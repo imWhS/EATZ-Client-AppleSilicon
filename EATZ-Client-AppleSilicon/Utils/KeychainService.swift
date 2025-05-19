@@ -7,10 +7,6 @@
 
 import Foundation
 
-enum KeychainError: Error {
-    case unexpectedStatus(OSStatus)
-}
-
 final class KeychainService {
     
     private init() {}
@@ -18,7 +14,6 @@ final class KeychainService {
     /// 키에 대응하는 문자열을 Keychain에 저장합니다.
     @discardableResult
     static func save(_ value: String, key: String) -> Bool {
-        print("[KeychainService] save")
        delete(key: key)
 
        guard let data = value.data(using: .utf8) else { return false }
@@ -31,6 +26,9 @@ final class KeychainService {
        ]
 
        let status = SecItemAdd(query as CFDictionary, nil)
+        if !(status == errSecSuccess) {
+            print("[KeychainService] \(key)로 \(value)를 저장하지 못했어요.")
+        }
        return status == errSecSuccess
     }
     

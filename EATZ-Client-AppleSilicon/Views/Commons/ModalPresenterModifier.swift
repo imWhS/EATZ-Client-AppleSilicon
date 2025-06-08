@@ -13,11 +13,10 @@ struct ModalPresenterModifier: ViewModifier {
     @State private var isPresented: Bool = false
     @State private var isViewAppeared: Bool = false
 
-    // 편의 바인딩: 현재 띄워야 할 스타일이 sheet인지?
     private var isSheetStyle: Bool {
         selectedModal?.style == .sheet
     }
-    // 편의 바인딩: fullScreenCover 스타일인지?
+    
     private var isFullScreenStyle: Bool {
         selectedModal?.style == .fullScreenCover
     }
@@ -25,21 +24,19 @@ struct ModalPresenterModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .onChange(of: modalManager.sheet) { newValue in
-                // 최초 할당
                 if selectedModal == nil {
                     selectedModal = newValue
                 }
-                // 이미 선택된 게 있는데 뷰가 가려진 상태면 초기화
+                // 이미 모달이 화면에 표시되어 있으나, 다른 모달에 의해 가려진 상태면 초기화
                 else if selectedModal != nil, isViewAppeared == false {
                     selectedModal = nil
                     isPresented = false
                 }
             }
             .onChange(of: selectedModal) { newValue in
-                // selectedModal이 nil이 아니면 무조건 present 트리거
                 isPresented = (newValue != nil)
             }
-            // 1) sheet 스타일일 때만 sheet modifier 활성
+            
             .sheet(isPresented: Binding(
                 get: { isPresented && isSheetStyle },
                 set: { newVal in
@@ -56,7 +53,7 @@ struct ModalPresenterModifier: ViewModifier {
                     .onAppear  { isViewAppeared = true }
                     .onDisappear { isViewAppeared = false }
             }
-            // 2) fullScreenCover 스타일일 때만 fullScreenCover modifier 활성
+
             .fullScreenCover(isPresented: Binding(
                 get: { isPresented && isFullScreenStyle },
                 set: { newVal in

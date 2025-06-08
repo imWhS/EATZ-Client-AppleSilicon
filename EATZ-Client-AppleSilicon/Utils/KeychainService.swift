@@ -11,7 +11,7 @@ final class KeychainService {
     
     private init() {}
     
-    /// 키에 대응하는 문자열을 Keychain에 저장합니다.
+    /// 키에 대응하는 데이터를 keychain에 저장합니다.
     @discardableResult
     static func save(_ value: String, key: String) -> Bool {
        delete(key: key)
@@ -32,9 +32,8 @@ final class KeychainService {
        return status == errSecSuccess
     }
     
-    /// 키에 대응하는 문자열을 Keychain에서 불러옵니다.
+    /// 키에 대응하는 데이터를 keychain에서 불러옵니다.
     static func load(key: String) -> String? {
-        print("[KeychainService] load")
         let query: [String: Any] = [
             kSecClass as String:           kSecClassGenericPassword,
             kSecAttrAccount as String:     key,
@@ -49,6 +48,7 @@ final class KeychainService {
               let data = result as? Data,
               let str = String(data: data, encoding: .utf8)
         else {
+            print("[KeychainService] '\(key)'에 해당하는 데이터를 불러오지 못했어요.")
             return nil
         }
         return str
@@ -56,14 +56,14 @@ final class KeychainService {
     
     @discardableResult
     static func delete(key: String) -> Bool {
-        print("[KeychainService] delete")
+        print("[KeychainService] '\(key)'에 해당하는 데이터를 삭제할게요.")
         let query: [String: Any] = [
             kSecClass as String:       kSecClassGenericPassword,
             kSecAttrAccount as String: key
         ]
         let status = SecItemDelete(query as CFDictionary)
+        
         return status == errSecSuccess || status == errSecItemNotFound
     }
-    
     
 }

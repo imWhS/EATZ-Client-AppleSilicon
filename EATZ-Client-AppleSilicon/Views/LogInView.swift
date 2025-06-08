@@ -1,5 +1,5 @@
 //
-//  SignInView.swift
+//  LogInView.swift
 //  Eatz-AppleSilicon
 //
 //  Created by 손원희 on 5/10/25.
@@ -7,15 +7,17 @@
 
 import SwiftUI
 
-struct SignInView: View {
+struct LogInView: View {
     
     @EnvironmentObject var authManager: AuthManager
     
-    @StateObject var viewModel = SignInViewModel()
+    @StateObject var viewModel = LogInViewModel()
     
     @FocusState private var isFocused: Bool
     
     @State private var isPasswordVisible: Bool = false
+    
+    let dismissAction: DismissAction
     
     let email: String
     
@@ -54,7 +56,7 @@ struct SignInView: View {
                        } else {
                            Button("완료") {
                                viewModel.signIn(email: email) {
-                                   authManager.dismissSignInView()
+                                   dismissAction()
                                }
                            }
                            .fontWeight(.semibold)
@@ -85,5 +87,5 @@ struct SignInView: View {
 }
 
 #Preview {
-    SignInView(email: "heextory@icloud.com")
+//    LogInView(email: "heextory@icloud.com")
 }

@@ -8,8 +8,8 @@
 import SwiftUI
 
 extension View {
-    func border(width: CGFloat, edges: [Edge], color: Color) -> some View {
-        overlay(EdgeBorder(width: width, edges: edges).foregroundColor(color))
+    func sheetPresenter() -> some View {
+        modifier( ModalPresenterModifier() )
     }
 }
 
@@ -52,5 +52,3 @@ struct EdgeBorder: Shape {
         }.reduce(into: Path()) { $0.addPath($1) }
     }
 }
-
-

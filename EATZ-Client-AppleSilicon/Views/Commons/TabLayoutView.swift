@@ -19,7 +19,7 @@ struct TabLayoutView<Content: View>: View {
     var body: some View {
         ScrollView {
             VStack {
-                TabHeaderView(title: MainTab.recipe.title, buttons: buttons)
+                TabHeaderView(title: MainTabItemsData.explore.title, buttons: buttons)
             }
             
             content()

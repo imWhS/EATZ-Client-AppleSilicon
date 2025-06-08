@@ -15,8 +15,7 @@ struct HelloScreenView: View {
         VStack {
             Text("Hello Screen View")
             Button(action: {
-                print("이메일로 계속하기 화면을 불러올게요")
-                AuthManager.shared.presentSignInView()
+                authManager.loginPrompt = .logIn
             }) {
                 Text("이메일로 계속하기")
             }
@@ -26,5 +25,5 @@ struct HelloScreenView: View {
 }
 
 #Preview {
-    MyPageView()
+    HelloScreenView()
 }

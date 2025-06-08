@@ -7,12 +7,16 @@
 
 import SwiftUI
 
-struct ErrorManager: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+class ErrorManager: ObservableObject {
+    
+    static let shared = ErrorManager()
+    
+    @Published var isErrorAlertPresented = false
+    @Published var errorMessage: String?
+    
+    func showError(message: String) {
+        errorMessage = message
+        isErrorAlertPresented = true
     }
-}
-
-#Preview {
-    ErrorManager()
+    
 }

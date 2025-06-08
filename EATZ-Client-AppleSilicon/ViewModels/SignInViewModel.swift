@@ -7,7 +7,7 @@
 
 import Foundation
 
-class LogInViewModel: ObservableObject {
+class SignInViewModel: ObservableObject {
     
     private lazy var authManager = AuthManager.shared
     
@@ -41,8 +41,8 @@ class LogInViewModel: ObservableObject {
         }
     }
     
-    func logOut() {
-        authManager.logOut()
-    }
+//    func logOut() {
+//        authManager.()
+//    }
     
 }

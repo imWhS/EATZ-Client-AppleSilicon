@@ -6,92 +6,166 @@
 //
 
 import SwiftUI
+import Kingfisher
+
+enum EditorPresentType: Identifiable {
+  case register
+  case update(RatingItem)
+
+  var id: Int {
+    switch self {
+    case .register: return -1
+    case .update(let r): return Int(r.id)
+    }
+  }
+}
 
 struct RatingView: View {
     @EnvironmentObject var authManager: AuthManager
-    @Environment(\.dismiss) private var dismiss
     
     @StateObject var viewModel: RatingViewModel
+    
+//    @State private var isPresentingEditRatingView = false
+    @State private var editMode: EditorPresentType? = nil
     
     var onHide: ((Int64) -> Void)?
     var onDelete: ((Int64) -> Void)?
     
-    init(recipeId: Int64) {
+    init(
+        recipeId: Int64
+    ) {
         _viewModel = StateObject(wrappedValue: RatingViewModel(recipeId: recipeId))
     }
     
     var body: some View {
-        NavigationStack {
-                Group {
-                    switch viewModel.summaryState {
-                    case .loading:
-                        ProgressView("평가 요약 불러오는 중...")
-                    case .loaded(let summaryResponse):
-                        ScrollView {
-                            VStack(spacing: 20) {
-                                RatingSummaryView(
-                                    summary: RatingSummaryResponse(
-                                        average: .init(
-                                            count: summaryResponse.average.count,
-                                            averageScore: summaryResponse.average.averageScore),
-                                        distribution: summaryResponse.distribution
-                                    )
-                                )
-                                
-                                if let currentUser = authManager.currentUser {
-                                    NewRatingActionView(username: currentUser.username, imageUrl: currentUser.imageUrl, onRegisterTapped: { print("평가 등록") })
-                                }
-                                
-                                switch viewModel.listState {
-                                case .idle, .loading:
-                                    ProgressView("평가 목록 불러오는 중...")
-                                        .navigationTitle("평가")
-                                case .loaded(let ratings):
-                                    RatingsListView(
-                                        ratings: ratings,
-                                        canManage: canManage,
-                                        onHide: onHide,
-                                        onDelete: onDelete
-                                    )
-                                    .navigationTitle("\(ratings.count)개의 평가")
-                                case .error(let message):
-                                    Text("평가 목록을 불러올 수 없어요: \(message)")
-                                        .foregroundColor(.red)
-                                        .navigationTitle("평가")
+        Group {
+            switch viewModel.ratingSummaryState {
+            case .loading:
+                ProgressView("평가 요약 불러오는 중...")
+                    .toolbarBackground(.visible, for: .tabBar)
+            case .loaded(let summaryResponse):
+                ScrollView {
+                    VStack(spacing: 0) {
+                        if let recipeEssential = viewModel.recipeEssential {
+                            HStack(alignment: .center, spacing: 12) {
+                                KFImage(URL(string: recipeEssential.authorImageUrl))
+                                    .placeholder {
+                                        ProgressView()
+                                    }
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 60, height: 60)
+                                    .clipped()
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(recipeEssential.title)
+                                        .font(.system(size: 16, weight: .bold))
+                                        .fontWeight(.bold)
+                                    Text(recipeEssential.authorUsername)
+                                        .font(.system(size: 12, weight: .medium))
+                                        .foregroundColor(Color.init("8F8F8F"))
                                 }
                             }
-                            }
-                    case .loadedNothing:
-                        VStack(spacing: 8) {
-                            Text("평가가 없어요.")
-                                .font(.system(size: 18, weight: .bold))
-                            Text("아직 아무도 이 레시피에 평가를 등록하지 않았어요.")
-                                .font(.system(size: 12, weight: .regular))
-                                .foregroundStyle(Color.init("8F8F8F"))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.init("F9F9F9"))
+                            .cornerRadius(8)
+                            .padding(20)
+                            .clipped()
                         }
-                    case .error(let message):
-                        VStack(spacing: 8) {
-                            Text("평가 정보를 가져오지 못했어요.")
-                                .font(.system(size: 18, weight: .bold))
-                            Text("\(message)")
-                                .font(.system(size: 12, weight: .regular))
-                                .foregroundStyle(Color.init("8F8F8F"))
+
+                        VStack(spacing: 40) {
+                            RatingSummaryView(
+                                summary: RatingSummaryResponse(
+                                    average: .init(
+                                        count: summaryResponse.average.count,
+                                        averageScore: summaryResponse.average.averageScore),
+                                    distribution: summaryResponse.distribution
+                                )
+                            )
+                            
+                            if authManager.isLoggedIn {
+                                switch viewModel.myRatingState {
+                                case .loading:
+                                    ProgressView("불러오는 중...")
+                                case .loaded(let rating):
+                                    Text("hello")
+                                    MyRatingItemView(
+                                        rating: rating,
+                                        onUpdateTapped: {
+                                            if let recipeEssential = viewModel.recipeEssential {
+                                                ModalManager.shared.sheet = .ratingEditor(recipeEssential: recipeEssential)
+                                            }
+                                        }, onDeleteTapped: {
+                                            authManager.performAfterLogIn {
+                                                print("평가 삭제")
+                                            }
+                                        })
+                                case .loadedNothing:
+                                    Text("hello")
+                                    if let currentUser = authManager.currentUser {
+                                        NewRatingActionView(username: currentUser.username, imageUrl: currentUser.imageUrl, onRegisterAction: {
+                                            authManager.performAfterLogIn {
+                                                if let recipeEssential = viewModel.recipeEssential {
+                                                    ModalManager.shared.sheet = .ratingEditor(recipeEssential: recipeEssential)
+                                                }
+                                            }
+                                        })
+                                    }
+                                case .error(let message):
+                                    Text("회원님의 평가를 불러올 수 없어요: \(message)")
+                                        .foregroundColor(.red)
+                                }
+                            } else {
+                                LogInActionView()
+                            }
+
+                            switch viewModel.ratingListState {
+                            case .idle, .loading:
+                                ProgressView("평가 목록 불러오는 중...")
+                                    .navigationTitle("평가")
+                            case .loaded(let ratings):
+                                RatingsListView(
+                                    ratings: ratings,
+                                    canManage: canManage,
+                                    onHide: onHide,
+                                    onDelete: onDelete
+                                )
+                                .navigationTitle("\(ratings.count)개의 평가")
+                            case .error(let message):
+                                Text("평가 목록을 불러올 수 없어요: \(message)")
+                                    .foregroundColor(.red)
+                                    .navigationTitle("평가")
+                            }
                         }
                     }
                 }
-                .onAppear {
-                    viewModel.fetchRatingSummary()
+            case .loadedNothing:
+                VStack(spacing: 8) {
+                    Text("평가가 없어요.")
+                        .font(.system(size: 18, weight: .bold))
+                    Text("아직 아무도 이 레시피에 평가를 등록하지 않았어요.")
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundStyle(Color.init("8F8F8F"))
                 }
-                .onChange(of: authManager.isLoggedIn) { newValue in
-                    viewModel.refreshAllData()
+            case .error(let message):
+                VStack(spacing: 8) {
+                    Text("평가 정보를 가져오지 못했어요.")
+                        .font(.system(size: 18, weight: .bold))
+                    Text("\(message)")
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundStyle(Color.init("8F8F8F"))
                 }
-//                .authSheetPresenter()
-                .navigationBarTitleDisplayMode(.inline)
+            }
         }
-        .sheetPresenter()
+        .onAppear {
+                    viewModel.fetchRatingSummary()
+        }
+        .onChange(of: authManager.isLoggedIn) { newValue in
+                    viewModel.refreshAllData()
+        }
+        .navigationBarTitleDisplayMode(.inline)
     }
     
-    private func canManage(rating: RatingListItem) -> Bool {
+    private func canManage(rating: RatingItem) -> Bool {
         guard let myUserId = viewModel.myUserId else {
             return viewModel.isRecipeOwner
         }
@@ -103,8 +177,8 @@ struct RatingView: View {
 // MARK: - Ratings List
 
 struct RatingsListView: View {
-    let ratings: [RatingListItem]
-    let canManage: (RatingListItem) -> Bool
+    let ratings: [RatingItem]
+    let canManage: (RatingItem) -> Bool
     let onHide: ((Int64) -> Void)?
     let onDelete: ((Int64) -> Void)?
 
@@ -128,30 +202,3 @@ struct RatingsListView: View {
         }
     }
 }
-
-//#Preview {
-//    let user = UserBasic(id: 1, username: "hee.xtory", imageUrl: "...")
-//    let otherUser = UserBasic(id: 2, username: "cookstar", imageUrl: nil)
-//    let ratings = [
-//        RatingListItem(id: 1, user: user, score: 5, content: "최고!", createdAt: "2025-05-24 10:00:00"),
-//        RatingListItem(id: 2, user: otherUser, score: 3, content: "보통이에요.", createdAt: "2025-05-24 11:00:00"),
-//    ]
-//
-//    RatingView(
-//        summary: RatingSummaryResponse(
-//            average: .init(count: 1, averageScore: 4.5),
-//            distribution: .init(
-//                countScore5: 0,
-//                countScore4: 0,
-//                countScore3: 0,
-//                countScore2: 0,
-//                countScore1: 1
-//            )
-//        ),
-//        ratings: ratings,
-//        isRecipeOwner: true,
-//        myUserId: 1,
-//        onHide: { print("숨기기 \($0)") },
-//        onDelete: { print("삭제하기 \($0)") }
-//    )
-//}

@@ -8,7 +8,6 @@
 import Foundation
 
 class SignInViewModel: ObservableObject {
-    
     private lazy var authManager = AuthManager.shared
     
     @Published var email: String = "admin@eatz.io"

@@ -9,19 +9,17 @@ import SwiftUI
 import Kingfisher
 
 struct RecipeView: View {
-    
     @EnvironmentObject var authManager: AuthManager
+    
+    @EnvironmentObject private var router: Router
     
     @StateObject private var viewModel: RecipeViewModel
     
     @State private var imageHeight: CGFloat = .zero
-    @State private var isRatingViewPresented = false
-    
-    @Binding var navigationPath: NavigationPath
-    
-    init(recipeId: Int64, navigationPath: Binding<NavigationPath>) {
+    init(
+        recipeId: Int64,
+    ) {
         _viewModel = StateObject(wrappedValue: RecipeViewModel(recipeId: recipeId))
-        _navigationPath = navigationPath
     }
 
     var body: some View {
@@ -47,7 +45,6 @@ struct RecipeView: View {
                 dismissButton: .default(Text("확인"))
             )
         }
-
     }
     
     @ViewBuilder
@@ -55,10 +52,11 @@ struct RecipeView: View {
         switch viewModel.state {
         case .loading:
             ProgressView("레시피를 불러오는 중이에요...")
+                .toolbarBackground(.visible, for: .tabBar)
+            
         case .loaded(let recipe):
             RecipeDetailView(
                 showAuthModal: $authManager.loginPrompt,
-                isRatingViewPresented: $isRatingViewPresented,
                 recipe: recipe,
                 ingredientListState: viewModel.ingredientListState,
                 isLoggedIn: authManager.isLoggedIn,
@@ -68,6 +66,9 @@ struct RecipeView: View {
                 isLiked: viewModel.isLiked,
                 likedCount: viewModel.likedCount,
                 onLikeTapped: viewModel.toggleLike,
+                onRatingTapped: { id in
+                    router.push(.rating(recipeId: recipe.id, recipeImageUrl: recipe.imageUrl, recipeTitle: recipe.title, recipeAuthorUsername: recipe.author.username))
+                },
                 onIngredientAddTapped: { id in
                     viewModel.addIngredientToUser(ingredientId: id)
                 },
@@ -98,7 +99,6 @@ struct RecipeView: View {
 
 struct RecipeDetailView: View {
     @Binding var showAuthModal: AuthPresentMessageType?
-    @Binding var isRatingViewPresented: Bool
     
     let recipe: RecipeResponse
     let ingredientListState: RecipeIngredientListState
@@ -107,6 +107,7 @@ struct RecipeDetailView: View {
     let isLiked: Bool
     let likedCount: Int64
     let onLikeTapped: () -> Void
+    let onRatingTapped: (Int64) -> Void
     let onIngredientAddTapped: (Int64) -> Void
     let onIngredientRemoveTapped: (Int64) -> Void
     let isUpdatingIngredient: [Int64: Bool]
@@ -122,36 +123,21 @@ struct RecipeDetailView: View {
         case .loading:
             ProgressView("재료 목록을 불러오는 중...")
         case .loaded(let ingredients):
-//                            RecipeIngredientsView(
-//                                ingredients: ingredients,
-//                                onMainAction: { print("레시피 보기") },
-//                                onAdd: { id in
-//                                    onIngredientAddTapped(id)
-//                                },
-//                                onAction: { id, action in
-//                                    onIngredientRemoveTapped(id)
-//                                },
-//                                isUpdatingIngredient: isUpdatingIngredient
-//                            )
             if isLoggedIn {
                 RecipeIngredientsView(
                     ingredients: ingredients,
                     onMainAction: { print("레시피 보기") },
-                    onAdd: { id in
+                    onAddTapped: { id in
                         onIngredientAddTapped(id)
                     },
-                    onAction: { id, action in
+                    onActionTapped: { id, action in
                         onIngredientRemoveTapped(id)
                     },
                     isUpdatingIngredient: isUpdatingIngredient
                 )
             } else {
                 RecipeIngredientsPublicView(
-                    ingredients: ingredients,
-                    onMainAction: {
-                        ModalManager.shared.sheet = .authMain(promptMessage: .logIn)
-//                        showAuthModal = .logIn
-                    }
+                    ingredients: ingredients
                 )
             }
         case .error(let message):
@@ -173,13 +159,16 @@ struct RecipeDetailView: View {
                     InteractionView(cookingTime: recipe.cookingTime, prepTime: recipe.prepTime, isLiked: isLiked, likedCount: likedCount, onLikeTapped: onLikeTapped)
                     AuthorView(author: recipe.author)
                     Text(recipe.description)
-                        .font(.system(size: 14))
+                        .font(.system(size: 16))
                         .padding(.horizontal, 20)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                    
                     HorizontalDividerView()
                     HStack(spacing: 20) {
                         DoubleLineButton(firstIcon: "recipe-rating", firstTitle: "\(recipe.rating?.averageScore ?? 0.0)", secondTitle: "평가", isShowArrow: true, isShowDivider: true) {
                             print("평가 pressed")
-                            ModalManager.shared.sheet = .rating(recipeId: recipe.id)
+                            onRatingTapped(recipe.id)
                         }
                         VerticalDividerView(horizontalPadding: 0)
                         DoubleLineButton(firstIcon: "recipe-rating", firstTitle: "\(recipe.commentCount)", secondTitle: "댓글 수", isShowArrow: true) {
@@ -205,9 +194,6 @@ struct RecipeDetailView: View {
             imageHeight = size.width * (2/3)
             print("이미지 높이: \(imageHeight)")
         }
-//        .sheet(isPresented: $isRatingViewPresented) {
-//            RatingView(recipeId: recipe.id)
-//        }
     }
 }
 

@@ -14,7 +14,7 @@ struct RecipeIngredientItemView: View {
     let isAdded: Bool?
     let isLoading: Bool
     let onAdd: () -> Void
-    let onAction: ((RecipeIngredientAction) -> Void)
+    let onActionTapped: ((RecipeIngredientAction) -> Void)
     
     var body: some View {
         HStack {
@@ -59,13 +59,13 @@ struct RecipeIngredientItemView: View {
     private var actionMenu: some View {
         Menu {
             Button(role: .destructive) {
-                onAction(.remove)
+                onActionTapped(.remove)
             } label: {
                 Label("보관함에서 제거", systemImage: "trash")
             }
 
             Button {
-                onAction(.like)
+                onActionTapped(.like)
             } label: {
                 Label("좋아요", systemImage: "heart")
             }
@@ -117,7 +117,7 @@ enum RecipeIngredientAction {
             isAdded: true,
             isLoading: false,
             onAdd: { print("추가") },
-            onAction: { action in
+            onActionTapped: { action in
                 switch action {
                 case .remove: print("보관함에서 제거")
                 case .like: print("좋아요")
@@ -132,7 +132,7 @@ enum RecipeIngredientAction {
             isAdded: false,
             isLoading: false,
             onAdd: { print("추가") },
-            onAction: { action in
+            onActionTapped: { action in
                 switch action {
                 case .remove: print("보관함에서 제거")
                 case .like: print("좋아요")
@@ -147,7 +147,7 @@ enum RecipeIngredientAction {
             isAdded: nil,
             isLoading: false,
             onAdd: { print("추가") },
-            onAction: { action in print(action) }
+            onActionTapped: { action in print(action) }
         )
     }
     .padding()

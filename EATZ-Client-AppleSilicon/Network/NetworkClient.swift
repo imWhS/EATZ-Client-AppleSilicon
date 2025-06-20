@@ -104,6 +104,72 @@ class NetworkClient {
         }
     }
     
+    public func requestOptional<T: Decodable>(
+        endpointUrl: String,
+        method: HTTPMethod,
+        parameters: Parameters? = nil,
+        decoder: JSONDecoder = JSONDecoder(),
+        completion: @escaping (Result<T?, NetworkError>) -> Void
+    ) {
+        guard let url = URL(string: baseUrl + endpointUrl) else {
+            print("[NetworkClient.requestOptional] '\(baseUrl + endpointUrl)'은 유효하지 않은 URL이에요")
+            completion(.failure(.unknown("유효하지 않은 URL이에요.")))
+            return
+        }
+        
+        print("[NetworkClient.requestOptional] \(url.relativePath) | HTTP 요청을 보낼게요")
+        authSession.request(
+            url,
+            method: method,
+            parameters: parameters,
+            encoding: method == .get ? URLEncoding.default : JSONEncoding.default)
+        .validate(statusCode: 200 ..< 300)
+        .responseData { response in
+            switch response.result {
+            case .success(let data):
+                guard let httpResponse = response.response else {
+                    print("[NetworkClient.requestOptional] \(url.relativePath) | HTTP 응답 데이터가 없어요.")
+                    completion(.failure(.unknown("서버로부터 HTTP 응답 데이터를 받지 못했어요.")))
+                    return
+                }
+                
+                let status = httpResponse.statusCode
+                if status == 204 {
+                    print("[NetworkClient.requestOptional] \(url.relativePath) | 204 No Content → nil 반환")
+                    completion(.success(nil))
+                } else if (200..<300).contains(status) {
+                    do {
+                        let decoded = try decoder.decode(T.self, from: data)
+                        print("[NetworkClient.requestOptional] \(url.relativePath) | 서버 응답 디코딩 성공")
+                        completion(.success(decoded))
+                    } catch {
+                        print("[NetworkClient.requestOptional] \(url.relativePath) | 디코딩 오류: \(error.localizedDescription)")
+                        completion(.failure(.unknown("응답 데이터 처리를 실패했어요.")))
+                    }
+                // 204, 200~299에 해당하지 않는 상태 코드가 온 경우
+                } else {
+                    print("[NetworkClient.requestOptional] \(url.relativePath) | API 처리 오류 - 응답 코드: \(status)")
+                    completion(.failure(.unknown("서버에서 요청 처리를 실패했어요: \(status)")))
+                }
+            case .failure(let afError):
+                // 서버의 오류 데이터부터 확인합니다.
+                if let data = response.data,
+                   let apiError = self.decodeAPIError(from: data) {
+                    // 서버의 오류 데이터가 HTTP 응답 바디에 존재하는 경우, 서버의 오류 데이터 속 메시지를 반환합니다.
+                    print("[NetworkClient.requestOptional] \(url.relativePath) | 서버 오류예요: \(apiError.message)")
+                    let error = NetworkError.serverError(apiError)
+                    completion(.failure(error))
+                } else {
+                    // 서버의 오류 데이터가 없는 경우, 네트워크 오류로 처리합니다.
+                    print("[NetworkClient.requestOptional] \(url.relativePath) | 네트워크 통신 오류예요: \(afError.localizedDescription)")
+                    let error = NetworkError.afError(afError)
+                    ErrorManager.shared.showError(message: error.userMessage)
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
+    
     public func authRequest(
         endpointUrl: String,
         method: HTTPMethod = .post,

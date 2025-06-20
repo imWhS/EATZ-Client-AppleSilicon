@@ -15,23 +15,29 @@ struct RootTabView: View {
     
     @State var showLogin = false
     
+    @StateObject private var exploreRouter = Router()
+    @StateObject private var plannerRouter = Router()
+    @StateObject private var myAccountRouter = Router()
+    
     var body: some View {
         TabView {
-            RecipeListView()
-                .tabItem { Label(MainTabItemsData.explore.title, systemImage: MainTabItemsData.explore.systemImage) }
+            ExploreView()
+            .tabItem { Label(MainTabItemsData.explore.title, systemImage: MainTabItemsData.explore.systemImage) }
+            .environmentObject(exploreRouter)
+            
             VStack {
-                Text("Search View")
+                Text("Planner View")
                     .font(.title)
-                Text("검색")
+                Text("플래너")
             }
-            .tabItem { Label(MainTabItemsData.search.title, systemImage: MainTabItemsData.search.systemImage) }
+            .tabItem { Label(MainTabItemsData.planner.title, systemImage: MainTabItemsData.planner.systemImage) }
             if authManager.isLoggedIn {
                 VStack {
                     Text("My Account View")
                         .font(.title)
                     Text("내 계정")
                 }
-                .tabItem { Label(MainTabItemsData.mypage.title, systemImage: MainTabItemsData.mypage.systemImage) }
+                .tabItem { Label(MainTabItemsData.myAccount.title, systemImage: MainTabItemsData.myAccount.systemImage) }
             } else {
                 VStack {
                     Text("로그아웃 상태입니다.")

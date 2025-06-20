@@ -11,8 +11,8 @@ struct RecipeIngredientsView: View {
     
     let ingredients: [RecipeIngredient]
     let onMainAction: () -> Void
-    let onAdd: (Int64) -> Void
-    let onAction: (Int64, RecipeIngredientAction) -> Void
+    let onAddTapped: (Int64) -> Void
+    let onActionTapped: (Int64, RecipeIngredientAction) -> Void
     let isUpdatingIngredient: [Int64: Bool]
     
     private var missingIngredientsCount: Int {
@@ -27,11 +27,11 @@ struct RecipeIngredientsView: View {
         VStack {
             VStack(spacing: 20) {
                 if isAllAdded {
-                    CookableHeaderView(onMainAction: onMainAction)
+                    CookableHeaderView(onViewRecipeTapped: onMainAction)
                 } else {
                     UncookableHeaderView(
                         missingCount: missingIngredientsCount,
-                        onMainAction: onMainAction
+                        onActionTapped: onMainAction
                     )
                 }
                 VStack {
@@ -41,8 +41,8 @@ struct RecipeIngredientsView: View {
                             name: item.name,
                             isAdded: item.ownedByUser,
                             isLoading: isUpdatingIngredient[item.id] == true,
-                            onAdd: { onAdd(item.id) },
-                            onAction: { action in onAction(item.id, action) }
+                            onAdd: { onAddTapped(item.id) },
+                            onActionTapped: { action in onActionTapped(item.id, action) }
                         )
                         .padding(.horizontal, 20)
                     }
@@ -57,7 +57,7 @@ struct RecipeIngredientsView: View {
 }
 
 struct CookableHeaderView: View {
-    let onMainAction: () -> Void
+    let onViewRecipeTapped: () -> Void
     
     var body: some View {
         VStack(spacing: 20) {
@@ -72,7 +72,7 @@ struct CookableHeaderView: View {
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            Button(action: onMainAction) {
+            Button(action: onViewRecipeTapped) {
                 Text("레시피 보기")
             }
             .buttonStyle(SmallRoundedButtonStyle(type: .primary))
@@ -82,7 +82,7 @@ struct CookableHeaderView: View {
 
 struct UncookableHeaderView: View {
     let missingCount: Int
-    let onMainAction: () -> Void
+    let onActionTapped: () -> Void
     
     var body: some View {
         VStack(spacing: 20) {
@@ -101,7 +101,7 @@ struct UncookableHeaderView: View {
             .padding(.horizontal, 20)
             
             VStack(spacing: 16) {
-                Button(action: onMainAction) {
+                Button(action: onActionTapped) {
                     Text("재료 모두 추가")
                 }
                 Text("이미 필요한 모든 재료를 보유하고 있다면,\n필요한 재료만 한 번에 추가할 수 있어요.")

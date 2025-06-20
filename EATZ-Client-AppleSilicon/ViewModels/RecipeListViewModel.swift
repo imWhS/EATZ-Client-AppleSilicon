@@ -21,6 +21,7 @@ class RecipeListViewModel: ObservableObject {
     func fetchRecipeList(page: Int = 0, size: Int = 10) {
         isLoading = true
         errorMessage = nil
+        print("로드로드로드중")
         
         recipeService.fetchRecipes(page: page, size: size) { [weak self] result in
             guard let self = self else { return }

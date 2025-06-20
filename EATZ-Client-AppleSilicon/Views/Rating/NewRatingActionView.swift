@@ -10,7 +10,7 @@ import SwiftUI
 struct NewRatingActionView: View {
     let username: String
     let imageUrl: String?
-    let onRegisterTapped: () -> Void
+    let onRegisterAction: () -> Void
     
     var body: some View {
         VStack {
@@ -30,7 +30,7 @@ struct NewRatingActionView: View {
                 }
                 VStack(spacing: 16) {
                     Button(action: {
-                        onRegisterTapped()
+                        onRegisterAction()
                     }) {
                         Text("평가하기")
                             .frame(maxWidth: .infinity)
@@ -48,9 +48,9 @@ struct NewRatingActionView: View {
     }
 }
 
-#Preview {
-    NewRatingActionView(
-        username: "hee.xtory",
-        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiZAwyv3ky9HdSIH32PzkhiCAPtsBGRZ49LA&s",
-        onRegisterTapped: { print("평가 등록") })
-}
+//#Preview {
+//    NewRatingActionView(
+//        username: "hee.xtory",
+//        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiZAwyv3ky9HdSIH32PzkhiCAPtsBGRZ49LA&s",
+//        onRegisterTapped: { print("평가 등록") })
+//}

@@ -40,6 +40,15 @@ final class RecipeService {
         )
     }
     
+    func fetchRecipeEssential(
+        id: Int64,
+        completion: @escaping (Result<RecipeEssential, NetworkError>) -> Void
+    ) {
+        networkClient.request(
+            endpointUrl: "/api/v0/recipes/\(id)/essential", method: .get, completion: completion
+        )
+    }
+    
     func fetchRecipeIngredients(
         id: Int64,
         completion: @escaping (Result<[RecipeIngredient], NetworkError>) -> Void
@@ -77,6 +86,13 @@ final class RecipeService {
             completion: completion)
     }
     
+    func fetchMyRating(
+        id: Int64,
+        completion: @escaping (Result<RatingItem?, NetworkError>) -> Void
+    ) {
+        networkClient.requestOptional(endpointUrl: "/api/v0/recipes/\(id)/ratings/me", method: .get, completion: completion)
+    }
+    
     func fetchRatings(
         id: Int64,
         completion: @escaping (Result<RatingListResponse, NetworkError>) -> Void
@@ -86,7 +102,7 @@ final class RecipeService {
             method: .get,
             completion: completion)
     }
-    
+
     
     
 }

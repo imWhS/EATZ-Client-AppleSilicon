@@ -8,7 +8,7 @@
 import Foundation
 
 struct RatingListResponse: Decodable {
-    let content: [RatingListItem]
+    let content: [RatingItem]
     let page: Int
     let size: Int
     let totalElements: Int

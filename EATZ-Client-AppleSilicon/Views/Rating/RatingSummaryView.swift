@@ -24,7 +24,6 @@ struct RatingSummaryView: View {
                 countScore1: summary.distribution.countScore1
             ))
         }
-        .padding(.vertical, 20)
     }
 }
 

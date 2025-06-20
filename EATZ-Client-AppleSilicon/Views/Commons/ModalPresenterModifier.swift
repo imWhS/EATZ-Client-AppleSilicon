@@ -4,8 +4,9 @@
 //
 //  Created by 손원희 on 6/7/25.
 //
-
+// TODO: Alert 처리 
 import SwiftUI
+
 struct ModalPresenterModifier: ViewModifier {
     @EnvironmentObject var modalManager: ModalManager
 
@@ -29,6 +30,7 @@ struct ModalPresenterModifier: ViewModifier {
                 }
                 // 이미 모달이 화면에 표시되어 있으나, 다른 모달에 의해 가려진 상태면 초기화
                 else if selectedModal != nil, isViewAppeared == false {
+                    print("DBG selectedModal != nil, isViewAppeared == false")
                     selectedModal = nil
                     isPresented = false
                 }

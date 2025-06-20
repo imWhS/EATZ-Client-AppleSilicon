@@ -58,8 +58,7 @@ struct DoubleLineButton: View {
                         Circle()
                             .foregroundStyle(Color.init("ECECEC"))
                         
-                            Image("arrow-down-button")
-                                .foregroundStyle(Color.accentColor)
+                            Image("arrow-right-circled-accent")
                                 .offset(x: 0.25, y: 0.5)
                     }
                     .frame(width: 18, height: 18)

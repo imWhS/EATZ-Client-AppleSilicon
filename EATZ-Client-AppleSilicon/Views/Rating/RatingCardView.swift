@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RatingCardView: View {
-    let rating: RatingListItem
+    let rating: RatingItem
     let canManageRating: Bool
     let onHide: (() -> Void)?
     let onDelete: (() -> Void)?
@@ -72,7 +72,7 @@ struct RatingCardView: View {
         username: "hee.xtory",
         imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgRpKzCD0qaHBwI03JFHGakAPxGdv5yOIk-vkhqp0nY3B_y9J-Nn5PQwu34h0Aq81jXuA&usqp=CAU"
     )
-    let rating = RatingListItem(
+    let rating = RatingItem(
         id: 1,
         user: user,
         score: 4,

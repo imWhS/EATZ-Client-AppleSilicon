@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RatingListItem: Identifiable, Codable, Hashable {
+struct RatingItem: Identifiable, Codable, Hashable {
     let id: Int64
     let user: UserBasic
     let score: Int

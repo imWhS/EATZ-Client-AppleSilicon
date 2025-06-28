@@ -35,15 +35,18 @@ enum AuthPresentMessageType: Identifiable {
 class AuthManager: ObservableObject {
     static let shared = AuthManager()
     
-    /// 실제 로그인·토큰 재발급 등 인증 관련 API 호출은 AuthService에 위임합니다.
-    private lazy var authService = AuthService.shared
-    private lazy var userService = UserService.shared
-    
     private static let accessTokenKey = "accessToken"
     
-    /// 현재 로그인(인증) 상태를 나타냅니다.
+    /// 실제 로그인·토큰 재발급 요청 등 인증 관련 API 호출은 AuthService에 위임합니다.
+    private lazy var authService = AuthService.shared
+    
+    /// 현재 로그인 된 사용자 정보 요청 등 사용자 관련 API 호출은 UserService에 위임합니다.
+    private lazy var userService = UserService.shared
+    
+    /// 현재 로그인(인증) 상태입니다.
     @Published private(set) var isLoggedIn: Bool = false
-    @Published var loginPrompt: AuthPresentMessageType? = nil
+    
+    /// 현재 로그인된 사용자 정보입니다.
     @Published var currentUser: CurrentUser? = nil
     
     private var accessToken: String? {
@@ -59,10 +62,7 @@ class AuthManager: ObservableObject {
     
     private init() {
         accessToken = KeychainService.load(key: Self.accessTokenKey)
-        print("[AuthManager] \(isLoggedIn ? "전역 로그인 상태로 초기화됐어요." : "전역 비로그인 상태로 초기화됐어요.")")
-        if accessToken == nil {
-            clearTokens()
-        }
+        print("AUTHDBG [AuthManager] \(isLoggedIn ? "전역 로그인 상태로 초기화됐어요." : "전역 비로그인 상태로 초기화됐어요.")")
     }
       
     func saveAccessToken(_ accessToken: String) -> Bool {
@@ -73,7 +73,7 @@ class AuthManager: ObservableObject {
     
     /**
      인증이 필요한 액션을 실행하기 전에 로그인 여부를 먼저 확인합니다.
-     로그인되어 있는 경우, 액션을 바로 실행하며 로그인되어 있지 않은 경우 액션 실행을 잠시 보류한 후, 로그인 뷰 modal을 표시합니다.
+     로그인되어 있는 경우, 액션을 바로 실행하며 로그인되어 있지 않은 경우, 액션 실행을 잠시 보류한 후 로그인 뷰 modal을 표시합니다.
      */
     func performAfterLogIn(_ action: @escaping () -> Void) {
         if isLoggedIn {
@@ -82,17 +82,7 @@ class AuthManager: ObservableObject {
             print("[AuthManager.performAfterLogIn] 인증이 필요한 액션을 보류할게요.")
             pendingActions.append(action)
             ModalManager.shared.sheet = .authMain(promptMessage: .authRequiredAction)
-//            loginPrompt = .authRequiredAction
         }
-    }
-    
-    /// 로그인 완료 시 처리: 로그인 뷰 sheet 숨김, 현재 로그인 된 사용자 정보 API 호출
-    func completeLogin() {
-        print("[AuthManager.completeLogin]")
-//        loginPrompt = nil
-//        SheetManager.shared.sheet = nil
-        fetchCurrentUser()
-        flushPendingActions()
     }
     
     /**
@@ -109,17 +99,14 @@ class AuthManager: ObservableObject {
     
     /// 세션 만료 시 처리: 토큰 삭제, 로그아웃 상태, 로그인 뷰 sheet 표시
     func handleSessionExpired() {
-        print("[AuthManager.handleSessionExpired]")
         currentUser = nil
         clearTokens()
-//        print("[AuthManager] 화면에 로그인 뷰를 present 할게요!")
-//        loginPrompt = .sessionExpired
         ModalManager.shared.sheet = .authMain(promptMessage: .sessionExpired)
     }
 
     /// 앱에서 보관 중인 액세스 토큰을 초기화합니다.
     func clearTokens() {
-        print("[AuthManager.clearCredentials]")
+        print("AUTHDBG 액세스 토큰 삭제할게요")
         KeychainService.delete(key: Self.accessTokenKey)
         accessToken = nil
     }
@@ -138,8 +125,9 @@ class AuthManager: ObservableObject {
                     // 액세스 토큰을 keychain에 저장 후 로그인 성공 처리합니다.
                     let saved = self.saveAccessToken(accessToken)
                     if saved {
-                        // Keychain에 액세스 토큰 값이 저장됐다면, 전역 로그인 상태 처리 후 열려져 있을 수 있는 로그인 모달을 숨김 처리합니다.
-                        self.completeLogin()
+                        // 로그인 완료 시 처리: 현재 로그인 된 사용자 정보 조회 API를 호출하고, 보류된 모든 액션을 실행합니다.
+                        self.fetchCurrentUser()
+                        self.flushPendingActions()
                         
                         print("[AuthManager.logIn] 전역 로그인 상태로 설정했어요.")
                         completion(.success(()))
@@ -162,20 +150,12 @@ class AuthManager: ObservableObject {
     }
     
     func fetchCurrentUser() {
-//        guard isLoggedIn else {
-//            print("[AuthManager.fetchCurrentUser] 비로그인 상태여서 종료할게요.")
-//            currentUser = nil
-//            return
-//        }
-//        
         if accessToken == nil { return }
-        print("[AuthManager.fetchCurrentUser] called! AuthManager.isLoggedIn: \(isLoggedIn)")
         
         userService.getCurrentUser { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let currentUser):
-                    print("[AuthManager.fetchCurrentUser] 현재 로그인된 사용자 정보를 저장했어요.")
                     self?.currentUser = currentUser
                 case .failure:
                     print("[AuthManager.fetchCurrentUser] 현재 로그인된 사용자 정보 저장을 실패했어요. 세션 만료 처리할게요.")

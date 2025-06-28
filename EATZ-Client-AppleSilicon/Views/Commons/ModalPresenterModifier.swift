@@ -24,48 +24,50 @@ struct ModalPresenterModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .onChange(of: modalManager.sheet) { newValue in
+            .onChange(of: modalManager.sheet?.id) { newValue in
                 if selectedModal == nil {
-                    selectedModal = newValue
+                    print("DBGTEST - \(modalManager.sheet?.id ?? "") - selectedModal == nil")
+                    selectedModal = modalManager.sheet
                 }
                 // 이미 모달이 화면에 표시되어 있으나, 다른 모달에 의해 가려진 상태면 초기화
                 else if selectedModal != nil, isViewAppeared == false {
-                    print("DBG selectedModal != nil, isViewAppeared == false")
+                    print("DBGTEST - \(modalManager.sheet?.id ?? "") - selectedModal != nil, isViewAppeared == false")
                     selectedModal = nil
                     isPresented = false
                 }
             }
-            .onChange(of: selectedModal) { newValue in
+            .onChange(of: selectedModal?.id) { newValue in
                 isPresented = (newValue != nil)
+                print("DBGTEST - \(modalManager.sheet?.id ?? "") - .onChange(of: selectedModal?.id) isPresented: \(newValue != nil)")
             }
             
             .sheet(isPresented: Binding(
                 get: { isPresented && isSheetStyle },
-                set: { newVal in
+                set: { newValue in
                     // sheet 뚫고 내려갈 때
-                    if !newVal {
+                    if !newValue {
                         selectedModal = nil
                         modalManager.sheet = nil
                     }
                     // isPresented 상태 동기화
-                    isPresented = newVal
+                    isPresented = newValue
                 }
             )) {
                 selectedModal?.view
                     .onAppear  { isViewAppeared = true }
                     .onDisappear { isViewAppeared = false }
             }
-
             .fullScreenCover(isPresented: Binding(
                 get: { isPresented && isFullScreenStyle },
-                set: { newVal in
-                    if !newVal {
+                set: { newValue in
+                    if !newValue {
                         selectedModal = nil
                         modalManager.sheet = nil
                     }
-                    isPresented = newVal
+                    isPresented = newValue
+                    print("DBGTEST - \(modalManager.sheet?.id ?? "") - newValue: \(newValue)")
                 }
-            )) {
+            ), onDismiss: { print("Good bye!")}) {
                 selectedModal?.view
                     .onAppear  { isViewAppeared = true }
                     .onDisappear { isViewAppeared = false }

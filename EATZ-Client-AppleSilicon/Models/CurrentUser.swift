@@ -8,7 +8,7 @@
 import Foundation
 
 struct CurrentUser: Identifiable, Codable, Hashable {
-    let id: Int
+    let id: Int64
     let username: String
     let email: String
     let imageUrl: String?

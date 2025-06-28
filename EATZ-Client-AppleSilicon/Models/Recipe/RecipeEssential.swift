@@ -13,5 +13,5 @@ struct RecipeEssential: Codable, Equatable {
     let imageUrl: String
     let authorId: Int64
     let authorUsername: String
-    let authorImageUrl: String
+    let authorImageUrl: String?
 }

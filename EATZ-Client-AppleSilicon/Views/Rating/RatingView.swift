@@ -8,16 +8,32 @@
 import SwiftUI
 import Kingfisher
 
-enum EditorPresentType: Identifiable {
-  case register
-  case update(RatingItem)
-
-  var id: Int {
-    switch self {
-    case .register: return -1
-    case .update(let r): return Int(r.id)
+enum RatingDeleteType: Equatable, Identifiable {
+    case mine
+    case other(username: String)
+    
+    var id: String {
+        switch self {
+        case .mine:
+            return "mine"
+        case .other(let username):
+            return "other_\(username)"
+        }
     }
-  }
+}
+
+enum RatingViewAlert: Identifiable, Equatable {
+    case confirmDelete(type: RatingDeleteType, rating: RatingItem)
+    case deletionSuccess
+
+    var id: String {
+        switch self {
+        case .confirmDelete(let type, let rating):
+            return "confirmDelete_\(type.id)_\(rating.id)"
+        case .deletionSuccess:
+            return "deletionSuccess"
+        }
+    }
 }
 
 struct RatingView: View {
@@ -25,180 +41,154 @@ struct RatingView: View {
     
     @StateObject var viewModel: RatingViewModel
     
-//    @State private var isPresentingEditRatingView = false
-    @State private var editMode: EditorPresentType? = nil
+    @State private var deleteType: RatingDeleteType? = nil
+    @State private var ratingToDelete: RatingItem? = nil
+    @State private var showDeleteRatingAlert = false
+    @State private var showSuccessDeletionMyRatingAlert = false
     
-    var onHide: ((Int64) -> Void)?
-    var onDelete: ((Int64) -> Void)?
+    @State private var alert: RatingViewAlert? = nil
     
-    init(
-        recipeId: Int64
-    ) {
+    @State private var isSamplePresented: Bool = false
+    
+    init(recipeId: Int64) {
         _viewModel = StateObject(wrappedValue: RatingViewModel(recipeId: recipeId))
     }
     
     var body: some View {
         Group {
-            switch viewModel.ratingSummaryState {
-            case .loading:
-                ProgressView("평가 요약 불러오는 중...")
-                    .toolbarBackground(.visible, for: .tabBar)
-            case .loaded(let summaryResponse):
+            if viewModel.shouldShowEmptyView {
+                VStack(spacing: 0) {
+                    RatingRecipeEssentialView(state: viewModel.recipeEssentialState)
+                    RatingEmptyView(isLoggedIn: authManager.isLoggedIn, onRegister: editMyRating)
+                }
+            } else {
                 ScrollView {
                     VStack(spacing: 0) {
-                        if let recipeEssential = viewModel.recipeEssential {
-                            HStack(alignment: .center, spacing: 12) {
-                                KFImage(URL(string: recipeEssential.authorImageUrl))
-                                    .placeholder {
-                                        ProgressView()
-                                    }
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 60, height: 60)
-                                    .clipped()
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(recipeEssential.title)
-                                        .font(.system(size: 16, weight: .bold))
-                                        .fontWeight(.bold)
-                                    Text(recipeEssential.authorUsername)
-                                        .font(.system(size: 12, weight: .medium))
-                                        .foregroundColor(Color.init("8F8F8F"))
-                                }
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(Color.init("F9F9F9"))
-                            .cornerRadius(8)
-                            .padding(20)
-                            .clipped()
-                        }
-
-                        VStack(spacing: 40) {
-                            RatingSummaryView(
-                                summary: RatingSummaryResponse(
-                                    average: .init(
-                                        count: summaryResponse.average.count,
-                                        averageScore: summaryResponse.average.averageScore),
-                                    distribution: summaryResponse.distribution
-                                )
-                            )
-                            
-                            if authManager.isLoggedIn {
-                                switch viewModel.myRatingState {
-                                case .loading:
-                                    ProgressView("불러오는 중...")
-                                case .loaded(let rating):
-                                    Text("hello")
-                                    MyRatingItemView(
-                                        rating: rating,
-                                        onUpdateTapped: {
-                                            if let recipeEssential = viewModel.recipeEssential {
-                                                ModalManager.shared.sheet = .ratingEditor(recipeEssential: recipeEssential)
-                                            }
-                                        }, onDeleteTapped: {
-                                            authManager.performAfterLogIn {
-                                                print("평가 삭제")
-                                            }
-                                        })
-                                case .loadedNothing:
-                                    Text("hello")
-                                    if let currentUser = authManager.currentUser {
-                                        NewRatingActionView(username: currentUser.username, imageUrl: currentUser.imageUrl, onRegisterAction: {
-                                            authManager.performAfterLogIn {
-                                                if let recipeEssential = viewModel.recipeEssential {
-                                                    ModalManager.shared.sheet = .ratingEditor(recipeEssential: recipeEssential)
-                                                }
-                                            }
-                                        })
-                                    }
-                                case .error(let message):
-                                    Text("회원님의 평가를 불러올 수 없어요: \(message)")
-                                        .foregroundColor(.red)
-                                }
-                            } else {
-                                LogInActionView()
-                            }
-
-                            switch viewModel.ratingListState {
-                            case .idle, .loading:
-                                ProgressView("평가 목록 불러오는 중...")
-                                    .navigationTitle("평가")
-                            case .loaded(let ratings):
-                                RatingsListView(
-                                    ratings: ratings,
-                                    canManage: canManage,
-                                    onHide: onHide,
-                                    onDelete: onDelete
-                                )
-                                .navigationTitle("\(ratings.count)개의 평가")
-                            case .error(let message):
-                                Text("평가 목록을 불러올 수 없어요: \(message)")
-                                    .foregroundColor(.red)
-                                    .navigationTitle("평가")
-                            }
-                        }
+                        RatingRecipeEssentialView(state: viewModel.recipeEssentialState)
+                        RatingSummaryView(state: viewModel.ratingSummaryState)
+                        RatingMySectionView(
+                            currentUser: authManager.currentUser,
+                            state: viewModel.myRatingState,
+                            onEditTapped: editMyRating,
+                            onDeleteTapped: { rating in triggerDelete(type: .mine, rating: rating) })
+                        RatingListSectionView(
+                            ratings: viewModel.ratings,
+                            canManage: canManage,
+                            onHide: { id in hideRating(id) },
+                            onDelete: { rating in triggerDelete(type: .other(username: rating.user.username), rating: rating) }
+                        )
                     }
                 }
-            case .loadedNothing:
-                VStack(spacing: 8) {
-                    Text("평가가 없어요.")
-                        .font(.system(size: 18, weight: .bold))
-                    Text("아직 아무도 이 레시피에 평가를 등록하지 않았어요.")
-                        .font(.system(size: 12, weight: .regular))
-                        .foregroundStyle(Color.init("8F8F8F"))
-                }
-            case .error(let message):
-                VStack(spacing: 8) {
-                    Text("평가 정보를 가져오지 못했어요.")
-                        .font(.system(size: 18, weight: .bold))
-                    Text("\(message)")
-                        .font(.system(size: 12, weight: .regular))
-                        .foregroundStyle(Color.init("8F8F8F"))
-                }
             }
         }
-        .onAppear {
-                    viewModel.fetchRatingSummary()
-        }
-        .onChange(of: authManager.isLoggedIn) { newValue in
-                    viewModel.refreshAllData()
-        }
-        .navigationBarTitleDisplayMode(.inline)
-    }
-    
-    private func canManage(rating: RatingItem) -> Bool {
-        guard let myUserId = viewModel.myUserId else {
-            return viewModel.isRecipeOwner
-        }
-        return viewModel.isRecipeOwner || rating.user.id == myUserId
-    }
-    
-}
-
-// MARK: - Ratings List
-
-struct RatingsListView: View {
-    let ratings: [RatingItem]
-    let canManage: (RatingItem) -> Bool
-    let onHide: ((Int64) -> Void)?
-    let onDelete: ((Int64) -> Void)?
-
-    var body: some View {
-        VStack(spacing: 20) {
-            HStack {
-                Text("모든 평가")
-                    .font(.system(size: 18, weight: .bold))
-                Spacer()
-            }
-            .padding(.horizontal, 20)
-
-            ForEach(ratings, id: \.id) { rating in
-                RatingCardView(
-                    rating: rating,
-                    canManageRating: canManage(rating),
-                    onHide: { onHide?(rating.id) },
-                    onDelete: { onDelete?(rating.id) }
+        .alert(item: $alert) { alert in
+            switch alert {
+            case .confirmDelete(let type, let rating):
+                let username = rating.user.username
+                return Alert(
+                    title: Text(type == .mine ? "평가를 정말 삭제하시겠어요?" : "\(username)님의 평가를 정말 삭제하시겠어요?"),
+                    message: Text(""),
+                    primaryButton: .destructive(Text("삭제"), action: { performDelete(type: type, rating: rating)}),
+                    secondaryButton: .cancel()
+                )
+            case .deletionSuccess:
+                return Alert(
+                    title: Text("삭제했습니다."),
+                    dismissButton: .default(Text("확인"), action: reloadAfterDeletion)
                 )
             }
         }
+        .onAppear {
+            print("DBG RATING - onAppear")
+            viewModel.reloadAll()
+        }
+        .onChange(of: authManager.isLoggedIn) { newValue in
+            print("DBG RATING - onChange of: authManager.isLoggedIn - \(authManager.isLoggedIn) -> \(newValue)")
+            if case .error = viewModel.ratingSummaryState {
+                // isLoggedIn 상태 변경 전, 토큰 만료(세션 만료) 등으로 인해 RatingSummaryState가 .error 였다면, 레시피 요약, 내 평가 섹션, 평가 목록 섹션도 모두 정상적으로 화면에 보여지고 있지 않을 것이기에 전체 데이터를 모두 새로고침합니다.
+                viewModel.reloadAll()
+            } else {
+                viewModel.fetchMyRating()
+            }
+        }
+        .onChange(of: authManager.currentUser) { newValue in
+            print("DBG RATING - onChange of: authManager.currentUser.username - \(authManager.currentUser?.username) -> \(newValue?.username)")
+            if case .error = viewModel.ratingSummaryState {
+                // currentUser 상태 변경 전, 토큰 만료(세션 만료) 등으로 인해 RatingSummaryState가 .error 였다면, 레시피 요약, 내 평가 섹션, 평가 목록 섹션도 모두 정상적으로 화면에 보여지고 있지 않을 것이기에 전체 데이터를 모두 새로고침합니다.
+                viewModel.reloadAllRatings()
+            } else {
+                viewModel.fetchMyRating()
+            }
+        }
+        .navigationTitle(viewModel.ratings.count > 0 ? "\(viewModel.ratings.count)개의 평가" : "평가")
+        .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $isSamplePresented) {
+            Text("hello world!")
+        }
     }
+    
+    private func reloadAfterDeletion() {
+        viewModel.fetchRatingSummary { hasRatings in
+            if hasRatings {
+                viewModel.fetchMyRating()
+            } else {
+                viewModel.ratings = []
+                viewModel.myRatingState = .loadedNothing
+            }
+        }
+        alert = nil
+    }
+    
+    private func triggerDelete(type: RatingDeleteType, rating: RatingItem) {
+        authManager.performAfterLogIn {
+            alert = .confirmDelete(type: type, rating: rating)
+        }
+    }
+    
+    private func performDelete(type: RatingDeleteType, rating: RatingItem) {
+        switch type {
+        case .mine:
+            viewModel.deleteMyRating(id: rating.id) {
+                alert = .deletionSuccess
+            }
+        case .other:
+            viewModel.deleteRatingItem(id: rating.id) {
+                alert = .deletionSuccess
+            }
+        }
+    }
+
+    
+    
+    private func editMyRating() {
+        authManager.performAfterLogIn {
+            print("DBGTEST - editMyRating")
+            isSamplePresented = true
+//            ModalManager.shared.sheet = .ratingEditor(recipeId: viewModel.recipeId) {
+//                viewModel.reloadAllRatings()
+//            }
+        }
+    }
+
+    private func deleteMyRating(_ rating: RatingItem) {
+        authManager.performAfterLogIn {
+            ratingToDelete = rating
+            deleteType = .mine
+            showDeleteRatingAlert = true
+        }
+    }
+
+    private func canManage() -> Bool {
+        guard let currentUsername = authManager.currentUser?.username else { return false }
+        return viewModel.recipeEssential?.authorUsername == currentUsername
+    }
+    
+    private func hideRating(_ id: Int64) {
+        print("hide rating \(id)")
+    }
+    
+    private func deleteRating(_ rating: RatingItem) {
+        triggerDelete(type: .other(username: rating.user.username), rating: rating)
+    }
+    
 }

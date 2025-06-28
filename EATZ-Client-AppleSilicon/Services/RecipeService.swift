@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 final class RecipeService {
     
@@ -45,7 +46,9 @@ final class RecipeService {
         completion: @escaping (Result<RecipeEssential, NetworkError>) -> Void
     ) {
         networkClient.request(
-            endpointUrl: "/api/v0/recipes/\(id)/essential", method: .get, completion: completion
+            endpointUrl: "/api/v0/recipes/\(id)/essential",
+            method: .get,
+            completion: completion
         )
     }
     
@@ -103,7 +106,42 @@ final class RecipeService {
             completion: completion)
     }
 
+    func submitRating(
+        id: Int64,
+        score: Int,
+        content: String,
+        completion: @escaping (Result<Empty, NetworkError>) -> Void
+    ) {
+        let parameters: [String: Any] = [
+            "score": score,
+            "content": content
+        ]
+        
+        networkClient.request(endpointUrl: "/api/v0/recipes/\(id)/ratings", method: .post, parameters: parameters, completion: completion)
+    }
+
+    func updateRating(
+        id: Int64,
+        recipeId: Int64,
+        score: Int,
+        content: String,
+        completion: @escaping (Result<Empty, NetworkError>) -> Void
+    ) {
+        let parameters: [String: Any] = [
+            "score": score,
+            "content": content
+        ]
+        
+        networkClient.request(endpointUrl: "/api/v0/recipes/\(recipeId)/ratings/\(id)", method: .put, parameters: parameters, completion: completion)
+    }
     
+    func deleteRating(
+        id: Int64,
+        recipeId: Int64,
+        completion: @escaping (Result<Empty, NetworkError>) -> Void
+    ) {
+        networkClient.request(endpointUrl: "/api/v0/recipes/\(recipeId)/ratings/\(id)", method: .delete, completion: completion)
+    }
     
 }
 

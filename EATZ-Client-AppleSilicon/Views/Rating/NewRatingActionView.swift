@@ -41,7 +41,7 @@ struct NewRatingActionView: View {
                         .foregroundStyle(Color.init("8F8F8F"))
                 }
             }
-            .padding(20)
+            .padding(24)
             .border(color: Color.init("EDEDED"), width: 1, radius: 20)
         }
         .padding(.horizontal, 20)

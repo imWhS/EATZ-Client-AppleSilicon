@@ -9,17 +9,16 @@ import SwiftUI
 
 enum ModalStyle { case sheet, fullScreenCover, alert }
 
-enum ModalRoute: Identifiable, Equatable {
+enum ModalRoute: Identifiable {
     case authMain(promptMessage: AuthPresentMessageType)
-    case ratingEditor(recipeEssential: RecipeEssential)
-//    case rating(recipeId: Int64)
+    case ratingEditor(recipeId: Int64, onComplete: () -> Void)
     
     var id: String {
         switch self {
         case .authMain(let promptMessage):
             return "authMain-\(promptMessage)"
-        case .ratingEditor(let recipeEssential):
-            return "ratingEditor-\(recipeEssential.id)"
+        case .ratingEditor(let recipeId, let onComplete):
+            return "ratingEditor-\(recipeId)"
         }
     }
     
@@ -28,7 +27,7 @@ enum ModalRoute: Identifiable, Equatable {
         case .authMain:
             return .fullScreenCover
         case .ratingEditor:
-            return .sheet
+            return .fullScreenCover
         }
     }
     
@@ -37,8 +36,8 @@ enum ModalRoute: Identifiable, Equatable {
         switch self {
         case .authMain(let promptMessage):
             AuthView(promptMessage: promptMessage)
-        case .ratingEditor(let recipeEssential):
-            RatingEditorView(recipeEssential: recipeEssential)
+        case .ratingEditor(let recipeId, let onComplete):
+            RatingEditorView(recipeId: recipeId, onComplete: onComplete)
         }
     }
 }

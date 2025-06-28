@@ -56,7 +56,7 @@ struct RecipeView: View {
             
         case .loaded(let recipe):
             RecipeDetailView(
-                showAuthModal: $authManager.loginPrompt,
+//                showAuthModal: $authManager.loginPrompt,
                 recipe: recipe,
                 ingredientListState: viewModel.ingredientListState,
                 isLoggedIn: authManager.isLoggedIn,
@@ -98,7 +98,7 @@ struct RecipeView: View {
 }
 
 struct RecipeDetailView: View {
-    @Binding var showAuthModal: AuthPresentMessageType?
+//    @Binding var showAuthModal: AuthPresentMessageType?
     
     let recipe: RecipeResponse
     let ingredientListState: RecipeIngredientListState

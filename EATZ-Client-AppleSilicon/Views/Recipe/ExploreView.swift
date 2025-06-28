@@ -29,6 +29,12 @@ struct ExploreView: View {
                     }
                 ]) {
                     VStack {
+                        if let tkn =
+                            KeychainService.load(key: "accessToken") {
+                            Text("Token: \(tkn)")
+                        } else {
+                            Text("Token is nil")
+                        }
                         RecipeSearchView()
                         
                         HStack {
@@ -63,10 +69,6 @@ struct ExploreView: View {
             .navigationDestination(for: ViewRoute.self) { route in
                 DestinationView(route: route)
             }
-        }
-
-        .onAppear {
-            viewModel.fetchRecipeList()
         }
     }
     

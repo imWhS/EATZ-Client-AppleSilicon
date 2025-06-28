@@ -40,12 +40,12 @@ struct RatingBarView: View {
                 ZStack(alignment: .leading) {
                     Capsule()
                         .fill(Color(.systemGray5))
-                        .frame(height: 10)
+                        .frame(height: 8)
                     Capsule()
                         .fill(Color.init("D69E5C"))
                         .frame(
                             width: animatedRatio * proxy.size.width,
-                            height: 10
+                            height: 8
                         )
                 }
                 .onAppear {

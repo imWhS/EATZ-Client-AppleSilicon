@@ -18,6 +18,10 @@ class RecipeListViewModel: ObservableObject {
     
     private let recipeService = RecipeService()
     
+    init() {
+        fetchRecipeList()
+    }
+    
     func fetchRecipeList(page: Int = 0, size: Int = 10) {
         isLoading = true
         errorMessage = nil

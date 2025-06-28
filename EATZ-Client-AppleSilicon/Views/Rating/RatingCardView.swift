@@ -10,8 +10,8 @@ import SwiftUI
 struct RatingCardView: View {
     let rating: RatingItem
     let canManageRating: Bool
-    let onHide: (() -> Void)?
-    let onDelete: (() -> Void)?
+    let onHide: (Int64) -> Void
+    let onDelete: (RatingItem) -> Void
     
     var body: some View {
         VStack(spacing: 8) {
@@ -34,12 +34,17 @@ struct RatingCardView: View {
                         .font(.system(size: 12))
                     }
                 }
-                HorizontalDividerView(horizontalPadding: 0)
-                Text(rating.content)
-                    .lineLimit(nil)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
+                
+                if (!rating.content.isEmpty) {
+                    VStack(spacing: 16) {
+                        HorizontalDividerView(horizontalPadding: 0)
+                        Text(rating.content)
+                            .lineLimit(nil)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .multilineTextAlignment(.leading)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
             }
             .padding(24)
             .background(Color.init("F9F9F9"))
@@ -49,12 +54,12 @@ struct RatingCardView: View {
             if canManageRating {
                 HStack(spacing: 0) {
                     Spacer()
-                    Button("숨기기") {
-                        onHide?()
+                    Button("삭제하기") {
+                        onDelete(rating)
                     }
                     .buttonStyle(SmallBorderlessButtonStyle())
-                    Button("삭제하기") {
-                        onDelete?()
+                    Button("숨기기") {
+                        onHide(rating.id)
                     }
                     .buttonStyle(SmallBorderlessButtonStyle())
                 }
@@ -62,7 +67,6 @@ struct RatingCardView: View {
                 .padding(.horizontal, 8)
             }
         }
-        
     }
 }
 
@@ -83,7 +87,7 @@ struct RatingCardView: View {
     RatingCardView(
         rating: rating,
         canManageRating: true,
-        onHide: { print("숨기기") },
-        onDelete: { print("삭제하기") }
+        onHide: { id in print("숨기기: \(id)") },
+        onDelete: { id in print("삭제하기: \(id)") }
     )
 }

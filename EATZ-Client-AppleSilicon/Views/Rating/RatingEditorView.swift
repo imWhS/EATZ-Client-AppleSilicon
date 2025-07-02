@@ -77,7 +77,7 @@ struct RatingEditorView: View {
             authManager.fetchCurrentUser()
         }
         .alert(
-            "잠깐! 변경된 내용이 있어요.",
+            "잠깐! 변경된 내용이 있어요",
             isPresented: $showDiscardAlert,
             actions:  discardAlertActions,
             message: {
@@ -89,7 +89,7 @@ struct RatingEditorView: View {
             isPresented: $showScoreAlert) {
                 Button("확인", role: .cancel) {}
         }
-        .sheetPresenter()
+//        .sheetPresenter()
     }
     
     private func handleRatingStateChange(_ newState: ExistingRatingState) {

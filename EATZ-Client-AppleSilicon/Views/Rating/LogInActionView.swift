@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct LogInActionView: View {
+    let onAction: () -> Void
+    
     var body: some View {
         VStack {
             VStack(alignment: .center, spacing: 28) {
@@ -23,9 +25,10 @@ struct LogInActionView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Button(action: {
-                    ModalManager.shared.sheet = .authMain(promptMessage: .logIn)
+                    onAction()
+//                    ModalManager.shared.sheet = .authMain(promptMessage: .logIn)
                 }) {
-                    Text("이메일로 계속하기")
+                    Text("이메일로 시작하기")
                 }
                 .buttonStyle(SmallRoundedButtonStyle(type: .primary))
             }

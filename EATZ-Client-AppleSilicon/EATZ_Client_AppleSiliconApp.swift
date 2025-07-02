@@ -14,7 +14,7 @@ struct EATZ_Client_AppleSiliconApp: App {
     
     @StateObject private var errorManager = ErrorManager.shared
     
-    @StateObject private var sheetManager = ModalManager.shared
+//    @StateObject private var sheetManager = ModalManager.shared
     
     @Environment(\.scenePhase) private var scenePhase
     
@@ -23,7 +23,7 @@ struct EATZ_Client_AppleSiliconApp: App {
             RootTabView()
                 .environmentObject(authManager)
                 .environmentObject(errorManager)
-                .environmentObject(sheetManager)
+//                .environmentObject(sheetManager)
         }
         .onChange(of: scenePhase) { newPhase in
             if newPhase == .active, authManager.isLoggedIn {

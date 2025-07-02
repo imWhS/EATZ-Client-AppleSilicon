@@ -75,7 +75,8 @@ struct RecipeView: View {
                 onIngredientRemoveTapped: { id in
                     viewModel.removeIngredientFromUser(ingredientId: id)
                 },
-                isUpdatingIngredient: viewModel.isUpdatingIngredient
+                isUpdatingIngredient: viewModel.isUpdatingIngredient,
+                onLogIn: { authManager.isRequiredAuth = .logIn() }
             )
         case .error(let message):
             VStack(spacing: 20) {
@@ -111,6 +112,7 @@ struct RecipeDetailView: View {
     let onIngredientAddTapped: (Int64) -> Void
     let onIngredientRemoveTapped: (Int64) -> Void
     let isUpdatingIngredient: [Int64: Bool]
+    let onLogIn: () -> Void
     
     @State private var scrollOffset: CGPoint = .zero
     @State private var imageHeight: CGFloat = .zero
@@ -137,7 +139,8 @@ struct RecipeDetailView: View {
                 )
             } else {
                 RecipeIngredientsPublicView(
-                    ingredients: ingredients
+                    ingredients: ingredients,
+                    onAction: onLogIn
                 )
             }
         case .error(let message):

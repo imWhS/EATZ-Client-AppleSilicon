@@ -24,7 +24,7 @@ enum RatingDeleteType: Equatable, Identifiable {
 
 enum RatingViewAlert: Identifiable, Equatable {
     case confirmDelete(type: RatingDeleteType, rating: RatingItem)
-    case deletionSuccess
+    case deletionSuccess(type: RatingDeleteType)
 
     var id: String {
         switch self {
@@ -47,8 +47,7 @@ struct RatingView: View {
     @State private var showSuccessDeletionMyRatingAlert = false
     
     @State private var alert: RatingViewAlert? = nil
-    
-    @State private var isSamplePresented: Bool = false
+    @State private var isPresentingEditor = false
     
     init(recipeId: Int64) {
         _viewModel = StateObject(wrappedValue: RatingViewModel(recipeId: recipeId))
@@ -59,7 +58,7 @@ struct RatingView: View {
             if viewModel.shouldShowEmptyView {
                 VStack(spacing: 0) {
                     RatingRecipeEssentialView(state: viewModel.recipeEssentialState)
-                    RatingEmptyView(isLoggedIn: authManager.isLoggedIn, onRegister: editMyRating)
+                    RatingEmptyView(isLoggedIn: authManager.isLoggedIn, onRegister: registerRatingWithoutAuth)
                 }
             } else {
                 ScrollView {
@@ -69,8 +68,14 @@ struct RatingView: View {
                         RatingMySectionView(
                             currentUser: authManager.currentUser,
                             state: viewModel.myRatingState,
-                            onEditTapped: editMyRating,
-                            onDeleteTapped: { rating in triggerDelete(type: .mine, rating: rating) })
+                            onEdit: editMyRating,
+                            onDelete: { rating in triggerDelete(type: .mine, rating: rating) },
+                            onLogIn: {
+                                authManager.performAfterLogIn {
+                                    viewModel.reloadAllRatings()
+                                }
+                            }
+                        )
                         RatingListSectionView(
                             ratings: viewModel.ratings,
                             canManage: canManage,
@@ -88,15 +93,28 @@ struct RatingView: View {
                 return Alert(
                     title: Text(type == .mine ? "평가를 정말 삭제하시겠어요?" : "\(username)님의 평가를 정말 삭제하시겠어요?"),
                     message: Text(""),
-                    primaryButton: .destructive(Text("삭제"), action: { performDelete(type: type, rating: rating)}),
-                    secondaryButton: .cancel()
+                    primaryButton: .destructive(Text("삭제")) { performDelete(type: type, rating: rating)},
+                    secondaryButton: .cancel(Text("취소"))
                 )
-            case .deletionSuccess:
+            case .deletionSuccess(let type):
                 return Alert(
                     title: Text("삭제했습니다."),
-                    dismissButton: .default(Text("확인"), action: reloadAfterDeletion)
+                    dismissButton: .default(Text("확인")) {
+                        reloadAfterDeletion()
+                        if (type == .mine) {
+                            viewModel.fetchRatingList()
+                        }
+                    }
                 )
             }
+        }
+        .fullScreenCover(
+            isPresented: $isPresentingEditor,
+            onDismiss: {
+                viewModel.reloadAllRatings()
+            }
+        ) {
+            RatingEditorView(recipeId: viewModel.recipeId, onComplete: { print("completed!") })
         }
         .onAppear {
             print("DBG RATING - onAppear")
@@ -104,12 +122,7 @@ struct RatingView: View {
         }
         .onChange(of: authManager.isLoggedIn) { newValue in
             print("DBG RATING - onChange of: authManager.isLoggedIn - \(authManager.isLoggedIn) -> \(newValue)")
-            if case .error = viewModel.ratingSummaryState {
-                // isLoggedIn 상태 변경 전, 토큰 만료(세션 만료) 등으로 인해 RatingSummaryState가 .error 였다면, 레시피 요약, 내 평가 섹션, 평가 목록 섹션도 모두 정상적으로 화면에 보여지고 있지 않을 것이기에 전체 데이터를 모두 새로고침합니다.
-                viewModel.reloadAll()
-            } else {
-                viewModel.fetchMyRating()
-            }
+            viewModel.reloadAll()
         }
         .onChange(of: authManager.currentUser) { newValue in
             print("DBG RATING - onChange of: authManager.currentUser.username - \(authManager.currentUser?.username) -> \(newValue?.username)")
@@ -122,9 +135,6 @@ struct RatingView: View {
         }
         .navigationTitle(viewModel.ratings.count > 0 ? "\(viewModel.ratings.count)개의 평가" : "평가")
         .navigationBarTitleDisplayMode(.inline)
-        .sheet(isPresented: $isSamplePresented) {
-            Text("hello world!")
-        }
     }
     
     private func reloadAfterDeletion() {
@@ -149,24 +159,27 @@ struct RatingView: View {
         switch type {
         case .mine:
             viewModel.deleteMyRating(id: rating.id) {
-                alert = .deletionSuccess
+                alert = .deletionSuccess(type: .mine)
             }
         case .other:
             viewModel.deleteRatingItem(id: rating.id) {
-                alert = .deletionSuccess
+                alert = .deletionSuccess(type: .other(username: rating.user.username))
             }
         }
     }
 
     
+    private func registerRatingWithoutAuth() {
+        authManager.requireAuthWithCompletion(.authRequiredAction(onDismiss: { isLoggedIn in
+            if (isLoggedIn) {
+                self.isPresentingEditor = true
+            }
+        }))
+    }
     
     private func editMyRating() {
         authManager.performAfterLogIn {
-            print("DBGTEST - editMyRating")
-            isSamplePresented = true
-//            ModalManager.shared.sheet = .ratingEditor(recipeId: viewModel.recipeId) {
-//                viewModel.reloadAllRatings()
-//            }
+            self.isPresentingEditor = true
         }
     }
 

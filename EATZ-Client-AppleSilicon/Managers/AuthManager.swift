@@ -8,13 +8,37 @@
 import Foundation
 import SwiftUI
 
-/// 로그인 sheet를 띄울 때 메시지를 함께 전달하기 위해 사용합니다.
-enum AuthPresentMessageType: Identifiable {
-    case logIn
-    case authRequiredAction
-    case sessionExpired
+/// AuthView를 띄울 때 메시지를 함께 전달하기 위해 사용합니다.
+enum AuthContext: Identifiable {
+//    case logIn(onDismiss: (() -> Void)? = nil)
+//    case authRequiredAction(onDismiss: (() -> Void)? = nil)
+//    case sessionExpired(onDismiss: (() -> Void)? = nil)
+    case logIn(onDismiss: ((Bool) -> Void)? = nil)
+    case authRequiredAction(onDismiss: ((Bool) -> Void)? = nil)
+    case sessionExpired(onDismiss: ((Bool) -> Void)? = nil)
 
-    var id: Int { hashValue }
+    var id: String {
+        switch self {
+        case .logIn:
+            return "logIn"
+        case .authRequiredAction:
+            return "authRequiredAction"
+        case .sessionExpired:
+            return "sessionExpired"
+        }
+    }
+    
+    // Equatable 프로토콜을 수동으로 준수합니다. 클로저는 비교할 수 없으므로, case의 종류만 비교합니다.
+    static func == (lhs: AuthContext, rhs: AuthContext) -> Bool {
+        switch (lhs, rhs) {
+        case (.logIn, .logIn),
+             (.authRequiredAction, .authRequiredAction),
+             (.sessionExpired, .sessionExpired):
+            return true
+        default:
+            return false
+        }
+    }
 
     /// 로그인 시트에 보여줄 안내 메시지
     var message: String {
@@ -25,6 +49,20 @@ enum AuthPresentMessageType: Identifiable {
             return "로그인 후 계속 진행할 수 있어요."
         case .sessionExpired:
             return "인증이 만료됐어요. 다시 로그인해주세요."
+        }
+    }
+    
+    /// 연관 값으로 전달된 onDismiss 클로저를 쉽게 꺼내쓰기 위한 편의 프로퍼티
+//    var onDismiss: (() -> Void)? {
+//        switch self {
+//        case .logIn(let onDismiss), .authRequiredAction(let onDismiss), .sessionExpired(let onDismiss):
+//            return onDismiss
+//        }
+//    }
+    var onDismiss: ((Bool) -> Void)? {
+        switch self {
+        case .logIn(let onDismiss), .authRequiredAction(let onDismiss), .sessionExpired(let onDismiss):
+            return onDismiss
         }
     }
 }
@@ -44,18 +82,27 @@ class AuthManager: ObservableObject {
     private lazy var userService = UserService.shared
     
     /// 현재 로그인(인증) 상태입니다.
-    @Published private(set) var isLoggedIn: Bool = false
+    @Published var isLoggedIn: Bool = false
     
     /// 현재 로그인된 사용자 정보입니다.
     @Published var currentUser: CurrentUser? = nil
+    
+    @Published var isShowingAuthView: Bool = false
+    
+    @Published var isRequiredAuth: AuthContext? = nil
     
     private var accessToken: String? {
         didSet {
             DispatchQueue.main.async {
                 self.isLoggedIn = (self.accessToken != nil)
+                print("PRESENTDBG - isLoggedIn: \(self.isLoggedIn)")
             }
         }
     }
+    
+    
+//    private var pendingAuthOnDismiss: (() -> Void)? = nil
+    private var pendingAuthOnDismiss: ((Bool) -> Void)? = nil
     
     /// 로그인 후 실행해야 할 작업들을 일시적으로 보관합니다.
     private var pendingActions: [() -> Void] = []
@@ -63,6 +110,18 @@ class AuthManager: ObservableObject {
     private init() {
         accessToken = KeychainService.load(key: Self.accessTokenKey)
         print("AUTHDBG [AuthManager] \(isLoggedIn ? "전역 로그인 상태로 초기화됐어요." : "전역 비로그인 상태로 초기화됐어요.")")
+    }
+    
+    func requireAuthWithCompletion(_ context: AuthContext) {
+        self.pendingAuthOnDismiss = context.onDismiss
+        self.isRequiredAuth = context
+    }
+     
+    func handleAuthDismiss() {
+        self.isRequiredAuth = nil
+        // 클로저를 실행할 때 현재 로그인 상태(self.isLoggedIn)를 전달합니다.
+        self.pendingAuthOnDismiss?(self.isLoggedIn)
+        self.pendingAuthOnDismiss = nil
     }
       
     func saveAccessToken(_ accessToken: String) -> Bool {
@@ -81,9 +140,12 @@ class AuthManager: ObservableObject {
         } else {
             print("[AuthManager.performAfterLogIn] 인증이 필요한 액션을 보류할게요.")
             pendingActions.append(action)
-            ModalManager.shared.sheet = .authMain(promptMessage: .authRequiredAction)
+            isRequiredAuth = .authRequiredAction()
+//            ModalManager.shared.sheet = .authMain(promptMessage: .authRequiredAction)
         }
     }
+    
+    
     
     /**
      잠시 보류했던 인증 필요 액션을 한 번에 순차적으로 실행합니다.
@@ -93,7 +155,7 @@ class AuthManager: ObservableObject {
         pendingActions.removeAll()
         if actions.count == 0 { return }
 
-        print("[AuthManager.flushPendingActions] 보류된 액션 \(actions.count)개를 실행할게요")
+        print("DISMISSDBG - [AuthManager.flushPendingActions] 보류된 액션 \(actions.count)개를 실행할게요")
         actions.forEach { $0() }
     }
     
@@ -101,7 +163,8 @@ class AuthManager: ObservableObject {
     func handleSessionExpired() {
         currentUser = nil
         clearTokens()
-        ModalManager.shared.sheet = .authMain(promptMessage: .sessionExpired)
+        isRequiredAuth = .sessionExpired()
+//        ModalManager.shared.sheet = .authMain(promptMessage: .sessionExpired)
     }
 
     /// 앱에서 보관 중인 액세스 토큰을 초기화합니다.

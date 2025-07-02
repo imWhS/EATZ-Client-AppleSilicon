@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RecipeIngredientsPublicView: View {
     let ingredients: [RecipeIngredient]
+    let onAction: () -> Void
 
     var body: some View {
         VStack(alignment: .center, spacing: 20) {
@@ -22,10 +23,8 @@ struct RecipeIngredientsPublicView: View {
                         .multilineTextAlignment(.center)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-                Button(action: {
-                    ModalManager.shared.sheet = .authMain(promptMessage: .logIn)
-                }) {
-                    Text("이메일로 계속하기")
+                Button(action: onAction) {
+                    Text("이메일로 시작하기")
                 }
                 .buttonStyle(SmallRoundedButtonStyle(type: .primary))
             }
@@ -51,12 +50,12 @@ struct RecipeIngredientsPublicView: View {
     }
 }
 
-#Preview {
-    RecipeIngredientsPublicView(
-        ingredients: [
-            RecipeIngredient(id: 1, name: "고추장", ownedByUser: true),
-            RecipeIngredient(id: 2, name: "양파", ownedByUser: false),
-            RecipeIngredient(id: 3, name: "돼지고기 앞다리살", ownedByUser: false)
-        ]
-    )
-}
+//#Preview {
+//    RecipeIngredientsPublicView(
+//        ingredients: [
+//            RecipeIngredient(id: 1, name: "고추장", ownedByUser: true),
+//            RecipeIngredient(id: 2, name: "양파", ownedByUser: false),
+//            RecipeIngredient(id: 3, name: "돼지고기 앞다리살", ownedByUser: false)
+//        ]
+//    )
+//}

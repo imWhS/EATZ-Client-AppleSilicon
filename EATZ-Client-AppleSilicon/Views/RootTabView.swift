@@ -48,7 +48,19 @@ struct RootTabView: View {
                 .tabItem { Label(MainTabItemsData.hello.title, systemImage: MainTabItemsData.hello.systemImage) }
             }
         }
-        .sheetPresenter()
+        .fullScreenCover(item: $authManager.isRequiredAuth, onDismiss: {
+            authManager.handleAuthDismiss()
+        }) { context in
+            AuthView(context: context)
+        }
+//        .fullScreenCover(item: $authManager.isRequiredAuth, onDismiss: {
+//            authManager.isRequiredAuth?.onDismiss!()
+//
+//            authManager.isRequiredAuth = nil
+//            print("PRESENTDBG - root tab view - bye")
+//        }) { context in
+//            AuthView(context: context)
+//        }
     }
 }
 

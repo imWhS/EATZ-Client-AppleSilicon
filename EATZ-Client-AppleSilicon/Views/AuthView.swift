@@ -11,7 +11,7 @@ struct AuthView: View {
     
     @EnvironmentObject var authManager: AuthManager
     
-    let promptMessage: AuthPresentMessageType
+    let context: AuthContext
     
     @StateObject var viewModel = AuthViewModel()
     
@@ -33,7 +33,7 @@ struct AuthView: View {
                     }
                     
                     VStack(spacing: 40) {
-                        FrontView(loginPrompt: promptMessage)
+                        FrontView(loginPrompt: context)
                         VStack(spacing: 12) {
                             FloatingTitleTextField(
                                 title: "이메일 주소",
@@ -116,7 +116,7 @@ struct AuthView: View {
     }
     
     private struct FrontView: View {
-        let loginPrompt: AuthPresentMessageType
+        let loginPrompt: AuthContext
         
         var body: some View {
             VStack(spacing: 16) {
@@ -148,5 +148,5 @@ struct AuthView: View {
 }
 
 #Preview {
-    AuthView(promptMessage: .logIn)
+    AuthView(context: .logIn())
 }

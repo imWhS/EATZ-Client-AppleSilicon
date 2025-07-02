@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-extension View {
-    func sheetPresenter() -> some View {
-        modifier( ModalPresenterModifier() )
-    }
-}
+//extension View {
+//    func sheetPresenter() -> some View {
+//        modifier( ModalPresenterModifier() )
+//    }
+//}
 
 extension View {
     func trackOffset(into binding: Binding<CGPoint>) -> some View {

@@ -131,7 +131,6 @@ class RecipeViewModel: ObservableObject {
         
         isUpdatingIngredient[ingredientId] = true
         
-        print("ID가 \(ingredientId)인 재료를 사용자 보유 재료로 추가할게요.")
         newIngredients[index].ownedByUser = true
         ingredientListState = .loaded(newIngredients)
         
@@ -168,7 +167,6 @@ class RecipeViewModel: ObservableObject {
         
         isUpdatingIngredient[ingredientId] = true
         
-        print("ID가 \(ingredientId)인 재료를 사용자 보유 재료에서 제거할게요.")
         newIngredients[index].ownedByUser = false
         ingredientListState = .loaded(newIngredients)
         

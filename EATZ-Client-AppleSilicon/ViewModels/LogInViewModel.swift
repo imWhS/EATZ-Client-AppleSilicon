@@ -20,7 +20,6 @@ class LogInViewModel: ObservableObject {
         guard validatePassword() else { return }
         isLoading = true
         
-        print("[SignInViewModel.signIn] 로그인을 요청할게요")
         authManager.logIn(email: email, password: password) { [weak self] result in
             guard let self = self else { return }
             
@@ -30,13 +29,11 @@ class LogInViewModel: ObservableObject {
                 switch result {
                 case .success(()):
 //                    self.authManager.loginPrompt = nil
-                    print("성공")
                     completion()
 //                    SheetManager.shared.sheet = nil
                 case .failure(let networkError):
                     switch networkError {
                     case .afError(let afError):
-                        print("Alamofire 에러 \(afError.localizedDescription)")
                         self.statusMessage = networkError.userMessage
                     case .serverError(let errorResponse):
                         self.statusMessage = errorResponse.message

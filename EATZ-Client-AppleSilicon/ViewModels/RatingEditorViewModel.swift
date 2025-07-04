@@ -57,7 +57,7 @@ class RatingEditorViewModel: ObservableObject {
                 case .success(let recipeEssential):
                     self.recipeEssential = recipeEssential
                 case .failure(let networkError):
-                    print("오류가 발생했어요: \(networkError.localizedDescription)")
+                    print("[RatingEditorViewModel.loadRecipeEssential] 오류가 발생했어요: \(networkError.localizedDescription)")
                 }
             }
         }
@@ -85,7 +85,6 @@ class RatingEditorViewModel: ObservableObject {
                     self.existingRatingState = .loaded
                     self.setFormData(rating: rating)
                 case .failure(let networkError):
-                    print("오류가 발생했어요: \(networkError.localizedDescription)")
                     self.existingRatingState = .error(networkError.localizedDescription)
                 }
             }

@@ -48,7 +48,7 @@ final class KeychainService {
               let data = result as? Data,
               let str = String(data: data, encoding: .utf8)
         else {
-            print("AUTHDBG [KeychainService] '\(key)'에 해당하는 데이터를 불러오지 못했어요.")
+            print("[KeychainService] '\(key)'에 해당하는 데이터를 불러오지 못했어요.")
             return nil
         }
         return str

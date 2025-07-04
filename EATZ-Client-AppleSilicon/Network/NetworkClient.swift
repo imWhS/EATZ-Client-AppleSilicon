@@ -71,7 +71,7 @@ class NetworkClient {
             return
         }
         
-        print("[NetworkClient.request] \(url.relativePath) | HTTP 요청을 보낼게요")
+        print("[NetworkClient.request] \(method.rawValue) \(url.relativePath)")
         
         authSession.request(
             url,
@@ -82,19 +82,18 @@ class NetworkClient {
         .responseDecodable(of: T.self, decoder: decoder) { response in
             switch response.result {
             case .success(let decodable):
-                print("[NetworkClient.request] \(url.relativePath) | 서버 응답 디코딩을 성공했어요.")
                 completion(.success(decodable))
             case .failure(let afError):
                 // 서버의 오류 데이터부터 확인합니다.
                 if let data = response.data,
                    let apiError = self.decodeAPIError(from: data) {
                     // 서버의 오류 데이터가 HTTP 응답 바디에 존재하는 경우, 서버의 오류 데이터 속 메시지를 반환합니다.
-                    print("[NetworkClient.request] \(url.relativePath) | 서버 오류예요: \(apiError.message)")
+                    print("[NetworkClient.request] \(method.rawValue) \(url.relativePath) | 서버 오류예요: \(apiError.message)")
                     let error = NetworkError.serverError(apiError)
                     completion(.failure(error))
                 } else {
                     // 서버의 오류 데이터가 없는 경우, 네트워크 오류로 처리합니다.
-                    print("[NetworkClient.request] \(url.relativePath) | 네트워크 통신 오류예요: \(afError.localizedDescription)")
+                    print("[NetworkClient.request] \(method.rawValue) \(url.relativePath) | 네트워크 통신 오류예요: \(afError.localizedDescription)")
                     let error = NetworkError.afError(afError)
                     ErrorManager.shared.showError(message: error.userMessage)
                     completion(.failure(error))
@@ -117,7 +116,7 @@ class NetworkClient {
             return
         }
         
-        print("[NetworkClient.requestOptional] \(url.relativePath) | HTTP 요청을 보낼게요")
+        print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath)")
         authSession.request(
             url,
             method: method,
@@ -128,27 +127,27 @@ class NetworkClient {
             switch response.result {
             case .success(let data):
                 guard let httpResponse = response.response else {
-                    print("[NetworkClient.requestOptional] \(url.relativePath) | HTTP 응답 데이터가 없어요.")
+                    print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath) | HTTP 응답 데이터가 없어요.")
                     completion(.failure(.unknown("서버로부터 HTTP 응답 데이터를 받지 못했어요.")))
                     return
                 }
                 
                 let status = httpResponse.statusCode
                 if status == 204 {
-                    print("[NetworkClient.requestOptional] \(url.relativePath) | 204 No Content → nil 반환")
+                    print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath) | 204 No Content → nil 반환")
                     completion(.success(nil))
                 } else if (200..<300).contains(status) {
                     do {
                         let decoded = try decoder.decode(T.self, from: data)
-                        print("[NetworkClient.requestOptional] \(url.relativePath) | 서버 응답 디코딩 성공")
+                        print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath) | 서버 응답 디코딩 성공")
                         completion(.success(decoded))
                     } catch {
-                        print("[NetworkClient.requestOptional] \(url.relativePath) | 디코딩 오류: \(error.localizedDescription)")
+                        print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath) | 디코딩 오류: \(error.localizedDescription)")
                         completion(.failure(.unknown("응답 데이터 처리를 실패했어요.")))
                     }
                 // 204, 200~299에 해당하지 않는 상태 코드가 온 경우
                 } else {
-                    print("[NetworkClient.requestOptional] \(url.relativePath) | API 처리 오류 - 응답 코드: \(status)")
+                    print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath) | API 처리 오류 - 응답 코드: \(status)")
                     completion(.failure(.unknown("서버에서 요청 처리를 실패했어요: \(status)")))
                 }
             case .failure(let afError):
@@ -156,12 +155,12 @@ class NetworkClient {
                 if let data = response.data,
                    let apiError = self.decodeAPIError(from: data) {
                     // 서버의 오류 데이터가 HTTP 응답 바디에 존재하는 경우, 서버의 오류 데이터 속 메시지를 반환합니다.
-                    print("[NetworkClient.requestOptional] \(url.relativePath) | 서버 오류예요: \(apiError.message)")
+                    print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath) | 서버 오류예요: \(apiError.message)")
                     let error = NetworkError.serverError(apiError)
                     completion(.failure(error))
                 } else {
                     // 서버의 오류 데이터가 없는 경우, 네트워크 오류로 처리합니다.
-                    print("[NetworkClient.requestOptional] \(url.relativePath) | 네트워크 통신 오류예요: \(afError.localizedDescription)")
+                    print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath) | 네트워크 통신 오류예요: \(afError.localizedDescription)")
                     let error = NetworkError.afError(afError)
                     ErrorManager.shared.showError(message: error.userMessage)
                     completion(.failure(error))
@@ -182,7 +181,7 @@ class NetworkClient {
             return
         }
         
-        print("[NetworkClient.authRequest] \(url.relativePath) | HTTP 요청을 보낼게요")
+        print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath)")
         
         basicSession.request(
             url,
@@ -193,7 +192,7 @@ class NetworkClient {
         .response { response in
             // 서버의 HTTP 응답을 확인합니다.
             guard let httpResponse = response.response else {
-                print("[NetworkClient.authRequest] \(url.relativePath) | 서버로부터 받은 응답이 없어요.")
+                print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath) | 서버로부터 받은 응답이 없어요.")
                 completion(.failure(.afError(AFError.responseValidationFailed(reason: .dataFileNil))))
                 return
             }
@@ -204,10 +203,10 @@ class NetworkClient {
             // 서버가 오류 응답과 함께 오류 정보 데이터를 바디에 포함시켰는지 확인합니다.
             if !(200 ..< 300).contains(statusCode) {
                 if let data = response.data, let apiError = self.decodeAPIError(from: data) {
-                    print("[NetworkClient.authRequest] 서버 오류예요(\(statusCode)) | \(apiError.errorCode) | \(apiError.message)")
+                    print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath) | 서버 오류예요(\(statusCode)) | \(apiError.errorCode) | \(apiError.message)")
                     completion(.failure(.serverError(apiError)))
                 } else {
-                    print("[NetworkClient.authRequest] 알 수 없는 서버 오류예요(\(statusCode)) | 서버가 오류 정보를 제공하지 않았어요.")
+                    print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath) | 알 수 없는 서버 오류예요(\(statusCode)) | 서버가 오류 정보를 제공하지 않았어요.")
                     completion(.failure(.unknown("알 수 없는 서버 오류가 발생했어요.")))
                 }
                 return
@@ -215,7 +214,7 @@ class NetworkClient {
             
             // 네트워크 오류 여부를 확인합니다.
             if let afError = response.error {
-                print("[NetworkClient.authRequest] \(url.relativePath) | 네트워크 통신 오류예요 | \(afError.localizedDescription)")
+                print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath) | 네트워크 통신 오류예요 | \(afError.localizedDescription)")
                 let error = NetworkError.afError(afError)
 //                ErrorManager.shared.showError(message: error.userMessage)
                 completion(.failure(error))
@@ -224,25 +223,23 @@ class NetworkClient {
             
             // Authorizatin 헤더에서 액세스 토큰을 추출합니다.
             guard let accessToken = self.extractAccessToken(from: response.response!.allHeaderFields) else {
-                print("[NetworkClient.authRequest] Authorization 헤더를 파싱하지 못해서, 액세스 토큰을 추출하지 못했어요.")
+                print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath) | Authorization 헤더를 파싱하지 못해서, 액세스 토큰을 추출하지 못했어요.")
                 completion(.failure(.unknown("서버로부터 올바른 액세스 토큰을 받지 못했어요.")))
                 return
             }
             
             // HttpOnly 쿠키에서 리프레시 토큰을 추출합니다.
             guard let cookies = HTTPCookieStorage.shared.cookies(for: url) else {
-                print("[NetworkClient.authRequest] \(url.relativePath) | HttpOnly 쿠키가 존재하지 않아요.")
+                print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath) | HttpOnly 쿠키가 존재하지 않아요.")
                 completion(.failure(.afError(AFError.responseValidationFailed(reason: .unacceptableStatusCode(code: httpResponse.statusCode)))))
                 return
             }
             
             guard let refreshToken = self.extractRefreshToken(from: url) else {
-                print("[NetworkClient.authRequest] HttpOnly 쿠키에서 리프레시 토큰을 추출하지 못했어요.")
+                print("[NetworkClient.authRequest]\(method.rawValue) \(url.relativePath) | HttpOnly 쿠키에서 리프레시 토큰을 추출하지 못했어요.")
                 completion(.failure(.unknown("서버로부터 올바른 리프레시 토큰을 받지 못했어요.")))
                 return
             }
-            
-            print("[NetworkClient.authRequest] 요청에 대한 응답을 성공적으로 받고 처리했어요. | 액세스 토큰: \(accessToken.suffix(8)) | 리프레시 토큰: \(refreshToken.suffix(8))")
             
             completion(.success(AuthTokens(accessToken: accessToken, refreshToken: refreshToken)))
         }

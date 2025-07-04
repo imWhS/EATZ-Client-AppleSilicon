@@ -114,18 +114,15 @@ struct RatingView: View {
                 viewModel.reloadAllRatings()
             }
         ) {
-            RatingEditorView(recipeId: viewModel.recipeId, onComplete: { print("completed!") })
+            RatingEditorView(recipeId: viewModel.recipeId, onComplete: {  })
         }
         .onAppear {
-            print("DBG RATING - onAppear")
             viewModel.reloadAll()
         }
         .onChange(of: authManager.isLoggedIn) { newValue in
-            print("DBG RATING - onChange of: authManager.isLoggedIn - \(authManager.isLoggedIn) -> \(newValue)")
             viewModel.reloadAll()
         }
         .onChange(of: authManager.currentUser) { newValue in
-            print("DBG RATING - onChange of: authManager.currentUser.username - \(authManager.currentUser?.username) -> \(newValue?.username)")
             if case .error = viewModel.ratingSummaryState {
                 // currentUser 상태 변경 전, 토큰 만료(세션 만료) 등으로 인해 RatingSummaryState가 .error 였다면, 레시피 요약, 내 평가 섹션, 평가 목록 섹션도 모두 정상적으로 화면에 보여지고 있지 않을 것이기에 전체 데이터를 모두 새로고침합니다.
                 viewModel.reloadAllRatings()
@@ -170,11 +167,19 @@ struct RatingView: View {
 
     
     private func registerRatingWithoutAuth() {
-        authManager.requireAuthWithCompletion(.authRequiredAction(onDismiss: { isLoggedIn in
-            if (isLoggedIn) {
-                self.isPresentingEditor = true
-            }
-        }))
+        authManager.presentAfterLogIn {
+            self.isPresentingEditor = true
+        }
+//        if authManager.isLoggedIn {
+//            self.isPresentingEditor = true
+//        } else {
+////            authManager.requireAuthWithCompletion(.authRequiredAction(onDismiss: { isLoggedIn in
+////                if (isLoggedIn) {
+////                    self.isPresentingEditor = true
+////                }
+////            }))
+//        }
+        
     }
     
     private func editMyRating() {

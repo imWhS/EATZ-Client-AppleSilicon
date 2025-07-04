@@ -33,7 +33,6 @@ struct RecipeView: View {
             }
         }
         .onChange(of: authManager.isLoggedIn) { _ in
-            print("[RecipeView] 전역 인증 상태가 변경되어, 뷰의 모든 데이터를 새로 고칠게요.")
             viewModel.refreshAllData()
         }
         .animation(.easeInOut(duration: 0.15), value: viewModel.state)
@@ -195,7 +194,6 @@ struct RecipeDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onReadSize { size in
             imageHeight = size.width * (2/3)
-            print("이미지 높이: \(imageHeight)")
         }
     }
 }

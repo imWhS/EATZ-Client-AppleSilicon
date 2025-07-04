@@ -48,11 +48,11 @@ struct RootTabView: View {
                 .tabItem { Label(MainTabItemsData.hello.title, systemImage: MainTabItemsData.hello.systemImage) }
             }
         }
-        .fullScreenCover(item: $authManager.isRequiredAuth, onDismiss: {
-            authManager.handleAuthDismiss()
-        }) { context in
-            AuthView(context: context)
-        }
+//        .fullScreenCover(item: $authManager.isRequiredAuth, onDismiss: {
+//            authManager.handleAuthDismiss()
+//        }) { context in
+//            AuthView(context: context)
+//        }
 //        .fullScreenCover(item: $authManager.isRequiredAuth, onDismiss: {
 //            authManager.isRequiredAuth?.onDismiss!()
 //

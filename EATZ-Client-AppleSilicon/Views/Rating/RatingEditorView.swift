@@ -68,7 +68,7 @@ struct RatingEditorView: View {
             }
         }
         .onAppear {
-            print("DBGTEST - hello RatingEditorView!")
+//            print("DBGTEST - hello RatingEditorView!")
         }
         .onChange(of: viewModel.existingRatingState, perform: handleRatingStateChange)
         .onChange(of: authManager.currentUser?.username, perform: handleUserChange)
@@ -88,6 +88,11 @@ struct RatingEditorView: View {
             "점수를 선택해주세요.",
             isPresented: $showScoreAlert) {
                 Button("확인", role: .cancel) {}
+        }
+        .fullScreenCover(item: $authManager.isRequiredAuth, onDismiss: {
+            authManager.handleAuthDismiss()
+        }) { context in
+            AuthView(context: context)
         }
 //        .sheetPresenter()
     }

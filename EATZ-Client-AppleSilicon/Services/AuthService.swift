@@ -43,10 +43,8 @@ final class AuthService {
         networkClient.authRequest(endpointUrl: "/reissue-token") { result in
             switch result {
             case .success(let authTokens):
-                print("[AuthService.reissueTokens] 토큰 재발급 요청을 성공했어요! | \(authTokens.accessToken.suffix(8)) | \(authTokens.refreshToken.suffix(8))")
                 completion(.success(authTokens.accessToken))
             case .failure(let networkError):
-                print("[AuthService.reissueTokens] 토큰 재발급 요청을 실패했어요.")
                 completion(.failure(networkError))
             }
         }

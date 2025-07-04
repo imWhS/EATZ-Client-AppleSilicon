@@ -88,7 +88,6 @@ class RatingViewModel: ObservableObject {
     }
     
     func reloadAllRatings() {
-        print("DBG RATING - fetchAllRatings")
         fetchRatingSummary { [weak self] hasRatings in
             guard let self = self else { return }
             if hasRatings {
@@ -116,13 +115,10 @@ class RatingViewModel: ObservableObject {
                 case .failure(let networkError):
                     switch networkError {
                     case .afError(let afError):
-                        print("[RatingViewModel] ERROR | \(afError.localizedDescription)")
                         self.recipeEssentialState = .error(afError.localizedDescription)
                     case .serverError(let errorResponse):
-                        print("[RatingViewModel] ERROR | \(errorResponse.message)")
                         self.recipeEssentialState = .error(errorResponse.message)
                     case .unknown:
-                        print("[RatingViewModel] ERROR | 알 수 없는 이유로 레시피 주요 정보를 받아오지 못했어요.")
                         self.recipeEssentialState = .error("알 수 없는 이유로 레시피 주요 정보를 받아오지 못했어요. 다시 시도해보시겠어요?")
                     }
                 }
@@ -131,7 +127,6 @@ class RatingViewModel: ObservableObject {
     }
     
     func fetchRatingSummary(completion: @escaping (Bool) -> Void) {
-        print("DBG RATING - fetchRatingSummary")
         ratingSummaryState = .loading
         
         recipeService.fetchRatingSummary(id: recipeId) { [weak self] result in
@@ -143,19 +138,15 @@ class RatingViewModel: ObservableObject {
                     self.ratingSummaryState = .loaded(summary)
                     let hasRatings = summary.average.count > 0
                     self.shouldShowEmptyView = !hasRatings
-                    print("DBG RATING - shouldShowEmptyView: \(!hasRatings)")
                     completion(hasRatings)
                     
                 case .failure(let networkError):
                     switch networkError {
                     case .afError(let afError):
-                        print("[RatingViewModel] ERROR | \(afError.localizedDescription)")
                         self.ratingSummaryState = .error(afError.localizedDescription)
                     case .serverError(let errorResponse):
-                        print("[RatingViewModel] ERROR | \(errorResponse.message)")
                         self.ratingSummaryState = .error(errorResponse.message)
                     case .unknown:
-                        print("[RatingViewModel] ERROR | 알 수 없는 이유로 평가 요약을 받아오지 못했어요.")
                         self.ratingSummaryState = .error("알 수 없는 이유로 평가 요약을 받아오지 못했어요. 다시 시도해보시겠어요?")
                     }
                     self.alertError = RatingViewAlertError(title: "평가 요약 가져오기 실패", message: networkError.localizedDescription)
@@ -167,7 +158,6 @@ class RatingViewModel: ObservableObject {
     
     
     func fetchMyRating() {
-        print("DBG RATING - fetchMyRating")
         myRatingState = .loading
         recipeService.fetchMyRating(id: recipeId) { [weak self] result in
             guard let self = self else { return }
@@ -197,7 +187,6 @@ class RatingViewModel: ObservableObject {
     }
     
     func fetchRatingList(page: Int = 0, size: Int = 10) {
-        print("DBG RATING - fetchRatingList")
         recipeService.fetchRatings(id: recipeId) { [weak self] result in
             guard let self = self else { return }
             
@@ -207,17 +196,16 @@ class RatingViewModel: ObservableObject {
 //                    self.ratingListState = .loaded(response.content)
                     self.ratings = response.content
                     self.shouldShowEmptyView = response.content.isEmpty
-                    print("DBG RATING - shouldShowEmptyView: \(response.content.isEmpty)")
                 case .failure(let networkError):
                     switch networkError {
                     case .afError(let afError):
-                        print("평가 목록 요청 오류: \(afError.localizedDescription)")
+                        print("[RatingViewModel.fetchRatingList] 평가 목록 요청 오류: \(afError.localizedDescription)")
 //                        self.ratingListState = .error(afError.localizedDescription)
                     case .serverError(let errorResponse):
-                        print("평가 목록 요청 오류: \(errorResponse.message)")
+                        print("[RatingViewModel.fetchRatingList] 평가 목록 요청 오류: \(errorResponse.message)")
 //                        self.ratingListState = .error(errorResponse.message)
                     case .unknown:
-                        print("평가 목록 요청 오류: \("알 수 없는 이유로 평가 목록을 받아오지 못했어요. 다시 시도해보시겠어요?")")
+                        print("[RatingViewModel.fetchRatingList] 평가 목록 요청 오류: \("알 수 없는 이유로 평가 목록을 받아오지 못했어요. 다시 시도해보시겠어요?")")
 //                        self.ratingListState = .error("알 수 없는 이유로 평가 목록을 받아오지 못했어요. 다시 시도해보시겠어요?")
                     }
                     self.alertError = RatingViewAlertError(title: "평가 목록 가져오기 실패", message: networkError.localizedDescription)

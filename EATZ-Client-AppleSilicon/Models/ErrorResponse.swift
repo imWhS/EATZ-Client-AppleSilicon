@@ -7,10 +7,8 @@
 
 import Foundation
 
-struct ErrorResponse: Decodable {
-    
-    let errorCode: String
+struct ErrorResponse : Decodable {
+    let code: String
     let message: String
     let timestamp: String
-    
 }

@@ -1,8 +1,0 @@
-//
-//  CommentListResponse.swift
-//  EATZ-Client-AppleSilicon
-//
-//  Created by 손원희 on 7/8/25.
-//
-
-import Foundation

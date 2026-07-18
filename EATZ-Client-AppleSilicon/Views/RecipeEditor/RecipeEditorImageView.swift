@@ -1,0 +1,33 @@
+//
+//  RecipeEditorImageView.swift
+//  EATZ-Client-AppleSilicon
+//
+//  Created by 손원희 on 2/20/26.
+//
+
+import SwiftUI
+import Kingfisher
+
+struct RecipeEditorImageView: View {
+    let imageUrl: String?
+    
+    init(_ imageUrl: String) {
+        self.imageUrl = imageUrl
+    }
+    
+    var body: some View {
+        Group {
+            KFImage(URL(imageUrlString: imageUrl))
+                .placeholder {
+                    ProgressView("대표 사진을 불러오고 있어요...")
+                        .foregroundStyle(Color.init(hex: "BEBEB9"))
+                }
+                .resizable()
+                .aspectRatio(1, contentMode: .fit)
+                .clipped()
+                .ignoresSafeArea()
+        }
+        .background(Color.init(hex: "F9F9F9"))
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+}

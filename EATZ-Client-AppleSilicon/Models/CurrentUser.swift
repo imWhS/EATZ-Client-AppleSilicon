@@ -7,9 +7,14 @@
 
 import Foundation
 
-struct CurrentUser: Identifiable, Codable, Hashable {
+struct CurrentUser: Identifiable, Codable, Hashable, Equatable {
     let id: Int64
     let username: String
     let email: String
     let imageUrl: String?
+    let role: UserRole
+    
+    static func makeFake() -> CurrentUser {
+        return CurrentUser(id: 1, username: "testAccount", email: "testAccount@eatz.io", imageUrl: "", role: .ROLE_MEMBER)
+    }
 }

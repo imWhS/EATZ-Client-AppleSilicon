@@ -11,7 +11,13 @@ struct BasicTextEditor: View {
     @Binding var text: String
     @FocusState.Binding var isFocused: Bool
     
-    var placeholder: String? = "탭해서 입력하기"
+    var placeholder: String?
+    
+    init(text: Binding<String>, isFocused: FocusState<Bool>.Binding, placeholder: String = "탭해서 입력") {
+        self._text = text
+        self._isFocused = isFocused
+        self.placeholder = placeholder
+    }
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -25,16 +31,16 @@ struct BasicTextEditor: View {
                 .cornerRadius(12)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(isFocused ? Color.accentColor : Color("EEEEEE"), lineWidth: 1)
+                        .stroke(isFocused ? Color.accentColor : Color(hex: "EEEEEE"), lineWidth: 1)
                 )
-            if text.isEmpty {
-                Text("탭해서 입력하기")
-                    .foregroundColor(.secondary)
+            if text.isEmpty, let placeholder = placeholder {
+                Text(placeholder)
+                    .foregroundStyle(.secondary)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 16)
+                    .allowsHitTesting(false) // 터치 이벤트를 TextEditor로 넘깁니다.
             }
         }
-
     }
 }
 

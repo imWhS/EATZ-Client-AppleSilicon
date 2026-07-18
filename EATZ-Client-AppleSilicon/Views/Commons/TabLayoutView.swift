@@ -8,21 +8,18 @@
 import SwiftUI
 
 struct TabLayoutView<Content: View>: View {
-    
-    let title: String
+    let mainTabItems: MainTabItems
     let buttons: [HeaderIconButton]
     
-    @ViewBuilder let content: () -> Content
-    
-    @EnvironmentObject private var authManager: AuthManager
+    @ViewBuilder let contentView: () -> Content
     
     var body: some View {
         ScrollView {
             VStack {
-                TabHeaderView(title: MainTabItemsData.explore.title, buttons: buttons)
+                TabHeaderView(title: mainTabItems.title, buttons: buttons)
+                contentView()
             }
-            
-            content()
         }
+        .coordinateSpace(name: "scroll")
     }
 }

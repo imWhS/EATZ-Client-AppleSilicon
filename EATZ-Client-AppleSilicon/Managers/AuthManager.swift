@@ -1,312 +1,247 @@
 //
-//  AuthManager.swift
+//  AuthManagerN.swift
 //  EATZ-Client-AppleSilicon
 //
-//  Created by 손원희 on 5/16/25.
+//  Created by 손원희 on 8/21/25.
 //
 
 import Foundation
-import SwiftUI
+import Combine
 
-/// AuthView를 띄울 때 메시지를 함께 전달하기 위해 사용합니다.
-enum AuthContext: Identifiable {
-    case logIn(onDismiss: (() -> Void)? = nil)
-    case authRequiredAction(onDismiss: (() -> Void)? = nil)
-    case sessionExpired(onDismiss: (() -> Void)? = nil)
-//    case logIn(onDismiss: ((Bool) -> Void)? = nil)
-//    case authRequiredAction(onDismiss: ((Bool) -> Void)? = nil)
-//    case sessionExpired(onDismiss: ((Bool) -> Void)? = nil)
-
-    var id: String {
-        switch self {
-        case .logIn:
-            return "logIn"
-        case .authRequiredAction:
-            return "authRequiredAction"
-        case .sessionExpired:
-            return "sessionExpired"
-        }
-    }
+protocol AuthProvider {
+    var state: AuthState { get }
+    var isLoggedIn: Bool { get }
+    var currentUser: CurrentUser? { get }
     
-    // Equatable 프로토콜을 수동으로 준수합니다. 클로저는 비교할 수 없으므로, case의 종류만 비교합니다.
-    static func == (lhs: AuthContext, rhs: AuthContext) -> Bool {
-        switch (lhs, rhs) {
-        case (.logIn, .logIn),
-             (.authRequiredAction, .authRequiredAction),
-             (.sessionExpired, .sessionExpired):
-            return true
-        default:
-            return false
-        }
-    }
-
-    /// 로그인 시트에 보여줄 안내 메시지
-    var message: String {
-        switch self {
-        case .logIn:
-            return "이메일로 시작해볼까요?"
-        case .authRequiredAction:
-            return "로그인 후 계속 진행할 수 있어요."
-        case .sessionExpired:
-            return "인증이 만료됐어요. 다시 로그인해주세요."
-        }
-    }
-    
-    /// 연관 값으로 전달된 onDismiss 클로저를 쉽게 꺼내쓰기 위한 편의 프로퍼티
-    var onDismiss: (() -> Void)? {
-        switch self {
-        case .logIn(let onDismiss), .authRequiredAction(let onDismiss), .sessionExpired(let onDismiss):
-            return onDismiss
-        }
-    }
-//    var onDismiss: ((Bool) -> Void)? {
-//        switch self {
-//        case .logIn(let onDismiss), .authRequiredAction(let onDismiss), .sessionExpired(let onDismiss):
-//            return onDismiss
-//        }
-//    }
+    func performWhenLoggedIn(perform action: @escaping () -> Void)
+    func requireAuthView()
+    func validateSession(perform action: (() -> Void)?)
 }
 
-/**
- 앱 전역에서 사용자 인증 상태를 관리합니다.
- */
-class AuthManager: ObservableObject {
+/// 전역 인증 상태를 나타냅니다.
+enum AuthState: Equatable {
+    // 앱 실행 직후, 액세스 토큰 유효성을 확인 중인 초기 상태
+    case unknown
+    
+    // 게스트 상태. 비로그인 상태에 해당합니다.
+    case unauthorized
+    
+    // 로그인 상태. 연관 값으로 로그인된 사용자 정보를 가집니다.
+    case authenticated(user: CurrentUser)
+}
+
+/// 앱의 전역 인증 상태를 관리합니다.
+/// 앱의 모든 곳에서 `authState` 를 구독해 사용자의 상태를 구분할 수 있습니다.
+/// `authState`는  'Single source of truth' 원칙에 의해 반드시 AuthManager에 의해서만 변경될 수 있습니다.
+/// 인증 관련한 UI 처리는 GlobalPresenter에게 맡깁니다.
+final class AuthManager: ObservableObject, AuthProvider {
+    // MARK: - 싱글톤 객체 프로퍼티
+    
     static let shared = AuthManager()
     
-    private static let accessTokenKey = "accessToken"
+    // MARK: - 공개 프로퍼티
+
+    /// 사용자의 인증 상태를 제공합니다.
+    @Published private(set) var state: AuthState = .unknown
     
-    /// 실제 로그인·토큰 재발급 요청 등 인증 관련 API 호출은 AuthService에 위임합니다.
-    private lazy var authService = AuthService.shared
-    
-    /// 현재 로그인 된 사용자 정보 요청 등 사용자 관련 API 호출은 UserService에 위임합니다.
-    private lazy var userService = UserService.shared
-    
-    /// 현재 로그인(인증) 상태입니다.
-    @Published var isLoggedIn: Bool = false
-    
-    /// 현재 로그인된 사용자 정보입니다.
-    @Published var currentUser: CurrentUser? = nil
-    
-    @Published var isShowingAuthView: Bool = false
-    
-    @Published var isRequiredAuth: AuthContext? = nil
-    
-    @Published var showLogin = false
-    
-    @Published var isSessionExpiredViewPresented = false
-    
-    private var accessToken: String? {
-        didSet {
-            DispatchQueue.main.async {
-                self.isLoggedIn = (self.accessToken != nil)
-                print("[AuthManager] isLoggedIn: \(self.isLoggedIn)")
-            }
-        }
+    /// 현재 사용자의 로그인 여부를 제공합니다.
+    var isLoggedIn: Bool {
+        if case .authenticated = state { return true }
+        return false
     }
     
-//    private var pendingAuthOnDismiss: (() -> Void)? = nil
-    private var pendingAuthOnDismiss: (() -> Void)? = nil
+    /// 회원(로그인된 사용자)인 경우, 사용자 정보를 제공합니다.
+    /// 비로그인 사용자이거나, 아직 서버로부터 사용자 정보를 불러오지 못했다면 `nil`을 반환합니다.
+    /// - `state`의 값이 `.authenticated`로 설정될 때마다 연관 값에 의해 동기화되는 연산 프로퍼티입니다. 이벤트 스트림을 중복으로 방출하지 않도록 하기 위해 `@Published`를 추가하지 않습니다.
+    var currentUser: CurrentUser? {
+        if case .authenticated(let user) = state { return user }
+        return nil
+    }
     
-    /// 로그인 후 실행해야 할 작업들을 일시적으로 보관합니다.
+    // MARK: - 비공개 프로퍼티
+    
+    /// 전역 게스트 상태여서 로그인 상태가 필요한 액션 실행을 실패했을 때, 로그인 성공 후(전역 로그인 상태로 변경된 직후)에 다시 실행하기 위해 액션을 임시로 저장해두는 프로퍼티입니다.
     private var pendingActions: [() -> Void] = []
     
-    private var pendingViewAction: (() -> Void)? = nil
+    /// 로그인 상태에서 액션 실행 중 세션 만료로 인해 실패했을 때, 재로그인 성공 후에 다시 실행하기 위해 액션을 임시로 저장해두는 프로퍼티입니다.
+    private var retryActionsOnSessionExpired: [() -> Void] = []
+    
+    private var isHandlingSessionExpiration = false
+    
+    private let tokenManager = TokenManager.shared
+    private lazy var authService = AuthService.shared
+    private lazy var userService = UserService.shared
     
     private init() {
-        accessToken = KeychainService.load(key: Self.accessTokenKey)
-        print("[AuthManager] \(isLoggedIn ? "전역 로그인 상태로 초기화됐어요." : "전역 비로그인 상태로 초기화됐어요.")")
+        DispatchQueue.main.async { [weak self] in
+            self?.checkInitialState()
+        }
     }
     
-    func requireAuthWithCompletion(_ context: AuthContext) {
-        self.pendingAuthOnDismiss = context.onDismiss
-        self.isRequiredAuth = context
-    }
-     
-    func handleAuthDismiss() {
-        self.isRequiredAuth = nil
-        // 클로저를 실행할 때 현재 로그인 상태(self.isLoggedIn)를 전달합니다.
-        self.pendingAuthOnDismiss?()
-        self.pendingAuthOnDismiss = nil
-    }
-      
-    func saveAccessToken(_ accessToken: String) -> Bool {
-        let saved = KeychainService.save(accessToken, key: Self.accessTokenKey)
-        if saved { self.accessToken = accessToken }
-        return saved
+    init(initialState: AuthState) {
+        self.state = initialState
     }
     
-    /**
-     인증이 필요한 액션을 실행하기 전에 로그인 여부를 먼저 확인합니다.
-     로그인되어 있는 경우, 액션을 바로 실행하며 로그인되어 있지 않은 경우, 액션 실행을 잠시 보류한 후 로그인 뷰 modal을 표시합니다.
-     */
-    func performAfterLogIn(_ action: @escaping () -> Void) {
-        if isLoggedIn {
+    /// 단순 로그인만 진행하기 위해 AuthView를 화면에 띄웁니다.
+    /// 로그인 성공 직후 실행되어야 할 액션이 있는 경우, `runWhenAuthenticated`를 사용해야 합니다.
+    func requireAuthView() {
+        print("[AuthManager.requireAuthView] AuthView를 present 할게요.")
+        guard case .unauthorized = state else {
+            print(" - 게스트 상태여서 실행을 취소할게요.")
+            return
+        }
+        GlobalPresenter.shared.presentAuthView(context: .logIn)
+    }
+    
+    /// 현재 사용자가 로그인 상태면 액션을 바로 실행하고, 게스트 상태면 AuthView를 띄워, 로그인 성공 직후에 액션을 실행합니다.
+    func performWhenLoggedIn(perform action: @escaping () -> Void) {
+        switch state {
+        case .authenticated:
+            print("[AuthManager.performWhenLoggedIn] 로그인이 필요한 액션을 바로 실행할게요.")
             action()
-        } else {
+        case .unauthorized, .unknown:
+            print("[AuthManager.performWhenLoggedIn] 로그인이 필요한 액션을 요청했어요. 액션은 잠시 보류시킨 후, 로그인을 위해 AuthView를 띄워볼게요.")
             pendingActions.append(action)
-            presentAuthView(context: .authRequiredAction(onDismiss: {}))
-//            isRequiredAuth = .authRequiredAction()
-//            ModalManager.shared.sheet = .authMain(promptMessage: .authRequiredAction)
+            GlobalPresenter.shared.presentAuthView(context: .authRequiredAction)
         }
     }
     
-    func presentAfterLogIn(_ action: @escaping () -> Void) {
-        if isLoggedIn {
-            action()
-        } else {
-            pendingViewAction = action
-            presentAuthView(context: .authRequiredAction(onDismiss: {}))
-            
+    /// AuthInterceptor.retry()가 세션 만료 감지 후 재인증 실패 시 호출합니다.
+    func sessionExpired(retryAction: @escaping () -> Void) {
+        print("[AuthManager.sessionExpired] 세션 만료 처리를 시작할게요. 액션은 잠시 pending 후, AuthView를 띄울게요.")
+        retryActionsOnSessionExpired.append(retryAction)
+        
+        if isHandlingSessionExpiration {
+            print("[AuthManager.sessionExpired] - 이미 만료 처리 중인 작업이 있어서, 세션 만료 처리를 취소할게요.")
+            return
         }
+        
+        // 여러 API 호출로 인해 세션 만료 감지가 동시에 발생했을 때 race condition을 예방합니다.
+        isHandlingSessionExpiration = true
+
+        GlobalPresenter.shared.presentAuthView(context: .sessionExpired, onDismiss: {
+            print("[AuthManager.sessionExpired] 사용자가 재로그인을 취소했어요.")
+            self.logOut()
+        })
     }
     
-    /**
-     잠시 보류했던 인증 필요 액션을 한 번에 순차적으로 실행합니다.
-     */
-    private func flushPendingActions() {
-        let actions = pendingActions
+    /// 현재 사용자의 세션에서 로그아웃을 실행합니다. 모든 토큰을 삭제하며, 전역 게스트 상태로 설정합니다.
+    func logOut() {
+        print("[AuthManager.logOut] 로그아웃을 실행할게요.")
+        tokenManager.clearAllTokens()
+        state = .unauthorized
         pendingActions.removeAll()
-        if actions.count == 0 { return }
-
-        print("[AuthManager.flushPendingActions] 보류된 액션 \(actions.count)개를 실행할게요")
-        actions.forEach { $0() }
+        retryActionsOnSessionExpired.removeAll()
+        isHandlingSessionExpiration = false
     }
     
-    /// 세션 만료 시 처리: 토큰 삭제, 로그아웃 상태, 로그인 뷰 sheet 표시
-    func handleSessionExpired() {
-        currentUser = nil
-        clearTokens()
-//        isRequiredAuth = .sessionExpired()
-        presentAuthView(context: .sessionExpired(onDismiss: {}))
-//        ModalManager.shared.sheet = .authMain(promptMessage: .sessionExpired)
-    }
-    
-    private func presentAuthView(context: AuthContext = .logIn(onDismiss: {})) {
-        if (self.isSessionExpiredViewPresented) { return }
-        print("[AuthManager.presentAuthView] AuthView를 present할게요 | context: \(context.id)")
-        let swiftUIView = AuthView(context: context)
-        let hostingController = DismissAwareHostingController(rootView: swiftUIView)
-        hostingController.onDismiss = { [weak self] in
-            guard let self = self else { return }
-            print("AuthView 닫을게요!!!!")
-                self.isSessionExpiredViewPresented = false
-            self.pendingAuthOnDismiss?() // 보류된 onDismiss 클로저 실행
-                    self.pendingAuthOnDismiss = nil
-            self.pendingViewAction?()
-            self.pendingViewAction = nil
-            
-            }
-        hostingController.modalPresentationStyle = .fullScreen
+    /// GlobalPresenter.presentAuthView()가 로그인 성공 시 호출합니다.
+    /// 서버로부터 받은 액세스 토큰을 저장하고, 전역 로그인 상태로 설정합니다.
+    func setStateAsAuthenticated(accessToken: String, user: CurrentUser) {
+        let previousUser = self.currentUser
+        tokenManager.saveAccessToken(accessToken)
+        state = .authenticated(user: user)
         
-        self.isSessionExpiredViewPresented = true
+        if let previousUser, previousUser.id != user.id {
+            pendingActions.removeAll()
+            retryActionsOnSessionExpired.removeAll()
+            isHandlingSessionExpiration = false
+            return
+        }
         
-        // 화면에 표시되고 있는 최상위 계층의 뷰 컨트롤러 위에 새 뷰 컨트롤러를 present 합니다.
-        UIApplication.shared.topViewController()?.present(hostingController, animated: true)
-    }
-
-    /// 앱에서 보관 중인 액세스 토큰을 초기화합니다.
-    func clearTokens() {
-        KeychainService.delete(key: Self.accessTokenKey)
-        accessToken = nil
+        retryActionsOnSessionExpired.forEach { $0() }
+        pendingActions.forEach { $0() }
+        
+        pendingActions.removeAll()
+        retryActionsOnSessionExpired.removeAll()
+        isHandlingSessionExpiration = false
     }
     
-    func logIn(
-            email: String,
-            password: String,
-            completion: @escaping (Result<Void, NetworkError>) -> Void
-    ) {
-        authService.logIn(email: email, password: password) { [weak self] result in
-            guard let self = self else { return }
+    /// 세션이 유효한지 검증합니다.
+    /// 서버에 토큰 재발급 API를 호출하고, API로부터 받은 응답을 이용해 세션 유효성을 검증합니다.
+    func validateSession(perform action: (() -> Void)? = nil) {
+       // 로그인 상태가 아니면 더 이상 실행하지 않습니다.
+       guard case .authenticated = state else {
+           print("[AuthManager.validateSession] 전역 로그인 상태가 아니기 때문에 토큰 재발급 요청 실행을 취소할게요.")
+           return
+       }
 
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let accessToken):
-                    // 액세스 토큰을 keychain에 저장 후 로그인 성공 처리합니다.
-                    let saved = self.saveAccessToken(accessToken)
-                    if saved {
-                        // 로그인 완료 시 처리: 현재 로그인 된 사용자 정보 조회 API를 호출하고, 보류된 모든 액션을 실행합니다.
-                        self.fetchCurrentUser()
-                        self.flushPendingActions()
-                        
-                        completion(.success(()))
-                        return
-                    } else {
-                        // 키체인 저장 오류로 로그인 실패 처리합니다.
-                        print("[AuthManager.logIn] 액세스 토큰을 keychain에 저장하지 못해 로그인 실패했어요.")
-                        self.handleSessionExpired()
-                        completion(.failure(.unknown("액세스 토큰을 keychain에 저장하지 못해 로그인 실패했어요.")))
-                        return
-                    }
-                case .failure(let networkError):
-                    // 네트워크 또는 서버 오류로 로그인 실패 처리합니다.
-                    print("[AuthManager.logIn] 네트워크 또는 서버 오류로 인해 로그인 실패했어요.")
-                    self.handleSessionExpired()
-                    completion(.failure(networkError))
-                }
+       authService.reissueTokens { [weak self] result in
+           DispatchQueue.main.async {
+               switch result {
+               case .success:
+                   print("[AuthManager.validateSession] 토큰 재발급 요청을 성공했어요.")
+                   // 토큰 재발급 API에서 성공 응답을 보낸 경우, 사용자 정보 조회 API도 추가 호출합니다.
+                   self?.performSessionValidation(completion: action ?? {})
+               case .failure:
+                   // 토큰 재발급 API에서 실패 응답을 보낸 경우, 로그아웃 처리합니다.
+                   print("[AuthManager.validateSession] 세션 유효성 검증을 실패했어요.")
+                   self?.sessionExpired(retryAction: action ?? {})
+               }
+           }
+       }
+    }
+    
+    /// 현재 사용자의 정보를 서버로부터 불러옵니다.
+    func fetchCurrentUser(completion: @escaping (Result<CurrentUser, Error>) -> Void) {
+        guard tokenManager.loadAccessToken() != nil else {
+            print("[AuthManager.fetchCurrentUser] 액세스 토큰이 존재하지 않아서 현재 사용자 정보 조회를 취소할게요.")
+            completion(.failure(NetworkError.unknown("액세스 토큰이 존재하지 않아요.")))
+            return
+        }
+        
+        userService.getCurrentUser { result in
+            switch result {
+            case .success(let currentUser):
+                print("[AuthManager.fetchCurrentUser] 현재 사용자 정보를 성공적으로 가져왔어요.")
+                completion(.success(currentUser))
+            case .failure(let error):
+                print("[AuthManager.fetchCurrentUser] 현재 사용자 정보 조회를 실패했어요.")
+                completion(.failure(error))
             }
         }
     }
     
-    func fetchCurrentUser() {
-        if accessToken == nil { return }
-        
-        userService.getCurrentUser { [weak self] result in
+    // MARK: - 비공개 메서드
+    
+    /// 액세스 토큰 저장 여부를 확인하고, 서버를 통해 토큰 유효성을 검증해 앱 전역 인증 상태를 설정합니다.
+    private func checkInitialState() {
+        if tokenManager.loadAccessToken() != nil {
+            print("[AuthManager.checkInitialState] Keychain에서 액세스 토큰을 발견했어요. 서버를 통해 사용자 정보 조회를 시도할게요.")
+            performSessionValidation()
+        } else {
+            print("[AuthManager.checkInitialState] 게스트 상태로 설정할게요.")
+            state = .unauthorized
+        }
+    }
+    
+    /// 현재 로그인 상태인 사용자의 세션이 서버에서 유효한지 확인합니다.
+    func performSessionValidation(completion: (() -> Void)? = nil) {
+        fetchCurrentUser { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let currentUser):
-                    self?.currentUser = currentUser
-                case .failure:
-                    print("[AuthManager.fetchCurrentUser] 현재 로그인된 사용자 정보 저장을 실패했어요. 세션 만료 처리할게요.")
-                    self?.handleSessionExpired()
+                    print("[AuthManager.performSessionValidation] 세션 유효성 검증을 성공했어요. 로그인 상태로 설정할게요.")
+                    self?.state = .authenticated(user: currentUser)
+                    completion?()
+                case .failure(let failure):
+                    print("[AuthManager.performSessionValidation] 세션 유효성 검증을 실패했어요. 로그아웃 처리할게요.")
+                    self?.logOut()
                 }
             }
         }
     }
-    
-    func reissueTokens(completion: @escaping (Result<Void, NetworkError>) -> Void) {
-        authService.reissueTokens { [weak self] result in
-            guard let self = self else { return }
-            
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let accessToken):
-                    let saved = self.saveAccessToken(accessToken)
-                    if saved {
-                        completion(.success(()))
-                    } else {
-                        // 키체인 저장 오류로 토큰 재발급 실패 처리합니다.
-                        print("[AuthManager.reissueTokens] 액세스 토큰을 keychain에 저장하지 못해 토큰 재발급 실패했어요. 로그아웃 처리할게요.")
-                        self.handleSessionExpired()
-                        completion(.failure(.unknown("액세스 토큰을 keychain에 저장하지 못해 토큰 재발급 실패했어요.")))
-                    }
-                case .failure(let networkError):
-                    var errorMessage: String? = nil
-                    switch networkError {
-                    case .serverError(let errorResponse):
-                        if errorResponse.errorCode == "TOKEN_REFRESH_EXPIRED"
-                            || errorResponse.errorCode == "TOKEN_REFRESH_MISSING" {
-                            print("[AuthManager.reissueTokens] 리프레시 토큰이 만료됐어요. 전역 로그아웃 처리할게요.")
-                            self.handleSessionExpired()
-                        } else {
-                            print("[AuthManager.reissueTokens] 알 수 없는 서버 오류로 인해 토큰 재발급 실패했어요.")
-                            errorMessage = "알 수 없는 서버 오류로 인해 인증이 만료됐어요. 다시 로그인해주세요."
-                            self.handleSessionExpired()
-                        }
-                    default:
-                        print("[AuthManager.reissueTokens] 네트워크 오류로 인해 토큰 재발급 실패했어요.")
-                        errorMessage = "네트워크 오류로 인해 인증이 만료됐어요. 다시 로그인해주세요."
-                        self.handleSessionExpired()
-                    }
-                    
-                    if errorMessage != nil {
-                        ErrorManager.shared.showError(message: "인증 오류예요. 다시 로그인해주세요.")
-                    }
-                    
-                    completion(.failure(networkError))
-                }
-            }
-        }
-        
+}
+
+extension AuthManager {
+    /// 인증(로그인) 상태의 프리뷰용 인스턴스입니다.
+    static var previewAuthenticated: AuthManager {
+        let user = CurrentUser(id: 1, username: "dev_preview", email: "devpreview@eatz.io", imageUrl: nil, role: .ROLE_MEMBER)
+        return AuthManager(initialState: .authenticated(user: user))
     }
     
+    /// 게스트 상태의 프리뷰용 인스턴스입니다.
+    static var previewGuest: AuthManager {
+        return AuthManager(initialState: .unauthorized)
+    }
 }

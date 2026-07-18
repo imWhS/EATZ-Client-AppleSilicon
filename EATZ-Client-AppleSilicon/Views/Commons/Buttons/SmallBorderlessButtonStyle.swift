@@ -7,19 +7,40 @@
 
 import SwiftUI
 
+enum SmallBorderlessButtonType {
+    case normal, disabled
+}
+
 struct SmallBorderlessButtonStyle: ButtonStyle {
+    var type: SmallBorderlessButtonType
     
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(Font.system(size: 14, weight: .bold))
-            .foregroundColor(.accentColor)
-            .frame(height: 22)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 6)
-            .background(configuration.isPressed ? Color.init("ECECEC") : .clear)
-            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-            .cornerRadius(12)
-            .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
+    init(type: SmallBorderlessButtonType = .normal) {
+        self.type = type
     }
     
+    func makeBody(configuration: Configuration) -> some View {
+        let foregroundColor: Color
+        
+        switch type {
+        case .normal:
+            foregroundColor = Color.accentColor
+        case .disabled:
+            foregroundColor = Color.init(hex: "D0D0D0")
+        }
+        
+        return configuration.label
+            .font(Font.system(size: 14, weight: .semibold))
+            .foregroundStyle(foregroundColor)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 6)
+            .background(configuration.isPressed ? Color.init(hex: "ECECEC") : .clear)
+            .cornerRadius(12)
+            .scaleEffect(configuration.isPressed ? 0.965 : 1.0)
+            .opacity(configuration.isPressed ? 0.5 : 1.0)
+            .animation(
+                configuration.isPressed ? .easeInOut(duration: 0.1) : .easeInOut(duration: 0.25),
+                value: configuration.isPressed
+            )
+        
+    }
 }

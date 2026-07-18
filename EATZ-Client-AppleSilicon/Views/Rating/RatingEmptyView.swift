@@ -15,25 +15,19 @@ struct RatingEmptyView: View {
         VStack {
             Spacer()
             VStack(spacing: 20) {
-                Image("rating-star")
-                    .resizable()
-                    .frame(width: 38, height: 38)
-                    .foregroundStyle(Color.init("ECECEC"))
+                Image("rating-empty")
                 VStack(spacing: 8) {
                     Text("평가가 없어요.")
-                        .font(.system(size: 18, weight: .bold))
+                        .font(.system(size: 17, weight: .semibold))
                     Text("아직 아무도 이 레시피에 평가를 등록하지 않았어요.")
-                        .font(.system(size: 12, weight: .regular))
-                        .foregroundStyle(Color.init("8F8F8F"))
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(Color.init(hex: "8F8F8F"))
                 }
             }
             Spacer()
             
-            Button(action: {
-                onRegister()
-            }) {
-                Text(isLoggedIn ? "평가하기" : "로그인 후 평가하기")
-                    .frame(maxWidth: .infinity)
+            Button(action: onRegister) {
+                Text(isLoggedIn ? "새 평가" : "로그인 후 평가").frame(maxWidth: .infinity)
             }
             .buttonStyle(BigRoundedButtonStyle(type: .primary))
             .padding(20)

@@ -8,7 +8,38 @@
 import Foundation
 
 enum ViewRoute: Hashable {
-    case recipe(id: Int64)   // 레시피 상세
-    case rating(recipeId: Int64, recipeImageUrl: String, recipeTitle: String, recipeAuthorUsername: String)   // 평가 보기
-    case profile(userId: Int64)    // 프로필
+    // RecipeView
+    case recipe(id: Int64)
+    
+    // RatingView
+    case rating(recipeId: Int64)
+    
+    // CommentView
+    case comment(recipeId: Int64)
+    
+    case profile(userId: Int64)
+    
+    case checklist(startDate: Date, endDate: Date)
+    
+    case cookable(searchCriteria: CookableSearchCriteria)
+    
+    case myRecipes
+    
+    case savedRecipes
+    
+    case likedRecipes
+    
+    case ratedRecipes
+    
+    case myIngredientPantry
+    
+    case myKitchenwarePantry
+    
+    case myAccountSettings
+    
+    case userBlocklist
+    
+    case deleteAccount
+    
+    case deleteAccountDetail
 }

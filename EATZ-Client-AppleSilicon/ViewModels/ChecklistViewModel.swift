@@ -1,0 +1,485 @@
+//
+//  ChecklistViewModel.swift
+//  EATZ-Client-AppleSilicon
+//
+//  Created by 손원희 on 9/9/25.
+//
+
+import SwiftUI
+import Alamofire
+
+class ChecklistViewModel: ObservableObject {
+    /// 뷰가 보여줄 화면 상태
+    /// - 뷰의 최상위 서브뷰에서 보여줄 화면을 분기하기 위해 사용합니다.
+    @Published var viewState: ChecklistViewState = .initialLoading
+    
+    @Published var checklist: Checklist?
+    
+    /// 화면에 표시할 alert
+    /// - 아무 alert도 표시하지 않는 경우 `nil`이 됩니다.
+    @Published var alert: ChecklistAlert?
+    
+    @Published var reportResource: ReportResource?
+    
+    @Published var showNavigationBarTitle = false
+    
+    // MARK: - 공개 프로퍼티 (Public Properties)
+    
+    /// 체크리스트 데이터를 조회할 기준이 되는 날짜 범위(시작 날짜, 종료 날짜)입니다.
+    ///
+    /// PlannerView에서 계산된 확정된 기간을 주입받습니다.
+    let dateRange: (startDate: Date, endDate: Date)
+    
+    var planCountLabel: String?  {
+        guard let checklist = checklist else { return nil }
+        return "\(checklist.cookable.plans.count + checklist.uncookable.plans.count)개의 플랜"
+    }
+    
+    // MARK: - 의존성 (Dependencies)
+    
+    private let userService = UserService.shared
+    private let userPlanService = UserPlanService.shared
+    private let userPantryService = UserPantryService.shared
+    private let recipeLikeService = RecipeLikeService.shared
+    private let ingredientLikeService = IngredientLikeService.shared
+    private let recipeService = RecipeService.shared
+    
+    init(dateRange: (startDate: Date, endDate: Date)) {
+        self.dateRange = dateRange
+    }
+    
+    /// 화면에 표시될 데이터를 관리하는 모든 프로퍼티를 초기화하고, 초기 데이터를 불러옵니다.
+    ///
+    /// 아래와 같은 경우에 사용합니다.
+    /// - 화면에 표시해야 할 데이터가 필요한 경우
+    /// - 화면에 표시 중인 기존 데이터가 최신 상태를 반영하지 못하거나 필요 없어진 경우
+    func resetAndLoadAll() {
+        loadChecklist { self.viewState = .content }
+    }
+    
+    func refresh() async {
+        await withCheckedContinuation { continuation in
+            loadChecklist { continuation.resume() }
+        }
+    }
+}
+
+extension ChecklistViewModel {
+    func handleAddAllRequirementsToPantry() {
+        guard case .content = viewState else { return }
+        guard let checklist = checklist else { return }
+        
+        alert = .confirmAddingAllRequirementsToPantry(
+            ingredientsCount: checklist.missingIngredientCount,
+            kitchenwaresCount: checklist.missingKitchenwareCount,
+            confirmAction: {
+                self.addAllRequirementsToPantry()
+            })
+    }
+    
+    /// 체크리스트 데이터를 불러옵니다.
+    func loadChecklist(onSuccess: @escaping () -> Void = {}) {
+        UserPlanService.shared.fetchChecklist(startDate: dateRange.startDate, endDate: dateRange.endDate) { [weak self] result in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let checklist):
+                    self.viewState = .content
+                    self.checklist = checklist
+                    onSuccess()
+                case .failure(let networkError):
+                    if self.checklist == nil {
+                        self.viewState = .error(message: networkError.userMessage)
+                    } else {
+                        self.alert = .error(message: networkError.userMessage)
+                    }
+                }
+            }
+        }
+    }
+    
+    func handleKitchenwareItemAction(for id: Int64, action: ChecklistKitchenwareItemAction) {
+        switch action {
+        case  .addNote: print("addNote")
+        default: updateKitchenware(for: id, action: action)
+        }
+    }
+    
+    func handleIngredientItemAction(for id: Int64, action: ChecklistIngredientItemAction) {
+        switch action {
+        case .addNote: print("setExpiryDate")
+        case .setExpiryDate: print("setExpiryDate")
+        default: updateIngredient(for: id, action: action)
+        }
+    }
+    
+    func updatePlan(for plan: ChecklistPlan, _ action: ChecklistPlanItemAction) {
+        guard var currentChecklist = self.checklist else { return }
+        let recipeId = plan.recipeId
+        let locations = findPlanLocationsByRecipe(in: currentChecklist, recipeId: recipeId)
+        guard let firstLocation = locations.first else { return }
+        let originalPlan = getPlan(from: currentChecklist, at: firstLocation)
+        
+        for location in locations {
+            var plan = getPlan(from: currentChecklist, at: location)
+            
+            switch action {
+            case .save: plan.savedRecipeByUser = true
+            case .unsave: plan.savedRecipeByUser = false
+            case .like: plan.likedRecipeByUser = true
+            case .unlike: plan.likedRecipeByUser = false
+            default: break
+            }
+            
+            updatePlan(with: plan, at: location, checklist: &currentChecklist)
+        }
+        
+        self.checklist = currentChecklist
+        
+        switch action {
+        case .save, .unsave: toggleSaveRecipeInPlan(recipeId: recipeId, originalPlan: originalPlan, locations: locations, action: action)
+        case .like, .unlike: toggleLikeRecipeInPlan(recipeId: recipeId, originalPlan: originalPlan, locations: locations, action: action)
+        default: break
+        }
+    }
+    
+    func handlePlanItemAction(plan: ChecklistPlan, action: ChecklistPlanItemAction) {
+        switch action {
+        case .report: reportRecipe(plan.recipeId, plan.recipeTitle, plan.recipeAuthorId, plan.recipeAuthorUsername)
+        default: updatePlan(for: plan, action)
+        }
+    }
+    
+    private func addAllRequirementsToPantry() {
+        guard case .content = viewState, let requirements = checklist?.uncookable.requirements else { return }
+        UserPantryService.shared.addAllChecklistRequirements(requirements: requirements) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success: self.alert = .addedAllRequirementsToPantry(completion: {
+                self.loadChecklist()
+            })
+            case .failure(let networkError): self.alert = .error(message: networkError.userMessage)
+            }
+        }
+    }
+    
+    private func reportRecipe(_ recipeId: Int64, _ recipeTitle: String, _ recipeAuthorId: Int64, _ recipeAuthorUsername: String) {
+        let resource = ReportResource(id: recipeId, authorId: recipeAuthorId, authorUsername: recipeAuthorUsername, type: .RECIPE, content: recipeTitle)
+        reportResource = resource
+    }
+    
+    private func toggleSaveRecipeInPlan(recipeId: Int64, originalPlan: ChecklistPlan, locations: [ChecklistLocation], action: ChecklistPlanItemAction) {
+        let completionHandler: (Result<Empty, NetworkError>) -> Void = { [weak self] result in
+            guard let self = self else { return }
+            if case .failure(let networkError) = result {
+                self.alert = .error(message: networkError.userMessage)
+                self.rollbackPlan(to: originalPlan, locations: locations)
+            }
+        }
+        
+        if case .save = action { userService.saveRecipe(for: recipeId, completion: completionHandler) }
+        else if case .unsave = action { userService.unsaveRecipe(for: recipeId, completion: completionHandler) }
+    }
+    
+    private func toggleLikeRecipeInPlan(recipeId: Int64, originalPlan: ChecklistPlan, locations: [ChecklistLocation], action: ChecklistPlanItemAction) {
+        let completionHandler: (Result<LikedRecipe, NetworkError>) -> Void = { [weak self] result in
+            guard let self = self else { return }
+            if case .failure(let networkError) = result {
+                self.alert = .error(message: networkError.userMessage)
+                self.rollbackPlan(to: originalPlan, locations: locations)
+            }
+        }
+        
+        if case .like = action { recipeLikeService.likeRecipe(for: recipeId, completion: completionHandler) }
+        else if case .unlike = action { recipeLikeService.unlikeRecipe(for: recipeId, completion: completionHandler) }
+    }
+    
+    /// 체크리스트 속 특정 도구에 대한 사용자의 보유 상태를 변경하고 동기화합니다.
+    private func updateKitchenware(for id: Int64, action: ChecklistKitchenwareItemAction) {
+        guard var currentChecklist = self.checklist else { return }
+        
+        // 모든 섹션 속에서 해당 도구의 모든 위치를 찾습니다.
+        // 동일한 도구가 `Checklist`의 `cookable`과 `uncookable` 모두 존재할 수 있기 때문에,
+        // 도구의 변경된 상태를 `Checklist`에 일괄 적용하기 위해 사용합니다.
+        let locations = findKitchenwareLocations(in: currentChecklist, kitchenwareId: id)
+        
+        // 상태 변경 전의 도구를 별도로 보관합니다. 도구 상태 변경 실패 시, 낙관적 업데이트된 UI를 원상 복구할 때 사용합니다.
+        guard let firstLocation = locations.first else { return }
+        let originalKitchenware = getKitchenware(from: currentChecklist, at: firstLocation)
+        
+        // 낙관적 UI 업데이트
+        for location in locations {
+            var kitchenware = getKitchenware(from: currentChecklist, at: location)
+            switch action {
+            case .addToPantry: kitchenware.missing = false
+            case .removeFromPantry: kitchenware.missing = true
+            default: break
+            }
+            updateKitchenware(with: kitchenware, at: location, checklist: &currentChecklist)
+        }
+        
+        self.checklist = currentChecklist
+        
+        let completionHandler: (Result<Void, NetworkError>) -> Void = { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                switch result {
+                case .success: self.loadChecklist()
+                case .failure(let error):
+                    self.alert = .itemUpdateFailed(message: error.userMessage)
+                    self.rollbackKitchenware(to: originalKitchenware, locations: locations)
+                }
+            }
+        }
+        
+        switch action {
+        case .addToPantry: userPantryService.addKitchenwares(ids: [id], completion: completionHandler)
+        case .removeFromPantry: userPantryService.removeKitchenwares(ids: [id], completion: completionHandler)
+        default: break
+        }
+    }
+    
+    /// 체크리스트 속 특정 재료에 대한 사용자의 상태를 변경하고 동기화합니다.
+    private func updateIngredient(for id: Int64, action: ChecklistIngredientItemAction) {
+        guard var currentChecklist = self.checklist else { return }
+
+        // 모든 섹션 속에서 해당 재료의 모든 위치를 찾습니다.
+        // 동일한 재료가 `Checklist`의 `cookable`과 `uncookable` 모두 존재할 수 있기 때문에,
+        // 재료의 변경된 상태를 `Checklist`에 일괄 적용하기 위해 사용합니다.
+        let locations = findIngredientLocations(in: currentChecklist, ingredientId: id)
+        
+        // 상태 변경 전의 재료를 별도로 보관합니다. 재료 상태 변경 실패 시, 낙관적 업데이트된 UI를 원상 복구할 때 사용합니다.
+        guard let firstLocation = locations.first else { return }
+        let originalIngredient = getIngredient(from: currentChecklist, at: firstLocation)
+        
+        // 낙관적 UI 업데이트
+        for location in locations {
+            var ingredient = getIngredient(from: currentChecklist, at: location)
+            switch action {
+            case .addToPantry: ingredient.missing = false
+            case .removeFromPantry: ingredient.missing = true
+            case .like: ingredient.likedByUser = true
+            case .unlike: ingredient.likedByUser = false
+            default: break
+            }
+            updateIngredient(with: ingredient, at: location, checklist: &currentChecklist)
+        }
+        
+        self.checklist = currentChecklist
+        
+        switch action {
+        case .addToPantry, .removeFromPantry: toggleAdditionIngredientToPantry(for: id, originalIngredient: originalIngredient, locations: locations, type: action)
+        case .like, .unlike: toggleLikeIngredient(for: id, originalIngredient: originalIngredient, locations: locations, type: action)
+        default: break
+        }
+    }
+    
+    private func toggleAdditionIngredientToPantry(for id: Int64, originalIngredient: ChecklistIngredient, locations: [ChecklistLocation], type: ChecklistIngredientItemAction) {
+        let completionHandlerForPantry: (Result<Void, NetworkError>) -> Void = { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                switch result {
+                case .success: self.loadChecklist()
+                case .failure(let error):
+                    self.alert = .itemUpdateFailed(message: error.userMessage)
+                    self.rollbackIngredient(to: originalIngredient, locations: locations)
+                }
+            }
+        }
+        
+        switch type {
+        case .addToPantry: userPantryService.addIngredients(ids: [id], completion: completionHandlerForPantry)
+        case .removeFromPantry: userPantryService.removeIngredients(ids: [id], completion: completionHandlerForPantry)
+        default: break
+        }
+    }
+    
+    private func toggleLikeIngredient(for id: Int64, originalIngredient: ChecklistIngredient, locations: [ChecklistLocation], type: ChecklistIngredientItemAction) {
+        let completionHandler: (Result<LikedIngredient, NetworkError>) -> Void = { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                switch result {
+                case .success: self.loadChecklist()
+                case .failure(let error):
+                    self.alert = .itemUpdateFailed(message: error.userMessage)
+                    self.rollbackIngredient(to: originalIngredient, locations: locations)
+                }
+            }
+        }
+        
+        switch type {
+        case .like: ingredientLikeService.likeIngredient(for: id, completion: completionHandler)
+        case .unlike: ingredientLikeService.unlikeIngredient(for: id, completion: completionHandler)
+        default: break
+        }
+    }
+    
+    /// `Checklist`에서 `RequirementLocation`이 가리키는 위치의 `ChecklistPlan`을 불러옵니다.
+    private func getPlan(from checklist: Checklist, at location: ChecklistLocation) -> ChecklistPlan {
+        switch location.cookability {
+        case .cookable: return checklist.cookable.plans[location.index]
+        case .uncookable: return checklist.uncookable.plans[location.index]
+        }
+    }
+    
+    /// `Checklist`에서 `ChecklistLocation`이 가리키는 위치의 `ChecklistKitchenwareListItem`을 불러옵니다.
+    private func getKitchenware(from checklist: Checklist, at location: ChecklistLocation) -> ChecklistKitchenware {
+        switch location.cookability {
+        case .cookable: return checklist.cookable.requirements.kitchenwares[location.index]
+        case .uncookable: return checklist.uncookable.requirements.kitchenwares[location.index]
+        }
+    }
+    
+    /// `Checklist`에서 `ChecklistLocation`이 가리키는 위치의 `ChecklistIngredientListItem`을 불러옵니다.
+    private func getIngredient(from checklist: Checklist, at location: ChecklistLocation) -> ChecklistIngredient {
+        switch location.cookability {
+        case .uncookable: return checklist.uncookable.requirements.ingredients[location.index]
+        case .cookable: return checklist.cookable.requirements.ingredients[location.index]
+        }
+    }
+    
+    /// `Checklist`에서 `ChecklistLocation`이 가리키는 위치에 해당하는 `ChecklistIngredient` 타입의 재료 상태를 변경합니다.
+    private func updatePlan(with plan: ChecklistPlan, at location: ChecklistLocation, checklist: inout Checklist) {
+        switch location.cookability {
+        case .uncookable: checklist.uncookable.plans[location.index] = plan
+        case .cookable: checklist.cookable.plans[location.index] = plan
+        }
+    }
+    
+    /// `Checklist`에서 `ChecklistLocation`이 가리키는 위치에 해당하는 `ChecklistIngredient` 타입의 재료 상태를 변경합니다.
+    private func updateIngredient(with ingredient: ChecklistIngredient, at location: ChecklistLocation, checklist: inout Checklist) {
+        switch location.cookability {
+        case .uncookable: checklist.uncookable.requirements.ingredients[location.index] = ingredient
+        case .cookable: checklist.cookable.requirements.ingredients[location.index] = ingredient
+        }
+    }
+    
+    /// `Checklist`에서 `ChecklistLocation`이 가리키는 위치에 해당하는 `ChecklistKitchenware` 타입의 재료 상태를 변경합니다.
+    private func updateKitchenware(with kitchenware: ChecklistKitchenware, at location: ChecklistLocation, checklist: inout Checklist) {
+        switch location.cookability {
+        case .uncookable: checklist.uncookable.requirements.kitchenwares[location.index] = kitchenware
+        case .cookable: checklist.cookable.requirements.kitchenwares[location.index] = kitchenware
+        }
+    }
+    
+    
+    /// `Checklist`에서 `recipeId`에 해당하는 플랜의 모든 위치를 찾습니다.
+    ///
+    /// `Checklist` 내 `uncookable.plans`, `cookable.plans`에서 `recipeId`에 해당하는 레시피가 추가된
+    /// 모든 플랜의 섹션, 인덱스를 찾아 `RequirementLocation` 타입으로 반환합니다.
+    private func findPlanLocationsByRecipe(in checklist: Checklist, recipeId: Int64) -> [ChecklistLocation] {
+        var locations: [ChecklistLocation] = []
+        
+        // `Checklist.uncookable`의 모든 레시피를 `(index, plan)` 튜플화 한 후, `index`만 추출해
+        // `recipeId`에 대한 모든 요리 불가능 레시피를 포함하는 플랜 인덱스 목록으로 만듭니다.
+        let uncookableIndexes = checklist.uncookable.plans.enumerated()
+            .filter { $0.element.recipeId == recipeId }
+            .map { $0.offset }
+        
+        // 요리 불가능 레시피를 포함하는 플랜 인덱스 목록을 [ChecklistLocation]으로 변환 후, `locations`에 추가합니다.
+        locations.append(contentsOf: uncookableIndexes.map {
+            ChecklistLocation(cookability: .uncookable, index: $0)
+        } )
+        
+        // `Checklist.cookable`의 모든 레시피를 `(index, plan)` 튜플화 한 후, `index`만 추출해
+        // `recipeId`에 대한 모든 요리 가능 레시피를 포함하는 플랜 인덱스 목록으로 만듭니다.
+        let cookableIndexes = checklist.cookable.plans.enumerated()
+            .filter { $0.element.recipeId == recipeId }
+            .map { $0.offset }
+        
+        // 요리 가능 레시피를 포함하는 플랜 인덱스 목록을 [ChecklistLocation]으로 변환 후, `locations`에 추가합니다.
+        locations.append(contentsOf: cookableIndexes.map {
+            ChecklistLocation(cookability: .cookable, index: $0)
+        } )
+        
+        return locations
+    }
+    
+    /// `Checklist`에서 `kitchenwareId`에 해당하는 도구의 모든 위치를 찾습니다.
+    ///
+    /// `Checklist` 내 `uncookable.requirements.kitchenwares`, `cookable.requirements.kitchenwares`에서
+    /// 도구의 모든 섹션, 인덱스를 찾아 `RequirementLocation` 타입으로 반환합니다.
+    private func findKitchenwareLocations(in checklist: Checklist, kitchenwareId: Int64) -> [ChecklistLocation] {
+        var locations: [ChecklistLocation] = []
+        
+        if let index = checklist.uncookable.requirements.kitchenwares.firstIndex(where: { $0.id == kitchenwareId }) {
+            locations.append(ChecklistLocation(cookability: .uncookable, index: index))
+        }
+        
+        if let index = checklist.cookable.requirements.kitchenwares.firstIndex(where: { $0.id == kitchenwareId }) {
+            locations.append(ChecklistLocation(cookability: .cookable, index: index))
+        }
+        
+        return locations
+    }
+    
+    /// `Checklist`에서 `ingredientId`에 해당하는 재료의 모든 위치를 찾습니다.
+    ///
+    /// `Checklist` 내 `uncookable.requirements.ingredients`, `cookable.requirements.ingredients`에서
+    /// 도구의 모든 섹션, 인덱스를 찾아 `RequirementLocation` 타입으로 반환합니다.
+    private func findIngredientLocations(in checklist: Checklist, ingredientId: Int64) -> [ChecklistLocation] {
+        var locations: [ChecklistLocation] = []
+        
+        if let index = checklist.uncookable.requirements.ingredients.firstIndex(where: { $0.id == ingredientId }) {
+            locations.append(ChecklistLocation(cookability: .uncookable, index: index))
+        }
+        
+        if let index = checklist.cookable.requirements.ingredients.firstIndex(where: { $0.id == ingredientId }) {
+            locations.append(ChecklistLocation(cookability: .cookable, index: index))
+        }
+        
+        return locations
+    }
+    
+    private func rollbackPlan(to plan: ChecklistPlan, locations: [ChecklistLocation]) {
+        guard var checklist = self.checklist else { return }
+        
+        for location in locations {
+            updatePlan(with: plan, at: location, checklist: &checklist)
+        }
+        
+        self.checklist = checklist
+    }
+    
+    private func rollbackKitchenware(to kitchenware: ChecklistKitchenware, locations: [ChecklistLocation]) {
+        guard var checklist = self.checklist else { return }
+        
+        for location in locations {
+            updateKitchenware(with: kitchenware, at: location, checklist: &checklist)
+        }
+        
+        self.checklist = checklist
+    }
+    
+    private func rollbackIngredient(to ingredient: ChecklistIngredient, locations: [ChecklistLocation]) {
+        guard var checklist = self.checklist else { return }
+        
+        for location in locations {
+            updateIngredient(with: ingredient, at: location, checklist: &checklist)
+        }
+        
+        self.checklist = checklist
+    }
+}
+
+enum ChecklistViewState {
+    case initialLoading
+    case content
+    case error(message: String)
+}
+
+enum RequirementUpdateType {
+    case add, remove
+}
+
+/// `checklist`를 구성하는 2개의 섹션을 구분하기 위한 타입입니다.
+private enum CookabilityType {
+    case cookable, uncookable
+}
+
+/// `Checklist` 데이터 모델 내에서 재료, 도구와 같은 아이템의 위치를 특정하는 '좌표' 역할을 합니다.
+private struct ChecklistLocation {
+    let cookability: CookabilityType
+    let index: Int
+}

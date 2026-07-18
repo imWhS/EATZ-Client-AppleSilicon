@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct HeaderIconButton: View {
-    
     let title: String
     let action: () -> Void
     

@@ -18,7 +18,7 @@ struct ErrorMessageView: View {
                 .frame(width: 20, height: 20)
             Text(message)
                 .font(.system(size: 14))
-                .foregroundColor(.black)
+                .foregroundStyle(.black)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 12)
         }

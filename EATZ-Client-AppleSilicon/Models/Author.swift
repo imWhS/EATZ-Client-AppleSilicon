@@ -7,14 +7,16 @@
 
 import Foundation
 
-struct Author: Codable, Equatable {
+struct Author: Codable, Equatable, Hashable {
     
     let id: Int64
-    
     let username: String
-    
     let imageUrl: String?
-    
+    let bio: String?
     let recipeCount: Int?
+    
+    func toUserEssential() -> UserEssential {
+        return UserEssential(id: id, username: username, imageUrl: imageUrl)
+    }
     
 }

@@ -9,30 +9,49 @@ import SwiftUI
 
 @main
 struct EATZ_Client_AppleSiliconApp: App {
-    
     @StateObject private var authManager = AuthManager.shared
     
-    @StateObject private var errorManager = ErrorManager.shared
-    
-//    @StateObject private var sheetManager = ModalManager.shared
-    
     @Environment(\.scenePhase) private var scenePhase
+    
+    @State private var isFirstActive = true
     
     var body: some Scene {
         WindowGroup {
             RootTabView()
                 .environmentObject(authManager)
-                .environmentObject(errorManager)
-//                .environmentObject(sheetManager)
-        }
-        .onChange(of: scenePhase) { newPhase in
-            if newPhase == .active, authManager.isLoggedIn {
-                print("<APP> 인증 상태 확인을 위해 서버에 토큰 재발급을 요청할게요.")
-                authManager.reissueTokens { _ in
-                    authManager.fetchCurrentUser()
+                .onOpenURL { url in
+                    handleDeepLink(url)
                 }
-            } else {
-                print("<APP> 전역 비로그인 상태여서 비로그인 사용자 모드로 실행할게요")
+        }
+        .onChange(of: scenePhase) { scenePhase in
+            /// 앱이 foreground 상태로 전환됐을 때, 여전히 세션이 유효한지 검증합니다.
+            if scenePhase == .active {
+                GlobalPresenter.shared.processPendingDeepLink()
+                
+                if isFirstActive {
+                    // 앱을 실행한 직후에는 AuthManager.checkInitialState()를 통해 세션 유효성 검증을 진행하기 때문에 여기에서 세션 유효성 검증을 진행하지 않습니다.
+                    isFirstActive = false
+                } else {
+                    print("[APP] 앱이 foreground 상태로 전환됐어요. 세션 유효성 검증을 시작할게요.")
+                    authManager.validateSession()
+                }
+            }
+        }
+    }
+    
+    private func handleDeepLink(_ url: URL) {
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return }
+        
+        // Ex. eatz://reset-password?token=...
+        if components.scheme == "eatzuserauth" && components.host == "reset-password" {
+            if let token = components.queryItems?.first(where: { $0.name == "token" })?.value {
+                // 뷰를 present 하기 전, GlobalPresenter에 토큰 저장부터 합니다.
+                GlobalPresenter.shared.setPendingResetPasswordToken(token)
+
+                // 만약 앱이 이미 켜져있는 상태(Warm Start)에서 딥 링크를 받았다면, scenePhase가 바뀌지 않으므로 여기서 즉시 실행을 시도할 수도 있습니다.
+                if UIApplication.shared.applicationState == .active {
+                   GlobalPresenter.shared.processPendingDeepLink()
+                }
             }
         }
     }

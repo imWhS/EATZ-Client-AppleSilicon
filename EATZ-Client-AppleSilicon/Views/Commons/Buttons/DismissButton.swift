@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct DismissButton: View {
-    
     var action: () -> Void
-    
     @State private var isPressed = false
 
     var body: some View {
@@ -21,7 +19,7 @@ struct DismissButton: View {
                 .frame(width: 14, height: 14)
         }
         .frame(width: 32, height: 32)
-        .background(Color.init("ECECEC"))
+        .background(Color.init(hex: "ECECEC"))
         .clipShape(Circle())
         .buttonStyle(PlainButtonStyle())
         .opacity(isPressed ? 0.4 : 1)
@@ -36,7 +34,6 @@ struct DismissButton: View {
                 }
         )
     }
-    
 }
 
 #Preview {

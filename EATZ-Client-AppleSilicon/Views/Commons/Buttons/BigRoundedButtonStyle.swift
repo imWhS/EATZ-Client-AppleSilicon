@@ -7,14 +7,14 @@
 
 import SwiftUI
 
+enum BigRoundedButtonType {
+    case primary  // 글씨 흰색, 배경 accent
+    case secondary  // 글씨 accent, 배경 연한 회색
+    case disabled
+}
+
 struct BigRoundedButtonStyle: ButtonStyle {
-    
-    enum ButtonType {
-        case primary  // 글씨 흰색, 배경 accent
-        case secondary  // 글씨 accent, 배경 연한 회색
-    }
-    
-    var type: ButtonType
+    var type: BigRoundedButtonType
     
     func makeBody(configuration: Configuration) -> some View {
         let backgroundColor: Color
@@ -25,19 +25,27 @@ struct BigRoundedButtonStyle: ButtonStyle {
             backgroundColor = .accentColor
             foregroundColor = .white
         case .secondary:
-            backgroundColor = Color.init("ECECEC")
+            backgroundColor = Color.init(hex: "ECECEC")
+            foregroundColor = .accentColor
+        case .disabled:
+            backgroundColor = Color.init(hex: "ECECEC")
             foregroundColor = .accentColor
         }
         
         return configuration.label
-            .font(Font.system(size: 16, weight: .bold))
-            .foregroundColor(foregroundColor)
+            .font(Font.system(size: 17, weight: .semibold))
+            .foregroundStyle(foregroundColor)
             .frame(height: 42)
             .padding(.horizontal, 18)
             .background(backgroundColor)
             .cornerRadius(12)
-            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-            .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
+            .scaleEffect(type != .disabled && configuration.isPressed ? 0.965 : 1.0)
+            .opacity(type != .disabled && configuration.isPressed ? 0.5 : 1.0)
+            .animation(
+                configuration.isPressed ? .easeInOut(duration: 0.1) : .easeInOut(duration: 0.25),
+                value: configuration.isPressed
+            )
+            .opacity(type == .disabled ? 0.5 : 1)
+            .disabled(type == .disabled)
     }
-    
 }

@@ -7,14 +7,13 @@
 
 import SwiftUI
 
+enum SmallRoundedButtonType {
+    case primary, secondary, danger, disabled
+}
+
 struct SmallRoundedButtonStyle: ButtonStyle {
-    
-    enum ButtonType {
-            case primary  // 글씨 흰색, 배경 accent
-            case secondary  // 글씨 accent, 배경 연한 회색
-    }
-    
-    var type: ButtonType
+    var type: SmallRoundedButtonType
+    var isIconOnly: Bool = false
     
     func makeBody(configuration: Configuration) -> some View {
         let backgroundColor: Color
@@ -25,19 +24,40 @@ struct SmallRoundedButtonStyle: ButtonStyle {
             backgroundColor = .accentColor
             foregroundColor = .white
         case .secondary:
-            backgroundColor = Color.init("ECECEC")
+            backgroundColor = Color.init(hex: "ECECEC")
             foregroundColor = .accentColor
+        case .danger:
+            backgroundColor = Color.init(hex: "ECECEC")
+            foregroundColor = .red
+        case .disabled:
+            backgroundColor = Color.init(hex: "F7F7F7")
+            foregroundColor = Color.init(hex: "D0D0D0")
         }
         
-        return configuration.label
-            .font(Font.system(size: 13.5, weight: .bold))
-            .foregroundColor(foregroundColor)
-            .frame(height: 32)
-            .padding(.horizontal, 14)
+        @ViewBuilder
+        var content: some View {
+            if isIconOnly {
+                configuration.label
+                    .frame(width: 32, height: 32)
+            } else {
+                configuration.label
+                    .font(Font.system(size: 14, weight: .semibold))
+                    .padding(.horizontal, 14)
+                    .frame(height: 32)
+            }
+        }
+        
+        return content
+            .foregroundStyle(foregroundColor)
             .background(backgroundColor)
             .cornerRadius(16)
-            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-            .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
+            .scaleEffect(type != .disabled && configuration.isPressed ? 0.965 : 1.0)
+            .opacity(type != .disabled && configuration.isPressed ? 0.5 : 1.0)
+            .animation(
+                configuration.isPressed ? .easeInOut(duration: 0.1) : .easeInOut(duration: 0.25),
+                value: configuration.isPressed
+            )
+            .opacity(type == .disabled ? 0.5 : 1)
+            .disabled(type == .disabled)
     }
-    
 }

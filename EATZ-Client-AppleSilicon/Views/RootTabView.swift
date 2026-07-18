@@ -8,60 +8,33 @@
 import SwiftUI
 
 struct RootTabView: View {
+    @State private var selection: MainTabItems = .explore
+    @State private var previousSelection: MainTabItems = .explore
     
-    @EnvironmentObject var authManager: AuthManager
-    
-    @EnvironmentObject var errorManager: ErrorManager
-    
-    @State var showLogin = false
-    
+    @StateObject private var todayRouter = Router()
     @StateObject private var exploreRouter = Router()
     @StateObject private var plannerRouter = Router()
     @StateObject private var myAccountRouter = Router()
     
     var body: some View {
-        TabView {
+        TabView(selection: $selection) {
+            CookableView()
+                .tabItem { Label(MainTabItems.cookable.title, systemImage: MainTabItems.cookable.systemImage) }
+                .tag(MainTabItems.cookable)
+                .environmentObject(todayRouter)
             ExploreView()
-            .tabItem { Label(MainTabItemsData.explore.title, systemImage: MainTabItemsData.explore.systemImage) }
-            .environmentObject(exploreRouter)
-            
-            VStack {
-                Text("Planner View")
-                    .font(.title)
-                Text("플래너")
-            }
-            .tabItem { Label(MainTabItemsData.planner.title, systemImage: MainTabItemsData.planner.systemImage) }
-            if authManager.isLoggedIn {
-                VStack {
-                    Text("My Account View")
-                        .font(.title)
-                    Text("내 계정")
-                }
-                .tabItem { Label(MainTabItemsData.myAccount.title, systemImage: MainTabItemsData.myAccount.systemImage) }
-            } else {
-                VStack {
-                    Text("로그아웃 상태입니다.")
-                    Button(action: {showLogin = true}) {
-                        Text("로그인")
-                    }
-                }
-                .tabItem { Label(MainTabItemsData.hello.title, systemImage: MainTabItemsData.hello.systemImage) }
-            }
+                .tabItem { Label(MainTabItems.explore.title, systemImage: MainTabItems.explore.systemImage) }
+                .tag(MainTabItems.explore)
+                .environmentObject(exploreRouter)
+            PlannerView()
+                .tabItem { Label(MainTabItems.planner.title, systemImage: MainTabItems.planner.systemImage) }
+                .tag(MainTabItems.planner)
+                .environmentObject(plannerRouter)
+            MyAccountView()
+                .tabItem { Label(MainTabItems.myAccount.title, systemImage: MainTabItems.myAccount.systemImage) }
+                .tag(MainTabItems.myAccount)
+                .environmentObject(myAccountRouter)
         }
-//        .fullScreenCover(item: $authManager.isRequiredAuth, onDismiss: {
-//            authManager.handleAuthDismiss()
-//        }) { context in
-//            AuthView(context: context)
-//        }
-//        .fullScreenCover(item: $authManager.isRequiredAuth, onDismiss: {
-//            authManager.isRequiredAuth?.onDismiss!()
-//
-//            authManager.isRequiredAuth = nil
-//            print("PRESENTDBG - root tab view - bye")
-//        }) { context in
-//            AuthView(context: context)
-//        }
+        .onChange(of: selection) { newSelection in selection = newSelection }
     }
 }
-
-

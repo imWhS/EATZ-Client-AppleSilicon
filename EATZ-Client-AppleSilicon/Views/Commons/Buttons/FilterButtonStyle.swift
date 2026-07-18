@@ -11,10 +11,11 @@ struct FilterButtonStyle: ButtonStyle {
     
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(Font.system(size: 12, weight: .bold))
-            .foregroundColor(.black)
-            .frame(height: 28)
-            .background(configuration.isPressed ? Color.init("ECECEC") : .white)
+            .font(Font.system(size: 14, weight: .semibold))
+            .foregroundStyle(.black)
+            .frame(height: 30)
+            .padding(.horizontal, 10)
+            .background(configuration.isPressed ? Color.init(hex: "ECECEC") : Color.init(hex: "ECECEC"))
             .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
             .cornerRadius(14)
             .animation(.easeOut(duration: 0.2), value: configuration.isPressed)

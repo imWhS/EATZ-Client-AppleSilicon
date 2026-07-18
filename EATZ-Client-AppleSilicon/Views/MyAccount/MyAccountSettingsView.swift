@@ -1,0 +1,131 @@
+//
+//  MyAccountSettingsView.swift
+//  EATZ-Client-AppleSilicon
+//
+//  Created by 손원희 on 6/23/26.
+//
+
+import SwiftUI
+
+struct MyAccountSettingsView: View {
+    @EnvironmentObject private var router: Router
+    @EnvironmentObject private var authManager: AuthManager
+    @State private var alert: MyAccountSettingsAlert?
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                if authManager.isLoggedIn {
+                    SettingsSectionCard(title: "계정 관리") {
+                        BasicMenuRow("차단 사용자 관리", false) {
+                            router.push(.userBlocklist)
+                        }
+                    }
+                }
+                
+                SettingsSectionCard(title: "사용자 지원") {
+                    BasicMenuRow("새로운 소식", .action) {
+                        
+                    }
+                    BasicMenuRow("개발자에게 편지 쓰기", false, .action, "admin@eatz.io") {
+                        
+                    }
+                }
+                
+                SettingsSectionCard(title: "정보") {
+                    BasicMenuRow("이용 약관 및 정책", .action) {
+                        print("약관 링크 이동")
+                    }
+                    BasicMenuRow("개인 정보 처리 방침", .action) {
+                        print("처리방침 링크 이동")
+                    }
+                    BasicMenuRow("버전", false, .info(trailing: "iOS 1.0.0")) {
+                        print("버전 확인")
+                    }
+                }
+                if authManager.isLoggedIn {
+                    HStack {
+                        Button("로그아웃", action: handleLogOutAction)
+                        .buttonStyle(SmallRoundedButtonStyle(type: .danger))
+                        
+                        Button(action: { router.push(.deleteAccount) } ) {
+                            HStack {
+                                Text("회원 탈퇴")
+                                Image("arrow-right-6.8")
+                            }
+                        }
+                        .buttonStyle(SmallRoundedButtonStyle(type: .danger))
+                    }
+                }
+            }
+            .padding(.top, 20)
+        }
+        .background(Color(hex: "F9F9F9").ignoresSafeArea())
+        .navigationTitle("설정 및 정보")
+        .alert(
+            alert?.title ?? "",
+            isPresented: Binding(
+                get: { self.alert != nil },
+                set: { isPresented in if !isPresented { self.alert = nil } }),
+            presenting: alert,
+            actions: { $0.actions },
+            message: { $0.message })
+    }
+    
+    private func handleLogOutAction() {
+        guard let username = authManager.currentUser?.username else { return }
+        alert = .confirmLogOut(username: username, logOutAction: authManager.logOut)
+    }
+}
+
+enum MyAccountSettingsAlert {
+    case confirmLogOut(username: String, logOutAction: () -> Void)
+    
+    var title: String {
+        switch self {
+        case .confirmLogOut: return "계정 로그아웃"
+        }
+    }
+    
+    @ViewBuilder
+    var actions: some View {
+        switch self {
+        case .confirmLogOut(_, let logOutAction):
+            Button("로그아웃", role: .destructive, action: logOutAction)
+            Button("취소", role: .cancel) {}
+        }
+    }
+    
+    @ViewBuilder
+    var message: some View {
+        switch self {
+        case .confirmLogOut(let username, _): Text("\(username) 계정을 로그아웃하시겠어요?")
+        }
+    }
+    
+}
+
+struct SettingsSectionCard<Content: View>: View {
+    let title: String?
+    @ViewBuilder let content: Content
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            // 섹션 타이틀 (있는 경우에만 표시)
+            if let title = title {
+                Text(title)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 20)
+            }
+            
+            // 내용물을 담는 둥근 흰색 카드
+            VStack(spacing: 0) {
+                content
+            }
+            .background(Color.white)
+            .cornerRadius(12)
+            .padding(.horizontal, 20)
+        }
+    }
+}

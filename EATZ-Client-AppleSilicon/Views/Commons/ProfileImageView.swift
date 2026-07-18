@@ -9,36 +9,22 @@ import SwiftUI
 import Kingfisher
 
 struct ProfileImageView: View {
-    
     let imageUrl: String?
-    
     let size: CGFloat
     
     var body: some View {
-        if let imageUrl = imageUrl {
-            KFImage(URL(string: imageUrl))
-                .resizable()
-                .placeholder {
-                    Circle()
-                        .fill(Color.white)
-                }
-                .frame(width: size, height: size)
-                .clipShape(Circle())
-                .overlay(
-                    Circle().stroke(Color.gray.opacity(0.2), lineWidth: 1)
-                )
-                .contentShape(Circle())
-        } else {
-            Circle()
-                .fill(Color.white)
-                .frame(width: size, height: size)
-                .clipShape(Circle())
-                .overlay(
-                    Circle().stroke(Color.gray.opacity(0.2), lineWidth: 1)
-                )
-                .contentShape(Circle())
-        }
-        
+        KFImage(URL(imageUrlString: imageUrl))
+            .resizable()
+            .placeholder {
+                Circle()
+                    .fill(Color.white)
+            }
+            .frame(width: size, height: size)
+            .clipShape(Circle())
+            .overlay(
+                Circle().stroke(Color.gray.opacity(0.2), lineWidth: 1)
+            )
+            .contentShape(Circle())
     }
 }
 

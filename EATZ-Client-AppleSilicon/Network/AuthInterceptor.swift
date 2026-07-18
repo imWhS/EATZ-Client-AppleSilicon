@@ -1,6 +1,5 @@
 //
 //  AuthInterceptor.swift
-//  AuthInterceptorSample
 //
 //  Created by 손원희 on 5/15/25.
 //
@@ -8,114 +7,108 @@
 import Foundation
 import Alamofire
 
-class AuthInterceptor: RequestInterceptor, @unchecked Sendable {
+final class AuthInterceptor: RequestInterceptor, @unchecked Sendable {
+    private let tokenManager = TokenManager.shared
+    private let authService = AuthService.shared
+    private let authManager = AuthManager.shared
     
     private let MAX_RETRY_COUNT = 1
     
-    private let authManager = AuthManager.shared
-    
     private let lock = NSLock()
+    private var isReissuing = false
     
-    private var isRefreshing = false
-    
+    /// 액세스 토큰 만료로 인해 실패해서, 토큰 재발급 후 재실행을 기다리고 있는 요청 실행 클로저들을 보관합니다.
     private var requestsToRetry: [ (RetryResult) -> Void ] = []
     
+    /// HTTP 요청 전처리를 담당합니다.
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, any Error>) -> Void) {
         var urlRequest = urlRequest
-        guard let method = urlRequest.method else {
-            return
-        }
         
-        if let accessToken = KeychainService.load(key: "accessToken") {
+        // 액세스 토큰이 있다면, Authorization 헤더에 추가합니다.
+        if let accessToken = tokenManager.loadAccessToken() {
             urlRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        } else {
-            completion(.success(urlRequest))
-            return
-        }
-        
-        if let url = URL(string: "http://localhost:8080"),
-           let cookies = HTTPCookieStorage.shared.cookies(for: url) {
-            for cookie in cookies where cookie.name == "RefreshToken" {
-                //
-            }
         }
         
         completion(.success(urlRequest))
     }
     
+    /// HTTP 요청에 대해 서버로부터 실패/오류 응답을 받은 경우의 처리를 담당합니다.
     func retry(_ request: Request, for session: Session, dueTo error: any Error, completion: @escaping (RetryResult) -> Void) {
-        guard let urlRequest = request.request else { return }
-        guard let method = urlRequest.method else { return }
-//        print("<AuthInterceptor.retry>")
         
-        if request.retryCount >= MAX_RETRY_COUNT {
-//            print("[AuthInterceptor.retry] 최대 재시도 수(총 \(MAX_RETRY_COUNT)번 중 \(request.retryCount + 1)번)를 초과해서, 해당 요청을 종료할게요. | \(request.request?.url?.relativePath ?? "")")
+        let method = request.request?.httpMethod ?? ""
+        let path = request.request?.url?.path ?? ""
+        
+        /// 인증 오류 응답을 받은 요청이 아닌 경우, 재시도하지 않고 종료합니다.
+        guard let response = request.response, response.statusCode == 401 else {
+            completion(.doNotRetry)
+            return
+        }
+                
+        /// 토큰 재발급을 실패한 요청인 경우, 재시도하지 않고 종료합니다.
+        if let url = request.request?.url?.absoluteString, url.contains("/reissue-token") {
+            print("[AuthInterceptor.retry] \(method) \(path) | 토큰 재발급 요청이에요. 요청을 종료할게요.")
             completion(.doNotRetry)
             return
         }
         
-        if !(authManager.isLoggedIn) {
-            print("[AuthInterceptor.retry] 전역 비로그인 상태여서, 액세스 토큰 없이 해당 요청을 재시도할게요. | \(method.rawValue) \(urlRequest.url?.relativePath ?? "")")
-            authManager.clearTokens()
-            completion(.retry)
+        /// 이미 한 번 재시도한 적 있는 요청인 경우, 추가 시도하지 않고 종료합니다.
+        if 0 < request.retryCount {
+            print("[AuthInterceptor.retry] \(method) \(path) | 인증 재시도 최대 횟수에 도달한 요청이에요. 요청을 종료할게요.")
+            completion(.doNotRetry)
             return
         }
         
-        
-        lock.lock(); defer {
+        /// 액세스 토큰 만료로 인해 실패한 요청의 실행 클로저를 보관하고, 토큰 재발급 상태를 설정하는 것과 토큰 재발급 요청을 보내는 작업을 atomic 하게 처리하기 위해 lock을 설정합니다.
+        lock.lock();
+        defer {
             lock.unlock()
         }
         
-        if (!requestsToRetry.isEmpty) {
-            print("[AuthInterceptor.retry] 대기 목록에 추가된 요청 수: \(requestsToRetry.count) | \(method.rawValue) \(request.request?.url?.relativePath ?? "")")
-        }
-
+        /// 액세스 토큰 만료로 인해 실패했던 요청 실행 클로저를 미리 보관해둡니다. 토큰 재발급 성공 후 재시도할 때 호출됩니다.
         requestsToRetry.append(completion)
-        guard !isRefreshing else {
-            print("[AuthInterceptor.retry] 이미 다른 스레드가 토큰 재발급 API 요청 중이어서, 해당 요청을 대기 목록에 넣어두기만 했어요. | \(method.rawValue) \(request.request?.url?.relativePath ?? "")")
+        
+        /// 이전에 발생한 다른 요청에 의해 이미 토큰 재발급 절차를 실행 중인 경우, 재시도하지 않고 종료합니다.
+        if isReissuing {
+            print("[AuthInterceptor.retry] \(method) \(path) | 이미 토큰 재발급 요청을 처리하고 있어서, 요청을 대기열에 추가한 상태로 종료할게요. | 현재 대기열의 요청 수: \(requestsToRetry.count)")
             return
         }
         
-        isRefreshing = true
-        authManager.reissueTokens { result in
-            self.isRefreshing = false
-            let retryResult: RetryResult = {
-                switch result {
-                case .success(()):
-                    print("[AuthInterceptor.retry] 리프레시 토큰 재발급을 성공해서, 해당 요청을 재시도할게요. | \(method.rawValue) \(request.request?.url?.relativePath ?? "")")
-                    return .retry
-                case .failure(let networkError):
-                    switch networkError {
-                    case .serverError(let errorResponse):
-                        if errorResponse.errorCode == "TOKEN_REFRESH_EXPIRED"
-                            || errorResponse.errorCode == "TOKEN_REFRESH_MISSING" {
-                            print("[AuthInterceptor.retry] 리프레시 토큰이 만료되어서, 해당 요청을 종료할게요. | \(method.rawValue) \(request.request?.url?.relativePath ?? "")")
-                            return .doNotRetry
-                        } else {
-                            print("[AuthInterceptor.retry] 서버 오류가 발생했어요. 해당 요청을 종료할게요. | \(method.rawValue) \(request.request?.url?.relativePath ?? "")")
-                            return .doNotRetry
-                        }
-                    case .afError, .unknown:
-                        // 네트워크/알 수 없는 에러는 1회 재시도 후 실패
-                        if request.retryCount < self.MAX_RETRY_COUNT {
-                            print("[AuthInterceptor.retry] 네트워크 오류가 발생했어요. 해당 요청을 재시도할게요. | \(method.rawValue) \(request.request?.url?.relativePath ?? "")")
-                            return .retry
-                        } else {
-                            print("[AuthInterceptor.retry] 네트워크 오류가 발생했어요. 최대 재시도 횟수(\(self.MAX_RETRY_COUNT)번 중 \(request.retryCount + 1)번)에 도달했기 떄문에 해당 요청을 종료할게요. | \(method.rawValue) \(request.request?.url?.relativePath ?? "")")
-                            return .doNotRetry
-                        }
-                    }
+        /// 토큰 재발급 절차를 실행합니다.
+        print("[AuthInterceptor.retry] \(method) \(path) | 토큰 재발급을 요청할게요. | 현재 대기열의 요청 수: \(requestsToRetry.count)")
+        isReissuing = true
+        
+        /// 서버에 토큰 재발급 요청을 보냅니다.
+        authService.reissueTokens { [weak self] result in
+            guard let self = self else { return }
+            
+            /// 토큰 재발급 완료 시, 그 동안
+            self.lock.lock()
+            let requestsToProcess = self.requestsToRetry
+            self.requestsToRetry.removeAll()
+            self.lock.unlock()
+
+            switch result {
+            case .success:
+                /// 토큰 재발급 성공: 해당 시점에 액세스 토큰이 만료되어 실패한 모든 요청 클로저들을 재시도 처리합니다.
+                print("[AuthInterceptor.retry] \(method) \(path) | 토큰 재발급을 성공했어요! 대기열의 요청 \(requestsToProcess.count)개를 재시도 처리할게요.")
+                requestsToProcess.forEach { $0(.retry) }
+                
+            case .failure(let error):
+                /// 토큰 재발급 실패: 서버에서 해당 사용자의 세션을 만료시켰기 때문에, 해당 상황에 대응하는 로직을 실행합니다.
+                print("[AuthInterceptor.retry] \(method) \(path) | 토큰 재발급 실패. AuthManager에게 세션 만료 처리를 위임할게요. | 현재 대기열의 요청 수: \(requestsToProcess.count)")
+                
+                /// 세션 만료로 인한 재로그인을 성공했을 때 재시도해야 할 모든 요청 클로저 실행 클로저를 미리 만들어둡니다.
+                let retryAction: () -> Void = {
+                    print("[AuthInterceptor] 재로그인 성공. 대기열의 \(requestsToProcess.count)개의 모든 요청을 재시도합니다.")
+                    requestsToProcess.forEach { $0(.retry) }
                 }
-            }()
-            
-            
-            for (index, requestToRetry) in self.requestsToRetry.enumerated() {
-                print("[AuthInterceptor.retry] requestsToRetry의 \(self.requestsToRetry.count)개 중 \(index + 1)번 요청 클로저를 \(retryResult) 파라미터로 호출할게요. | \(method.rawValue) \(request.request?.url?.relativePath ?? "")")
-                requestToRetry(retryResult)
+                
+                self.authManager.sessionExpired(retryAction: retryAction)
             }
 
-            self.requestsToRetry.removeAll()
+            self.lock.lock()
+            self.isReissuing = false
+            self.lock.unlock()
         }
     }
-    
 }

@@ -9,46 +9,45 @@ import SwiftUI
 
 struct FloatingTitleTextField: View {
     
-    let title: String
-    
+    let title: String?
     let placeholder: String?
-    
     @Binding var text: String
-    
     @FocusState.Binding var isFocused: Bool
-    
-    var autocorrectionDisabled: Bool = true
-    
+    var isAutocorrectionDisabled: Bool = true
     var capitalization: TextInputAutocapitalization = .never
-    
     var keyboardType: UIKeyboardType = .default
-    
     var textContentType: UITextContentType?
-    
+    var submitLabel: SubmitLabel = .return
     var onSubmit: (() -> Void)? = nil
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(Font.system(size: 11, weight: .semibold))
-                .foregroundColor(isFocused ? Color.accentColor : Color.init("CBCBCB"))
+            if let title = title {
+                Text(title)
+                    .font(Font.system(size: 12, weight: .semibold))
+                    .foregroundStyle(isFocused ? Color.accentColor : Color.init(hex: "CBCBCB"))
+            }
             TextField(placeholder ?? "", text: $text)
-                .font(Font.system(size: 16, weight: .medium))
+                .font(Font.system(size: 17, weight: .medium))
+                .foregroundStyle(Color.black)
                 .focused($isFocused)
-                .autocorrectionDisabled(autocorrectionDisabled)
+                .autocorrectionDisabled(isAutocorrectionDisabled)
                 .textInputAutocapitalization(capitalization)
                 .keyboardType(keyboardType)
                 .textContentType(textContentType)
                 .frame(height: 19)
+                .submitLabel(submitLabel)
                 .onSubmit(onSubmit ?? ({}))
+                .foregroundStyle(isFocused ? Color.accentColor : Color.init(hex: "CBCBCB"))
         }
-        .frame(height: 68)
+//        .frame(height: 68)
         .padding(.horizontal, 16)
+        .padding(.vertical, 16)
         .background(Color.white)
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(isFocused ? Color.accentColor : Color.init("EEEEEE"), lineWidth: 1)
+                .stroke(isFocused ? Color.accentColor : Color.init(hex: "EEEEEE"), lineWidth: 1)
         )
         .onTapGesture {
             isFocused = true
@@ -66,7 +65,7 @@ struct FloatingTitleTextField: View {
             VStack {
                 FloatingTitleTextField(
                     title: "이메일 주소",
-                    placeholder: "이메일을 입력하세요",
+                    placeholder: "이메일을 입력하세요.",
                     text: $text,
                     isFocused: $isFocused // 외부에서 제어
                 )

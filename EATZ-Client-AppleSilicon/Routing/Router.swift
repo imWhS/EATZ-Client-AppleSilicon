@@ -9,7 +9,6 @@ import SwiftUI
 
 @MainActor
 class Router: ObservableObject {
-    
     @Published var path = NavigationPath()
     
     func push(_ route: ViewRoute) {
@@ -23,5 +22,4 @@ class Router: ObservableObject {
     func popToRoot() {
         path.removeLast(path.count)
     }
-    
 }

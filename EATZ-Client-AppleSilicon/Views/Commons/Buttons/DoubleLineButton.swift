@@ -8,31 +8,24 @@
 import SwiftUI
 
 struct DoubleLineButton: View {
-    
     let firstIcon: String?
-    
-    let firstTitle: String
-    
-    let secondTitle: String
-    
+    let label: String
+    let subtitle: String
     let isShowArrow: Bool
-    
     let action: () -> Void
     
     @State private var isPressed: Bool = false
     
     init(firstIcon: String? = nil, firstTitle: String, secondTitle: String, isShowArrow: Bool = false, isShowDivider: Bool = false, action: @escaping () -> Void) {
         self.firstIcon = firstIcon
-        self.firstTitle = firstTitle
-        self.secondTitle = secondTitle
+        self.label = firstTitle
+        self.subtitle = secondTitle
         self.isShowArrow = isShowArrow
         self.action = action
     }
     
     var body: some View {
-        Button(action: {
-                    action()
-        }) {
+        Button(action: action) {
             HStack(spacing: 8) {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 4) {
@@ -43,12 +36,13 @@ struct DoubleLineButton: View {
                                 .frame(height: 16)
                                 .foregroundStyle(Color.black)
                         }
-                        Text(firstTitle)
-                            .font(.system(size: 16, weight: .bold))
+                        Text(label)
+                            .font(.system(size: 17, weight: .semibold))
+                            .foregroundStyle(Color.black)
                     }
-                    Text(secondTitle)
+                    Text(subtitle)
                         .font(.system(size: 12))
-                        .foregroundStyle(Color.init("BEBEB9"))
+                        .foregroundStyle(Color.init(hex: "BEBEB9"))
                 }
                 
                 Spacer()
@@ -56,14 +50,14 @@ struct DoubleLineButton: View {
                 if isShowArrow {
                     ZStack(alignment: .center) {
                         Circle()
-                            .foregroundStyle(Color.init("ECECEC"))
+                            .foregroundStyle(Color.init(hex: "ECECEC"))
                         
-                            Image("arrow-right-circled-accent")
-                                .offset(x: 0.25, y: 0.5)
+                        ArrowRightCircled20()
                     }
                     .frame(width: 18, height: 18)
                 }
-            }            .contentShape(Rectangle())
+            }
+            .contentShape(Rectangle())
             .opacity(isPressed ? 0.5 : 1.0)
             .animation(isPressed ? .easeIn(duration: 0.075) : .easeOut(duration: 0.3), value: isPressed)
         }
@@ -72,7 +66,6 @@ struct DoubleLineButton: View {
                     .onChanged { _ in isPressed = true }
                     .onEnded { _ in isPressed = false }
                 )
-        
     }
 }
 

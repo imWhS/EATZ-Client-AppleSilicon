@@ -8,22 +8,15 @@
 import Foundation
 import Alamofire
 
-/**
- NetworkClient는 통신 계층을 담당합니다.
- */
+/// 서버와의 통신 계층을 담당합니다.
 class NetworkClient {
-    
     static let shared = NetworkClient()
     
-    /**
-     인증 인터셉터를 거치지 않는 세션입니다.
-     주로 로그인, 토큰 재발급과 같이 액세스 토큰이 포함되지 않아야 하는 API 요청에 사용합니다.
-     */
+    /// 인증 인터셉터를 거치지 않는 세션입니다.
+    /// 주로 로그인, 토큰 재발급과 같이 액세스 토큰이 포함되지 않아야 하는 API 요청에 사용합니다.
     private let basicSession: Session
     
-    /**
-     인증 인터셉터를 거치는 세션입니다.
-     */
+    /// 인증 인터셉터를 거치는 세션입니다.
     private let authSession: Session
     
     private let baseUrl = "http://localhost:8080"
@@ -38,90 +31,129 @@ class NetworkClient {
         authSession = Session(configuration: configuration, interceptor: AuthInterceptor())
     }
     
-    /// Authorization 헤더에서 액세스 토큰을 추출합니다.
-    private func extractAccessToken(from headers: [AnyHashable: Any]) -> String? {
-      guard let header = headers["Authorization"] as? String else { return nil }
-      let parts = header.split(separator: " ")
-      guard parts.count == 2, parts[0] == "Bearer" else { return nil }
-      return String(parts[1])
-    }
-
-    /// HttpOnly 쿠키에서 리프레시 토큰을 추출합니다.
-    private func extractRefreshToken(from url: URL) -> String? {
-      guard let cookies = HTTPCookieStorage.shared.cookies(for: url) else { return nil }
-      return cookies
-        .first(where: { $0.name == "RefreshToken" })?
-        .value
+    /// 요청 URL에 쿼리 파라미터로 날짜, 시간을 포함해야 할 때 사용하는 인코더입니다.
+    /// `Date` 타입의 데이터를 ISO8601 포맷으로 변환됩니다.
+    private static let customUrlParameterEncoder: URLEncodedFormParameterEncoder = {
+        let encoder = URLEncodedFormEncoder(
+            arrayEncoding: .noBrackets,
+            dateEncoding: .formatted(EatzDateTimeFormatters.iso8601))
+        return URLEncodedFormParameterEncoder(encoder: encoder, destination: .queryString)
+    }()
+    
+    /// Spring Boot 서버로 요청을 보낼 때 사용할 수 있는 JSON 데이터 인코더입니다.
+    private static let springBootLocalDateTimeJsonParameterEncoder: JSONParameterEncoder = {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = EatzDateEncodingStrategy.springBootLocalDateTimeJson
+        return JSONParameterEncoder(encoder: encoder)
+    }()
+    
+    /// Spring Boot 서버가 응답으로 보낸 JSON 데이터에 사용할 수 있는 디코더입니다.
+    private static let springBootLocalDateTimeJsonDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = EatzDateDecodingStrategy.springBootLocalDateTimeJson
+        return decoder
+    }()
+    
+    /// Alamofire의 오류 응답 바디 데이터를 공통 에러 타입인 `NetworkError`로 생성합니다.
+    /// - 서버의 오류 응답 바디에 ErrorResponse 타입의 데이터가 있는 경우: `.serverError`로 생성
+    /// - 서버의 오류 응답 바디 데이터가 없는 경우: AFError를 유지하며 `.afError`로 생성
+    private func createNetworkError<T>(
+        _ response: AFDataResponse<T>,
+        _ error: AFError,
+        _ statusCode: Int
+    ) -> NetworkError {
+        if let data = response.data,
+           let apiError = try? Self.springBootLocalDateTimeJsonDecoder.decode(ErrorResponse.self, from: data) {
+            return .serverError(statusCode: statusCode, response: apiError)
+        } else {
+            return .afError(error)
+        }
     }
     
-    private func decodeAPIError(from data: Data) -> ErrorResponse? {
-        return try? JSONDecoder().decode(ErrorResponse.self, from: data)
+    private func getEncoder(method: HTTPMethod, type: EncodingType) -> ParameterEncoder {
+        switch type {
+        case .auto:
+            return (method == .get || method == .delete)
+                            ? Self.customUrlParameterEncoder
+                            : Self.springBootLocalDateTimeJsonParameterEncoder
+        case .json: return Self.springBootLocalDateTimeJsonParameterEncoder
+        case .url: return Self.customUrlParameterEncoder
+        }
     }
     
-    public func request<T: Decodable>(
+    /// 서버에 `multipart/form-data` 형식의 단일 이미지 업로드를 요청합니다.
+    func uploadImage<D: Decodable>(
         endpointUrl: String,
-        method: HTTPMethod,
-        parameters: Parameters? = nil,
-        decoder: JSONDecoder = JSONDecoder(),
-        completion: @escaping (Result<T, NetworkError>) -> Void
-    ) {
-        guard let url = URL(string: baseUrl + endpointUrl) else {
-            print("[NetworkClient.request] '\(baseUrl + endpointUrl)'은 유효하지 않은 URL이에요")
+        method: HTTPMethod = .post,
+        imageData: Data,
+        fileName: String = "image.jpeg",
+        completion: @escaping (Result<D, NetworkError>) -> Void)
+    {
+        guard let url = URL(string: AppConfig.apiBaseUrl + endpointUrl) else {
+            print("[NetworkClient] AUTH | '\(AppConfig.apiBaseUrl + endpointUrl)'은 유효하지 않은 URL이에요.")
             completion(.failure(.unknown("유효하지 않은 URL이에요.")))
             return
         }
         
-        print("[NetworkClient.request] \(method.rawValue) \(url.relativePath)")
-        
-        authSession.request(
-            url,
-            method: method,
-            parameters: parameters,
-            encoding: method == .get ? URLEncoding.default : JSONEncoding.default)
+        print("[NetworkClient] AUTH | PUT \(url.absoluteString) URL을 통한 이미지 업로드 요청 시도")
+        authSession.upload(
+            multipartFormData: {
+                $0.append(
+                    imageData,
+                    withName: "image",
+                    fileName: fileName,
+                    mimeType: "image/jpeg")},
+            to: url,
+            method: method
+        )
         .validate(statusCode: 200 ..< 300)
-        .responseDecodable(of: T.self, decoder: decoder) { response in
+        .responseDecodable(of: D.self, decoder: Self.springBootLocalDateTimeJsonDecoder) { response in
+            let statusCode = response.response?.statusCode ?? 0
             switch response.result {
-            case .success(let decodable):
-                completion(.success(decodable))
-            case .failure(let afError):
-                // 서버의 오류 데이터부터 확인합니다.
-                if let data = response.data,
-                   let apiError = self.decodeAPIError(from: data) {
-                    // 서버의 오류 데이터가 HTTP 응답 바디에 존재하는 경우, 서버의 오류 데이터 속 메시지를 반환합니다.
-                    print("[NetworkClient.request] \(method.rawValue) \(url.relativePath) | 서버 오류예요: \(apiError.message)")
-                    let error = NetworkError.serverError(apiError)
-                    completion(.failure(error))
-                } else {
-                    // 서버의 오류 데이터가 없는 경우, 네트워크 오류로 처리합니다.
-                    print("[NetworkClient.request] \(method.rawValue) \(url.relativePath) | 네트워크 통신 오류예요: \(afError.localizedDescription)")
-                    let error = NetworkError.afError(afError)
-                    ErrorManager.shared.showError(message: error.userMessage)
-                    completion(.failure(error))
-                }
+            case .success(let response): completion(.success(response))
+            case .failure(let error):
+                print("[NetworkClient.uploadImage] \(method.rawValue) \(url.absoluteString) | 오류 발생: \(statusCode)")
+                completion(.failure(self.createNetworkError(response, error, statusCode)))
             }
-            
         }
     }
     
-    public func requestOptional<T: Decodable>(
+    public func requestOptional<D: Decodable>(
         endpointUrl: String,
         method: HTTPMethod,
-        parameters: Parameters? = nil,
-        decoder: JSONDecoder = JSONDecoder(),
-        completion: @escaping (Result<T?, NetworkError>) -> Void
-    ) {
-        guard let url = URL(string: baseUrl + endpointUrl) else {
-            print("[NetworkClient.requestOptional] '\(baseUrl + endpointUrl)'은 유효하지 않은 URL이에요")
+        completion: @escaping (Result<D?, NetworkError>) -> Void)
+    {
+        self.requestOptional(
+            endpointUrl: endpointUrl,
+            method: method,
+            parameters: nil as String?,
+            completion: completion
+        )
+    }
+    
+    public func requestOptional<E: Encodable, D: Decodable>(
+        endpointUrl: String,
+        method: HTTPMethod,
+        parameters: E? = nil,
+        completion: @escaping (Result<D?, NetworkError>) -> Void)
+    {
+        guard let url = URL(string: AppConfig.apiBaseUrl + endpointUrl) else {
+            print("[NetworkClient.requestOptional] '\(AppConfig.apiBaseUrl + endpointUrl)'은 유효하지 않은 URL이에요.")
             completion(.failure(.unknown("유효하지 않은 URL이에요.")))
             return
         }
         
-        print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath)")
+        print("[NetworkClient.requestOptional] \(method.rawValue) \(url.absoluteString) 요청 시도")
+        
+        let encoder: ParameterEncoder = (method == .get) || (method == .delete)
+        ? Self.customUrlParameterEncoder
+        : Self.springBootLocalDateTimeJsonParameterEncoder
+        
         authSession.request(
             url,
             method: method,
             parameters: parameters,
-            encoding: method == .get ? URLEncoding.default : JSONEncoding.default)
+            encoder: encoder)
         .validate(statusCode: 200 ..< 300)
         .responseData { response in
             switch response.result {
@@ -132,39 +164,26 @@ class NetworkClient {
                     return
                 }
                 
-                let status = httpResponse.statusCode
-                if status == 204 {
+                let statusCode = httpResponse.statusCode
+                if statusCode == 204 {
                     print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath) | 204 No Content → nil 반환")
                     completion(.success(nil))
-                } else if (200..<300).contains(status) {
-                    do {
-                        let decoded = try decoder.decode(T.self, from: data)
-                        print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath) | 서버 응답 디코딩 성공")
-                        completion(.success(decoded))
-                    } catch {
-                        print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath) | 디코딩 오류: \(error.localizedDescription)")
-                        completion(.failure(.unknown("응답 데이터 처리를 실패했어요.")))
-                    }
-                // 204, 200~299에 해당하지 않는 상태 코드가 온 경우
-                } else {
-                    print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath) | API 처리 오류 - 응답 코드: \(status)")
-                    completion(.failure(.unknown("서버에서 요청 처리를 실패했어요: \(status)")))
+                    return
                 }
-            case .failure(let afError):
-                // 서버의 오류 데이터부터 확인합니다.
-                if let data = response.data,
-                   let apiError = self.decodeAPIError(from: data) {
-                    // 서버의 오류 데이터가 HTTP 응답 바디에 존재하는 경우, 서버의 오류 데이터 속 메시지를 반환합니다.
-                    print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath) | 서버 오류예요: \(apiError.message)")
-                    let error = NetworkError.serverError(apiError)
-                    completion(.failure(error))
-                } else {
-                    // 서버의 오류 데이터가 없는 경우, 네트워크 오류로 처리합니다.
-                    print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath) | 네트워크 통신 오류예요: \(afError.localizedDescription)")
-                    let error = NetworkError.afError(afError)
-                    ErrorManager.shared.showError(message: error.userMessage)
-                    completion(.failure(error))
+                
+                // HTTP 응답 코드가 200~299인 경우
+                do {
+                    let decoded = try Self.springBootLocalDateTimeJsonDecoder.decode(D.self, from: data)
+                    print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath) | 서버 응답 디코딩 성공")
+                    completion(.success(decoded))
+                } catch {
+                    print("[NetworkClient.requestOptional] \(method.rawValue) \(url.relativePath) | 디코딩 오류: \(error.localizedDescription)")
+                    completion(.failure(.unknown("응답 데이터 처리를 실패했어요.")))
                 }
+            case .failure(let error):
+                let statusCode = response.response?.statusCode ?? 0
+                print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath) | 서버 오류예요(\(statusCode))")
+                completion(.failure(self.createNetworkError(response, error, statusCode)))
             }
         }
     }
@@ -172,77 +191,254 @@ class NetworkClient {
     public func authRequest(
         endpointUrl: String,
         method: HTTPMethod = .post,
-        parameters: Parameters? = nil,
-        completion: @escaping (Result<AuthTokens, NetworkError>) -> Void
-    ) {
-        guard let url = URL(string: baseUrl + endpointUrl) else {
-            print("[NetworkClient.authRequest] '\(baseUrl + endpointUrl)'은 유효하지 않은 URL이에요")
+        completion: @escaping (Result<AuthTokens, NetworkError>) -> Void)
+    {
+        self.authRequest(
+            endpointUrl: endpointUrl,
+            method: method,
+            parameters: nil as String?,
+            completion: completion
+        )
+    }
+    
+    public func authRequest<E: Encodable>(
+        endpointUrl: String,
+        disableApiBaseUrl: Bool = false,
+        method: HTTPMethod = .post,
+        parameters: E? = nil,
+        completion: @escaping (Result<AuthTokens, NetworkError>) -> Void)
+    {
+        guard let url = URL(string: (disableApiBaseUrl ? AppConfig.serverDomain : AppConfig.apiBaseUrl) + endpointUrl) else {
+            print("[NetworkClient.authRequest] '\((disableApiBaseUrl ? AppConfig.serverDomain : AppConfig.apiBaseUrl) + endpointUrl)'은 유효하지 않은 URL이에요.")
             completion(.failure(.unknown("유효하지 않은 URL이에요.")))
             return
         }
         
         print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath)")
+            
+        let encoder: ParameterEncoder = (method == .get) || (method == .delete)
+            ? Self.customUrlParameterEncoder
+            : Self.springBootLocalDateTimeJsonParameterEncoder
         
         basicSession.request(
             url,
             method: method,
             parameters: parameters,
-            encoding: JSONEncoding.default)
+            encoder: encoder)
         .validate(statusCode: 200 ..< 300)
         .response { response in
-            // 서버의 HTTP 응답을 확인합니다.
-            guard let httpResponse = response.response else {
-                print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath) | 서버로부터 받은 응답이 없어요.")
-                completion(.failure(.afError(AFError.responseValidationFailed(reason: .dataFileNil))))
-                return
-            }
+            let statusCode = response.response?.statusCode ?? 0
             
-            // 서버의 오류 응답을 확인합니다.
-            let statusCode = httpResponse.statusCode
-            
-            // 서버가 오류 응답과 함께 오류 정보 데이터를 바디에 포함시켰는지 확인합니다.
-            if !(200 ..< 300).contains(statusCode) {
-                if let data = response.data, let apiError = self.decodeAPIError(from: data) {
-                    print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath) | 서버 오류예요(\(statusCode)) | \(apiError.errorCode) | \(apiError.message)")
-                    completion(.failure(.serverError(apiError)))
-                } else {
-                    print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath) | 알 수 없는 서버 오류예요(\(statusCode)) | 서버가 오류 정보를 제공하지 않았어요.")
-                    completion(.failure(.unknown("알 수 없는 서버 오류가 발생했어요.")))
+            switch response.result {
+            case .success:
+                guard let httpResponse = response.response else {
+                    print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath) | 서버로부터 받은 응답이 없어요.")
+                    completion(.failure(.unknown("서버로부터 받은 응답이 없어요.")))
+                    return
                 }
-                return
+                
+                guard let accessToken = TokenUtils.extractAccessToken(from: httpResponse.allHeaderFields) else {
+                    print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath) | Authorization 헤더를 파싱하지 못해서, 액세스 토큰을 추출하지 못했어요.")
+                    completion(.failure(.unknown("서버로부터 올바른 액세스 토큰을 받지 못했어요.")))
+                    return
+                }
+                
+                guard let refreshToken = TokenUtils.extractRefreshToken(from: url) else {
+                    print("[NetworkClient.authRequest]\(method.rawValue) \(url.relativePath) | HttpOnly 쿠키에서 리프레시 토큰을 추출하지 못했어요.")
+                    completion(.failure(.unknown("서버로부터 올바른 리프레시 토큰을 받지 못했어요.")))
+                    return
+                }
+                
+                completion(.success(AuthTokens(accessToken: accessToken, refreshToken: refreshToken)))
+            case .failure(let error):
+                print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath) | 서버 오류예요(\(statusCode))")
+                completion(.failure(self.createNetworkError(response, error, statusCode)))
             }
-            
-            // 네트워크 오류 여부를 확인합니다.
-            if let afError = response.error {
-                print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath) | 네트워크 통신 오류예요 | \(afError.localizedDescription)")
-                let error = NetworkError.afError(afError)
-//                ErrorManager.shared.showError(message: error.userMessage)
-                completion(.failure(error))
-                return
-            }
-            
-            // Authorizatin 헤더에서 액세스 토큰을 추출합니다.
-            guard let accessToken = self.extractAccessToken(from: response.response!.allHeaderFields) else {
-                print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath) | Authorization 헤더를 파싱하지 못해서, 액세스 토큰을 추출하지 못했어요.")
-                completion(.failure(.unknown("서버로부터 올바른 액세스 토큰을 받지 못했어요.")))
-                return
-            }
-            
-            // HttpOnly 쿠키에서 리프레시 토큰을 추출합니다.
-            guard let cookies = HTTPCookieStorage.shared.cookies(for: url) else {
-                print("[NetworkClient.authRequest] \(method.rawValue) \(url.relativePath) | HttpOnly 쿠키가 존재하지 않아요.")
-                completion(.failure(.afError(AFError.responseValidationFailed(reason: .unacceptableStatusCode(code: httpResponse.statusCode)))))
-                return
-            }
-            
-            guard let refreshToken = self.extractRefreshToken(from: url) else {
-                print("[NetworkClient.authRequest]\(method.rawValue) \(url.relativePath) | HttpOnly 쿠키에서 리프레시 토큰을 추출하지 못했어요.")
-                completion(.failure(.unknown("서버로부터 올바른 리프레시 토큰을 받지 못했어요.")))
-                return
-            }
-            
-            completion(.success(AuthTokens(accessToken: accessToken, refreshToken: refreshToken)))
         }
     }
+    
+    public func request<D: Decodable>(
+        endpointUrl: String,
+        method: HTTPMethod,
+        parameters: D? = nil,
+        completion: @escaping (Result<D, NetworkError>) -> Void)
+    {
+        self.request(
+            endpointUrl: endpointUrl,
+            method: method,
+            parameters: nil as String?,
+            completion: completion
+        )
+    }
+    
+    public func request<E:Encodable, D: Decodable>(
+        endpointUrl: String,
+        method: HTTPMethod,
+        parameters: E? = nil,
+        encodingType: EncodingType = .auto,
+        completion: @escaping (Result<D, NetworkError>) -> Void)
+    {
+        performDecodableRequest(
+            session: authSession,
+            endpointUrl: endpointUrl,
+            method: method,
+            parameters: parameters,
+            encodingType: encodingType,
+            completion: completion
+        )
+    }
+    
+    public func requestPublic<D: Decodable>(
+        endpointUrl: String,
+        method: HTTPMethod,
+        completion: @escaping (Result<D, NetworkError>) -> Void)
+    {
+        requestPublic(
+            endpointUrl: endpointUrl,
+            method: method,
+            parameters: nil as [String: String]?,
+            completion: completion
+        )
+    }
+    
+    public func requestPublic<E:Encodable, D: Decodable>(
+        endpointUrl: String,
+        method: HTTPMethod,
+        parameters: E? = nil,
+        completion: @escaping (Result<D, NetworkError>) -> Void)
+    {
+        performDecodableRequest(
+            session: basicSession,
+            endpointUrl: endpointUrl,
+            method: method,
+            parameters: parameters,
+            completion: completion
+        )
+    }
 
+    public func requestPublicNoContent<E: Encodable>(
+        endpointUrl: String,
+        method: HTTPMethod,
+        parameters: E? = nil,
+        completion: @escaping (Result<Void, NetworkError>) -> Void)
+    {
+        guard let url = URL(string: AppConfig.apiBaseUrl + endpointUrl) else {
+            print("[NetworkClient.requestPublicNoContent] '\(AppConfig.apiBaseUrl + endpointUrl)'은 유효하지 않은 URL이에요.")
+            completion(.failure(.unknown("유효하지 않은 URL이에요.")))
+            return
+        }
+        
+        print("[NetworkClient.requestPublicNoContent] \(method.rawValue) \(url.absoluteString) 요청 시도")
+        
+        let encoder: ParameterEncoder = (method == .get) || (method == .delete)
+            ? Self.customUrlParameterEncoder
+            : Self.springBootLocalDateTimeJsonParameterEncoder
+        
+        basicSession.request(
+            url,
+            method: method,
+            parameters: parameters,
+            encoder: encoder)
+        .validate(statusCode: 200 ..< 300)
+        .response { response in
+            let statusCode = response.response?.statusCode ?? 0
+                        
+            switch response.result {
+            case .success(_): completion(.success(()))
+            case .failure(let error):
+                print("[NetworkClient.requestPublicNoContent] PUBLIC | \(method.rawValue) \(url.absoluteString) 오류가 발생했어요: \(statusCode)")
+                completion(.failure(self.createNetworkError(response, error, statusCode)))
+            }
+        }
+    }
+    
+    public func requestNoContent(
+        endpointUrl: String,
+        method: HTTPMethod,
+        completion: @escaping (Result<Void, NetworkError>) -> Void)
+    {
+        self.requestNoContent(
+            endpointUrl: endpointUrl,
+            method: method,
+            parameters: nil as String?,
+            completion: completion)
+    }
+    
+    public func requestNoContent<E: Encodable>(
+        endpointUrl: String,
+        method: HTTPMethod,
+        parameters: E? = nil,
+        completion: @escaping (Result<Void, NetworkError>) -> Void)
+    {
+        guard let url = URL(string: AppConfig.apiBaseUrl + endpointUrl) else {
+            print("[NetworkClient.requestNoContent] '\(AppConfig.apiBaseUrl + endpointUrl)'은 유효하지 않은 URL이에요.")
+            completion(.failure(.unknown("유효하지 않은 URL이에요.")))
+            return
+        }
+        
+        print("[NetworkClient.requestNoContent] \(method.rawValue) \(url.absoluteString) 요청 시도")
+        
+        let encoder: ParameterEncoder = (method == .get) || (method == .delete)
+            ? Self.customUrlParameterEncoder
+            : Self.springBootLocalDateTimeJsonParameterEncoder
+        
+        authSession.request(
+            url,
+            method: method,
+            parameters: parameters,
+            encoder: encoder)
+        .validate(statusCode: 200 ..< 300)
+        .response { response in
+            let statusCode = response.response?.statusCode ?? 0
+            
+            switch response.result {
+            case .success(_): completion(.success(()))
+            case .failure(let error):
+                print("[NetworkClient.requestNoContent] \(method.rawValue) \(url.relativePath) | 서버 오류예요(\(statusCode))")
+                completion(.failure(self.createNetworkError(response, error, statusCode)))
+            }
+        }
+    }
+    
+    private func performDecodableRequest<E: Encodable, D: Decodable>(
+        session: Session,
+        endpointUrl: String,
+        method: HTTPMethod,
+        parameters: E? = nil,
+        encodingType: EncodingType = .auto,
+        completion: @escaping (Result<D, NetworkError>
+        ) -> Void)
+    {
+        guard let url = URL(string: AppConfig.apiBaseUrl + endpointUrl) else {
+            print("[NetworkClient.performDecodableRequest] \(session === authSession ? "AUTH" : "PUBLIC") | '\(AppConfig.apiBaseUrl + endpointUrl)'은 유효하지 않은 URL이에요.")
+            completion(.failure(.unknown("유효하지 않은 URL이에요.")))
+            return
+        }
+        
+        print("[NetworkClient.performDecodableRequest] \(session === authSession ? "AUTH" : "PUBLIC") | \(method.rawValue) \(url.absoluteString) 요청 시도")
+        let encoder = getEncoder(method: method, type: encodingType)
+        
+        session.request(
+                url,
+                method: method,
+                parameters: parameters,
+                encoder: encoder)
+            .validate(statusCode: 200 ..< 300)
+            .responseDecodable(of: D.self, decoder: Self.springBootLocalDateTimeJsonDecoder) { response in
+                let statusCode = response.response?.statusCode ?? 0
+                switch response.result {
+                case .success(let response): completion(.success(response))
+                case .failure(let error):
+                    print("[NetworkClient.performDecodableRequest] \(session === self.authSession ? "AUTH" : "PUBLIC") | \(method.rawValue) \(url.absoluteString) 오류가 발생했어요: \(statusCode)")
+                    completion(.failure(self.createNetworkError(response, error, statusCode)))
+                }
+            }
+    }
+}
+
+
+enum EncodingType {
+    case auto
+    case json
+    case url
 }

@@ -214,16 +214,16 @@ private struct ChecklistUncookableSection: View {
                 onPlanItemAction,
                 onKitchenwareItemAction,
                 onIngredientItemAction)
-            VStack(spacing: 6) {
+            VStack(spacing: 20) {
                 HorizontalDivider()
                 VStack(spacing: 0) {
-                    Text("이미 위의 재료와 도구를 모두 가지고 있나요?")
+                    Text("이미 위의 재료와 도구를 모두 가지고 있다면, 지금 바로 보관함에 재료와 도구를 추가해 보세요.")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(Color.init(hex: "C5C5C5"))
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.horizontal, 20)
-                        .padding(.vertical, 6)
+                        .padding(.bottom, 10)
                     Button(action: {
                         // 레시피를 요리하기 위해 필요한(사용자가 보관함에 추가하지 않은) 재료와 도구 모두 사용자 보관함에 일괄 추가합니다.
                         onAddAllRequirements()
@@ -236,11 +236,9 @@ private struct ChecklistUncookableSection: View {
                     }
                     .buttonStyle(BigRoundedButtonStyle(type: .primary))
                     .padding(.horizontal, 20)
-                    .padding(.top, 6)
-                    .padding(.bottom, 10)
+                    .padding(.vertical, 10)
                 }
             }
-            .padding(.top, 6)
             .padding(.bottom, 10)
         }
         .background(Color.white)

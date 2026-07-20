@@ -12,53 +12,84 @@ struct MyAccountSettingsView: View {
     @EnvironmentObject private var authManager: AuthManager
     @State private var alert: MyAccountSettingsAlert?
     
+    var clientVersion: String {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
+        return "iOS \(version)"
+    }
+    
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
-                if authManager.isLoggedIn {
-                    SettingsSectionCard(title: "계정 관리") {
-                        BasicMenuRow("차단 사용자 관리", false) {
-                            router.push(.userBlocklist)
-                        }
-                    }
-                }
-                
-                SettingsSectionCard(title: "사용자 지원") {
-                    BasicMenuRow("새로운 소식", .action) {
-                        
-                    }
-                    BasicMenuRow("개발자에게 편지 쓰기", false, .action, "admin@eatz.io") {
-                        
-                    }
-                }
-                
-                SettingsSectionCard(title: "정보") {
-                    BasicMenuRow("이용 약관 및 정책", .action) {
-                        print("약관 링크 이동")
-                    }
-                    BasicMenuRow("개인 정보 처리 방침", .action) {
-                        print("처리방침 링크 이동")
-                    }
-                    BasicMenuRow("버전", false, .info(trailing: "iOS 1.0.0")) {
-                        print("버전 확인")
-                    }
-                }
-                if authManager.isLoggedIn {
-                    HStack {
-                        Button("로그아웃", action: handleLogOutAction)
-                        .buttonStyle(SmallRoundedButtonStyle(type: .danger))
-                        
-                        Button(action: { router.push(.deleteAccount) } ) {
-                            HStack {
-                                Text("회원 탈퇴")
-                                Image("arrow-right-6.8")
+            VStack {
+                VStack(spacing: 20) {
+                    if authManager.isLoggedIn {
+                        SettingsSectionCard(title: "계정 관리") {
+                            BasicMenuRow("차단 사용자 관리", false) {
+                                router.push(.userBlocklist)
                             }
                         }
-                        .buttonStyle(SmallRoundedButtonStyle(type: .danger))
+                    }
+                    
+                    SettingsSectionCard(title: "사용자 지원") {
+                        BasicMenuRow("새로운 소식", .action) {
+                            
+                        }
+                        BasicMenuRow("개발자에게 편지 쓰기", false, .action, "admin@eatz.io") {
+                            
+                        }
+                    }
+                    
+                    SettingsSectionCard(title: "정보") {
+                        BasicMenuRow("이용 약관 및 정책", .action) {
+                            print("약관 링크 이동")
+                        }
+                        BasicMenuRow("개인 정보 처리 방침", .action) {
+                            print("처리방침 링크 이동")
+                        }
+                        BasicMenuRow("버전", false, .info(trailing: clientVersion)) {
+                            print("버전 확인")
+                        }
+                    }
+                    if authManager.isLoggedIn {
+                        HStack {
+                            Button("로그아웃", action: handleLogOutAction)
+                                .buttonStyle(SmallRoundedButtonStyle(type: .danger))
+                            
+                            Button(action: { router.push(.deleteAccount) } ) {
+                                HStack {
+                                    Text("회원 탈퇴")
+                                    Image("arrow-right-6.8")
+                                }
+                            }
+                            .buttonStyle(SmallRoundedButtonStyle(type: .danger))
+                        }
                     }
                 }
+                .padding(.top, 20)
+                
+                VStack(spacing: 6) {
+                    Group {
+                        HStack {
+                            Group {
+                                Text("EATZ")
+                                DotSeparatorView()
+                                Text(clientVersion)
+                            }
+                            .font(.system(size: 14, weight: .bold))
+                        }
+                        VStack(spacing: 2) {
+                            Group {
+                                Text("© 2026 Wonhee Son. All rights reserved.")
+                                Link("heextory@icloud.com", destination: URL(string: "mailto:heextory@icloud.com")!)
+                                Link("github.com/imWhS", destination: URL(string: "https://github.com/imWhS")!)
+                            }
+                            .font(.system(size: 10, weight: .medium))
+                        }
+                    }
+                    .foregroundStyle(Color.init(hex: "BEBEB9"))
+                    .tint(Color.init(hex: "BEBEB9"))
+                }
+                .padding(.vertical, 20)
             }
-            .padding(.top, 20)
         }
         .background(Color(hex: "F9F9F9").ignoresSafeArea())
         .navigationTitle("설정 및 정보")
@@ -99,7 +130,7 @@ enum MyAccountSettingsAlert {
     @ViewBuilder
     var message: some View {
         switch self {
-        case .confirmLogOut(let username, _): Text("\(username) 계정을 로그아웃하시겠어요?")
+        case .confirmLogOut(let username, _): Text("지금 사용 중이신 \(username) 계정을 로그아웃하시겠어요?")
         }
     }
     

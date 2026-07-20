@@ -99,7 +99,7 @@ enum MyAccountSettingsAlert {
     @ViewBuilder
     var message: some View {
         switch self {
-        case .confirmLogOut(let username, _): Text("\(username) 계정을 로그아웃하시겠어요?")
+        case .confirmLogOut(let username, _): Text("지금 사용 중이신 \(username) 계정을 로그아웃하시겠어요?")
         }
     }
     

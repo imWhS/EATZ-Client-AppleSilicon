@@ -239,9 +239,7 @@ private struct ChecklistUncookableSection: View {
                     .padding(.vertical, 10)
                 }
             }
-//            .padding(.top, 8)
             .padding(.bottom, 10)
-//            .background(Color.yellow)
         }
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 28))

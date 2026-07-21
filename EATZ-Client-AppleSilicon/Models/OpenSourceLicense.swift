@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct OpenSourceLicense {
+struct OpenSourceLicense: Identifiable {
+    let id: Int64
     let name: String
     let urlString: String
     let copyrightNotice: String

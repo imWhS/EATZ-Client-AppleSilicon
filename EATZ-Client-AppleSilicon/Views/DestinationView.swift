@@ -45,10 +45,13 @@ struct DestinationView: View {
             MyAccountSettingsView()
         case .userBlocklist:
             UserBlocklist()
+        case .openSourceLicense:
+            OpenSourceLicenseView()
         case .deleteAccount:
             DeleteAccountView()
         case .deleteAccountDetail:
             DeleteAccountDetailView()
+            
         }
     }
 }

@@ -39,6 +39,8 @@ enum ViewRoute: Hashable {
     
     case userBlocklist
     
+    case openSourceLicense
+    
     case deleteAccount
     
     case deleteAccountDetail

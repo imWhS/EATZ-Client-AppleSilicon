@@ -26,7 +26,10 @@ enum BasicMenuRowStyle {
     var trailingIcon: some View {
         switch self {
         case .navigation: Image("arrow-right-14").foregroundStyle(Color.accentColor)
-        case .info(let trailing): Text(trailing).foregroundStyle(Color.init(hex: "A5A5A5"))
+        case .info(let trailing):
+            Text(trailing)
+                .font(.system(size: 17, weight: .medium))
+                .foregroundStyle(Color.init(hex: "A5A5A5"))
         default: EmptyView()
         }
     }

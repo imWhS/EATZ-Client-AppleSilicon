@@ -46,7 +46,7 @@ struct MyAccountSettingsView: View {
                             print("처리방침 링크 이동")
                         }
                         BasicMenuRow("Open Source License") {
-                            router.push(.userBlocklist)
+                            router.push(.openSourceLicense)
                         }
                         BasicMenuRow("버전", false, .info(trailing: clientVersion)) {
                             print("버전 확인")

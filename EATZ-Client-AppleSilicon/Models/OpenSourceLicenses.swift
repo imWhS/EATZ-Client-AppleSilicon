@@ -10,6 +10,7 @@ import Foundation
 enum OpenSourceLicenses {
     static let data: [OpenSourceLicense] = [
         OpenSourceLicense(
+            id: 0,
             name: "FSCalendar",
             urlString: "https://github.com/WenchaoD/FSCalendar",
             copyrightNotice: "Copyright (c) 2013-2016 FSCalendar",
@@ -36,6 +37,7 @@ enum OpenSourceLicenses {
                 THE SOFTWARE.
                 """),
         OpenSourceLicense(
+            id: 1,
             name: "Alamofire",
             urlString: "http://alamofire.org/",
             copyrightNotice: "Copyright (c) 2014-2022 Alamofire Software Foundation",
@@ -62,6 +64,7 @@ enum OpenSourceLicenses {
                 THE SOFTWARE.
                 """),
         OpenSourceLicense(
+            id: 2,
             name: "Kingfisher",
             urlString: "https://github.com/onevcat/kingfisher",
             copyrightNotice: "Copyright (c) 2019 Wei Wang",

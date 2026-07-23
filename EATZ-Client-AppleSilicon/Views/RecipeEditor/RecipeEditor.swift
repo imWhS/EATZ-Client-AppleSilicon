@@ -46,7 +46,7 @@ struct RecipeEditor: View {
             
             viewModel.loadInitial(mode, authManager)
         }
-        .onChange(of: viewModel.selectedPhotoItem) { viewModel.handleProfileImageSelection() }
+        .onChange(of: viewModel.selectedPhotoItem) { viewModel.handlePhotoSelection() }
         .onChange(of: authManager.currentUser) { _, newUser in
             viewModel.validateAndPrepareUser(authManager)
         }
@@ -73,9 +73,10 @@ struct RecipeEditor: View {
             VStack(alignment: .leading, spacing: 0) {
                 RecipeEditorDefaultInfoSection(
                     draft: $viewModel.currentDraft,
+                    localImage: $viewModel.localImage,
                     selectedPhotoItem: $viewModel.selectedPhotoItem,
                     isProcessingImage: $viewModel.isProcessingImage,
-                    onDeletePhotoTapped: viewModel.handleDeleteImage
+                    onDeletePhotoTapped: viewModel.handleClearImage
                 )
                 RecipeEditorRequirementsSection(
                     draft: $viewModel.currentDraft,
@@ -228,7 +229,7 @@ enum RecipeEditorAlert: Identifiable {
     @ViewBuilder
     var message: some View {
         switch self {
-        case .deleteImageConfirmation: Text("레시피의 대표 사진을 삭제할까요? 삭제된 사진은 복구할 수 없어요.")
+        case .deleteImageConfirmation: Text("레시피의 대표 사진을 삭제할까요?")
         case .hasUnsavedChanges: Text("이 화면에서 나가면, 변경된 내용이 버려집니다.")
         case .incompleteDraft(let message): Text(message)
         case .userChanged: Text("기존과 다른 사용자로 로그인됐어요. 레시피 편집을 종료할게요.")

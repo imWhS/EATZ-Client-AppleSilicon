@@ -46,7 +46,7 @@ struct RecipeEditor: View {
             
             viewModel.loadInitial(mode, authManager)
         }
-        .onChange(of: viewModel.selectedPhotoItem) { viewModel.handleProfileImageSelection() }
+        .onChange(of: viewModel.selectedPhotoItem) { viewModel.handlePhotoSelection() }
         .onChange(of: authManager.currentUser) { _, newUser in
             viewModel.validateAndPrepareUser(authManager)
         }
@@ -73,6 +73,7 @@ struct RecipeEditor: View {
             VStack(alignment: .leading, spacing: 0) {
                 RecipeEditorDefaultInfoSection(
                     draft: $viewModel.currentDraft,
+                    pendingImage: $viewModel.pendingImage,
                     selectedPhotoItem: $viewModel.selectedPhotoItem,
                     isProcessingImage: $viewModel.isProcessingImage,
                     onDeletePhotoTapped: viewModel.handleDeleteImage

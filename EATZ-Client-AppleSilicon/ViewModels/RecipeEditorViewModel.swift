@@ -38,6 +38,8 @@ class RecipeEditorViewModel: ObservableObject {
     
     @Published var selectedPhotoItem: PhotosPickerItem?
     
+    @Published var pendingImage: UIImage?
+    
     @Published var isProcessingImage: Bool = false
     
     @Published var routingAction: RecipeEditorRoutingAction?
@@ -190,7 +192,7 @@ class RecipeEditorViewModel: ObservableObject {
 }
 
 extension RecipeEditorViewModel {
-    func handleProfileImageSelection() {
+    func handlePhotoSelection() {
         guard let item = selectedPhotoItem else { return }
         
         Task {
@@ -199,7 +201,7 @@ extension RecipeEditorViewModel {
                 let resizedUiImage = uiImage.resized(maxDimension: 1024.0) ?? uiImage
                 guard let jpegData = resizedUiImage.jpegData(compressionQuality: 0.8) else { return }
                 DispatchQueue.main.async {
-                    self.uploadImage(jpegData)
+                    self.pendingImage = UIImage(data: jpegData)
                 }
             } catch {
                 self.alert = .error(message: "사진을 정상적으로 불러오지 못했어요.")

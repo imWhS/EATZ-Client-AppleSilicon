@@ -73,7 +73,7 @@ struct RecipeEditor: View {
             VStack(alignment: .leading, spacing: 0) {
                 RecipeEditorDefaultInfoSection(
                     draft: $viewModel.currentDraft,
-                    pendingImage: $viewModel.pendingImage,
+                    localImage: $viewModel.localImage,
                     selectedPhotoItem: $viewModel.selectedPhotoItem,
                     isProcessingImage: $viewModel.isProcessingImage,
                     onDeletePhotoTapped: viewModel.handleClearImage

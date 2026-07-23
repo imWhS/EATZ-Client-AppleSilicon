@@ -10,19 +10,19 @@ import PhotosUI
 
 struct RecipeEditorDefaultInfoImageSection: View {
     @Binding var imageUrl: String
-    @Binding var pendingImage: UIImage?
+    @Binding var localImage: UIImage?
     @Binding var isProcessing: Bool
     @Binding var selectedPhotoItem: PhotosPickerItem?
     
     let onDeleteTapped: () -> Void
     
     private var hasImage: Bool {
-        !imageUrl.isEmpty || pendingImage != nil
+        !imageUrl.isEmpty || localImage != nil
     }
     
-    init(imageUrl: Binding<String>, _ pendingImage: Binding<UIImage?>, _ isProcessing: Binding<Bool>, _ selectedPhotoItem: Binding<PhotosPickerItem?>, _ onDeleteTapped: @escaping () -> Void) {
+    init(imageUrl: Binding<String>, _ localImage: Binding<UIImage?>, _ isProcessing: Binding<Bool>, _ selectedPhotoItem: Binding<PhotosPickerItem?>, _ onDeleteTapped: @escaping () -> Void) {
         self._imageUrl = imageUrl
-        self._pendingImage = pendingImage
+        self._localImage = localImage
         self._isProcessing = isProcessing
         self._selectedPhotoItem = selectedPhotoItem
         self.onDeleteTapped = onDeleteTapped
@@ -44,8 +44,8 @@ struct RecipeEditorDefaultInfoImageSection: View {
     private var imageSection: some View {
         if isProcessing {
             processingView
-        } else if let selectedImage = pendingImage {
-            RecipeEditorImageView(selectedImage)
+        } else if let localImage = localImage {
+            RecipeEditorImageView(localImage)
         } else if !imageUrl.isEmpty {
             RecipeEditorImageView(imageUrl)
         } else {

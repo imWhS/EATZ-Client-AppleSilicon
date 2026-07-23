@@ -36,13 +36,35 @@ class RecipeEditorViewModel: ObservableObject {
     /// 사용자가 현재 편집 중인 레시피 초안입니다.
     @Published var currentDraft = RecipeDraft()
     
+    /// 사용자가 OS의 PhotosPicker에서 선택한 사진 아이템입니다.
+    /// - 사진이 선택되면, `handlePhotoSelection()`을 통해 가공 후 `localImage`와 `pendingUploadJpegData`에 설정됩니다.
     @Published var selectedPhotoItem: PhotosPickerItem?
     
-    @Published var pendingImage: UIImage?
+    /// 사용자가 앨범에서 새로 선택한 대표 사진 아이템에 후가공을 거친 로컬 대표 사진 이미지입니다.
+    /// - 뷰의 서브뷰를 통해 업로드 할 대표 사진의 미리보기를 위해 사용하기 때문에, 리사이징, 압축 등의 후가공이 적용됩니다.
+    @Published var localImage: UIImage?
     
+    /// 이미지 압축, 서버 업로드 등 대표 사진과 관련한 작업 진행 여부를 나타냅니다.
     @Published var isProcessingImage: Bool = false
     
     @Published var routingAction: RecipeEditorRoutingAction?
+    
+    /// 사용자가 앨범에서 새로 선택한 대표 사진 아이템에 후가공을 거친 업로드 전용 대표 사진 데이터입니다.
+    /// - 이미지 업로드 요청 시 바로 사용할 데이터여서, 리사이징, 압축 등의 후가공이 적용됩니다.
+    private var pendingUploadJpegData: Data?
+    
+    /// 새로 선택한 대표 사진으로 덮어쓰거나, 기존 업로드된 대표 사진 URL에 대한 데이터를 삭제할 때, 최종적으로 서버에서 지워야 할 기존 대표 사진의 URL입니다.
+    ///
+    /// - 대표 사진을 삭제한 후 뷰를 dismiss 하거나, 오류로 인해 레시피 제출(등록/업데이트)이 실패했을 때 서버의 대표 사진이 불필요하게 또는, 의도치 않게 삭제되는 것을 막아서
+    ///   레시피 제출 과정이 모두 성공적으로 완료된 후의 시점에 서버에서 대표 사진을 삭제하기 위해 사용합니다.
+    /// - 레시피 제출(등록/업데이트)이 성공한 직후에 값이 삭제됩니다.
+    private var pendingDeletionImageUrl: String?
+    
+    /// 뷰에 유효한 대표 사진이 존재하는지 여부를 나타냅니다.
+    /// - 기존 업로드된 대표 사진 URL이 남아있거나, 사용자가 새로 고른 로컬 대표 사진 이미지가 있으면 `true`를 반환합니다.
+    private var isImageValid: Bool {
+        !currentDraft.hasInvalidImageUrl() || localImage != nil
+    }
     
     /// 뷰의 Navigation Title에 표시할 문구입니다.
     /// - 초기 진입 모드에 따라 동적으로 설정됩니다.
@@ -82,8 +104,6 @@ class RecipeEditorViewModel: ObservableObject {
     var isSubmittable: Bool {
         guard state == .content else { return false }
         
-        let isImageValid = !currentDraft.hasInvalidImageUrl() || pendingImage != nil
-        
         return isImageValid &&
             !currentDraft.hasInvalidTitle() &&
             !currentDraft.hasInvalidUrl() &&
@@ -110,7 +130,7 @@ class RecipeEditorViewModel: ObservableObject {
     
     /// 현재 편집 중인 레시피 초안의 변경 사항 및 새로 선택한 사진의 존재 여부를 나타냅니다.
     private var hasUnsavedChanges: Bool {
-        (RecipeDraft(from: recipeEditable) != currentDraft) || pendingImage != nil
+        (RecipeDraft(from: recipeEditable) != currentDraft) || localImage != nil
     }
     
     // MARK: - 의존성
@@ -194,6 +214,7 @@ class RecipeEditorViewModel: ObservableObject {
 }
 
 extension RecipeEditorViewModel {
+    /// 사용자가 `PhotosPicker`에서 새로운 사진을 선택했을 때 호출됩니다.
     func handlePhotoSelection() {
         guard let item = selectedPhotoItem else { return }
         
@@ -203,7 +224,8 @@ extension RecipeEditorViewModel {
                 let resizedUiImage = uiImage.resized(maxDimension: 1024.0) ?? uiImage
                 guard let jpegData = resizedUiImage.jpegData(compressionQuality: 0.8) else { return }
                 DispatchQueue.main.async {
-                    self.pendingImage = UIImage(data: jpegData)
+                    self.pendingUploadJpegData = jpegData
+                    self.localImage = UIImage(data: jpegData)
                 }
             } catch {
                 self.alert = .error(message: "사진을 정상적으로 불러오지 못했어요.")
@@ -220,19 +242,29 @@ extension RecipeEditorViewModel {
         else { dismissAction() }
     }
     
+    /// 사용자가 '완료' 버튼을 탭했을 때 호출되는 제출 핸들러입니다.
+    /// 뷰모델의 상태가 정상인지 확인하고, `currentDraft`(레시피 편집 초안)의 필수 항목 유효성 검사를 통과하면 레시피 제출 사전 작업을 시작합니다.
     func handleSubmit() {
         guard case .content = state else { return }
         guard validateCurrentDraft() else { return }
-        submit()
+        prepareSubmit()
     }
     
+    /// '대표 사진 삭제' 버튼을 탭했을 때 호출되는 대표 사진 초기화 핸들러입니다.
     func handleClearImage() {
         alert = .deleteImageConfirmation(confirmAction: clearImage)
     }
     
+    /// 뷰에 표시되고 있는 대표 사진 관련 모든 프로퍼티 값 및 상태를 초기화합니다.
+    /// - 기존에 레시피에서 사용 중인 대표 사진의 URL이 존재했다면, 레시피 제출(등록/업데이트) 후에 서버에서 삭제하기 위해 `pendingDeletionImageUrl`의 값으로 URL을 설정합니다.
     private func clearImage() {
+        if !currentDraft.imageUrl.isEmpty {
+            pendingDeletionImageUrl = currentDraft.imageUrl
+        }
+        
         currentDraft.imageUrl = ""
-        pendingImage = nil
+        pendingUploadJpegData = nil
+        localImage = nil
         selectedPhotoItem = nil
     }
     
@@ -273,16 +305,65 @@ extension RecipeEditorViewModel {
         }
     }
     
-    private func submit() {
+    /// 레시피를 제출하기 위한 사전 작업을 처리합니다.
+    private func prepareSubmit() {
         submissionState = .submitting
         
+        if !currentDraft.imageUrl.isEmpty && pendingUploadJpegData != nil {
+            pendingDeletionImageUrl = currentDraft.imageUrl
+        }
+        
+        // 사용자가 첨부하기 위해 새로 선택한 사진(pendingImage)이 있으면, 해당 사진을 먼저 업로드한 후 제출을 요청합니다.
+        if let jpegData = pendingUploadJpegData {
+            recipeService.uploadImage(imageData: jpegData) { [weak self] result in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let response):
+                        self.pendingUploadJpegData = nil
+                        self.selectedPhotoItem = nil
+                        self.currentDraft.imageUrl = response.imageUrl
+                        self.submit()
+                    case .failure(let networkError):
+                        self.alert = .error(title: "대표 사진 업로드 실패", message: "\(networkError.userMessage) 다시 시도해보세요.")
+                        self.submissionState = .idle
+                    }
+                }
+            }
+        } else {
+            submit()
+        }
+    }
+    
+    // 레시피 제출(등록/업데이트) 후, 레시피에 대한 서버 내 기존 이미지를 삭제합니다.
+    private func handlePendingDeletionImage(completion: (() -> Void)? = nil) {
+        guard let imageUrlToDelete = pendingDeletionImageUrl else {
+            completion?()
+            return
+        }
+        
+        recipeService.deleteImage(imageUrlToDelete) { [weak self] result in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                if case .failure = result {
+                    print("[RecipeEditorViewModel.deleteExistingImage] 기존 대표 사진을 삭제하지 못했어요 | 이미지 URL: \(imageUrlToDelete)")
+                }
+                self.pendingDeletionImageUrl = nil
+                completion?()
+            }
+        }
+    }
+    
+    private func submit() {
         // API 호출 후 실행될 공통 콜백 클로저를 정의합니다.
         let completionHandler: (Result<Any, NetworkError>) -> Void = { [weak self] result in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.submissionState = .idle
                 switch result {
-                case .success: self.routingAction = .submitCompleted
+                case .success:
+                    self.routingAction = .submitCompleted
+                    self.handlePendingDeletionImage()
                 case .failure(let networkError): self.alert = .error(message: networkError.userMessage)
                 }
             }
@@ -295,12 +376,12 @@ extension RecipeEditorViewModel {
         case .update(let recipeId):
             let request = currentDraft.toUpdateRequest()
             recipeService.update(for: recipeId, request) { result in completionHandler(result.map { $0 as Any }) }
-        case .none: break
+        case .none: submissionState = .idle
         }
     }
     
     private func validateCurrentDraft() -> Bool {
-        if currentDraft.hasInvalidImageUrl() {
+        if !isImageValid {
             alert = .incompleteDraft(message: "레시피 대표 사진을 추가해주세요. 레시피 대표 사진은 필수 항목이에요.")
             return false
         }

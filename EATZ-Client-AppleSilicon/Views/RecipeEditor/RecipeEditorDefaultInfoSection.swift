@@ -11,6 +11,7 @@ import Kingfisher
 
 struct RecipeEditorDefaultInfoSection: View {
     @Binding var draft: RecipeDraft
+    @Binding var pendingImage: UIImage?
     @Binding var selectedPhotoItem: PhotosPickerItem?
     @Binding var isProcessingImage: Bool
     
@@ -35,7 +36,7 @@ struct RecipeEditorDefaultInfoSection: View {
     
     private var essentialEditView: some View {
         VStack(spacing: 0) {
-            RecipeEditorDefaultInfoImageSection(imageUrl: $draft.imageUrl, $isProcessingImage, $selectedPhotoItem, onDeletePhotoTapped)
+            RecipeEditorDefaultInfoImageSection(imageUrl: $draft.imageUrl, $pendingImage, $isProcessingImage, $selectedPhotoItem, onDeletePhotoTapped)
             VStack(spacing: 0) {
                 DynamicHeightTextView(
                     text: $draft.title,

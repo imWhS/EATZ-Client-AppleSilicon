@@ -10,13 +10,19 @@ import PhotosUI
 
 struct RecipeEditorDefaultInfoImageSection: View {
     @Binding var imageUrl: String
+    @Binding var pendingImage: UIImage?
     @Binding var isProcessing: Bool
     @Binding var selectedPhotoItem: PhotosPickerItem?
     
     let onDeleteTapped: () -> Void
     
-    init(imageUrl: Binding<String>, _ isProcessing: Binding<Bool>, _ selectedPhotoItem: Binding<PhotosPickerItem?>, _ onDeleteTapped: @escaping () -> Void) {
+    private var hasImage: Bool {
+        !imageUrl.isEmpty || pendingImage != nil
+    }
+    
+    init(imageUrl: Binding<String>, _ pendingImage: Binding<UIImage?>, _ isProcessing: Binding<Bool>, _ selectedPhotoItem: Binding<PhotosPickerItem?>, _ onDeleteTapped: @escaping () -> Void) {
         self._imageUrl = imageUrl
+        self._pendingImage = pendingImage
         self._isProcessing = isProcessing
         self._selectedPhotoItem = selectedPhotoItem
         self.onDeleteTapped = onDeleteTapped
@@ -25,33 +31,44 @@ struct RecipeEditorDefaultInfoImageSection: View {
     var body: some View {
         VStack(spacing: 20) {
             VStack(spacing: 20) {
-                if isProcessing {
-                    processingView
-                } else if imageUrl.isEmpty {
-                    placeholderView
-                } else {
-                    RecipeEditorImageView(imageUrl)
-                }
-                
-                HStack {
-                    if !(imageUrl.isEmpty) {
-                        Button("대표 사진 삭제", action: onDeleteTapped)
-                            .buttonStyle(SmallRoundedButtonStyle(type: isProcessing ? .disabled : .danger))
-                    }
-                    PhotosPicker(
-                        selection: $selectedPhotoItem,
-                        matching: .images,
-                        photoLibrary: .shared()) {
-                            Text(imageUrl.isEmpty ? "대표 사진 추가" : "대표 사진 변경")
-                        }
-                        .buttonStyle(SmallRoundedButtonStyle(type: isProcessing ? .disabled : .primary))
-                }
-                .disabled(isProcessing)
+                imageSection
+                interactionSection
             }
             
             HorizontalDivider(padding: 0)
         }
         .padding(.horizontal, 20)
+    }
+    
+    @ViewBuilder
+    private var imageSection: some View {
+        if isProcessing {
+            processingView
+        } else if let selectedImage = pendingImage {
+            RecipeEditorImageView(selectedImage)
+        } else if !imageUrl.isEmpty {
+            RecipeEditorImageView(imageUrl)
+        } else {
+            placeholderView
+        }
+    }
+    
+    @ViewBuilder
+    private var interactionSection: some View {
+        HStack {
+            if hasImage {
+                Button("대표 사진 삭제", action: onDeleteTapped)
+                    .buttonStyle(SmallRoundedButtonStyle(type: isProcessing ? .disabled : .danger))
+            }
+            PhotosPicker(
+                selection: $selectedPhotoItem,
+                matching: .images,
+                photoLibrary: .shared()) {
+                    Text(hasImage ? "대표 사진 변경" : "대표 사진 추가")
+                }
+                .buttonStyle(SmallRoundedButtonStyle(type: isProcessing ? .disabled : .primary))
+        }
+        .disabled(isProcessing)
     }
     
     private var processingView: some View {

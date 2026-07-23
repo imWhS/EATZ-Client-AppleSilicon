@@ -82,7 +82,9 @@ class RecipeEditorViewModel: ObservableObject {
     var isSubmittable: Bool {
         guard state == .content else { return false }
         
-        return !currentDraft.hasInvalidImageUrl() &&
+        let isImageValid = !currentDraft.hasInvalidImageUrl() || pendingImage != nil
+        
+        return isImageValid &&
             !currentDraft.hasInvalidTitle() &&
             !currentDraft.hasInvalidUrl() &&
             !currentDraft.hasInvalidDescription() &&
@@ -106,9 +108,9 @@ class RecipeEditorViewModel: ObservableObject {
         }
     }
     
-    /// 현재 편집 중인 레시피 초안의 변경 사항 여부를 나타냅니다.
-    private var hasDraftChanges: Bool {
-        RecipeDraft(from: recipeEditable) != currentDraft
+    /// 현재 편집 중인 레시피 초안의 변경 사항 및 새로 선택한 사진의 존재 여부를 나타냅니다.
+    private var hasUnsavedChanges: Bool {
+        (RecipeDraft(from: recipeEditable) != currentDraft) || pendingImage != nil
     }
     
     // MARK: - 의존성
@@ -214,7 +216,7 @@ extension RecipeEditorViewModel {
     /// - 변경 또는 추가 내용이 있으면, 관련 alert을 present합니다.
     func handleDismissAction() {
         let dismissAction: () -> Void = { self.routingAction = .dismiss }
-        if hasDraftChanges { alert = .hasUnsavedChanges(confirmAction: dismissAction) }
+        if hasUnsavedChanges { alert = .hasUnsavedChanges(confirmAction: dismissAction) }
         else { dismissAction() }
     }
     

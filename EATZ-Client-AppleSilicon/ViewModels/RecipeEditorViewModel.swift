@@ -224,21 +224,14 @@ extension RecipeEditorViewModel {
         submit()
     }
     
-    func handleDeleteImage() {
-        alert = .deleteImageConfirmation(confirmAction: deleteImage)
+    func handleClearImage() {
+        alert = .deleteImageConfirmation(confirmAction: clearImage)
     }
     
-    private func deleteImage() {
-        isProcessingImage = true
-        recipeService.deleteImage(currentDraft.imageUrl) { [weak self] result in
-            guard let self = self else { return }
-            self.isProcessingImage = false
-            switch result {
-            case .success: self.currentDraft.imageUrl = ""
-            case .failure(let networkError): self.alert = .error(title: "대표 사진 삭제 실패", message: networkError.userMessage)
-            }
-            self.selectedPhotoItem = nil
-        }
+    private func clearImage() {
+        currentDraft.imageUrl = ""
+        pendingImage = nil
+        selectedPhotoItem = nil
     }
     
     private func uploadImage(_ data: Data) {

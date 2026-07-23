@@ -195,15 +195,11 @@ extension RecipeEditorViewModel {
         
         Task {
             do {
-                if let imageData = try await item.loadTransferable(type: Data.self) {
-                    if let uiImage = UIImage(data: imageData) {
-                        let resizedUiImage = uiImage.resized(maxDimension: 1024.0) ?? uiImage
-                        if let jpegData = resizedUiImage.jpegData(compressionQuality: 0.8) {
-                            DispatchQueue.main.async {
-                                self.uploadImage(jpegData)
-                            }
-                        }
-                    }
+                let uiImage = try await PhotosPickerItemUtility.toUIImage(for: item)
+                let resizedUiImage = uiImage.resized(maxDimension: 1024.0) ?? uiImage
+                guard let jpegData = resizedUiImage.jpegData(compressionQuality: 0.8) else { return }
+                DispatchQueue.main.async {
+                    self.uploadImage(jpegData)
                 }
             } catch {
                 self.alert = .error(message: "사진을 정상적으로 불러오지 못했어요.")

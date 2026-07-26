@@ -81,6 +81,7 @@ struct SignUpAdditionPasswordView: View {
             Text("암호 보기")
                 .font(.system(size: 14, weight: .medium))
         }
+        .tint(.accent)
         .padding(.horizontal, 20)
         .padding(.vertical, 6)
     }

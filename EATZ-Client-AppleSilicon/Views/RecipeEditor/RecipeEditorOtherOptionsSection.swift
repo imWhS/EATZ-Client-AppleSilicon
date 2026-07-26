@@ -65,6 +65,7 @@ struct RecipeEditorOtherOptionsSection: View {
                 hasPadding: false
             )
         }
+        .tint(.accent)
         .padding(20)
         HorizontalDivider()
     }

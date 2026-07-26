@@ -17,24 +17,29 @@
 			</array>
 		</dict>
 	</array>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-		<key>NSAllowsLocalNetworking</key>
-		<true/>
-		<key>NSExceptionDomains</key>
-		<dict>
-			<key>localhost</key>
-			<dict>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-				<key>NSTemporaryExceptionRequiresForwardSecrecy</key>
-				<false/>
-			</dict>
-		</dict>
-	</dict>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+<!--	<key>NSAppTransportSecurity</key>-->
+<!--	<dict>-->
+<!--		<key>NSAllowsArbitraryLoads</key>-->
+<!--		<true/>-->
+<!--		<key>NSAllowsLocalNetworking</key>-->
+<!--		<true/>-->
+<!--		<key>NSExceptionDomains</key>-->
+<!--		<dict>-->
+<!--			<key>localhost</key>-->
+<!--			<dict>-->
+<!--				<key>NSIncludesSubdomains</key>-->
+<!--				<true/>-->
+<!--				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>-->
+<!--				<true/>-->
+<!--				<key>NSTemporaryExceptionRequiresForwardSecrecy</key>-->
+<!--				<false/>-->
+<!--			</dict>-->
+<!--		</dict>-->
+<!--	</dict>-->
 </dict>
 </plist>

@@ -76,7 +76,11 @@ struct RatingEditor: View {
     private var isAlertPresented: Binding<Bool> {
         Binding(
             get: { viewModel.alert != nil },
-            set: { isPresented in if !isPresented { viewModel.alert = nil } }
+            set: { isPresented in
+                DispatchQueue.main.async {
+                    if !isPresented { self.viewModel.alert = nil }
+                }
+            }
         )
     }
     

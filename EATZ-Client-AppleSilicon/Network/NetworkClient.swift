@@ -19,8 +19,6 @@ class NetworkClient {
     /// 인증 인터셉터를 거치는 세션입니다.
     private let authSession: Session
     
-    private let baseUrl = "http://localhost:8080"
-    
     private init() {
         let configuration = URLSessionConfiguration.default
         configuration.httpCookieAcceptPolicy = .always // 쿠키 허용

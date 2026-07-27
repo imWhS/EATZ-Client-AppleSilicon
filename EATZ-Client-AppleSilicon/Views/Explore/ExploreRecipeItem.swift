@@ -34,11 +34,11 @@ struct ExploreRecipeItem: View {
         VStack(spacing: 0) {
             Button(action: { onTappedRecipe(recipe) }) {
                 VStack(alignment: .leading, spacing: 0) {
-                    RecipeItemThumbnailView(
+                    RecipeItemThumbnail(
                         id: recipe.id,
-                        saved: recipe.savedByUser,
-                        imageUrl: recipe.imageUrl,
-                        width: cardWidth, onSave: { id in onAction(recipe, .save)}
+                        isSaved: recipe.savedByUser,
+                        imageUrlString: recipe.imageUrl,
+                        width: cardWidth, onSaveTapped: { id in onAction(recipe, .save)}
                     )
                     ExploreItemDetailView(recipe: recipe, onAction: onAction)
                 }

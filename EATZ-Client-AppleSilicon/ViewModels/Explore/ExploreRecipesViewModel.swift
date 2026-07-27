@@ -118,11 +118,27 @@ class ExploreRecipesViewModel: ObservableObject {
     
     func handleItem(for recipe: ExploreRecipe, action: ExploreRecipeItemAction) {
         switch action {
-        case .save: self.toggleSave(of: recipe)
-        case .like: self.toggleLike(of: recipe)
+        case .save: handleToggleSave(for: recipe.id)
+        case .like: handleToggleLike(for: recipe.id)
         case .comment: self.navigationRoute = .comment(recipeId: recipe.id)
         case .addToPlanner: presentAddToPlanner(for: recipe.id)
         case .report: handleReportRecipe(for: recipe)
+        }
+    }
+    
+    private func handleToggleSave(for id: Int64) {
+        guard !pendingSaveRecipeIds.contains(id) else { return }
+        
+        auth.performWhenLoggedIn {
+            self.toggleSave(of: id)
+        }
+    }
+    
+    private func handleToggleLike(for id: Int64) {
+        guard !pendingLikeRecipeIds.contains(id) else { return }
+        
+        auth.performWhenLoggedIn {
+            self.toggleLike(of: id)
         }
     }
     
@@ -184,23 +200,31 @@ class ExploreRecipesViewModel: ObservableObject {
         }
     }
     
+    private func handleReportRecipe(for recipe: CookableRecipe) {
+        reportResource = ReportResource(
+            id: recipe.id,
+            authorId: recipe.authorId,
+            authorUsername: recipe.authorUsername,
+            type: .RECIPE,
+            content: recipe.title)
+    }
+    
     /// 특정 레시피의 저장 상태를 토글합니다.
-    private func toggleSave(of recipe: ExploreRecipe) {
-        auth.performWhenLoggedIn {
-            guard !self.pendingSaveRecipeIds.contains(recipe.id) else { return }
+    private func toggleSave(of id: Int64) {
+        // 관련 UI를 낙관적 업데이트 처리합니다.
+        var isSaved = false
+        pagedRecipes.updateItem(for: id) { recipe in
+            recipe.savedByUser.toggle()
+            isSaved = recipe.savedByUser
+        }
+        
+        pendingSaveRecipeIds.insert(id)
+        
+        let completionHandler: (Result<Empty, NetworkError>) -> Void = { [weak self] result in
+            guard let self = self else { return }
             
-            // 관련 UI를 낙관적 업데이트 처리합니다.
-            var saved = false
-            self.pagedRecipes.updateItem(for: recipe.id) { recipe in
-                recipe.savedByUser.toggle()
-                saved = recipe.savedByUser
-            }
-            
-            self.pendingSaveRecipeIds.insert(recipe.id)
-            
-            let completionHandler: (Result<Empty, NetworkError>) -> Void = { [weak self] result in
-                guard let self = self else { return }
-                self.pendingSaveRecipeIds.remove(recipe.id)
+            DispatchQueue.main.async {
+                self.pendingSaveRecipeIds.remove(id)
                 
                 /**
                  '낙관적 UI 업데이트' 이후, 서버 응답이 돌아오기까지의 시간 동안 전역 인증 상태 변경(예: 게스트 -> 로그인)으로 인해 `items` 전체가 교체될 수 있습니다.
@@ -209,58 +233,54 @@ class ExploreRecipesViewModel: ObservableObject {
                 
                 if case .failure(let networkError) = result {
                     self.alert = .error(message: networkError.userMessage)
-                    self.pagedRecipes.updateItem(for: recipe.id) { recipe in recipe.savedByUser.toggle() } // 낙관적 업데이트된 UI 상태를 롤백합니다.
+                    self.pagedRecipes.updateItem(for: id) { recipe in recipe.savedByUser.toggle() } // 낙관적 업데이트된 UI 상태를 롤백합니다.
                 }
             }
-            
-            if saved { self.userService.saveRecipe(for: recipe.id, completion: completionHandler) }
-            else { self.userService.unsaveRecipe(for: recipe.id, completion: completionHandler) }
         }
+        
+        if isSaved { userService.saveRecipe(for: id, completion: completionHandler) }
+        else { userService.unsaveRecipe(for: id, completion: completionHandler) }
     }
     
     /// 특정 레시피의 좋아요 상태를 토글합니다.
-    private func toggleLike(of recipe: ExploreRecipe) {
-        auth.performWhenLoggedIn {
-            guard !self.pendingLikeRecipeIds.contains(recipe.id) else { return }
+    private func toggleLike(of id: Int64) {
+        // 관련 UI를 낙관적 업데이트 처리합니다.
+        var isLiked = false
+        pagedRecipes.updateItem(for: id) { recipe in
+            recipe.likedByUser.toggle()
+            isLiked = recipe.likedByUser
+            recipe.likedCount = isLiked ? (recipe.likedCount + 1) : (recipe.likedCount - 1)
+        }
+        
+        pendingLikeRecipeIds.insert(id)
+        
+        let completionHandler: (Result<LikedRecipe, NetworkError>) -> Void = { [weak self] result in
+            guard let self = self else { return }
+            self.pendingLikeRecipeIds.remove(id)
             
-            // 관련 UI를 낙관적 업데이트 처리합니다.
-            var liked = false
-            self.pagedRecipes.updateItem(for: recipe.id) { recipe in
-                recipe.likedByUser.toggle()
-                liked = recipe.likedByUser
-                recipe.likedCount = liked ? (recipe.likedCount + 1) : (recipe.likedCount - 1)
-            }
+            /**
+             '낙관적 UI 업데이트' 이후, 서버 응답이 돌아오기까지의 시간 동안 전역 인증 상태 변경(예: 게스트 -> 로그인)으로 인해 `items` 전체가 교체될 수 있습니다.
+             따라서 API 호출 전에 계산했던 `index`는 더 이상 유효하지 않을 수 있으므로, 실제 데이터를 업데이트하기 직전에 반드시 최신 `items` 배열을 기준으로 `index`를 다시 조회해야 합니다. (`Paged.updateItem`)
+             */
             
-            self.pendingLikeRecipeIds.insert(recipe.id)
-            
-            let completionHandler: (Result<LikedRecipe, NetworkError>) -> Void = { [weak self] result in
-                guard let self = self else { return }
-                self.pendingLikeRecipeIds.remove(recipe.id)
-                
-                /**
-                 '낙관적 UI 업데이트' 이후, 서버 응답이 돌아오기까지의 시간 동안 전역 인증 상태 변경(예: 게스트 -> 로그인)으로 인해 `items` 전체가 교체될 수 있습니다.
-                 따라서 API 호출 전에 계산했던 `index`는 더 이상 유효하지 않을 수 있으므로, 실제 데이터를 업데이트하기 직전에 반드시 최신 `items` 배열을 기준으로 `index`를 다시 조회해야 합니다. (`Paged.updateItem`)
-                 */
-                
-                switch result {
-                case .success(let response):
-                    self.pagedRecipes.updateItem(for: recipe.id) { recipe in
-                        recipe.likedByUser = response.liked
-                        recipe.likedCount = response.count
-                    }
-                case .failure(let networkError):
-                    self.alert = .error(message: networkError.userMessage)
-                    self.pagedRecipes.updateItem(for: recipe.id) { recipe in
-                        recipe.likedByUser.toggle()
-                        liked = recipe.likedByUser
-                        recipe.likedCount = liked ? (recipe.likedCount + 1) : (recipe.likedCount - 1)
-                    }
+            switch result {
+            case .success(let response):
+                self.pagedRecipes.updateItem(for: id) { recipe in
+                    recipe.likedByUser = response.liked
+                    recipe.likedCount = response.count
+                }
+            case .failure(let networkError):
+                self.alert = .error(message: networkError.userMessage)
+                self.pagedRecipes.updateItem(for: id) { recipe in
+                    recipe.likedByUser.toggle()
+                    isLiked = recipe.likedByUser
+                    recipe.likedCount = isLiked ? (recipe.likedCount + 1) : (recipe.likedCount - 1)
                 }
             }
-
-            if liked { self.likeService.likeRecipe(for: recipe.id, completion: completionHandler) }
-            else { self.likeService.unlikeRecipe(for: recipe.id, completion: completionHandler) }
         }
+
+        if isLiked { likeService.likeRecipe(for: id, completion: completionHandler) }
+        else { likeService.unlikeRecipe(for: id, completion: completionHandler) }
     }
     
     private func resetListState() {
@@ -271,15 +291,6 @@ class ExploreRecipesViewModel: ObservableObject {
     
     private func index(of recipeId: Int64) -> Int? {
         pagedRecipes.items.firstIndex(where: { $0.id == recipeId })
-    }
-    
-    private func handleReportRecipe(for recipe: CookableRecipe) {
-        reportResource = ReportResource(
-            id: recipe.id,
-            authorId: recipe.authorId,
-            authorUsername: recipe.authorUsername,
-            type: .RECIPE,
-            content: recipe.title)
     }
 }
 

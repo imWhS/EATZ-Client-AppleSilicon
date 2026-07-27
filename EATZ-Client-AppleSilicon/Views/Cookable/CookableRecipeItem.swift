@@ -14,7 +14,7 @@ enum CookableRecipeItemAction {
 
 struct CookableRecipeItem: View {
     let recipe: CookableRecipe
-    let onTapItem: (Int64) -> Void
+    let onTappedRecipe: (Int64) -> Void
     let onAction: (CookableRecipe, CookableRecipeItemAction) -> Void
     
     private let screenWidth: CGFloat = UIScreen.main.bounds.width
@@ -27,7 +27,7 @@ struct CookableRecipeItem: View {
          onAction: @escaping (CookableRecipe, CookableRecipeItemAction) -> Void,
          isPressed: Bool = false) {
         self.recipe = recipe
-        self.onTapItem = onTapItem
+        self.onTappedRecipe = onTapItem
         self.onAction = onAction
         self.isPressed = isPressed
     }
@@ -38,14 +38,14 @@ struct CookableRecipeItem: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Button(action: { onTapItem(recipe.id) }) {
+            Button(action: { onTappedRecipe(recipe.id) }) {
                 HStack(spacing: 0) {
-                    RecipeItemThumbnailView(
+                    RecipeItemThumbnail(
                         id: recipe.id,
-                        saved: recipe.savedByUser,
-                        imageUrl: recipe.imageUrl,
+                        isSaved: recipe.savedByUser,
+                        imageUrlString: recipe.imageUrl,
                         width: width,
-                        onSave: { id in onAction(recipe, .save) }
+                        onSaveTapped: { id in onAction(recipe, .save) }
                     )
                     detailView
                 }
@@ -141,45 +141,5 @@ struct CookableRecipeItem: View {
                 .padding(4)
                 .contentShape(Rectangle())
         }
-    }
-}
-
-private struct TodayCookableListItemThumbnailView: View {
-    let imageUrl: String?
-    let width: CGFloat
-    let onSave: () -> Void
-    
-    var body: some View {
-        ZStack(alignment: .topLeading) {
-            imageView
-            Button(action: {
-                onSave()
-            }) {
-                VStack {
-                    Image("recipe-list-item-save")
-                        .foregroundStyle(Color.white)
-                        .padding(8)
-                        .shadow(color: Color.black.opacity(0.15), radius: 4, x: 0, y: 1)
-                }
-                .frame(width: 28, height: 28)
-                .padding(4)
-            }
-            .buttonStyle(ScaleDownButtonStyle(cornerRadius: 12))
-            .padding(8)
-        }
-    }
-    
-    @ViewBuilder
-    private var imageView: some View {
-        KFImage(URL(imageUrlString: imageUrl ?? ""))
-            .resizable()
-            .placeholder {
-                ZStack {
-                    Rectangle().foregroundStyle(.gray.opacity(0.2))
-                    ProgressView()
-                }
-            }
-            .aspectRatio(contentMode: .fill)
-            .frame(width: width, height: width)
     }
 }

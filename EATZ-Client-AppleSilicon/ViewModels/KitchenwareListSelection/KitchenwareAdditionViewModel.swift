@@ -31,7 +31,7 @@ class KitchenwareAdditionViewModel: ObservableObject, SelectableKitchenwareManag
     
     // MARK: - 기본 설정 프로퍼티
     
-    private var dismissAction: (() -> Void)?
+    private var onDismiss: (() -> Void)?
     
     // MARK: - 기타 프로퍼티
     
@@ -65,7 +65,7 @@ class KitchenwareAdditionViewModel: ObservableObject, SelectableKitchenwareManag
     }
     
     func setDismissAction(_ action: @escaping () -> Void) {
-        dismissAction = action
+        onDismiss = action
     }
     
     func complete() {
@@ -78,7 +78,7 @@ class KitchenwareAdditionViewModel: ObservableObject, SelectableKitchenwareManag
         
         userPantryService.addKitchenwares(ids: kitchenwareIds) { result in
             switch result {
-            case .success(let success): self.dismissAction?()
+            case .success: self.onDismiss?()
             case .failure(let networkError): self.alert = .error(message: networkError.userMessage)
             }
         }
@@ -217,14 +217,14 @@ class KitchenwareAdditionViewModel: ObservableObject, SelectableKitchenwareManag
     
     /// 전역 게스트 상태가 됐을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextAsGuest() {
-        alert = .sessionExpired(dismissAction: dismissAction ?? {})
+        alert = .sessionExpired(dismissAction: onDismiss ?? {})
         viewState = .unauthorized
         clearAllContextData()
     }
     
     /// 이전과 다른 사용자로 변경했을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextForNewUser() {
-        alert = .userChanged(dismissAction: dismissAction ?? {})
+        alert = .userChanged(dismissAction: onDismiss ?? {})
         viewState = .unauthorized
         clearAllContextData()
     }

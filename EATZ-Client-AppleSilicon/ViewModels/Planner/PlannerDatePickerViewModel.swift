@@ -78,8 +78,8 @@ class PlannerDatePickerViewModel: ObservableObject {
     // MARK: - 기본 설정 프로퍼티
     
     private let recipeId: Int64
-    private var dismissAction: (() -> Void)?
-    private var completeAction: (() -> Void)?
+    private var onDismiss: (() -> Void)?
+    private var onComplete: (() -> Void)?
     
     // MARK: - 기타 프로퍼티
     
@@ -96,8 +96,8 @@ class PlannerDatePickerViewModel: ObservableObject {
     }
     
     func setCompleteActions(onDismiss: @escaping () -> Void, onComplete: (() -> Void)? = nil) {
-        self.dismissAction = onDismiss
-        self.completeAction = onComplete
+        self.onDismiss = onDismiss
+        self.onComplete = onComplete
     }
     
     /// 뷰를 화면에 표시하기 위한 사용자 검증 및 데이터 불러오기 진입점입니다.
@@ -162,8 +162,8 @@ class PlannerDatePickerViewModel: ObservableObject {
         userPlanService.createPlan(recipeId: recipeId, date: date, priority: 1) { [weak self] result in
             switch result {
             case .success:
-                self?.completeAction?()
-                self?.dismissAction?()
+                self?.onComplete?()
+                self?.onDismiss?()
             case .failure(let networkError):
                 // 세션 만료 에러라면, 지역 에러 처리(present alert)를 하지 않고 종료합니다.
                 if networkError.isTokenExpiredError { return }
@@ -198,14 +198,14 @@ class PlannerDatePickerViewModel: ObservableObject {
     
     /// 전역 게스트 상태가 됐을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextAsGuest() {
-        alert = .sessionExpired(dismissAction: dismissAction ?? {})
+        alert = .sessionExpired(dismissAction: onDismiss ?? {})
         viewState = .unauthorized
         clearAllContextData()
     }
     
     /// 이전과 다른 사용자로 변경했을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextForNewUser() {
-        alert = .userChanged(dismissAction: dismissAction ?? {})
+        alert = .userChanged(dismissAction: onDismiss ?? {})
         viewState = .unauthorized
         clearAllContextData()
     }

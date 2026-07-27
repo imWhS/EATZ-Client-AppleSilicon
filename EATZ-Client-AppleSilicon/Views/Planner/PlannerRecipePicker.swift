@@ -33,7 +33,7 @@ struct PlannerRecipePicker: View {
                 .toolbar { dismissToolbarItem }
         }
         .task {
-            viewModel.setActions(onDismiss: dismiss.callAsFunction, onComplete: onComplete ?? {})
+            viewModel.setActions(dismissAction: dismiss.callAsFunction, completeAction: onComplete ?? {})
             viewModel.prepareDataIfNeeded()
         }
         .onChange(of: isSearchFieldFocused) { _, isSearchFieldFocused in

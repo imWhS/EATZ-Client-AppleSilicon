@@ -29,7 +29,7 @@ class MyIngredientPantryViewModel: ObservableObject {
     
     // MARK: - 기본 설정 프로퍼티
     
-    private var dismissAction: (() -> Void)?
+    private var onDismiss: (() -> Void)?
     
     // MARK: - 기타 프로퍼티
     
@@ -40,7 +40,7 @@ class MyIngredientPantryViewModel: ObservableObject {
     private lazy var authManager = AuthManager.shared
     
     func setDismissAction(_ action: @escaping () -> Void) {
-        dismissAction = action
+        onDismiss = action
     }
     
     /// 뷰를 화면에 표시하기 위한 사용자 검증 및 데이터 불러오기 진입점입니다.
@@ -221,7 +221,7 @@ class MyIngredientPantryViewModel: ObservableObject {
     /// 전역 게스트 상태가 됐을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextAsGuest() {
         viewState = .unauthorized
-        alert = .sessionExpired(dismissAction: self.dismissAction ?? {})
+        alert = .sessionExpired(dismissAction: self.onDismiss ?? {})
         clearAllContextData()
     }
     

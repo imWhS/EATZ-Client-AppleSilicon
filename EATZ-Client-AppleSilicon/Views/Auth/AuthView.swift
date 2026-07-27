@@ -45,7 +45,7 @@ struct AuthView: View {
         NavigationStack(path: $viewModel.navigationPath) {
             contentView
                 .navigationDestination(for: AuthViewModel.AuthNavigationPath.self) { path in
-                        Group {
+                    Group {
                         switch path {
                         case .logIn: LogInView()
                         case .signUpEmailVerification: SignUpEmailVerificationView()
@@ -66,84 +66,50 @@ struct AuthView: View {
     private var contentView: some View {
         ZStack(alignment: .top) {
             VStack(spacing: 0) {
-                VStack(spacing: 0) {
-                    VStack(spacing: 30) {
-                        Spacer()
-                        FrontView(loginPrompt: context, showMessages: !isKeyboardVisible)
-                        if !isKeyboardVisible { contextMessageView }
-                        Spacer()
-                    }
-                    legalNoticeView
-                }
-                .background(Color.white)
+                contextView
+                legalNoticeView
             }
             .alert(item: $viewModel.alert) { $0.alert }
             .transition(.opacity.combined(with: .move(edge: .top)))
             .animation(.easeInOut(duration: 0.3), value: isKeyboardVisible)
             AuthTitleHeader(onCancelTapped: onDismiss)
         }
-        .contentShape(Rectangle())
+        .background(Color.white)
         .onTapGesture {
             isEmailFocused = false
         }
-        .safeAreaInset(edge: .bottom) {
-            VStack(spacing: 4) {
-                VStack(spacing: 16) {
-                    if viewModel.isLoading {
-                        ProgressView()
-                            .frame(maxWidth: .infinity, alignment: .center)
-                    } else {
-                        FloatingTitleTextField(
-                            title: "이메일 주소",
-                            placeholder: nil,
-                            isInvalid: false,
-                            text: $viewModel.email,
-                            isFocused: $isEmailFocused,
-                            isAutocorrectionDisabled: true,
-                            capitalization: .never,
-                            keyboardType: .emailAddress,
-                            onSubmit: viewModel.validateEmail
-                        )
-                        .padding(.horizontal, 20)
-                        authActionButton(title: "시작", type: .primary, action: viewModel.validateEmail)
-                    }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            VStack(spacing: 20) {
+                if viewModel.isLoading {
+                    ProgressView()
+                        .frame(maxWidth: .infinity, alignment: .center)
+                } else {
+                    FloatingTitleTextField(
+                        title: "이메일 주소",
+                        placeholder: nil,
+                        isInvalid: false,
+                        text: $viewModel.email,
+                        isFocused: $isEmailFocused,
+                        isAutocorrectionDisabled: true,
+                        capitalization: .never,
+                        keyboardType: .emailAddress,
+                        onSubmit: viewModel.validateEmail
+                    )
+                    .padding(.horizontal, 20)
+                    authActionButton(title: "시작", type: .primary, action: viewModel.validateEmail)
                 }
-                .padding(.vertical, 20)
             }
-//            .ignoresSafeArea(edges: .bottom)
+            .padding(.vertical, 20)
             .background(Color.init(hex: "F9F9F9"))
-            .background(Color.green)
         }
     }
     
-    private struct HeaderView: View {
-        let onCancelTapped: () -> Void
-
-        var body: some View {
-            HStack {
-                Text("계정")
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(Color.black)
-                Spacer()
-                DismissButton {
-                    onCancelTapped()
-                }
-            }
-            .padding(.top, 20)
-            .padding(.horizontal, 20)
-        }
-    }
-    
-    private struct FrontView: View {
-        let loginPrompt: AuthContext
-        let showMessages: Bool
-        
-        var body: some View {
-            VStack {
-                Text("EATZ")
-                    .font(Font.system(size: 52, weight: .heavy))
-            }
-            .frame(maxWidth: .infinity)
+    private var contextView: some View {
+        VStack(spacing: 30) {
+            Spacer()
+            AuthFrontView(loginPrompt: context, showMessages: !isKeyboardVisible)
+            if !isKeyboardVisible { contextMessageView }
+            Spacer()
         }
     }
     
@@ -186,6 +152,19 @@ struct AuthView: View {
         }
         .buttonStyle(BigRoundedButtonStyle(type: type))
         .padding(.horizontal, 20)
+    }
+}
+
+private struct AuthFrontView: View {
+    let loginPrompt: AuthContext
+    let showMessages: Bool
+    
+    var body: some View {
+        VStack {
+            Text("EATZ")
+                .font(Font.system(size: 52, weight: .heavy))
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 

@@ -91,8 +91,9 @@ struct AuthView: View {
                 VStack(spacing: 16) {
                     if viewModel.isLoading {
                         ProgressView()
+                            .frame(maxWidth: .infinity, alignment: .center)
                     } else {
-                        FloatingTitleTextFieldTest(
+                        FloatingTitleTextField(
                             title: "이메일 주소",
                             placeholder: nil,
                             isInvalid: false,
@@ -111,6 +112,7 @@ struct AuthView: View {
             }
 //            .ignoresSafeArea(edges: .bottom)
             .background(Color.init(hex: "F9F9F9"))
+            .background(Color.green)
         }
     }
     

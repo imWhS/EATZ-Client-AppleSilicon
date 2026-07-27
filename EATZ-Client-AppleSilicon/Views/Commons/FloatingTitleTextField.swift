@@ -1,5 +1,5 @@
 //
-//  FloatingTitleTextField.swift
+//  FloatingTitleTextFieldTest.swift
 //  Eatz-AppleSilicon
 //
 //  Created by 손원희 on 4/7/25.
@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct FloatingTitleTextField: View {
-    
     let title: String?
     let placeholder: String?
+    let isInvalid: Bool
     @Binding var text: String
     @FocusState.Binding var isFocused: Bool
     var isAutocorrectionDisabled: Bool = true
@@ -20,60 +20,59 @@ struct FloatingTitleTextField: View {
     var submitLabel: SubmitLabel = .return
     var onSubmit: (() -> Void)? = nil
     
+    private var titleColor: Color {
+        if isInvalid {
+            return .orange
+        } else if isFocused {
+            return .accentColor
+        } else {
+            return .init(hex: "CBCBCB")
+        }
+    }
+    
+    private var borderColor: Color {
+        if isInvalid {
+            return .orange
+        } else if isFocused {
+            return .accentColor
+        } else {
+            return .init(hex: "EEEEEE")
+        }
+    }
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            if let title = title {
-                Text(title)
-                    .font(Font.system(size: 12, weight: .semibold))
-                    .foregroundStyle(isFocused ? Color.accentColor : Color.init(hex: "CBCBCB"))
+        VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 4) {
+                if let title = title {
+                    Text(title)
+                        .id("title")
+                        .font(Font.system(size: 12, weight: .semibold))
+                        .foregroundStyle(titleColor)
+                        .drawingGroup()
+                }
+                TextField(placeholder ?? "", text: $text)
+                    .font(Font.system(size: 17, weight: .medium))
+                    .focused($isFocused)
+                    .autocorrectionDisabled(isAutocorrectionDisabled)
+                    .textInputAutocapitalization(capitalization)
+                    .keyboardType(keyboardType)
+                    .textContentType(textContentType)
+                    .frame(height: 19)
+                    .submitLabel(submitLabel)
+                    .onSubmit(onSubmit ?? ({}))
             }
-            TextField(placeholder ?? "", text: $text)
-                .font(Font.system(size: 17, weight: .medium))
-                .foregroundStyle(Color.black)
-                .focused($isFocused)
-                .autocorrectionDisabled(isAutocorrectionDisabled)
-                .textInputAutocapitalization(capitalization)
-                .keyboardType(keyboardType)
-                .textContentType(textContentType)
-                .frame(height: 19)
-                .submitLabel(submitLabel)
-                .onSubmit(onSubmit ?? ({}))
-                .foregroundStyle(isFocused ? Color.accentColor : Color.init(hex: "CBCBCB"))
-        }
-//        .frame(height: 68)
-        .padding(.horizontal, 16)
-        .padding(.vertical, 16)
-        .background(Color.white)
-        .cornerRadius(12)
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(isFocused ? Color.accentColor : Color.init(hex: "EEEEEE"), lineWidth: 1)
-        )
-        .onTapGesture {
-            isFocused = true
-        }
-        .frame(height: 68)
-    }
-}
-
-#Preview {
-    struct PreviewContainer: View {
-        @State private var text = "heextory@icloud.com"
-        @FocusState private var isFocused: Bool
-        
-        var body: some View {
-            VStack {
-                FloatingTitleTextField(
-                    title: "이메일 주소",
-                    placeholder: "이메일을 입력하세요.",
-                    text: $text,
-                    isFocused: $isFocused // 외부에서 제어
-                )
+            .padding(.horizontal, 16)
+            .padding(.vertical, 16)
+            .background(Color.white)
+            .cornerRadius(12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(borderColor, lineWidth: 1)
+            )
+            .onTapGesture {
+                isFocused = true
             }
-            .padding(20)
-            .background(Color.gray.opacity(0.2))
+            .frame(minHeight: 68)
         }
     }
-
-    return PreviewContainer()
 }

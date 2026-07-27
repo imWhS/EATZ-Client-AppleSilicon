@@ -16,7 +16,7 @@ struct LogInPasswordField: View {
     
     var body: some View {
         ZStack {
-            FloatingTitleTextField(title: "암호", placeholder: nil, text: $password, isFocused: $isFocused)
+            FloatingTitleTextField(title: "암호", placeholder: nil, isInvalid: false, text: $password, isFocused: $isFocused)
                 .padding(.horizontal, 20)
                 .opacity(isPasswordVisible ? 1 : 0)
                 .disabled(!isPasswordVisible)

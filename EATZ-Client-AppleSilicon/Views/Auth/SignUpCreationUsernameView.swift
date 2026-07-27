@@ -53,7 +53,7 @@ struct SignUpCreationUsernameView: View {
     }
     
     private var usernameFieldView: some View {
-        FloatingTitleTextFieldTest(
+        FloatingTitleTextField(
             title: "사용자 이름",
             placeholder: nil,
             isInvalid: false,
@@ -84,8 +84,4 @@ struct SignUpCreationUsernameView: View {
             .disabled(viewModel.password.isEmpty)
         }
     }
-}
-
-#Preview {
-    SignUpAdditionPasswordView()
 }

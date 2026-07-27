@@ -129,7 +129,7 @@ struct SignUpEmailVerificationView: View {
     }
     
     private var validationCodeFieldView: some View {
-        FloatingTitleTextFieldTest(
+        FloatingTitleTextField(
             title: "인증 코드",
             placeholder: nil,
             isInvalid: false,

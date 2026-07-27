@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SignUpAdditionPasswordView: View {
+struct SignUpSetPasswordView: View {
     @EnvironmentObject private var viewModel: AuthViewModel
     @FocusState private var isPasswordFocused: Bool
     @State private var isPasswordVisible: Bool = false
@@ -38,7 +38,7 @@ struct SignUpAdditionPasswordView: View {
                 .padding(.horizontal, 10)
                 .frame(height: 22)
                 .cornerRadius(11)
-                .border(color: .init("E5E5E5"), width: 1)
+                .border(color: .init(hex: "E5E5E5"), width: 1)
             VStack(spacing: 8) {
                 Group {
                     Text("위 이메일 주소로 계정을 새로 만듭니다. 로그인할 때 사용할 암호를 입력하세요.")
@@ -63,7 +63,7 @@ struct SignUpAdditionPasswordView: View {
         
         var body: some View {
             ZStack {
-                FloatingTitleTextField(title: "암호", placeholder: nil, text: $password, isFocused: $isFocused, onSubmit: onSubmit)
+                FloatingTitleTextField(title: "암호", placeholder: nil, isInvalid: false, text: $password, isFocused: $isFocused, onSubmit: onSubmit)
                     .padding(.horizontal, 20)
                     .opacity(isPasswordVisible ? 1 : 0)
                     .disabled(!isPasswordVisible)
@@ -74,7 +74,6 @@ struct SignUpAdditionPasswordView: View {
             }
         }
     }
-    
     
     private var showPasswordToggleView: some View {
         Toggle(isOn: $isPasswordVisible) {
@@ -104,5 +103,5 @@ struct SignUpAdditionPasswordView: View {
 }
 
 #Preview {
-    SignUpAdditionPasswordView()
+    SignUpSetPasswordView()
 }

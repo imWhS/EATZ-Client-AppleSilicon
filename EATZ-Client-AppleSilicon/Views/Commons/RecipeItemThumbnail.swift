@@ -8,21 +8,25 @@
 import SwiftUI
 import Kingfisher
 
-struct RecipeItemThumbnailView: View {
+struct RecipeItemThumbnail: View {
     let id: Int64
-    let saved: Bool
-    let imageUrl: String?
+    let isSaved: Bool
+    let imageUrlString: String?
     let width: CGFloat
-    let onSave: (Int64) -> Void
+    let onSaveTapped: (Int64) -> Void
+    
+    private var imageUrl: URL? {
+        URL(imageUrlString: imageUrlString)
+    }
     
     var body: some View {
         ZStack(alignment: .topLeading) {
             imageView
             Button(action: {
-                onSave(id)
+                onSaveTapped(id)
             }) {
                 VStack {
-                    Image(saved ? "recipe-list-item-save-filled" : "recipe-list-item-save-stroked")
+                    Image(isSaved ? "recipe-list-item-save-filled" : "recipe-list-item-save-stroked")
                         .foregroundStyle(Color.white)
                         .padding(8)
                         .shadow(color: Color.black.opacity(0.15), radius: 4, x: 0, y: 1)
@@ -35,8 +39,9 @@ struct RecipeItemThumbnailView: View {
         }
     }
     
+    @ViewBuilder
     private var imageView: some View {
-        return KFImage(URL(imageUrlString: imageUrl))
+        KFImage(imageUrl)
             .placeholder {
                 ZStack {
                     Rectangle().foregroundStyle(.gray.opacity(0.2))

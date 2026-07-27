@@ -120,9 +120,16 @@ class CookableRecipeListViewModel: ObservableObject {
 extension CookableRecipeListViewModel {
     func handleRecipeAction(for item: CookableRecipe, action: CookableRecipeItemAction) {
         switch action {
-        case .save: toggleSave(for: item)
+        case .save: handleToggleSave(for: item.id)
         case .addToPlanner: presentCalendar(for: item.id)
         case .report: handleReportRecipe(for: item)
+        }
+    }
+    
+    private func handleToggleSave(for id: Int64) {
+        guard !togglingSaveIds.contains(id) else { return }
+        auth.performWhenLoggedIn {
+            self.toggleSave(for: id)
         }
     }
     
@@ -198,27 +205,27 @@ extension CookableRecipeListViewModel {
         }
     }
     
-    private func toggleSave(for item: CookableRecipe) {
-        guard !togglingSaveIds.contains(item.id) else { return }
-        togglingSaveIds.insert(item.id)
+    private func toggleSave(for id: Int64) {
+        togglingSaveIds.insert(id)
+        var isSaved = false
         
-        var saved = false
-        
-        pagedRecipes.updateItem(for: item.id) { recipe in
+        pagedRecipes.updateItem(for: id) { recipe in
             recipe.savedByUser.toggle()
-            saved = recipe.savedByUser
+            isSaved = recipe.savedByUser
         }
         
         let completionHandler: (Result<Alamofire.Empty, NetworkError>) -> Void = { [weak self] result in
-            if case .failure(let networkError) = result {
-                self?.alert = .error(message: networkError.userMessage)
-                self?.pagedRecipes.updateItem(for: item.id) { recipe in recipe.savedByUser.toggle() }
+            DispatchQueue.main.async {
+                if case .failure(let networkError) = result {
+                    self?.alert = .error(message: networkError.userMessage)
+                    self?.pagedRecipes.updateItem(for: id) { recipe in recipe.savedByUser.toggle() }
+                }
+                self?.togglingSaveIds.remove(id)
             }
-            self?.togglingSaveIds.remove(item.id)
         }
         
-        if saved { UserService.shared.saveRecipe(for: item.id, completion: completionHandler) }
-        else { UserService.shared.unsaveRecipe(for: item.id, completion: completionHandler) }
+        if isSaved { UserService.shared.saveRecipe(for: id, completion: completionHandler) }
+        else { UserService.shared.unsaveRecipe(for: id, completion: completionHandler) }
     }
 }
 

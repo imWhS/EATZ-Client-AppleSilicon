@@ -8,77 +8,6 @@
 import SwiftUI
 import Combine
 
-enum PlannerRecipePickerSearchState: Equatable {
-    case searching
-    case searched
-    case empty
-    case error(String)
-}
-
-enum PlannerRecipePickerSavedRecipesState: Equatable {
-    case loading
-    case loaded
-    case empty
-    case error(String)
-}
-
-enum PlannerRecipePickerRegistrationState: Equatable {
-    case idle
-    case submitting
-    case succeeded
-}
-
-enum PlannerRecipePickerAlert: Identifiable {
-    case addToPlannerFailure(message: String)
-    case userChanged(dismissAction: () -> Void)
-    case sessionExpired(dismissAction: () -> Void)
-    case error(message: String)
-    
-    var id: String {
-        switch self {
-        case .addToPlannerFailure(let message): return "plannerFailure_\(message)"
-        case .userChanged: return "userChanged"
-        case .sessionExpired: return "sessionExpired"
-        case .error: return "error"
-        }
-    }
-    
-    var alert: Alert {
-        switch self {
-        case .addToPlannerFailure(let message):
-            return Alert(
-                title: Text("플래너에 추가 실패"),
-                message: Text(message),
-                dismissButton: .default(Text("확인"))
-            )
-        case .userChanged(let dismissAction):
-            return Alert(
-                title: Text("사용자 변경"),
-                message: Text("다른 사용자로 로그인되어 플래너에 추가를 종료할게요."),
-                dismissButton: .default(Text("확인"), action: dismissAction)
-            )
-        case .sessionExpired(let dismissAction):
-            return Alert(
-                title: Text("세션 만료"),
-                message: Text("로그아웃 상태로 전환됐어요. 플래너에 추가를 종료할게요."),
-                dismissButton: .default(Text("확인"), action: dismissAction)
-            )
-        case .error(let message):
-            return Alert(
-                title: Text("오류"),
-                message: Text(message),
-                dismissButton: .default(Text("확인"))
-            )
-        }
-    }
-}
-
-enum PlannerRecipePickerViewState {
-    case idle
-    case unauthorized
-    case error(message: String)
-}
-
 @MainActor
 class PlannerRecipePickerViewModel: ObservableObject {
     // MARK: - 뷰 상태 프로퍼티 (View State Properties)
@@ -109,8 +38,8 @@ class PlannerRecipePickerViewModel: ObservableObject {
     // MARK: - 기본 설정 프로퍼티
     
     private let date: Date
-    private var dismissAction: (() -> Void)?
-    private var completeAction: (() -> Void)?
+    private var onDismiss: (() -> Void)?
+    private var onComplete: (() -> Void)?
     
     // MARK: - 기타 프로퍼티
     
@@ -119,7 +48,6 @@ class PlannerRecipePickerViewModel: ObservableObject {
     // MARK: - 의존성
     
     private let auth: AuthProvider
-//    private lazy var authManager = AuthManager.shared
     private let userPlanService = UserPlanService.shared
     private let recipeService = RecipeService.shared
     private let userService = UserService.shared
@@ -129,9 +57,9 @@ class PlannerRecipePickerViewModel: ObservableObject {
         self.auth = auth
     }
     
-    func setActions(onDismiss: @escaping () -> Void, onComplete: @escaping () -> Void) {
-        dismissAction = onDismiss
-        completeAction = onComplete
+    func setActions(dismissAction: @escaping () -> Void, completeAction: @escaping () -> Void) {
+        self.onDismiss = dismissAction
+        self.onComplete = completeAction
     }
     
     func startSearch() {
@@ -261,14 +189,14 @@ class PlannerRecipePickerViewModel: ObservableObject {
     
     /// 전역 게스트 상태가 됐을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextAsGuest() {
-        alert = .sessionExpired(dismissAction: dismissAction ?? {})
+        alert = .sessionExpired(dismissAction: onDismiss ?? {})
         viewState = .unauthorized
         clearAllContextData()
     }
     
     /// 이전과 다른 사용자로 변경했을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextForNewUser() {
-        alert = .userChanged(dismissAction: dismissAction ?? {})
+        alert = .userChanged(dismissAction: onDismiss ?? {})
         viewState = .unauthorized
         clearAllContextData()
     }
@@ -361,8 +289,8 @@ extension PlannerRecipePickerViewModel {
                 switch result {
                 case .success:
                     self.registrationState = .succeeded
-                    self.completeAction?()
-                    self.dismissAction?()
+                    self.onComplete?()
+                    self.onDismiss?()
                 case .failure(let networkError):
                     self.registrationState = .idle
                     self.alert = .addToPlannerFailure(message: networkError.userMessage)
@@ -371,3 +299,75 @@ extension PlannerRecipePickerViewModel {
         }
     }
 }
+
+enum PlannerRecipePickerSearchState: Equatable {
+    case searching
+    case searched
+    case empty
+    case error(String)
+}
+
+enum PlannerRecipePickerSavedRecipesState: Equatable {
+    case loading
+    case loaded
+    case empty
+    case error(String)
+}
+
+enum PlannerRecipePickerRegistrationState: Equatable {
+    case idle
+    case submitting
+    case succeeded
+}
+
+enum PlannerRecipePickerAlert: Identifiable {
+    case addToPlannerFailure(message: String)
+    case userChanged(dismissAction: () -> Void)
+    case sessionExpired(dismissAction: () -> Void)
+    case error(message: String)
+    
+    var id: String {
+        switch self {
+        case .addToPlannerFailure(let message): return "plannerFailure_\(message)"
+        case .userChanged: return "userChanged"
+        case .sessionExpired: return "sessionExpired"
+        case .error: return "error"
+        }
+    }
+    
+    var alert: Alert {
+        switch self {
+        case .addToPlannerFailure(let message):
+            return Alert(
+                title: Text("플래너에 추가 실패"),
+                message: Text(message),
+                dismissButton: .default(Text("확인"))
+            )
+        case .userChanged(let dismissAction):
+            return Alert(
+                title: Text("사용자 변경"),
+                message: Text("다른 사용자로 로그인되어 플래너에 추가를 종료할게요."),
+                dismissButton: .default(Text("확인"), action: dismissAction)
+            )
+        case .sessionExpired(let dismissAction):
+            return Alert(
+                title: Text("세션 만료"),
+                message: Text("로그아웃 상태로 전환됐어요. 플래너에 추가를 종료할게요."),
+                dismissButton: .default(Text("확인"), action: dismissAction)
+            )
+        case .error(let message):
+            return Alert(
+                title: Text("오류"),
+                message: Text(message),
+                dismissButton: .default(Text("확인"))
+            )
+        }
+    }
+}
+
+enum PlannerRecipePickerViewState {
+    case idle
+    case unauthorized
+    case error(message: String)
+}
+

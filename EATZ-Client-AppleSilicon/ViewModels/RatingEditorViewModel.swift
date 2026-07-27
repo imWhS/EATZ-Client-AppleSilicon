@@ -9,38 +9,6 @@ import SwiftUI
 import Alamofire
 import Combine
 
-/**
- 뷰 초기화 및 초기화에 필요한 데이터의 불러오기 상태를 정의합니다.
- */
-enum RatingEditorLoadState: Equatable {
-    /// 서버로부터 데이터를 불러오는 중인 상태입니다.
-    case loading
-    
-    /// 대기 상태입니다. 기본 값입니다.
-    case idle
-    
-    /// 서버로부터 데이터를 가져와서, 해당 데이터를 이용해 화면에 평가 편집 화면을 정상적으로 표시할 준비가 완료된 상태입니다.
-    case loaded
-    
-    /// 권한이 없거나 세션이 만료되어, 화면에 평가 편집 화면을 정상적으로 표시하지 못하는 상태입니다.
-    case unauthorized
-    
-    /// 서버로부터 데이터를 불러오는 과정에서 오류가 발생해 화면에 평가 편집 화면을 정상적으로 표시하지 못하는 상태입니다.
-    case error(String)
-    
-    static func == (lhs: RatingEditorLoadState, rhs: RatingEditorLoadState) -> Bool {
-        switch (lhs, rhs) {
-        case (.idle, .idle): return true
-        case (.loading, .loading): return true
-        case (.loaded, .loaded): return true
-        case (.unauthorized, .unauthorized): return true
-        case (.error(let lhsError), .error(let rhsError)):
-            return lhsError == rhsError
-        default: return false
-        }
-    }
-}
-
 /// RatingEditorView를 통해 레시피에 새 평가를 등록하거나, 기존 평가를 수정하기 위해 사용합니다.
 ///
 /// 서버로부터 아래와 같은 데이터를 불러옵니다.
@@ -94,7 +62,7 @@ class RatingEditorViewModel: ObservableObject {
     private let auth: AuthProvider
     private let recipeId: Int64
     private var cancellables = Set<AnyCancellable>()
-    private var dismissAction: (() -> Void)?
+    private var onDismiss: (() -> Void)?
     
     /// 사용자가 입력한 평점, 평가 내용 등의 상태들이 초기에 불러온 데이터 대비 변경 사항이 존재하는지에 대한 여부를 나타냅니다.
     private var hasUnsavedChanges: Bool {
@@ -117,7 +85,7 @@ class RatingEditorViewModel: ObservableObject {
     // MARK: - 공개 메서드 (Public Methods)
     
     func setDismissAction(_ action: @escaping () -> Void) {
-        dismissAction = action
+        onDismiss = action
     }
     
     /// 사용자의 비동기적인 인증 상태 변경 및 세션 만료 상태를 실시간으로 감지하기 위해 `AuthManager`의 `authState` 프로퍼티를 구독합니다.
@@ -134,14 +102,14 @@ class RatingEditorViewModel: ObservableObject {
                     // 게스트 상태에서 로그인 상태로 변경됐을 때
                     if self.initialUsername != nil && self.initialUsername != user.username {
                         // RatingEditorView가 처음 불러와졌을 때와 다른 사용자로 로그인된 경우, 관련 alert을 화면에 표시합니다.
-                        self.alert = .userChanged(dismissAction: self.dismissAction ?? {})
+                        self.alert = .userChanged(dismissAction: self.onDismiss ?? {})
                     }
                 case .unauthorized, .unknown:
                     self.loadState = .unauthorized
                     
                     // 로그인 상태에서만 접근할 수 있는 뷰가 화면에 보여지고 있는 상태에서, 게스트 상태로의 변경이 감지된 경우
                     // 세션 만료로 간주해서 관련 alert를 띄웁니다.
-                    self.alert = .sessionExpired(dismissAction: self.dismissAction ?? {})
+                    self.alert = .sessionExpired(dismissAction: self.onDismiss ?? {})
                 }
             }
             .store(in: &cancellables)
@@ -215,9 +183,9 @@ class RatingEditorViewModel: ObservableObject {
     /// - 변경 또는 추가 내용이 있으면 해당 내용과 관련한 alert을 present합니다.
     func handleCancelAction() {
         if hasUnsavedChanges {
-            alert = .hasUnsavedChanges(confirmAction: dismissAction ?? {})
+            alert = .hasUnsavedChanges(confirmAction: onDismiss ?? {})
         } else {
-            dismissAction?()
+            onDismiss?()
         }
     }
     
@@ -282,6 +250,38 @@ class RatingEditorViewModel: ObservableObject {
     private func setInitialUsernameFromAuthManager() {
         if let currentUser = auth.currentUser {
             initialUsername = currentUser.username
+        }
+    }
+}
+
+/**
+ 뷰 초기화 및 초기화에 필요한 데이터의 불러오기 상태를 정의합니다.
+ */
+enum RatingEditorLoadState: Equatable {
+    /// 서버로부터 데이터를 불러오는 중인 상태입니다.
+    case loading
+    
+    /// 대기 상태입니다. 기본 값입니다.
+    case idle
+    
+    /// 서버로부터 데이터를 가져와서, 해당 데이터를 이용해 화면에 평가 편집 화면을 정상적으로 표시할 준비가 완료된 상태입니다.
+    case loaded
+    
+    /// 권한이 없거나 세션이 만료되어, 화면에 평가 편집 화면을 정상적으로 표시하지 못하는 상태입니다.
+    case unauthorized
+    
+    /// 서버로부터 데이터를 불러오는 과정에서 오류가 발생해 화면에 평가 편집 화면을 정상적으로 표시하지 못하는 상태입니다.
+    case error(String)
+    
+    static func == (lhs: RatingEditorLoadState, rhs: RatingEditorLoadState) -> Bool {
+        switch (lhs, rhs) {
+        case (.idle, .idle): return true
+        case (.loading, .loading): return true
+        case (.loaded, .loaded): return true
+        case (.unauthorized, .unauthorized): return true
+        case (.error(let lhsError), .error(let rhsError)):
+            return lhsError == rhsError
+        default: return false
         }
     }
 }

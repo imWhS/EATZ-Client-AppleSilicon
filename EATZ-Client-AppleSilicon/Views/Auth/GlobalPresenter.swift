@@ -47,10 +47,10 @@ class GlobalPresenter {
         
         isResetPasswordViewPresented = true
         
-        let resetPasswordView = ResetPasswordView(
+        let resetPasswordView = AuthResetPasswordView(
             token: token,
-            completionAction: dismissResetPasswordView,
-            dismissAction: dismissResetPasswordView
+            onComplete: dismissResetPasswordView,
+            onDismiss: dismissResetPasswordView
         )
         
         let hostingController = UIHostingController(rootView: resetPasswordView)
@@ -135,7 +135,7 @@ class GlobalPresenter {
     private func dismissResetPasswordView() {
         guard isResetPasswordViewPresented, let topVC = UIApplication.shared.topViewController() else { return }
         
-        if topVC is UIHostingController<ResetPasswordView> {
+        if topVC is UIHostingController<AuthResetPasswordView> {
             topVC.dismiss(animated: true) {
                 self.isResetPasswordViewPresented = false
             }

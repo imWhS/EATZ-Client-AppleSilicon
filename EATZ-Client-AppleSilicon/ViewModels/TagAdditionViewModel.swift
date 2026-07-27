@@ -53,8 +53,8 @@ class TagAdditionViewModel: ObservableObject {
     
     // MARK: - 비공개 프로퍼티 (Private Properties)
     
-    private var dismissAction: (() -> Void)?
-    private var selectAction: ((TagPickerSelectionType) -> Void)?
+    private var onDismiss: (() -> Void)?
+    private var onSelect: ((TagPickerSelectionType) -> Void)?
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - 의존성 (Dependencies)
@@ -171,13 +171,13 @@ class TagAdditionViewModel: ObservableObject {
     /// 전역 게스트 상태가 됐을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextAsGuest() {
         viewState = .explorable
-        alert = .sessionExpired(dismissAction: dismissAction ?? {})
+        alert = .sessionExpired(dismissAction: onDismiss ?? {})
         clearAllContextData()
     }
     
     /// 이전과 다른 사용자로 변경됐을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextForNewUser() {
-        alert = .userChanged(dismissAction: dismissAction ?? {})
+        alert = .userChanged(dismissAction: onDismiss ?? {})
         viewState = .explorable
         clearAllContextData()
     }
@@ -248,15 +248,16 @@ extension TagAdditionViewModel {
     func setActions(
         onDismiss: @escaping () -> Void,
         onSelect: @escaping (TagPickerSelectionType) -> Void,
-        auth: AuthProvider = AuthManager.shared) {
-        dismissAction = onDismiss
-        selectAction = onSelect
+        auth: AuthProvider = AuthManager.shared)
+    {
+        self.onDismiss = onDismiss
+        self.onSelect = onSelect
     }
     
-    func confirmSelection(_ selection: TagPickerSelectionType) {
+    func confirmSelection(_ type: TagPickerSelectionType) {
         auth.validateSession {
-            self.selectAction?(selection)
-            self.dismissAction?()
+            self.onSelect?(type)
+            self.onDismiss?()
         }
     }
     

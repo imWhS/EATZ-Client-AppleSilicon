@@ -8,98 +8,7 @@
 import SwiftUI
 import Combine
 
-enum MyKitchenwarePantryViewState: Equatable {
-    case loading
-    case loaded
-    case empty
-    case error(message: String)
-    case unauthorized
-}
-
-enum MyKitchenwarePantrySheet: Identifiable {
-    case kitchenwarePicker
-    
-    var id: String {
-        switch self {
-        case .kitchenwarePicker: return "kitchenwarePicker"
-        }
-    }
-}
-
-enum MyKitchenwarePantryAlert: Identifiable {
-    case clearPantryCaution(confirmAction: () -> Void)
-    case clearPantryFailed(message: String)
-    case addToPantryFailed(message: String)
-    case removeFromPantryFailed(message: String)
-    case userChanged(dismissAction: () -> Void)
-    case sessionExpired(dismissAction: () -> Void)
-    case error(message: String)
-    
-    var id: String {
-        switch self {
-        case .clearPantryCaution: return "clearPantryCaution"
-        case .clearPantryFailed: return "clearPantryFailed"
-        case .addToPantryFailed: return "addToPantryFailed"
-        case .removeFromPantryFailed: return "removeFromPantryFailed"
-        case .userChanged: return "userChanged"
-        case .sessionExpired: return "sessionExpired"
-        case .error: return "error"
-        }
-    }
-    
-    var alert: Alert {
-        switch self {
-        case .clearPantryCaution(let confirmAction):
-            return Alert(
-                title: Text("도구 모두 제거"),
-                message: Text("보관함의 모든 도구를 제거할까요?"),
-                primaryButton: .destructive(Text("확인"), action: confirmAction),
-                secondaryButton: .cancel(Text("취소"))
-            )
-        case .addToPantryFailed(let message):
-            return Alert(
-                title: Text("보관함에 도구 추가 실패"),
-                message: Text(message),
-                dismissButton: .default(Text("확인"))
-            )
-        case .removeFromPantryFailed(let message):
-            return Alert(
-                title: Text("보관함에서 도구 제거 실패"),
-                message: Text(message),
-                dismissButton: .default(Text("확인"))
-            )
-        case .clearPantryFailed(let message):
-            return Alert(
-                title: Text("보관함에서 모든 도구 제거 실패"),
-                message: Text(message),
-                dismissButton: .default(Text("확인"))
-            )
-        case .userChanged(let dismissAction):
-            return Alert(
-                title: Text("사용자 변경"),
-                message: Text("기존과 다른 사용자로 로그인됐어요."),
-                dismissButton: .default(Text("확인"), action: dismissAction)
-            )
-            
-        case .sessionExpired(let dismissAction):
-            return Alert(
-                title: Text("세션 만료"),
-                message: Text("현재 사용자 인증을 실패했어요."),
-                dismissButton: .default(Text("확인"), action: dismissAction)
-            )
-            
-        case .error(let message):
-            return Alert(
-                title: Text("오류"),
-                message: Text(message),
-                dismissButton: .default(Text("확인"))
-            )
-        }
-    }
-}
-
 class MyKitchenwarePantryViewModel: ObservableObject {
-    
     // MARK: - 뷰 상태 프로퍼티 (View State Properties)
     
     @Published var viewState: MyKitchenwarePantryViewState = .loading
@@ -120,7 +29,7 @@ class MyKitchenwarePantryViewModel: ObservableObject {
     
     // MARK: - 기본 설정 프로퍼티
     
-    private var dismissAction: (() -> Void)?
+    private var onDismiss: (() -> Void)?
     
     // MARK: - 기타 프로퍼티
     
@@ -131,7 +40,7 @@ class MyKitchenwarePantryViewModel: ObservableObject {
     private lazy var authManager = AuthManager.shared
     
     func setDismissAction(_ action: @escaping () -> Void) {
-        dismissAction = action
+        onDismiss = action
     }
     
     /// 뷰를 화면에 표시하기 위한 사용자 검증 및 데이터 불러오기 진입점입니다.
@@ -281,7 +190,7 @@ class MyKitchenwarePantryViewModel: ObservableObject {
     /// 전역 게스트 상태가 됐을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextAsGuest() {
         viewState = .unauthorized
-        alert = .sessionExpired(dismissAction: self.dismissAction ?? {})
+        alert = .sessionExpired(dismissAction: self.onDismiss ?? {})
         clearAllContextData()
     }
     
@@ -297,3 +206,94 @@ class MyKitchenwarePantryViewModel: ObservableObject {
         currentUser = nil
     }
 }
+
+enum MyKitchenwarePantryViewState: Equatable {
+    case loading
+    case loaded
+    case empty
+    case error(message: String)
+    case unauthorized
+}
+
+enum MyKitchenwarePantrySheet: Identifiable {
+    case kitchenwarePicker
+    
+    var id: String {
+        switch self {
+        case .kitchenwarePicker: return "kitchenwarePicker"
+        }
+    }
+}
+
+enum MyKitchenwarePantryAlert: Identifiable {
+    case clearPantryCaution(confirmAction: () -> Void)
+    case clearPantryFailed(message: String)
+    case addToPantryFailed(message: String)
+    case removeFromPantryFailed(message: String)
+    case userChanged(dismissAction: () -> Void)
+    case sessionExpired(dismissAction: () -> Void)
+    case error(message: String)
+    
+    var id: String {
+        switch self {
+        case .clearPantryCaution: return "clearPantryCaution"
+        case .clearPantryFailed: return "clearPantryFailed"
+        case .addToPantryFailed: return "addToPantryFailed"
+        case .removeFromPantryFailed: return "removeFromPantryFailed"
+        case .userChanged: return "userChanged"
+        case .sessionExpired: return "sessionExpired"
+        case .error: return "error"
+        }
+    }
+    
+    var alert: Alert {
+        switch self {
+        case .clearPantryCaution(let confirmAction):
+            return Alert(
+                title: Text("도구 모두 제거"),
+                message: Text("보관함의 모든 도구를 제거할까요?"),
+                primaryButton: .destructive(Text("확인"), action: confirmAction),
+                secondaryButton: .cancel(Text("취소"))
+            )
+        case .addToPantryFailed(let message):
+            return Alert(
+                title: Text("보관함에 도구 추가 실패"),
+                message: Text(message),
+                dismissButton: .default(Text("확인"))
+            )
+        case .removeFromPantryFailed(let message):
+            return Alert(
+                title: Text("보관함에서 도구 제거 실패"),
+                message: Text(message),
+                dismissButton: .default(Text("확인"))
+            )
+        case .clearPantryFailed(let message):
+            return Alert(
+                title: Text("보관함에서 모든 도구 제거 실패"),
+                message: Text(message),
+                dismissButton: .default(Text("확인"))
+            )
+        case .userChanged(let dismissAction):
+            return Alert(
+                title: Text("사용자 변경"),
+                message: Text("기존과 다른 사용자로 로그인됐어요."),
+                dismissButton: .default(Text("확인"), action: dismissAction)
+            )
+            
+        case .sessionExpired(let dismissAction):
+            return Alert(
+                title: Text("세션 만료"),
+                message: Text("현재 사용자 인증을 실패했어요."),
+                dismissButton: .default(Text("확인"), action: dismissAction)
+            )
+            
+        case .error(let message):
+            return Alert(
+                title: Text("오류"),
+                message: Text(message),
+                dismissButton: .default(Text("확인"))
+            )
+        }
+    }
+}
+

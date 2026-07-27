@@ -40,7 +40,7 @@ class IngredientPickerViewModel: ObservableObject, SelectableIngredientManager {
     /// - 상위 뷰와 binding됩니다.
     private var selectionBinding: Binding<[IngredientEssential]>
     
-    private var dismissAction: (() -> Void)?
+    private var onDismiss: (() -> Void)?
     
     // MARK: - 기타 프로퍼티
     
@@ -93,12 +93,12 @@ class IngredientPickerViewModel: ObservableObject, SelectableIngredientManager {
     }
     
     func setDismissAction(_ action: @escaping () -> Void) {
-        dismissAction = action
+        onDismiss = action
     }
     
     func complete() {
         selectionBinding.wrappedValue = selectedIngredients
-        dismissAction?()
+        onDismiss?()
     }
     
     func toggleSelection(for ingredient: Ingredient) {
@@ -262,14 +262,14 @@ class IngredientPickerViewModel: ObservableObject, SelectableIngredientManager {
     
     /// 전역 게스트 상태가 됐을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextAsGuest() {
-        alert = .sessionExpired(dismissAction: dismissAction ?? {})
+        alert = .sessionExpired(dismissAction: onDismiss ?? {})
         viewState = .unauthorized
         clearAllContextData()
     }
     
     /// 이전과 다른 사용자로 변경했을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextForNewUser() {
-        alert = .userChanged(dismissAction: dismissAction ?? {})
+        alert = .userChanged(dismissAction: onDismiss ?? {})
         viewState = .unauthorized
         clearAllContextData()
     }

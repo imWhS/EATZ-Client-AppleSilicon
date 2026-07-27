@@ -7,18 +7,18 @@
 
 import SwiftUI
 
-struct ResetPasswordView: View {
+struct AuthResetPasswordView: View {
     @StateObject private var viewModel: ResetPasswordViewModel
     @FocusState private var isFocusedPassword: Bool
     @State private var isPasswordVisible: Bool = false
     
-    let dismissAction: () -> Void
-    let completionAction: () -> Void
+    let onDismiss: () -> Void
+    let onComplete: () -> Void
     
-    init(token: String, completionAction: @escaping () -> Void, dismissAction: @escaping () -> Void) {
+    init(token: String, onComplete: @escaping () -> Void, onDismiss: @escaping () -> Void) {
         _viewModel = StateObject(wrappedValue: ResetPasswordViewModel(token: token))
-        self.completionAction = completionAction
-        self.dismissAction = dismissAction
+        self.onComplete = onComplete
+        self.onDismiss = onDismiss
     }
     
     var body: some View {
@@ -29,40 +29,24 @@ struct ResetPasswordView: View {
     
     private var mainContent: some View {
         VStack {
-            ResetPasswordHeader(onCancel: dismissAction)
+            AuthTitleHeader(onCancelTapped: onDismiss)
 
             switch viewModel.state {
             case .validating: LoadingCurtain(title: "올바른 요청인지 확인하고 있어요...")
             case .idle, .resetting:
-                if let email = viewModel.email {
+                if viewModel.email != nil {
                     ResetPasswordSetupView(
                         password: $viewModel.newPassword,
                         isFocused: $isFocusedPassword,
                         isPasswordVisible: $isPasswordVisible,
                         email: viewModel.email!,
                         isSubmitable: viewModel.state != .resetting,
-                        onSubmit: { viewModel.resetPassword(onSuccess: completionAction) })
+                        onSubmit: { viewModel.resetPassword(onSuccess: onComplete) })
                 }
             case .validationFailed: ErrorCurtain("올바르지 않거나, 만료된 링크로 접근하신 것 같아요. 처음부터 다시 시도해주세요.")
             }
         }
         .background(Color.init(hex: "F9F9F9"))
-    }
-}
-
-private struct ResetPasswordHeader: View {
-    let onCancel: () -> Void
-
-    var body: some View {
-        HStack {
-            Text("계정")
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(Color.black)
-            Spacer()
-            DismissButton(action: onCancel)
-        }
-        .padding(.top, 20)
-        .padding(.horizontal, 20)
     }
 }
 

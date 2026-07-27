@@ -8,44 +8,6 @@
 import SwiftUI
 import Combine
 
-/// AuthView를 띄울 때 메시지를 함께 전달하기 위해 사용합니다.
-enum AuthContext: Identifiable {
-    case logIn
-    case authRequiredAction
-    case sessionExpired
-
-    var id: String {
-        switch self {
-        case .logIn:
-            return "logIn"
-        case .authRequiredAction:
-            return "authRequiredAction"
-        case .sessionExpired:
-            return "sessionExpired"
-        }
-    }
-    /// 로그인 시트에 보여줄 안내 메인 메시지
-    var mainMessage: String {
-        switch self {
-        case .logIn:
-            return "이메일로 시작해볼까요?"
-        case .authRequiredAction:
-            return "계속 하려면 계정이 필요해요.\n이메일로 시작해볼까요?"
-        case .sessionExpired:
-            return "로그아웃 상태로 전환됐어요.\n작업을 계속 하려면 다시 로그인해주세요."
-        }
-    }
-    /// 로그인 시트에 보여줄 안내 서브 메시지
-    var subMessage: String {
-        switch self {
-        case .logIn, .authRequiredAction:
-            return "로그인 할 계정 또는 가입에 사용할 이메일 주소를 입력하세요."
-        case .sessionExpired:
-            return "직전과 다른 계정으로 로그인하거나,\n새 계정을 만들어서 로그인하면 직전 작업이 종료될 수 있어요."
-        }
-    }
-}
-
 /// 로그인 및 가입 등 전체 인증 흐름을 진행하기 위해 필요한 뷰입니다.
 /// GlobalPresenter에 의해 화면에 present 되거나 dismiss 되어질 수 있습니다.
 /// 
@@ -64,13 +26,13 @@ struct AuthView: View {
     @FocusState private var isEmailFocused: Bool
     @State private var isKeyboardVisible = false
     
-    /// AuthView가 화면에 present 되어지는 이유를 나타냅니다.
+    /// AuthView가 화면에 present 되어지는 이유를 나타내는 컨텍스트입니다.
     let context: AuthContext
     
     /// 로그인 성공 시 호출해야 할 클로저입니다.
     let onLogInSuccess: (String, CurrentUser) -> Void
     
-    /// 로그인 취소(AuthView의 dismiss 액션 실행) 시 호출해야 할 클로저입니다.
+    /// 로그인 취소(dismiss 액션 실행) 시 호출해야 할 클로저입니다.
     let onDismiss: () -> Void
     
     init(context: AuthContext, onLogInSuccess: @escaping (String, CurrentUser) -> Void, onDismiss: @escaping () -> Void) {
@@ -88,20 +50,15 @@ struct AuthView: View {
                 isEmailFocused = false
             }
             .navigationDestination(for: AuthViewModel.AuthNavigationPath.self) { path in
-                switch path {
-                case .logIn:
-                    LogInView()
-                        .environmentObject(viewModel)
-                case .signUpEmailVerification:
-                    SignUpEmailVerificationView()
-                        .environmentObject(viewModel)
-                case .signUpSetPassword:
-                    SignUpAdditionPasswordView()
-                        .environmentObject(viewModel)
-                case .signUpCreateUsername:
-                    SignUpCreationUsernameView()
-                        .environmentObject(viewModel)
+                Group {
+                    switch path {
+                    case .logIn: LogInView()
+                    case .signUpEmailVerification: SignUpEmailVerificationView()
+                    case .signUpSetPassword: SignUpAdditionPasswordView()
+                    case .signUpCreateUsername: SignUpCreationUsernameView()
+                    }
                 }
+                .environmentObject(viewModel)
             }
         }
         .onReceive(Publishers.keyboardHeight) { height in
@@ -152,13 +109,13 @@ struct AuthView: View {
             .alert(item: $viewModel.alert) { $0.alert }
             .transition(.opacity.combined(with: .move(edge: .top)))
             .animation(.easeInOut(duration: 0.3), value: isKeyboardVisible)
-            HeaderView(onCancel: onDismiss)
+            AuthTitleHeader(onCancelTapped: onDismiss)
         }
         .background(Color.init(hex: "F9F9F9"))
     }
     
     private struct HeaderView: View {
-        let onCancel: () -> Void
+        let onCancelTapped: () -> Void
 
         var body: some View {
             HStack {
@@ -167,7 +124,7 @@ struct AuthView: View {
                     .foregroundStyle(Color.black)
                 Spacer()
                 DismissButton {
-                    onCancel()
+                    onCancelTapped()
                 }
             }
             .padding(.top, 20)
@@ -227,5 +184,43 @@ struct AuthView: View {
         }
         .buttonStyle(BigRoundedButtonStyle(type: type))
         .padding(.horizontal, 20)
+    }
+}
+
+/// AuthView를 띄울 때 메시지를 함께 전달하기 위해 사용합니다.
+enum AuthContext: Identifiable {
+    case logIn
+    case authRequiredAction
+    case sessionExpired
+
+    var id: String {
+        switch self {
+        case .logIn:
+            return "logIn"
+        case .authRequiredAction:
+            return "authRequiredAction"
+        case .sessionExpired:
+            return "sessionExpired"
+        }
+    }
+    /// 로그인 시트에 보여줄 안내 메인 메시지
+    var mainMessage: String {
+        switch self {
+        case .logIn:
+            return "이메일로 시작해볼까요?"
+        case .authRequiredAction:
+            return "계속 하려면 계정이 필요해요.\n이메일로 시작해볼까요?"
+        case .sessionExpired:
+            return "로그아웃 상태로 전환됐어요.\n작업을 계속 하려면 다시 로그인해주세요."
+        }
+    }
+    /// 로그인 시트에 보여줄 안내 서브 메시지
+    var subMessage: String {
+        switch self {
+        case .logIn, .authRequiredAction:
+            return "로그인 할 계정 또는 가입에 사용할 이메일 주소를 입력하세요."
+        case .sessionExpired:
+            return "직전과 다른 계정으로 로그인하거나,\n새 계정을 만들어서 로그인하면 직전 작업이 종료될 수 있어요."
+        }
     }
 }

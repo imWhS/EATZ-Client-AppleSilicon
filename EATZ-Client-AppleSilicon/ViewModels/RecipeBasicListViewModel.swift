@@ -44,7 +44,7 @@ class RecipeBasicListViewModel: ObservableObject {
     
     // MARK: - 기본 설정 프로퍼티
     
-    private var dismissAction: (() -> Void)?
+    private var onDismiss: (() -> Void)?
     
     private let fetcher: (Int, @escaping (Result<RecipeBasicsPaged, NetworkError>) -> Void) -> Void
     
@@ -162,7 +162,7 @@ class RecipeBasicListViewModel: ObservableObject {
     /// 전역 게스트 상태가 됐을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextAsGuest() {
         viewState = .unauthorized
-        alert = .sessionExpired(dismissAction: dismissAction ?? {})
+        alert = .sessionExpired(dismissAction: onDismiss ?? {})
         clearAllContextData()
     }
     
@@ -180,7 +180,7 @@ class RecipeBasicListViewModel: ObservableObject {
 
 extension RecipeBasicListViewModel {
     func setDismissAction(_ action: @escaping () -> Void) {
-        dismissAction = action
+        onDismiss = action
     }
     
     func loadNextPage() {

@@ -14,7 +14,7 @@ class ResetPasswordViewModel: ObservableObject {
     @Published var alert: ResetPasswordAlert?
     
     private let token: String
-    private var dismissAction: (() -> Void)?
+    private var onDismiss: (() -> Void)?
     
     private let authService = AuthService.shared
     
@@ -23,7 +23,7 @@ class ResetPasswordViewModel: ObservableObject {
     }
     
     func setDismissAction(_ action: @escaping () -> Void) {
-        dismissAction = action
+        onDismiss = action
     }
     
     func validateToken() {
@@ -38,7 +38,7 @@ class ResetPasswordViewModel: ObservableObject {
                     self.email = response.email
                     self.state = .idle
                 case .failure(let error):
-                    self.alert = .invalidLink(message: error.userMessage, dismissAction: self.dismissAction ?? {})
+                    self.alert = .invalidLink(message: error.userMessage, dismissAction: self.onDismiss ?? {})
                     self.state = .validationFailed
                 }
             }

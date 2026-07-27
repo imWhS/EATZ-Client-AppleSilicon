@@ -37,7 +37,7 @@ struct SignUpEmailVerificationView: View {
         .toolbar {
             titleToolbarItem
         }
-        .onChange(of: viewModel.validationCode) { validationCode in
+        .onChange(of: viewModel.validationCode) { _, validationCode in
             if !validationCode.allSatisfy({ $0.isNumber }) {
                 viewModel.validationCode = self.lastValidationCode
                 viewModel.alert = .invalidVerificationCodeInput

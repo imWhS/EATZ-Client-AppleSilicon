@@ -26,9 +26,14 @@ struct BlockContextModifier: ViewModifier {
                 isPresented: Binding(
                     get: { self.alert != nil },
                     set: { isPresented in
-                        if !isPresented {
-                            self.alert = nil
-                            self.targetUser = nil }}),
+                        DispatchQueue.main.async {
+                            if !isPresented {
+                                self.alert = nil
+                                self.targetUser = nil
+                            }
+                        }
+                    }
+                ),
                 presenting: alert,
                 actions: { $0.actions },
                 message: { $0.message })

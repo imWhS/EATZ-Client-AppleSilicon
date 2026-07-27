@@ -85,7 +85,3 @@ struct SignUpCreationUsernameView: View {
         }
     }
 }
-
-#Preview {
-    SignUpAdditionPasswordView()
-}

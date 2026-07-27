@@ -8,12 +8,11 @@
 import SwiftUI
 import Combine
 
-/// 로그인 및 가입 등 전체 인증 흐름을 진행하기 위해 필요한 뷰입니다.
-/// GlobalPresenter에 의해 화면에 present 되거나 dismiss 되어질 수 있습니다.
-/// 
+/// 로그인 및 가입 등 사용자 전체 인증 흐름을 진행하기 위해 필요한 뷰입니다.
 ///
-/// 로그인과 가입 흐름 각각은 하나의 논리적인 단위로 취급되어야 합니다.
-/// 그래서 로그인을 담당하는 LogInView, 가입을 담당하는 SignUpView를 하위 뷰로 둡니다.
+/// - GlobalPresenter에 의해 화면에 present 되거나 dismiss 되어질 수 있습니다.
+/// - 로그인과 가입 흐름 각각은 하나의 논리적인 단위로 취급되어야 합니다.
+///   그래서 로그인을 담당하는 LogInView, 가입을 담당하는 SignUpView를 하위 뷰로 둡니다.
 struct AuthView: View {
     // MARK: - StateObject 프로퍼터
     
@@ -21,19 +20,19 @@ struct AuthView: View {
     
     // MARK: - State 프로퍼티
     
-    @State private var goToSignIn = false
-    @State private var goToSignUp = false
-    @FocusState private var isEmailFocused: Bool
+    @State private var pushToSignIn = false
+    @State private var pushToSignUp = false
     @State private var isKeyboardVisible = false
+    @FocusState private var isEmailFocused: Bool
     
     /// AuthView가 화면에 present 되어지는 이유를 나타내는 컨텍스트입니다.
-    let context: AuthContext
+    private let context: AuthContext
     
     /// 로그인 성공 시 호출해야 할 클로저입니다.
-    let onLogInSuccess: (String, CurrentUser) -> Void
+    private let onLogInSuccess: (String, CurrentUser) -> Void
     
     /// 로그인 취소(dismiss 액션 실행) 시 호출해야 할 클로저입니다.
-    let onDismiss: () -> Void
+    private let onDismiss: () -> Void
     
     init(context: AuthContext, onLogInSuccess: @escaping (String, CurrentUser) -> Void, onDismiss: @escaping () -> Void) {
         self._viewModel = StateObject(wrappedValue: AuthViewModel(onLogInSuccess: onLogInSuccess))
@@ -44,22 +43,18 @@ struct AuthView: View {
     
     var body: some View {
         NavigationStack(path: $viewModel.navigationPath) {
-            mainContent
-            .contentShape(Rectangle())
-            .onTapGesture {
-                isEmailFocused = false
-            }
-            .navigationDestination(for: AuthViewModel.AuthNavigationPath.self) { path in
-                Group {
-                    switch path {
-                    case .logIn: LogInView()
-                    case .signUpEmailVerification: SignUpEmailVerificationView()
-                    case .signUpSetPassword: SignUpAdditionPasswordView()
-                    case .signUpCreateUsername: SignUpCreationUsernameView()
+            contentView
+                .navigationDestination(for: AuthViewModel.AuthNavigationPath.self) { path in
+                        Group {
+                        switch path {
+                        case .logIn: LogInView()
+                        case .signUpEmailVerification: SignUpEmailVerificationView()
+                        case .signUpSetPassword: SignUpSetPasswordView()
+                        case .signUpCreateUsername: SignUpCreationUsernameView()
+                        }
                     }
+                    .environmentObject(viewModel)
                 }
-                .environmentObject(viewModel)
-            }
         }
         .onReceive(Publishers.keyboardHeight) { height in
             withAnimation(.easeInOut(duration: 0.3)) {
@@ -68,7 +63,7 @@ struct AuthView: View {
         }
     }
     
-    private var mainContent: some View {
+    private var contentView: some View {
         ZStack(alignment: .top) {
             VStack(spacing: 0) {
                 VStack(spacing: 0) {
@@ -81,37 +76,42 @@ struct AuthView: View {
                     legalNoticeView
                 }
                 .background(Color.white)
-                VStack(spacing: 4) {
-                    VStack(spacing: 16) {
-                        if viewModel.isLoading {
-                            ProgressView()
-                        } else {
-                            FloatingTitleTextFieldTest(
-                                title: "이메일 주소",
-                                placeholder: nil,
-                                isInvalid: false,
-                                text: $viewModel.email,
-                                isFocused: $isEmailFocused,
-                                isAutocorrectionDisabled: true,
-                                capitalization: .never,
-                                keyboardType: .emailAddress,
-                                onSubmit: viewModel.validateEmail
-                            )
-                            .padding(.horizontal, 20)
-                            authActionButton(title: "시작", type: .primary, action: viewModel.validateEmail)
-                        }
-                    }
-                    .padding(.vertical, 20)
-                }
-                .ignoresSafeArea(edges: .bottom)
-                .background(Color.init(hex: "F9F9F9"))
             }
             .alert(item: $viewModel.alert) { $0.alert }
             .transition(.opacity.combined(with: .move(edge: .top)))
             .animation(.easeInOut(duration: 0.3), value: isKeyboardVisible)
             AuthTitleHeader(onCancelTapped: onDismiss)
         }
-        .background(Color.init(hex: "F9F9F9"))
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isEmailFocused = false
+        }
+        .safeAreaInset(edge: .bottom) {
+            VStack(spacing: 4) {
+                VStack(spacing: 16) {
+                    if viewModel.isLoading {
+                        ProgressView()
+                    } else {
+                        FloatingTitleTextFieldTest(
+                            title: "이메일 주소",
+                            placeholder: nil,
+                            isInvalid: false,
+                            text: $viewModel.email,
+                            isFocused: $isEmailFocused,
+                            isAutocorrectionDisabled: true,
+                            capitalization: .never,
+                            keyboardType: .emailAddress,
+                            onSubmit: viewModel.validateEmail
+                        )
+                        .padding(.horizontal, 20)
+                        authActionButton(title: "시작", type: .primary, action: viewModel.validateEmail)
+                    }
+                }
+                .padding(.vertical, 20)
+            }
+//            .ignoresSafeArea(edges: .bottom)
+            .background(Color.init(hex: "F9F9F9"))
+        }
     }
     
     private struct HeaderView: View {

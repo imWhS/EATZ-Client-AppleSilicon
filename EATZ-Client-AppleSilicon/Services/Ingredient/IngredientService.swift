@@ -49,7 +49,7 @@ final class IngredientService {
     {
         let ingredientSearch = IngredientSearch(keyword: name, pageableRequest: PageableRequest(page, size))
         networkClient.request(
-            endpointUrl: "/api/v0/ingredients/search",
+            endpointUrl: "\(commonEndpointUrl)/search",
             method: .get,
             parameters: ingredientSearch,
             completion: completion

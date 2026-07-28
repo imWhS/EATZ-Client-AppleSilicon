@@ -88,7 +88,7 @@ struct RecipeViewN: View {
                 case .none: break } }
             .alert(
                 viewModel.alert?.title ?? "",
-                isPresented: isAlertPresented(),
+                isPresented: Binding.init(isPresenting: $viewModel.alert),
                 presenting: viewModel.alert,
                 actions: { $0.actions },
                 message: { $0.message })
@@ -117,12 +117,6 @@ struct RecipeViewN: View {
         case .recipeEditor: RecipeEditor(mode: .update(recipeId)) {}
         case .recipeWebPageView(let recipeUrl): RecipeWebPageView(recipeUrl: recipeUrl)
         }
-    }
-    
-    private func isAlertPresented() -> Binding<Bool> {
-        return Binding(
-            get: { self.viewModel.alert != nil },
-            set: { isPresented in if !isPresented { self.viewModel.alert = nil } } )
     }
 }
 

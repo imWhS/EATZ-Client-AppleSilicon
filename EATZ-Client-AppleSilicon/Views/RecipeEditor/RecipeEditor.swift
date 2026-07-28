@@ -61,7 +61,7 @@ struct RecipeEditor: View {
         }
         .alert(
             viewModel.alert?.title ?? "",
-            isPresented: isAlertPresented(),
+            isPresented: Binding.init(isPresenting: $viewModel.alert),
             presenting: viewModel.alert,
             actions: { $0.actions },
             message: { $0.message })
@@ -137,12 +137,6 @@ struct RecipeEditor: View {
                 name: $viewModel.currentDraft.creatorName,
                 url: $viewModel.currentDraft.creatorUrl)
         }
-    }
-    
-    private func isAlertPresented() -> Binding<Bool> {
-        return Binding(
-            get: { self.viewModel.alert != nil },
-            set: { isPresented in if !isPresented { self.viewModel.alert = nil } } )
     }
     
     private var cancelToolbarItem: some ToolbarContent {

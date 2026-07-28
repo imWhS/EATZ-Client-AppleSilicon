@@ -25,7 +25,7 @@ struct RecipeView: View {
             }
             .alert(
                 viewModel.alert?.title ?? "",
-                isPresented: isAlertPresented(),
+                isPresented: Binding.init(isPresenting: $viewModel.alert),
                 presenting: viewModel.alert,
                 actions: { _ in Button("확인", role: .cancel) {} },
                 message: { $0.message })
@@ -47,13 +47,5 @@ struct RecipeView: View {
         switch item {
         case .plannerDatePicker(let recipeId): PlannerDatePicker(for: recipeId)
         }
-    }
-    
-    private func isAlertPresented() -> Binding<Bool> {
-        return Binding(
-            get: {
-                self.viewModel.alert != nil },
-            set: { isPresented in
-                if !isPresented { self.viewModel.alert = nil } } )
     }
 }

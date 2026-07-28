@@ -40,9 +40,7 @@ struct DeleteAccountDetailView: View {
         .onChange(of: authManager.state, isSessionExpired)
         .alert(
             viewModel.alert?.title ?? "",
-            isPresented: Binding(
-                get: { viewModel.alert != nil },
-                set: { isPresented in if (!isPresented) { viewModel.alert = nil } }),
+            isPresented: Binding.init(isPresenting: $viewModel.alert),
             presenting: viewModel.alert,
             actions: { $0.actions },
             message: { $0.message })

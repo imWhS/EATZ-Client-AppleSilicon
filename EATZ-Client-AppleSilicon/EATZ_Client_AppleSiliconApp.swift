@@ -26,7 +26,7 @@ struct EATZ_Client_AppleSiliconApp: App {
         .onChange(of: scenePhase) { scenePhase in
             /// 앱이 foreground 상태로 전환됐을 때, 여전히 세션이 유효한지 검증합니다.
             if scenePhase == .active {
-                GlobalPresenter.shared.processPendingDeepLink()
+                AuthGlobalPresenter.shared.processPendingDeepLink()
                 
                 if isFirstActive {
                     // 앱을 실행한 직후에는 AuthManager.checkInitialState()를 통해 세션 유효성 검증을 진행하기 때문에 여기에서 세션 유효성 검증을 진행하지 않습니다.
@@ -42,15 +42,17 @@ struct EATZ_Client_AppleSiliconApp: App {
     private func handleDeepLink(_ url: URL) {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return }
         
-        // Ex. eatz://reset-password?token=...
+        // Ex. eatz://reset-password?emailVerificationToken=...
         if components.scheme == "eatzuserauth" && components.host == "reset-password" {
-            if let token = components.queryItems?.first(where: { $0.name == "token" })?.value {
+            if let token = components.queryItems?.first(where: { $0.name == "emailVerificationToken" })?.value {
+                
+                print("[DBG] handleDeppLink - token: \(token)")
                 // 뷰를 present 하기 전, GlobalPresenter에 토큰 저장부터 합니다.
-                GlobalPresenter.shared.setPendingResetPasswordToken(token)
+                AuthGlobalPresenter.shared.setPendingResetPasswordToken(token)
 
                 // 만약 앱이 이미 켜져있는 상태(Warm Start)에서 딥 링크를 받았다면, scenePhase가 바뀌지 않으므로 여기서 즉시 실행을 시도할 수도 있습니다.
                 if UIApplication.shared.applicationState == .active {
-                   GlobalPresenter.shared.processPendingDeepLink()
+                   AuthGlobalPresenter.shared.processPendingDeepLink()
                 }
             }
         }

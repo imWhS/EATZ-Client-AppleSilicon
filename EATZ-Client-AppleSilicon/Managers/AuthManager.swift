@@ -90,7 +90,7 @@ final class AuthManager: ObservableObject, AuthProvider {
             print(" - 게스트 상태여서 실행을 취소할게요.")
             return
         }
-        GlobalPresenter.shared.presentAuthView(context: .logIn)
+        AuthGlobalPresenter.shared.presentAuthView(context: .logIn)
     }
     
     /// 현재 사용자가 로그인 상태면 액션을 바로 실행하고, 게스트 상태면 AuthView를 띄워, 로그인 성공 직후에 액션을 실행합니다.
@@ -102,7 +102,7 @@ final class AuthManager: ObservableObject, AuthProvider {
         case .unauthorized, .unknown:
             print("[AuthManager.performWhenLoggedIn] 로그인이 필요한 액션을 요청했어요. 액션은 잠시 보류시킨 후, 로그인을 위해 AuthView를 띄워볼게요.")
             pendingActions.append(action)
-            GlobalPresenter.shared.presentAuthView(context: .authRequiredAction)
+            AuthGlobalPresenter.shared.presentAuthView(context: .authRequiredAction)
         }
     }
     
@@ -119,7 +119,7 @@ final class AuthManager: ObservableObject, AuthProvider {
         // 여러 API 호출로 인해 세션 만료 감지가 동시에 발생했을 때 race condition을 예방합니다.
         isHandlingSessionExpiration = true
 
-        GlobalPresenter.shared.presentAuthView(context: .sessionExpired, onDismiss: {
+        AuthGlobalPresenter.shared.presentAuthView(context: .sessionExpired, onDismiss: {
             print("[AuthManager.sessionExpired] 사용자가 재로그인을 취소했어요.")
             self.logOut()
         })

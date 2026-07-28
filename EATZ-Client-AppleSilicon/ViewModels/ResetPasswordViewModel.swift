@@ -13,13 +13,14 @@ class ResetPasswordViewModel: ObservableObject {
     @Published var email: String?
     @Published var alert: ResetPasswordAlert?
     
-    private let token: String
+    private let emailVerificationToken: String
+    private var authorizedToken: String?
     private var onDismiss: (() -> Void)?
     
     private let authService = AuthService.shared
     
-    init(token: String) {
-        self.token = token
+    init(emailToken: String) {
+        self.emailVerificationToken = emailToken
     }
     
     func setDismissAction(_ action: @escaping () -> Void) {
@@ -29,13 +30,14 @@ class ResetPasswordViewModel: ObservableObject {
     func validateToken() {
         state = .validating
         
-        authService.validateResetPasswordToken(token: token) { [weak self] result in
+        authService.validateResetPasswordToken(emailVerificationToken: emailVerificationToken) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
                 switch result {
                 case .success(let response):
-                    self.email = response.email
+                    self.email = response.maskedEmail
+                    self.authorizedToken = response.authorizedToken
                     self.state = .idle
                 case .failure(let error):
                     self.alert = .invalidLink(message: error.userMessage, dismissAction: self.onDismiss ?? {})
@@ -46,13 +48,14 @@ class ResetPasswordViewModel: ObservableObject {
     }
     
     func resetPassword(onSuccess: @escaping () -> Void) {
+        guard let authorizedToken = authorizedToken else { return }
         state = .resetting
-        authService.submitNewPasswordForReset(token: token, newPassword: newPassword) { [weak self] result in
+        authService.submitNewPasswordForReset(authorizedToken: authorizedToken, newPassword: newPassword) { [weak self] result in
             guard let self = self else { return }
             self.state = .idle
             
             switch result {
-            case .success((())):
+            case .success:
                 self.alert = .resetSuccess(confirmAction: onSuccess)
             case .failure(let networkError):
                 self.alert = .resetFailed(message: networkError.userMessage)

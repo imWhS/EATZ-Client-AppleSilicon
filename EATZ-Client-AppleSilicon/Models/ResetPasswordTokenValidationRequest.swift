@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct ValidateResetPasswordToken : Encodable {
-    let token: String
+struct ResetPasswordTokenValidationRequest : Encodable {
+    let emailVerificationToken: String
 }

@@ -49,19 +49,6 @@ final class RecipeService {
             completion: completion)
     }
     
-//    func fetchRecipes(
-//        page: Int,
-//        size: Int,
-//        completion: @escaping (Result<RecipeDetailsPaged, NetworkError>) -> Void)
-//    {
-//        let pageableRequest = PageableRequest(page, size)
-//        networkClient.request(
-//            endpointUrl: "/api/v0/recipes",
-//            method: .get,
-//            parameters: pageableRequest,
-//            completion: completion)
-//    }
-    
     func uploadImage(imageData: Data, completion: @escaping (Result<UploadedImageResponse, NetworkError>) -> Void) {
         networkClient.uploadImage(
             endpointUrl: "\(commonEndpointUrl)/images",

@@ -42,7 +42,7 @@ struct PlannerMemberView: View {
         }
         .alert(
             viewModel.alert?.title ?? "",
-            isPresented: isAlertPresented,
+            isPresented: Binding.init(isPresenting: $viewModel.alert),
             presenting: viewModel.alert,
             actions: { $0.actions },
             message: { $0.message })
@@ -55,12 +55,6 @@ struct PlannerMemberView: View {
             },
             content: buildSheet)
         .getReportContext(resource: $viewModel.reportResource)
-    }
-    
-    private var isAlertPresented: Binding<Bool> {
-        Binding(
-            get: { self.viewModel.alert != nil },
-            set: { isPresented in if isPresented == false { self.viewModel.alert = nil } })
     }
     
     private var contentView: some View {

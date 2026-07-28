@@ -46,7 +46,7 @@ struct RatingViewN: View {
             .refreshable { await viewModel.refresh(for: recipeId, currentUser) }
             .alert(
                 viewModel.alert?.title ?? "",
-                isPresented: isAlertPresented(),
+                isPresented: Binding.init(isPresenting: $viewModel.alert),
                 presenting: viewModel.alert,
                 actions: { $0.actions },
                 message: { $0.message })
@@ -65,12 +65,6 @@ struct RatingViewN: View {
         switch type {
         case .ratingEditor(let recipeId, let mode): RatingEditor(recipeId: recipeId, mode: mode)
         }
-    }
-    
-    private func isAlertPresented() -> Binding<Bool> {
-        return Binding(
-            get: { self.viewModel.alert != nil },
-            set: { isPresented in if !isPresented { self.viewModel.alert = nil } } )
     }
     
     private func handleCurrentUserChanged(previous: CurrentUser?, new: CurrentUser?) {

@@ -66,29 +66,29 @@ final class AuthService {
     }
     
     func submitNewPasswordForReset(
-        token: String,
+        authorizedToken: String,
         newPassword: String,
         completion: @escaping (Result<Void, NetworkError>) -> Void
     ) {
-        let newPasswordForReset = NewPasswordForReset(token: token, newPassword: newPassword)
+        let request = ConfirmPasswordResetRequest(authorizedToken: authorizedToken, newPassword: newPassword)
         networkClient.requestPublicNoContent(
             endpointUrl: "\(commonEndpointUrl)/auth/reset-password",
             method: .post,
-            parameters: newPasswordForReset,
+            parameters: request,
             completion: completion
         )
     }
     
     func validateResetPasswordToken(
-        token: String,
-        completion: @escaping (Result<ValidateResetTokenResponse, NetworkError>) -> Void
+        emailVerificationToken: String,
+        completion: @escaping (Result<ResetPasswordTokenValidationResponse, NetworkError>) -> Void
     ) {
-        let validateResetPasswordToken = ValidateResetPasswordToken(token: token)
+        let request = ResetPasswordTokenValidationRequest(emailVerificationToken: emailVerificationToken)
         
         networkClient.requestPublic(
             endpointUrl: "\(commonEndpointUrl)/auth/reset-password/authorize-token",
             method: .get,
-            parameters: validateResetPasswordToken,
+            parameters: request,
             completion: completion
         )
     }

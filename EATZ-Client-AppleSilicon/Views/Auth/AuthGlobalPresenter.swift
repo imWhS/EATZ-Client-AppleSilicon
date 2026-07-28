@@ -1,5 +1,5 @@
 //
-//  GlobalPresenter.swift
+//  AuthGlobalPresenter.swift
 //  EATZ-Client-AppleSilicon
 //
 //  Created by 손원희 on 8/21/25.
@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-class GlobalPresenter {
+class AuthGlobalPresenter {
     // MARK: - 싱글톤 객체 프로퍼티
     
-    static let shared = GlobalPresenter()
+    static let shared = AuthGlobalPresenter()
     
     // MARK: - 비공개 프로퍼티
     
@@ -57,14 +57,14 @@ class GlobalPresenter {
         hostingController.modalPresentationStyle = .fullScreen
         
         DispatchQueue.main.async {
-            guard let topVC = UIApplication.shared.topViewController() else {
+            guard let topViewController = UIApplication.shared.topViewController() else {
                 self.isResetPasswordViewPresented = false
                 
                 print("[GlobalPresenter.presentResetPasswordView] 상위 계층의 뷰 컨트롤러가 없어요. ")
                 return
             }
             
-            topVC.present(hostingController, animated: true) {
+            topViewController.present(hostingController, animated: true) {
 //                onPresented?()
 //                self.dismissResetPasswordView()
             }
@@ -103,14 +103,14 @@ class GlobalPresenter {
         hostingController.modalPresentationStyle = .fullScreen
         
         DispatchQueue.main.async {
-            guard let topVC = UIApplication.shared.topViewController() else {
+            guard let topViewController = UIApplication.shared.topViewController() else {
                 self.isAuthViewPresented = false
                 
                 print("[GlobalPresenter.presentAuthView] 상위 계층의 뷰 컨트롤러가 없어요. ")
                 return
             }
             
-            topVC.present(hostingController, animated: true) {
+            topViewController.present(hostingController, animated: true) {
                 onPresented?()
             }
         }
@@ -120,10 +120,10 @@ class GlobalPresenter {
     
     /// AuthView를 dismiss 합니다.
     private func dismissAuthView() {
-        guard isAuthViewPresented, let topVC = UIApplication.shared.topViewController() else { return }
+        guard isAuthViewPresented, let topViewController = UIApplication.shared.topViewController() else { return }
         
-        if topVC is UIHostingController<AuthView> {
-            topVC.dismiss(animated: true) {
+        if topViewController is UIHostingController<AuthView> {
+            topViewController.dismiss(animated: true) {
                 self.isAuthViewPresented = false
             }
         } else {
@@ -133,10 +133,10 @@ class GlobalPresenter {
     }
     /// AuthView를 dismiss 합니다.
     private func dismissResetPasswordView() {
-        guard isResetPasswordViewPresented, let topVC = UIApplication.shared.topViewController() else { return }
+        guard isResetPasswordViewPresented, let topViewController = UIApplication.shared.topViewController() else { return }
         
-        if topVC is UIHostingController<AuthResetPasswordView> {
-            topVC.dismiss(animated: true) {
+        if topViewController is UIHostingController<AuthResetPasswordView> {
+            topViewController.dismiss(animated: true) {
                 self.isResetPasswordViewPresented = false
             }
         } else {

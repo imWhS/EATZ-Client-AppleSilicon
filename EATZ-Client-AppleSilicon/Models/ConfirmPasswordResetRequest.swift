@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NewPasswordForReset : Encodable {
-    let token: String
+struct ConfirmPasswordResetRequest : Encodable {
+    let authorizedToken: String
     let newPassword: String
 }

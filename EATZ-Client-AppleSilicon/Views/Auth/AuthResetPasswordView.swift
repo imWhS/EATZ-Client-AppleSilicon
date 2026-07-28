@@ -16,7 +16,7 @@ struct AuthResetPasswordView: View {
     let onComplete: () -> Void
     
     init(token: String, onComplete: @escaping () -> Void, onDismiss: @escaping () -> Void) {
-        _viewModel = StateObject(wrappedValue: ResetPasswordViewModel(token: token))
+        _viewModel = StateObject(wrappedValue: ResetPasswordViewModel(emailToken: token))
         self.onComplete = onComplete
         self.onDismiss = onDismiss
     }

@@ -42,9 +42,7 @@ struct CommentView: View {
         }
         .alert(
             viewModel.alert?.title ?? "",
-            isPresented: Binding(
-                get: { self.viewModel.alert != nil },
-                set: { isPresented in if !isPresented { self.viewModel.alert = nil } }),
+            isPresented: Binding.init(isPresenting: $viewModel.alert),
             presenting: viewModel.alert,
             actions: { $0.actions },
             message: { $0.message })

@@ -23,23 +23,29 @@ struct BlockContextModifier: ViewModifier {
             }
             .alert(
                 alert?.title ?? "",
-                isPresented: Binding(
-                    get: { self.alert != nil },
-                    set: { isPresented in
-                        DispatchQueue.main.async {
-                            if !isPresented {
-                                self.alert = nil
-                                self.targetUser = nil
-                            }
-                        }
-                    }
-                ),
+                isPresented: isAlertPresented(),
                 presenting: alert,
                 actions: { $0.actions },
                 message: { $0.message })
             .sheet(isPresented: $presentLearnMore) {
                 UserBlockShowLearnMoreView()
             }
+    }
+    
+    private func isAlertPresented() -> Binding<Bool> {
+        return Binding(
+            get: {
+                self.alert != nil
+            },
+            set: { isPresented in
+                DispatchQueue.main.async {
+                    if !isPresented {
+                        self.alert = nil
+                        self.targetUser = nil
+                    }
+                }
+            }
+        )
     }
     
     private func presentAlert(_ targetUser: UserEssential?) {

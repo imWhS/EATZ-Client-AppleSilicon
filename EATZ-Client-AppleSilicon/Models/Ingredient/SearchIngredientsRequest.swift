@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct IngredientSearch : Encodable {
+struct SearchIngredientsRequest : Encodable {
     let keyword: String
     let pageableRequest: PageableRequest
 }

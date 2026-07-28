@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FetchPlannedDates : Encodable {
+struct FetchPlannedDatesRequest : Encodable {
     let startDate: Date
     let endDate: Date
 }

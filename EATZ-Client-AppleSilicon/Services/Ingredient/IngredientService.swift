@@ -32,11 +32,11 @@ final class IngredientService {
         size: Int = 10,
         completion: @escaping (Result<IngredientListPageResponse, NetworkError>) -> Void)
     {
-        let pageableRequest = PageableRequest(page, size)
+        let request = PageableRequest(page, size)
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)/roots",
             method: .get,
-            parameters: pageableRequest,
+            parameters: request,
             completion: completion
         )
     }
@@ -47,11 +47,11 @@ final class IngredientService {
         size: Int = 10,
         completion: @escaping (Result<IngredientListPageResponse, NetworkError>) -> Void)
     {
-        let ingredientSearch = IngredientSearch(keyword: name, pageableRequest: PageableRequest(page, size))
+        let request = SearchIngredientsRequest(keyword: name, pageableRequest: PageableRequest(page, size))
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)/search",
             method: .get,
-            parameters: ingredientSearch,
+            parameters: request,
             completion: completion
         )
     }

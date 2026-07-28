@@ -46,11 +46,11 @@ final class RecipeRatingService {
         content: String,
         completion: @escaping (Result<Empty, NetworkError>) -> Void)
     {
-        let updateRating = UpdateRating(score: score, content: content)
+        let request = UpdateRatingRequest(score: score, content: content)
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)/\(id)/ratings",
             method: .put,
-            parameters: updateRating,
+            parameters: request,
             completion: completion)
     }
     
@@ -80,11 +80,11 @@ final class RecipeRatingService {
         size: Int,
         completion: @escaping (Result<RatingsPaged, NetworkError>) -> Void)
     {
-        let pageableRequest = PageableRequest(page, size)
+        let request = PageableRequest(page, size)
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)/\(id)/ratings",
             method: .get,
-            parameters: pageableRequest,
+            parameters: request,
             completion: completion)
     }
 }

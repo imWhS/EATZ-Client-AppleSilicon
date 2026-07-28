@@ -188,11 +188,11 @@ final class UserService {
     
     
     func fetchLikedIngredients(page: Int, size: Int, completion: @escaping (Result<IngredientListPageResponse, NetworkError>) -> Void) {
-        let pageableRequest = PageableRequest(page, size)
+        let request = PageableRequest(page, size)
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)/me/likeds/ingredients",
             method: .get,
-            parameters: pageableRequest,
+            parameters: request,
             completion: completion)
     }
     

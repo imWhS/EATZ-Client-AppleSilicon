@@ -17,25 +17,25 @@ final class RecipeService {
     private init() {}
     
     func register(
-        _ recipe: RecipeCreateRequest,
+        _ request: RecipeCreateRequest,
         completion: @escaping (Result<RecipeCreateResponse, NetworkError>) -> Void)
     {
         networkClient.request(
             endpointUrl: commonEndpointUrl,
             method: .post,
-            parameters: recipe,
+            parameters: request,
             completion: completion)
     }
     
     func update(
         for id: Int64,
-        _ recipe: RecipeUpdateRequest,
+        _ request: RecipeUpdateRequest,
         completion: @escaping (Result<Empty, NetworkError>) -> Void)
     {
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)/\(id)",
             method: .put,
-            parameters: recipe,
+            parameters: request,
             completion: completion)
     }
     
@@ -176,14 +176,14 @@ final class RecipeService {
             completion: completion)
     }
     
-    func fetchTodayCookableList(
+    func fetchCookableList(
         searchCriteria: CookableSearchCriteria,
         sort: CookableRecipeSort,
         size: Int,
         page: Int,
         completion: @escaping (Result<TodayCookableListResponse, NetworkError>) -> Void)
     {
-        let fetchTodayCookableList = FetchTodayCookableList(
+        let request = FetchCookableListRequest(
             keyword: searchCriteria.keyword,
             maxTotalTime: searchCriteria.maxTotalTime,
             servings: searchCriteria.servings,
@@ -195,7 +195,7 @@ final class RecipeService {
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)/cookable",
             method: .get,
-            parameters: fetchTodayCookableList,
+            parameters: request,
             completion: completion)
     }
 }

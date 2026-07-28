@@ -34,5 +34,4 @@ class RecipeLikeService {
             method: .delete,
             completion: completion)
     }
-    
 }

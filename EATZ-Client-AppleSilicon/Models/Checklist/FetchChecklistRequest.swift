@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FetchChecklist: Encodable {
+struct FetchChecklistRequest: Encodable {
     let startDate: Date
     let endDate: Date
 }

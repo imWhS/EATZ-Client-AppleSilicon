@@ -36,11 +36,11 @@ final class UserPlanService {
         endDate: Date,
         completion: @escaping (Result<PlannedDateResponse, NetworkError>) -> Void)
     {
-        let fetchPlannedDates = FetchPlannedDates(startDate: startDate, endDate: endDate)
+        let request = FetchPlannedDatesRequest(startDate: startDate, endDate: endDate)
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)/recipes/\(recipeId)/dates",
             method: .get,
-            parameters: fetchPlannedDates,
+            parameters: request,
             completion: completion)
     }
     
@@ -58,11 +58,11 @@ final class UserPlanService {
         endDate: Date,
         completion: @escaping (Result<[PlannerPlan], NetworkError>) -> Void)
     {
-        let fetchPlans = FetchPlans(startDate: startDate, endDate: endDate)
+        let request = FetchPlansRequest(startDate: startDate, endDate: endDate)
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)",
             method: .get,
-            parameters: fetchPlans,
+            parameters: request,
             completion: completion)
     }
     
@@ -71,11 +71,11 @@ final class UserPlanService {
         endDate: Date,
         completion: @escaping (Result<Checklist, NetworkError>) -> Void
     ) {
-        let fetchChecklist = FetchChecklist(startDate: startDate, endDate: endDate)
+        let request = FetchChecklistRequest(startDate: startDate, endDate: endDate)
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)/checklist",
             method: .get,
-            parameters: fetchChecklist,
+            parameters: request,
             completion: completion)
     }
 }

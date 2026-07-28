@@ -33,7 +33,7 @@ final class RatingService {
         content: String,
         completion: @escaping (Result<Empty, NetworkError>) -> Void)
     {
-        let updateRating = UpdateRating(score: score, content: content)
+        let updateRating = UpdateRatingRequest(score: score, content: content)
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)/\(id)",
             method: .put,

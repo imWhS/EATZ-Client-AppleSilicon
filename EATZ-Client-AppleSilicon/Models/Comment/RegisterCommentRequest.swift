@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct RegisterComment : Encodable {
+struct RegisterCommentRequest : Encodable {
     let content: String
 }

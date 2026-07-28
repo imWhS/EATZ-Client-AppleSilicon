@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UpdateRating : Encodable {
+struct UpdateRatingRequest : Encodable {
     let score: Int
     let content: String
 }

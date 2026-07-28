@@ -167,7 +167,7 @@ extension CookableRecipeListViewModel {
         let requestID = recipesRequestId ?? UUID()
         recipesRequestId = requestID
         
-        RecipeService.shared.fetchTodayCookableList(searchCriteria: searchCriteria, sort: sort, size: 10, page: page) { [weak self] result in
+        RecipeService.shared.fetchCookableList(searchCriteria: searchCriteria, sort: sort, size: 10, page: page) { [weak self] result in
             guard let self = self else { completion(); return }
             
             DispatchQueue.main.async {

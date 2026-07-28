@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FetchTodayCookableList : Encodable {
+struct FetchCookableListRequest : Encodable {
     let keyword: String
     let maxTotalTime: Int?
     let servings: Int?

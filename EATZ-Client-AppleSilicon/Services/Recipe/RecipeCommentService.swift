@@ -20,11 +20,11 @@ final class RecipeCommentService {
         content: String,
         completion: @escaping (Result<Comment, NetworkError>) -> Void)
     {
-        let registerComment = RegisterComment(content: content)
+        let request = RegisterCommentRequest(content: content)
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)/\(id)/comments",
             method: .post,
-            parameters: registerComment,
+            parameters: request,
             completion: completion)
     }
 }

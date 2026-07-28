@@ -29,9 +29,7 @@ struct PlannerView: View {
         .onChange(of: authManager.state, isSessionExpired)
         .alert(
             alert?.title ?? "",
-            isPresented: Binding(
-                get: { self.alert != nil },
-                set: { isPresented in if (!isPresented) { self.alert = nil } }),
+            isPresented: Binding.init(isPresenting: $alert),
             presenting: alert,
             actions: { $0.actions },
             message: { $0.message })

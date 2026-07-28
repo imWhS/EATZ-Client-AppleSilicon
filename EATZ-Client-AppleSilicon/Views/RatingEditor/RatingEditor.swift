@@ -67,21 +67,10 @@ struct RatingEditor: View {
             }
             .alert(
                 viewModel.alert?.title ?? "",
-                isPresented: isAlertPresented,
+                isPresented: Binding.init(isPresenting: $viewModel.alert),
                 presenting: viewModel.alert,
                 actions: { $0.actions },
                 message: { $0.message })
-    }
-    
-    private var isAlertPresented: Binding<Bool> {
-        Binding(
-            get: { viewModel.alert != nil },
-            set: { isPresented in
-                DispatchQueue.main.async {
-                    if !isPresented { self.viewModel.alert = nil }
-                }
-            }
-        )
     }
     
     private var contentView: some View {

@@ -8,7 +8,6 @@
 import Foundation
 
 struct Author: Codable, Equatable, Hashable {
-    
     let id: Int64
     let username: String
     let imageUrl: String?
@@ -18,5 +17,4 @@ struct Author: Codable, Equatable, Hashable {
     func toUserEssential() -> UserEssential {
         return UserEssential(id: id, username: username, imageUrl: imageUrl)
     }
-    
 }

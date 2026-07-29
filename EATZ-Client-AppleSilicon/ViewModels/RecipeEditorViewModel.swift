@@ -220,7 +220,7 @@ extension RecipeEditorViewModel {
         
         Task {
             do {
-                let uiImage = try await PhotosPickerItemUtility.toUIImage(for: item)
+                let uiImage = try await PhotosPickerItemUtil.toUIImage(for: item)
                 let resizedUiImage = uiImage.resized(maxDimension: 1024.0) ?? uiImage
                 guard let jpegData = resizedUiImage.jpegData(compressionQuality: 0.8) else { return }
                 DispatchQueue.main.async {

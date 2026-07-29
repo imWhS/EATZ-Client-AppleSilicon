@@ -34,6 +34,13 @@ struct AuthView: View {
     /// 로그인 취소(dismiss 액션 실행) 시 호출해야 할 클로저입니다.
     private let onDismiss: () -> Void
     
+    private var legalNoticeLabel: String {
+        return
+            "이메일 주소로 가입한 계정에 로그인합니다. 이메일 주소로 가입한 계정이 없으면 가입을 진행합니다. " +
+            "또한, 시작함으로써 **[이용 약관 및 정책](\(EatzLinks.termsOfServiceString))**, " +
+            "그리고 [개인 정보 처리 방침](\(EatzLinks.privacyPolicyString))에 동의하는 것으로 간주합니다."
+    }
+    
     init(context: AuthContext, onLogInSuccess: @escaping (String, CurrentUser) -> Void, onDismiss: @escaping () -> Void) {
         self._viewModel = StateObject(wrappedValue: AuthViewModel(onLogInSuccess: onLogInSuccess))
         self.context = context
@@ -131,9 +138,10 @@ struct AuthView: View {
     private var legalNoticeView: some View {
         VStack(spacing: 0) {
             HorizontalDivider()
-            Text("이메일 주소로 가입한 계정에 로그인합니다. 이메일 주소로 가입한 계정이 없으면 가입을 진행합니다. 또한, 시작함으로써 이용 약관 및 개인 정보 처리 방침에 동의하는 것으로 간주합니다.")
+            Text(LocalizedStringKey(legalNoticeLabel))
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(Color.gray15)
+                .tint(Color.accent)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(20)

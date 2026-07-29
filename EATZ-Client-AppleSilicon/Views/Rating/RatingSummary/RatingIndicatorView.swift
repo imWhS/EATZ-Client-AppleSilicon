@@ -15,15 +15,15 @@ struct RatingIndicatorView: View {
             switch state {
             case .initialLoading:
                 VStack(spacing: 20) {
-                    RatingSummaryAverageView(isPlaceholder: true)
-                    RatingSummaryDistributionView(isPlaceholder: true)
+                    RatingIndicatorAverageView(isPlaceholder: true)
+                    RatingIndicatorDistributionView(isPlaceholder: true)
                 }
             case .loaded(let summary):
                 VStack(spacing: 20) {
-                    RatingSummaryAverageView(
+                    RatingIndicatorAverageView(
                         averageScore: summary.summary.averageScore,
                         count: summary.summary.count)
-                    RatingSummaryDistributionView(distribution: RatingIndicatorScoresDistribution(
+                    RatingIndicatorDistributionView(distribution: RatingIndicatorScoresDistribution(
                         countScore5: summary.scoresDistribution.countScore5,
                         countScore4: summary.scoresDistribution.countScore4,
                         countScore3: summary.scoresDistribution.countScore3,

@@ -37,8 +37,8 @@ struct DynamicHeightTextView: View {
         placeholder: String = "탭해서 입력",
         minHeight: CGFloat? = nil,
         maxHeight: CGFloat = 120,
-        font: UIFont = .systemFont(ofSize: 17, weight: .regular), // 폰트도 외부에서 지정 가능
-        padding: EdgeInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8),
+        font: UIFont = .systemFont(ofSize: 17, weight: .regular),
+        padding: EdgeInsets = .init(top: 16, leading: 16, bottom: 16, trailing: 16),
         cornerRadius: CGFloat = 12,
         stroke: Color = Color(uiColor: .systemGray5),
         strokeHighlighted: Color = Color.accentColor,
@@ -72,7 +72,6 @@ struct DynamicHeightTextView: View {
         _UITextView(
             text: $text,
             height: $height,
-//            isFocused: externalFocus ?? $internalFocus,
             placeholder: placeholder,
             font: self.font,
             keyboardType: keyboardType,

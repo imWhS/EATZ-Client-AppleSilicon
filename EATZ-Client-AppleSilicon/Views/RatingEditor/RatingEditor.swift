@@ -18,7 +18,7 @@ struct RatingEditor: View {
     private let recipeId: Int64
     private let mode: RatingEditorMode
     private let onSubmitCompleted: () -> Void
-    private let textViewScrollID = "textViewBottom"
+    private let textViewScrollId = "textViewBottom"
     
     init(recipeId: Int64, mode: RatingEditorMode, onSubmitCompleted: @escaping () -> Void = {}) {
         self.recipeId = recipeId
@@ -36,6 +36,7 @@ struct RatingEditor: View {
                 case .unauthorized: CommonUnauthorizedStateView()
                 }
             }
+            .background(Color.backgroundPrimary)
             .navigationTitle(viewModel.navigationTitleLabel)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -77,25 +78,29 @@ struct RatingEditor: View {
         ScrollViewReader { proxy in
             ScrollView(.vertical) {
                 VStack(spacing: 28) {
-                    if let recipeEssential = viewModel.recipeEssential {
-                        RatingEditorHeader(recipeEssential: recipeEssential)
-                        HorizontalDivider()
-                    }
+                    headerSection
                     RatingEditorDraftView(
                         score: $viewModel.currentDraft.score,
                         content: $viewModel.currentDraft.content,
                         submissionState: $viewModel.submissionState,
                         isContentFocused: _isContentFocused,
-                        textViewScrollID: self.textViewScrollID)
+                        textViewScrollId: textViewScrollId)
                 }
                 .padding(.vertical, 28)
-                .background(Color.backgroundPrimary)
             }
             .onChange(of: viewModel.currentDraft.content) {
                 withAnimation {
-                    proxy.scrollTo(textViewScrollID, anchor: .bottom)
+                    proxy.scrollTo(textViewScrollId, anchor: .bottom)
                 }
             }
+        }
+    }
+    
+    @ViewBuilder
+    private var headerSection: some View {
+        if let recipeEssential = viewModel.recipeEssential {
+            RatingEditorHeader(recipeEssential: recipeEssential)
+            HorizontalDivider()
         }
     }
     

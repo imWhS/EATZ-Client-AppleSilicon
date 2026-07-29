@@ -76,8 +76,8 @@ struct CommentEditor: View {
                 DynamicHeightTextView(
                     text: $viewModel.editingContent,
                     placeholder: "탭해서 댓글 내용 입력",
-                    minHeight: 32,
-                    padding: .init(),
+                    minHeight: 28,
+                    padding: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0),
                     cornerRadius: 0,
                     stroke: .clear,
                     strokeHighlighted: .clear,

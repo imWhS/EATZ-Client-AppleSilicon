@@ -18,7 +18,7 @@ struct SquareHighlightButtonStyle: ButtonStyle {
             configuration.label
                 .background(
                     RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(isPressed ? Color.init(hex: "ECECEC") : Color.clear)
+                        .fill(isPressed ? Color.buttonSecondary : Color.clear)
                 )
                 .cornerRadius(isPressed ? cornerRadius : 0)
                 .contentShape(Rectangle())

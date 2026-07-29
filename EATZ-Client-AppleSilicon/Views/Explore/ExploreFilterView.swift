@@ -77,7 +77,7 @@ private struct ExploreFilterButton: View {
                 }
                 Text(subtitle)
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.init(hex: "C2C2C2"))
+                    .foregroundStyle(Color.gray35)
             }
             .padding(10)
             .frame(maxWidth: .infinity)

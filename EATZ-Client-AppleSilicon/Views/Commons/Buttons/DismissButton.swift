@@ -19,7 +19,7 @@ struct DismissButton: View {
                 .frame(width: 14, height: 14)
         }
         .frame(width: 32, height: 32)
-        .background(Color.init(hex: "ECECEC"))
+        .background(Color.buttonSecondary)
         .clipShape(Circle())
         .buttonStyle(PlainButtonStyle())
         .opacity(isPressed ? 0.4 : 1)

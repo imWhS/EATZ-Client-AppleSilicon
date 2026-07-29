@@ -63,16 +63,28 @@ private struct LikedIngredientList: View {
     let onAction: (IngredientItemAction) -> Void
     let onLoadMore: () -> Void
     
+    private var totalElementsLabel: String {
+        if pagedIngredients.totalElements > 0 { return "\(pagedIngredients.totalElements)개의 재료" }
+        else { return "재료" }
+    }
+    
     var body: some View {
         ScrollView {
-            LazyVStack(spacing: 8) {
-                ForEach(pagedIngredients.items) { ingredient in
-                    IngredientItem<EmptyView>(
-                        ingredient,
-                        onAction: onAction
-                    )
+            VStack(alignment: .leading, spacing: 0) {
+                Text(totalElementsLabel)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(Color.gray20)
+                    .padding(.leading, 20)
+                    .padding(.vertical, 20)
+                LazyVStack(spacing: 8) {
+                    ForEach(pagedIngredients.items) { ingredient in
+                        IngredientItem<EmptyView>(
+                            ingredient,
+                            onAction: onAction
+                        )
+                    }
+                    ListPageTailView(hasNextPage: pagedIngredients.hasNextPage, onAppearAction: onLoadMore)
                 }
-                ListPageTailView(hasNextPage: pagedIngredients.hasNextPage, onAppearAction: onLoadMore)
             }
         }
     }

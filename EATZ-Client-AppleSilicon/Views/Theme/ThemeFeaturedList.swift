@@ -41,7 +41,7 @@ struct ThemeFeaturedList: View {
     private var tagNameText: some View {
         Text(theme.name)
             .font(.system(size: 14))
-            .foregroundStyle(Color.init(hex: "606060"))
+            .foregroundStyle(Color.gray60)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, horizontalPadding)
     }

@@ -48,7 +48,7 @@ struct PlannerChecklistBanner: View {
                     .foregroundStyle(Color.black)
                 Text("레시피를 요리하기 위해 필요한 항목 확인하기")
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.init(hex: "A1A1A1"))
+                    .foregroundStyle(Color.gray35)
             }
             Spacer()
             checklistButton
@@ -73,7 +73,7 @@ struct PlannerChecklistBanner: View {
             Text("플래너의 특정 날짜 또는 원하는 기간에 플랜으로 추가한 모든 레시피를 요리하기 위해 필요한 재료와 도구를 체크리스트로 확인할 수 있어요.")
                 .font(.system(size: 12, weight: .medium))
                 .multilineTextAlignment(.center)
-                .foregroundStyle(Color.init(hex: "A1A1A1"))
+                .foregroundStyle(Color.gray35)
         }
         .padding(.horizontal, 20)
     }

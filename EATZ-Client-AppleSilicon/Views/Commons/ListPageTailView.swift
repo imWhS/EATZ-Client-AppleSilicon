@@ -32,7 +32,7 @@ struct ListPageTailView: View {
     private func labelView(text: String) -> some View {
         Text(text)
             .font(.system(size: 12, weight: .medium))
-            .foregroundStyle(Color.init(hex: "C5C5C5"))
+            .foregroundStyle(Color.gray25)
     }
 }
 

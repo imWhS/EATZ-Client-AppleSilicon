@@ -53,7 +53,7 @@ struct RecipeBasicItem<MenuContent: View>: View {
                     ProgressView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-                .background(Color.init(hex: "ECECEC"))
+                .background(Color.buttonSecondary)
             }
             .frame(width: 96, height: 96)
     }

@@ -53,14 +53,14 @@ enum PlannerPeriodIndicatorStyle {
     
     var dateViewBackground: Color {
         switch self {
-        case .interactive: Color.init(hex: "E8E8E8")
+        case .interactive: Color.gray8
         case .plain: Color.white
         }
     }
     var dateViewBorderColor: Color {
         switch self {
-        case .interactive: Color.init(hex: "E8E8E8")
-        case .plain: Color.init(hex: "E0E0E0")
+        case .interactive: Color.gray8
+        case .plain: Color.gray15
         }
     }
 }

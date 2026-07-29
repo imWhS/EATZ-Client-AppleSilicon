@@ -28,7 +28,7 @@ struct MyRecipesView: View {
                     footer: {
                         Text("새 레시피를 등록해볼까요?")
                             .font(.system(size: 12, weight: .medium))
-                            .foregroundStyle(Color.init(hex: "A1A1A1"))
+                            .foregroundStyle(Color.gray35)
                     }
                 )
             },
@@ -44,6 +44,7 @@ struct MyRecipesView: View {
                 )
             }
         )
+        .background(Color.backgroundPrimary)
         .alert(item: $alert) { $0.alert }
         .sheet(item: $sheet, content: buildSheet)
         .fullScreenCover(

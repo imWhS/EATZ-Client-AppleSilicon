@@ -101,7 +101,7 @@ struct PlannerRecipePicker: View {
             description: "원하는 레시피의 키워드를 입력하세요.")
         } else {
             switch viewModel.searchState {
-            case .searching: LoadingCurtain(title: "레시피를 검색하고 있어요...")
+            case .searching: LoadingCurtain(title: "레시피를 찾고 있어요...")
             case .searched: PlannerRecipePickerRecipeList(
                 headerTitle: "검색 결과",
                 pagedRecipes: viewModel.pagedSearchedRecipes,
@@ -110,7 +110,7 @@ struct PlannerRecipePicker: View {
             case .empty:
                 Curtain(
                 title: "원하는 레시피가 없어요.",
-                description: "'\(viewModel.keyword)'에 해당하는 레시피를 하나도 찾지 못했어요.\n다른 키워드로 다시 검색해보세요."
+                description: "'\(viewModel.keyword)' 관련 레시피를 하나도 찾지 못했어요.\n다른 키워드로 다시 검색해보세요."
                 )
             case .error(let message): ErrorCurtain(message)
             }
@@ -149,7 +149,7 @@ private struct PlannerRecipePickerRecipeList: View {
         HStack {
             Text(headerTitle)
                 .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(Color.init(hex: "C2C2C2"))
+                .foregroundStyle(Color.gray20)
                 .padding(.leading, 20)
             Spacer()
         }

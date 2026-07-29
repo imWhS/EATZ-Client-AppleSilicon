@@ -40,7 +40,7 @@ struct UserBlockShowLearnMoreView: View {
                     .font(.system(size: 17, weight: .semibold))
                 Text(subtitleLabel)
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.init(hex: "A1A1A1"))
+                    .foregroundStyle(Color.gray35)
             }
             .opacity(showNavigationBarTitle ? 1 : 0)
         }
@@ -71,7 +71,7 @@ struct UserBlockShowLearnMoreView: View {
                 Text(subtitleLabel)
                     .font(.system(size: 17, weight: .medium))
                     .multilineTextAlignment(.center)
-                    .foregroundStyle(Color.init(hex: "A1A1A1"))
+                    .foregroundStyle(Color.gray35)
             }
             .padding(20)
         }

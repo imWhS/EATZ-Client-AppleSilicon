@@ -86,7 +86,7 @@ struct TagAdditionView: View {
         case .searchedEmpty(let keyword):
             Curtain(
                 title: "원하는 태그가 없어요.",
-                description: "'\(keyword)'에 해당하는 재료를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요.")
+                description: "'\(keyword)' 관련 재료를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요.")
         case .error(let message): ErrorCurtain(message)
         }
     }

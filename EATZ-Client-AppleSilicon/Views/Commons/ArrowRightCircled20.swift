@@ -14,7 +14,7 @@ struct ArrowRightCircled20: View {
                 .foregroundStyle(Color.accentColor)
         }
         .frame(width: 20, height: 20)
-        .background(Color.init(hex: "ECECEC"))
+        .background(Color.buttonSecondary)
         .cornerRadius(9)
     }
 }

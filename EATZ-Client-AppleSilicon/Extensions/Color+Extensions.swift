@@ -11,6 +11,16 @@ extension Color {
     static let auth = Color("auth")
     static let rating = Color("Colors/rating")
     static let backgroundPrimary = Color("Colors/backgroundPrimary")
+    static let buttonSecondary = Color("Colors/buttonSecondary")
+    static let gray60 = Color("Colors/gray60")
+    static let gray50 = Color("Colors/gray50")
+    static let gray35 = Color("Colors/gray35")
+    static let gray25 = Color("Colors/gray25")
+    static let gray20 = Color("Colors/gray20")
+    static let gray15 = Color("Colors/gray15")
+    static let gray8 = Color("Colors/gray8")
+    static let gray4 = Color("Colors/gray4")
+    static let gray2 = Color("Colors/gray2")
 }
 
 extension Color {

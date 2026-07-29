@@ -16,7 +16,7 @@ struct OpenSourceLicenseView: View {
             }
             .frame(maxWidth: .infinity)
         }
-        .background(Color(hex: "F9F9F9").ignoresSafeArea())
+        .background(Color.backgroundPrimary.ignoresSafeArea())
         .navigationTitle("Open Source License")
     }
     

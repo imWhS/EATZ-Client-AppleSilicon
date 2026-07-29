@@ -50,7 +50,7 @@ struct ExploreSearchBar: View {
                     if !isSearchMode && keyword.isEmpty {
                         Text(themeNameLabel)
                             .font(.system(size: 17, weight: .semibold))
-                            .foregroundStyle(isFocused ? Color.init(hex: "707070") : .black )
+                            .foregroundStyle(isFocused ? Color.gray60 : .black )
                             .transition(.opacity)
                     }
                     TextField("", text: $keyword)
@@ -59,7 +59,7 @@ struct ExploreSearchBar: View {
                 }
                 Text("목록에서 검색")
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(isFocused ? Color.init(hex: "707070") : .black )
+                    .foregroundStyle(isFocused ? Color.gray60 : .black )
             }
         }
     }
@@ -112,7 +112,7 @@ struct ExploreSearchBar: View {
             .foregroundStyle(theme != nil ? Color.white : Color.accentColor)
             .frame(maxHeight: 34)
             .frame(minWidth: 34)
-            .background(theme != nil ? Color.accentColor : Color.init(hex: "ECECEC"))
+            .background(theme != nil ? Color.accentColor : Color.buttonSecondary)
             .clipShape(Capsule())
             .padding(.trailing, 16)
         }

@@ -13,7 +13,7 @@ enum IngredientRowAppearance {
     
     var background: Color {
         switch self {
-        case .filled: .init(hex: "F8F8F8")
+        case .filled: .gray2
         case .outlined: .clear
         }
     }
@@ -59,7 +59,11 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
         .frame(minHeight: 48)
         .background(appearance.background)
         .cornerRadius(14)
-        .border(color: appearance.borderColor, width: 1, radius: 14)
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .stroke(appearance.borderColor, lineWidth: 1)
+        )
+        .padding(.vertical, 0.5)
     }
     
     @ViewBuilder

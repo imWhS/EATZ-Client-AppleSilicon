@@ -19,7 +19,7 @@ struct ChecklistAddRequirementButton: View {
             }
             .padding(.horizontal, 9)
             .padding(.vertical, 6)
-            .background(Color.init(hex: "ECECEC"))
+            .background(Color.buttonSecondary)
             .cornerRadius(6)
         }
     }

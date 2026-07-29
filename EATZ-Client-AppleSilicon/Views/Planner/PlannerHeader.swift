@@ -43,7 +43,7 @@ struct PlannerHeader: View {
     }
     
     private var headerBackgroundGradient: LinearGradient {
-        let gradientColor = Color(hex: "F9F9F9")
+        let gradientColor = Color.backgroundPrimary
         
         return LinearGradient(
             gradient: Gradient(stops: [
@@ -89,7 +89,7 @@ struct PlannerHeader: View {
                     .foregroundStyle(Color.black)
             }
                 .frame(width: 70, height: 70)
-                .background(Color.init(hex: "E8E8E8"))
+                .background(Color.gray8)
                 .cornerRadius(35)
         )
     }

@@ -33,10 +33,10 @@ struct ChecklistPlanItem: View {
                     VStack(spacing: 0) {
                         Text(plan.scheduledAt.formattedMonth)
                             .font(.system(size: 10, weight: .medium))
-                            .foregroundStyle(Color.init(hex: "8B8B8B"))
+                            .foregroundStyle(Color.gray35)
                         Text(plan.scheduledAt.formattedDay)
                             .font(.system(size: 15, weight: .semibold))
-                            .foregroundStyle(Color.init(hex: "8B8B8B"))
+                            .foregroundStyle(Color.gray35)
                     }
                     .frame(maxWidth: cardWidth / 3.4, maxHeight: cardWidth / 3.4)
                     .background(Color.white)

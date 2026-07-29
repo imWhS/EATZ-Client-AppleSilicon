@@ -14,7 +14,7 @@ struct SortButtonStyle: ButtonStyle {
             .foregroundStyle(Color.accentColor)
             .frame(height: 30)
             .padding(.horizontal, 10)
-            .background(configuration.isPressed ? Color.init(hex: "ECECEC") : .clear)
+            .background(configuration.isPressed ? Color.buttonSecondary : .clear)
             .cornerRadius(14)
             .scaleEffect(configuration.isPressed ? 0.965 : 1.0)
             .opacity(configuration.isPressed ? 0.5 : 1.0)

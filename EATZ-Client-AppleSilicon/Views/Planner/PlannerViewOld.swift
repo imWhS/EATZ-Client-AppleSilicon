@@ -51,7 +51,7 @@ struct PlannerViewOld: View {
                 isDisabled: (viewModel.viewState == .unauthorized),
                 onShowCalendar: { viewModel.sheet = .calendar })
         }
-        .background(Color(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
     }
     
     @ViewBuilder

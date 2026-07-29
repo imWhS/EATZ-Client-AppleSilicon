@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct FloatingTitleSecureField: View {
-    
     let title: String
     let placeholder: String?
     @Binding var text: String
@@ -20,7 +19,7 @@ struct FloatingTitleSecureField: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
                 .font(Font.system(size: 12, weight: .semibold))
-                .foregroundStyle(isFocused ? Color.accentColor : Color.init(hex: "CBCBCB"))
+                .foregroundStyle(isFocused ? Color.accentColor : Color.gray25)
                 .alignmentGuide(.firstTextBaseline) { _ in 0 }
             SecureField(placeholder ?? "", text: $text)
                 .font(Font.system(size: 17, weight: .medium))
@@ -36,7 +35,7 @@ struct FloatingTitleSecureField: View {
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(isFocused ? Color.accentColor : Color.init(hex: "EEEEEE"), lineWidth: 1)
+                .stroke(isFocused ? Color.accentColor : Color.gray8, lineWidth: 1)
         )
         .onTapGesture {
             isFocused = true

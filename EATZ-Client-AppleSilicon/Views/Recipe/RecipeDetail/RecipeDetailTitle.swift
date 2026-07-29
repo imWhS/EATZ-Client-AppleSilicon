@@ -18,7 +18,7 @@ struct RecipeDetailTitle: View {
         HStack {
             Text(title)
                 .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(Color(hex: "BCBCBC"))
+                .foregroundStyle(Color.gray20)
             Spacer()
         }
         .padding(.horizontal, 20)

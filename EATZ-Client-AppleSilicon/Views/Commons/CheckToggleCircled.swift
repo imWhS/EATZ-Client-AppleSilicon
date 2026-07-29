@@ -16,7 +16,7 @@ struct CheckToggleCircled: View {
         }
         .frame(width: 26, height: 26)
         .foregroundStyle(isToggled ? Color.white : Color.init(hex: "76BD2F"))
-        .background(Color.init(hex: isToggled ? "76BD2F" : "ECECEC"))
+        .background(isToggled ? Color.init(hex:"76BD2F") : Color.gray8)
         .cornerRadius(13)
     }
 }

@@ -29,22 +29,35 @@ struct ExploreIngredientsList: View {
         VStack(spacing: 0) {
             searchResultHeader
             switch searchState {
-            case .searching: LoadingCurtain(title: "재료를 검색하고 있어요...")
+            case .searching: LoadingCurtain(title: "재료를 찾고 있어요...")
             case .searched: searchResultView
             case .error(let message): ErrorCurtain(message)
             case .empty:
                 Curtain(
                     title: "원하는 재료가 없어요.",
-                    description: "'\(viewModel.searchKeyword)'에 해당하는 재료를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요.")
+                    description: "'\(viewModel.searchKeyword)' 관련 재료를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요.")
             }
         }
     }
     
+    private var searchSubtitleLabel: String {
+        if viewModel.searchKeyword.isEmpty {
+            return ""
+        } else {
+            return "'\(viewModel.searchKeyword)' 관련 재료 찾는 중"
+        }
+    }
+    
     private var searchResultHeader: some View {
-        VStack {
-            Text("재료 검색")
-                .font(.headline)
-                .padding(12)
+        VStack(spacing: 0) {
+            VStack(spacing: 2) {
+                Text("재료 검색")
+                    .font(.system(size: 17, weight: .semibold))
+                Text(searchSubtitleLabel)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color.gray35)
+            }
+            .padding(20)
             HorizontalDivider()
         }
     }
@@ -94,7 +107,7 @@ struct ExploreIngredientsList: View {
             Text("재료 및 하위 재료를 탐색하거나, 원하는 재료를 검색해보세요. 자주 찾는 재료에 좋아요를 표시하고, 가지고 있는 재료를 보관함에 추가해보세요.")
                 .font(.system(size: 14, weight: .medium))
                 .multilineTextAlignment(.center)
-                .foregroundStyle(Color.init(hex: "A1A1A1"))
+                .foregroundStyle(Color.gray35)
         }
         .padding(20)
     }

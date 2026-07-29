@@ -61,6 +61,28 @@ struct IngredientAdditionView: View {
         }
     }
     
+    private var searchSubtitleLabel: String {
+        if viewModel.searchKeyword.isEmpty {
+            return ""
+        } else {
+            return "'\(viewModel.searchKeyword)' 관련 재료 찾는 중"
+        }
+    }
+    
+    private var searchResultHeader: some View {
+        VStack(spacing: 0) {
+            VStack(spacing: 2) {
+                Text("재료 검색")
+                    .font(.system(size: 17, weight: .semibold))
+                Text(searchSubtitleLabel)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color.gray35)
+            }
+            .padding(20)
+            HorizontalDivider()
+        }
+    }
+    
     private var dismissToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
             Button {

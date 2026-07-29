@@ -27,6 +27,7 @@ struct SelectedIngredientItem: View {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color.black.opacity(0.075), lineWidth: 1)
             )
+            .padding(.vertical, 0.5)
         }
         .buttonStyle(.plain)
     }

@@ -22,7 +22,7 @@ struct ThemeFeaturedItem: View {
                 } else {
                     Text(String(theme.name.prefix(1)))
                         .font(.system(size: 24, weight: .semibold))
-                        .foregroundStyle(Color.init(hex: "D2D2D2"))
+                        .foregroundStyle(Color.gray20)
                 }
                 Text(theme.name)
                     .font(.system(size: 14, weight: .semibold))
@@ -32,7 +32,7 @@ struct ThemeFeaturedItem: View {
             }
             .padding(.horizontal, 14)
             .frame(width: width, height: 74)
-            .background(Color.init(hex: "ECECEC"))
+            .background(Color.buttonSecondary)
         }
         .buttonStyle(ScaleDownButtonStyle(cornerRadius: 12))
     }

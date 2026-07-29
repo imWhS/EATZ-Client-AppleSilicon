@@ -69,7 +69,7 @@ struct TotalTimePicker: View {
             Spacer()
             Text("소요 시간은 요리 시간에 준비 시간을 더한 시간이에요.")
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color.init(hex: "8F8F8F"))
+                .foregroundStyle(Color.gray35)
             
             Button(action: {
                 onComplete(nil)

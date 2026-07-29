@@ -31,7 +31,7 @@ struct BasicTextEditor: View {
                 .cornerRadius(12)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(isFocused ? Color.accentColor : Color(hex: "EEEEEE"), lineWidth: 1)
+                        .stroke(isFocused ? Color.accentColor : Color.gray4, lineWidth: 1)
                 )
             if text.isEmpty, let placeholder = placeholder {
                 Text(placeholder)

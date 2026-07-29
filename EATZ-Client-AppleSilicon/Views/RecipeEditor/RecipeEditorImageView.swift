@@ -31,7 +31,7 @@ struct RecipeEditorImageView: View {
                 KFImage(URL(imageUrlString: imageUrl))
                     .placeholder {
                         ProgressView("대표 사진을 불러오고 있어요...")
-                            .foregroundStyle(Color.init(hex: "BEBEB9"))
+                            .foregroundStyle(Color.gray20)
                     }
                     .resizable()
             }

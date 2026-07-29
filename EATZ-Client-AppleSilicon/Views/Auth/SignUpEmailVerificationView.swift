@@ -70,7 +70,7 @@ struct SignUpEmailVerificationView: View {
                 }
                 .font(Font.system(size: 14, weight: .medium))
                 .multilineTextAlignment(.center)
-                .foregroundStyle(Color.init(hex: "A5A5A5"))
+                .foregroundStyle(Color.gray35)
                 .lineLimit(nil)
                 .padding(.horizontal, 20)
                 .fixedSize(horizontal: false, vertical: true)
@@ -101,7 +101,7 @@ struct SignUpEmailVerificationView: View {
             }
             .font(.system(size: 12, weight: .medium))
             .multilineTextAlignment(.center)
-            .foregroundStyle(Color.init(hex: "A5A5A5"))
+            .foregroundStyle(Color.gray35)
         }
         
         @ViewBuilder
@@ -110,7 +110,7 @@ struct SignUpEmailVerificationView: View {
                 Text("인증 코드는 이메일 주소 당 하루에 최대 \(dailyLimits)번까지 만들 수 있어요.")
                     .font(.system(size: 12, weight: .medium))
                     .multilineTextAlignment(.center)
-                    .foregroundStyle(Color.init(hex: "A5A5A5"))
+                    .foregroundStyle(Color.gray35)
             } else {
                 EmptyView()
             }

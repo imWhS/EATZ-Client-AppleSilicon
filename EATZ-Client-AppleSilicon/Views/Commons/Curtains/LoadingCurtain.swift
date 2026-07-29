@@ -22,17 +22,16 @@ struct LoadingCurtain: View {
                     Text(title)
                         .font(.system(size: 17, weight: .semibold))
                         .multilineTextAlignment(.center)
-                        .foregroundStyle(Color.init(hex: "8B8B8B"))
+                        .foregroundStyle(Color.gray35)
                         .fixedSize(horizontal: false, vertical: true)
                     Text("잠시만 기다려주세요...")
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(Color.init(hex: "A1A1A1"))
+                        .foregroundStyle(Color.gray35)
                 }
             }
             Spacer()
         }
         .padding(20)
-        .background(Color.backgroundPrimary)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

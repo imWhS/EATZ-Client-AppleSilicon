@@ -15,7 +15,7 @@ struct ArrowDownCircled20: View {
                 .offset(y: 1)
         }
         .frame(width: 20, height: 20)
-        .background(Color.init(hex: "ECECEC"))
+        .background(Color.buttonSecondary)
         .cornerRadius(9)
     }
 }

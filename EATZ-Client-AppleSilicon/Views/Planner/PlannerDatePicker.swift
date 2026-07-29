@@ -49,7 +49,7 @@ struct PlannerDatePicker: View {
     private var viewStateContent: some View {
         Group {
             switch viewModel.viewState {
-            case .loading: LoadingCurtain(title: "회원님의 플래너를 불러오고 있어요...")
+            case .loading: LoadingCurtain(title: "회원님의 플랜들을 불러오고 있어요...")
             case .loaded: mainContent
             case .unauthorized: CommonUnauthorizedStateView()
             case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
@@ -71,7 +71,7 @@ struct PlannerDatePicker: View {
             Text("레시피를 플래너에 추가할 날짜를 탭하세요. 레시피가 해당 날짜의 플랜으로 추가돼요.")
                 .font(.system(size: 14, weight: .medium))
                 .multilineTextAlignment(.center)
-                .foregroundStyle(Color.init(hex: "A1A1A1"))
+                .foregroundStyle(Color.gray35)
         }
         .padding(.vertical, 20)
     }

@@ -78,7 +78,7 @@ private struct ResetPasswordSetupView: View {
                 }
                 .font(Font.system(size: 14, weight: .medium))
                 .multilineTextAlignment(.center)
-                .foregroundStyle(Color.init(hex: "A5A5A5"))
+                .foregroundStyle(Color.gray35)
                 .lineLimit(nil)
                 .padding(.horizontal, 20)
                 .fixedSize(horizontal: false, vertical: true)

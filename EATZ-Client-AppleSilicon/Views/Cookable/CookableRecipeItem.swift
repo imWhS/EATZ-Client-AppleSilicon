@@ -74,7 +74,7 @@ struct CookableRecipeItem: View {
                     HStack(spacing: 4) {
                         Image("info-14")
                         Text("부족한 도구 수")
-                            .foregroundStyle(Color.init(hex: "A1A1A1"))
+                            .foregroundStyle(Color.gray35)
                             .font(.system(size: 12, weight: .medium))
                         Text("\(missingKitchenwareCount)개")
                             .foregroundStyle(Color.black)
@@ -86,7 +86,7 @@ struct CookableRecipeItem: View {
                     HStack(spacing: 4) {
                         Image("info-14")
                         Text("부족한 재료 수")
-                            .foregroundStyle(Color.init(hex: "A1A1A1"))
+                            .foregroundStyle(Color.gray35)
                             .font(.system(size: 12, weight: .medium))
                         Text("\(missingIngredientCount)개")
                             .foregroundStyle(Color.black)

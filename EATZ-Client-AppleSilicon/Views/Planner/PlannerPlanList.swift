@@ -87,14 +87,14 @@ private struct PlannerPlanListGuideView: View {
             if let title = title {
                 Text(title)
                     .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(Color.init(hex: "777777"))
+                    .foregroundStyle(Color.gray35)
             }
             
             Text(subtitle)
                 .font(.system(size: 12, weight: .medium))
                 .multilineTextAlignment(.center)
                 .lineLimit(nil)
-                .foregroundStyle(Color.init(hex: "BEBEB9"))
+                .foregroundStyle(Color.gray20)
         }
         .padding(20)
         .frame(maxWidth: .infinity)
@@ -136,7 +136,7 @@ private struct PlannerPlanListFooterView: View {
             if Calendar.current.isDateInToday(date) {
                 Text("오늘")
                     .font(.system(size: 17, weight: .medium))
-                    .foregroundStyle(Color.init(hex: "A5A5A5"))
+                    .foregroundStyle(Color.gray35)
             }
             Spacer()
         }
@@ -151,7 +151,7 @@ private struct PlannerPlanListFooterView: View {
                 Text(itemCountLabel)
             }
             .font(.system(size: 12, weight: .medium))
-            .foregroundStyle(Color.init(hex: "A5A5A5"))
+            .foregroundStyle(Color.gray35)
             
             Spacer()
         }

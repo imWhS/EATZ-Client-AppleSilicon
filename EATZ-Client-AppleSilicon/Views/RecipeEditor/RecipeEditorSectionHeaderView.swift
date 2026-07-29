@@ -30,7 +30,7 @@ struct RecipeEditorSectionHeaderView: View {
                 HStack {
                     Text(description)
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(Color.init(hex: "BEBEB9"))
+                        .foregroundStyle(Color.gray35)
                         .multilineTextAlignment(.leading)
                     Spacer()
                 }

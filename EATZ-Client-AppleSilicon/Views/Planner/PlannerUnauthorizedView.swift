@@ -26,7 +26,7 @@ struct PlannerUnauthorizedView: View {
                 Text("요리하고 싶은 레시피를 플래너의 원하는 날짜에 추가할 수 있어요. 플래너에 추가한 레시피를 요리하기 위해 필요한 재료와 도구를 체크리스트로 정리해드려요.")
                     .font(.system(size: 17, weight: .medium))
                     .multilineTextAlignment(.center)
-                    .foregroundStyle(Color.init(hex: "A1A1A1"))
+                    .foregroundStyle(Color.gray35)
             }
             .padding(20)
             Spacer()
@@ -44,7 +44,7 @@ struct PlannerUnauthorizedView: View {
                 Text("로그인 또는 가입 후 계속 진행할 수 있어요.")
                     .font(.system(size: 12, weight: .medium))
                     .multilineTextAlignment(.center)
-                    .foregroundStyle(Color.init(hex: "A1A1A1"))
+                    .foregroundStyle(Color.gray35)
             }
             .padding(20)
         }

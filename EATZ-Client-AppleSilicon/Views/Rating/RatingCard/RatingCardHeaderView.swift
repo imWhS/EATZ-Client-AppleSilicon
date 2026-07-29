@@ -39,7 +39,7 @@ struct RatingCardHeaderView: View {
                         Text("\(score)점")
                     }
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.init(hex: "A5A5A5"))
+                    .foregroundStyle(Color.gray35)
                 }
                 .font(.system(size: 12))
             }

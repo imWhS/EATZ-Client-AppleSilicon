@@ -106,7 +106,7 @@ private struct CookableButtonDescriptionsView: View {
                 .foregroundStyle(Color.black)
             Text(subtitleLabel)
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color.init(hex: "C2C2C2"))
+                .foregroundStyle(Color.gray35)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -218,7 +218,7 @@ struct CookableButtonHighlightStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .background(
-                Color.init(hex: "ECECEC").opacity(configuration.isPressed ? 1 : 0)
+                Color.buttonSecondary.opacity(configuration.isPressed ? 1 : 0)
             )
             .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
             .cornerRadius(18)

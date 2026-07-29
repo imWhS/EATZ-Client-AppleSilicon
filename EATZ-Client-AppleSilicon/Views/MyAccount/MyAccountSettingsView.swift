@@ -88,13 +88,13 @@ struct MyAccountSettingsView: View {
                             .font(.system(size: 10, weight: .medium))
                         }
                     }
-                    .foregroundStyle(Color.init(hex: "BEBEB9"))
-                    .tint(Color.init(hex: "BEBEB9"))
+                    .foregroundStyle(Color.gray20)
+                    .tint(Color.gray20)
                 }
                 .padding(.vertical, 20)
             }
         }
-        .background(Color(hex: "F9F9F9").ignoresSafeArea())
+        .background(Color.backgroundPrimary.ignoresSafeArea())
         .navigationTitle("설정 및 정보")
         .alert(
             alert?.title ?? "",

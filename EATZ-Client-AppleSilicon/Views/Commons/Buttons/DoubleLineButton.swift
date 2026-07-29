@@ -42,7 +42,7 @@ struct DoubleLineButton: View {
                     }
                     Text(subtitle)
                         .font(.system(size: 12))
-                        .foregroundStyle(Color.init(hex: "BEBEB9"))
+                        .foregroundStyle(Color.gray20)
                 }
                 
                 Spacer()
@@ -50,7 +50,7 @@ struct DoubleLineButton: View {
                 if isShowArrow {
                     ZStack(alignment: .center) {
                         Circle()
-                            .foregroundStyle(Color.init(hex: "ECECEC"))
+                            .foregroundStyle(Color.buttonSecondary)
                         
                         ArrowRightCircled20()
                     }

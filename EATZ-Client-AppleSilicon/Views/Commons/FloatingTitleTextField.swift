@@ -26,7 +26,7 @@ struct FloatingTitleTextField: View {
         } else if isFocused {
             return .accentColor
         } else {
-            return .init(hex: "CBCBCB")
+            return .gray25
         }
     }
     
@@ -36,7 +36,7 @@ struct FloatingTitleTextField: View {
         } else if isFocused {
             return .accentColor
         } else {
-            return .init(hex: "EEEEEE")
+            return .gray8
         }
     }
     

@@ -25,7 +25,7 @@ struct PlannerView: View {
                 PlannerMemberView(authManager).id(user.id)
             }
         }
-        .background(Color(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
         .onChange(of: authManager.state, isSessionExpired)
         .alert(
             alert?.title ?? "",

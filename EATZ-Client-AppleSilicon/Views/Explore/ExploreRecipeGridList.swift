@@ -57,7 +57,7 @@ struct ExploreRecipeGridList: View {
         HStack {
             Text(totalElementsLabel)
                 .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(Color.init(hex: "C2C2C2"))
+                .foregroundStyle(Color.gray20)
                 .padding(.leading, 20)
             Spacer()
             SortPicker(

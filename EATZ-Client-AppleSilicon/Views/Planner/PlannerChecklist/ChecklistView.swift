@@ -138,7 +138,7 @@ private struct ChecklistContentView: View {
                     Text(planCountLabel)
                         .font(.system(size: 17, weight: .medium))
                         .multilineTextAlignment(.center)
-                        .foregroundStyle(Color.init(hex: "A1A1A1"))
+                        .foregroundStyle(Color.gray35)
                 }
             }
             .padding(20)
@@ -218,7 +218,7 @@ private struct ChecklistUncookableSection: View {
                 VStack(spacing: 0) {
                     Text("이미 위의 재료와 도구를 모두 가지고 있다면, 지금 바로 보관함에 재료와 도구를 추가해 보세요.")
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(Color.init(hex: "C5C5C5"))
+                        .foregroundStyle(Color.gray35)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.horizontal, 20)
@@ -255,7 +255,7 @@ private struct ChecklistUncookableSection: View {
                         .font(.system(size: 17, weight: .semibold))
                     Text("해당 날짜에 추가한 레시피를 요리하려면\n\(missingKitchenwareLabel)\(missingIngredientLabel)가 더 필요해요.")
                         .font(.system(size: 17, weight: .medium))
-                        .foregroundStyle(Color(hex: "BCBCBC"))
+                        .foregroundStyle(Color.gray35)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -296,7 +296,7 @@ private struct ChecklistCookableSection: View {
                         .font(.system(size: 17, weight: .semibold))
                     Text("요리하기 위해 필요한 모든 도구와 재료가\n보관함에 추가되어 있어요.")
                         .font(.system(size: 17, weight: .medium))
-                        .foregroundStyle(Color(hex: "BCBCBC"))
+                        .foregroundStyle(Color.gray35)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }

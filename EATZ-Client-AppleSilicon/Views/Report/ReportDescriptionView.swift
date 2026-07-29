@@ -61,7 +61,7 @@ struct ReportDescriptionView: View {
                 Text("원하지 않으신다면 설명을 생략하셔도 돼요.")
             }
             .font(.system(size: 12, weight: .medium))
-            .foregroundColor(.init(hex: "A1A1A1"))
+            .foregroundColor(.gray35)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
@@ -76,7 +76,7 @@ struct ReportDescriptionView: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
                 .font(.system(size: 12, weight: .medium))
-                .foregroundColor(.init(hex: "A1A1A1"))
+                .foregroundColor(.gray35)
             Text(subtitle).foregroundColor(.primary)
                 .font(.system(size: 17, weight: .medium))
         }

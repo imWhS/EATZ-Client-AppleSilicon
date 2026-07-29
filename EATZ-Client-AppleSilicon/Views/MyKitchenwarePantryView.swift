@@ -98,7 +98,7 @@ private struct MyKitchenwarePantryList: View {
     private var countText: some View {
         Text(countLabel)
             .font(.system(size: 14, weight: .medium))
-            .foregroundStyle(Color.init(hex: "C2C2C2"))
+            .foregroundStyle(Color.gray20)
             .padding(.leading, 20)
     }
     

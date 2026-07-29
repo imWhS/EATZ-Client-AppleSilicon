@@ -28,7 +28,7 @@ struct RatingEditorHeader: View {
                 VStack(spacing: 4) {
                     Text(recipeEssential.authorUsername)
                         .font(.system(size: 17, weight: .medium))
-                        .foregroundStyle(Color.init(hex: "8F8F8F"))
+                        .foregroundStyle(Color.gray35)
                     Text(recipeEssential.title)
                         .font(.system(size: 22, weight: .semibold))
                         .multilineTextAlignment(.center)
@@ -36,7 +36,7 @@ struct RatingEditorHeader: View {
                 Text("레시피의 요리 경험을 공유해보세요.\n점수와 후기는 언제든지 수정할 수 있어요.")
                     .font(.system(size: 17, weight: .medium))
                     .multilineTextAlignment(.center)
-                    .foregroundStyle(Color.init(hex: "787878"))
+                    .foregroundStyle(Color.gray35)
             }
         }
         .padding(.horizontal, 20)

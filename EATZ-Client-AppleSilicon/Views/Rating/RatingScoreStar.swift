@@ -18,7 +18,7 @@ struct RatingScoreStar: View {
                 Image("rating-star")
                     .resizable()
                     .frame(width: starSize, height: starSize)
-                    .foregroundStyle(index < score ? Color.rating : Color.init(hex: "ECECEC"))
+                    .foregroundStyle(index < score ? .rating : Color.buttonSecondary)
             }
         }
     }

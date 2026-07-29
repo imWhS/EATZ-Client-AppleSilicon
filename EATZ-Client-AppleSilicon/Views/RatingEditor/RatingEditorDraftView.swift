@@ -58,7 +58,7 @@ struct RatingEditorDraftView: View {
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .fixedSize(horizontal: false, vertical: true)
-                .foregroundStyle(Color(hex: "787878"))
+                .foregroundStyle(Color.gray35)
         }
     }
 }

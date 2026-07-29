@@ -32,8 +32,8 @@ struct ExploreView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: ViewRoute.self) { DestinationView($0) }
         }
-        .onChange(of: viewModel.navigationRoute) { route in
-            guard let route = route else { return }
+        .onChange(of: viewModel.navigationRoute) { _, navigationRoute in
+            guard let route = navigationRoute else { return }
             router.push(route)
             viewModel.navigationRoute = nil
         }

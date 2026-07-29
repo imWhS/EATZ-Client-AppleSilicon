@@ -30,10 +30,10 @@ struct PlannerDatePicker: View {
                 viewModel.setCompleteActions(onDismiss: dismiss.callAsFunction, onComplete: onComplete)
                 viewModel.prepareDataIfNeeded()
             }
-            .onChange(of: viewModel.currentMonth) { currentMonth in
+            .onChange(of: viewModel.currentMonth) { _, currentMonth in
                 viewModel.loadPlannedDates(for: currentMonth)
             }
-            .onChange(of: viewModel.selectedDates) { selectedDates in
+            .onChange(of: viewModel.selectedDates) { _, selectedDates in
                 guard let selectedDate = selectedDates.first else { return }
                 viewModel.addToPlanner(on: selectedDate)
             }

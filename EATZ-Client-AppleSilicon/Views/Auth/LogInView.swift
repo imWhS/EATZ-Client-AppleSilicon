@@ -39,7 +39,7 @@ struct LogInView: View {
             }
             resetPasswordSection
         }
-        .background(Color.init(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
     }
     
     private var header: some View {

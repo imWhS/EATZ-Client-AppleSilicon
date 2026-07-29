@@ -54,7 +54,6 @@ struct RecipeBasicPagedList<EmptyViewContent: View, MenuContent: View>: View {
             case .unauthorized: CommonUnauthorizedStateView()
             }
         }
-        .background(Color(hex: "F9F9F9"))
     }
     
     private var mainContent: some View {
@@ -67,6 +66,7 @@ struct RecipeBasicPagedList<EmptyViewContent: View, MenuContent: View>: View {
                 headerContent: listHeader,
                 menuContent: menuContent
             )
+            .background(Color(hex: "F9F9F9"))
         }
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: recipes)
     }

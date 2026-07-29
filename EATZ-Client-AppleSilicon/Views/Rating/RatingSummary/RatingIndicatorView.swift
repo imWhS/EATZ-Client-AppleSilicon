@@ -1,5 +1,5 @@
 //
-//  RatingScoreSummaryView.swift
+//  RatingIndicatorView.swift
 //  EATZ-Client-AppleSilicon
 //
 //  Created by 손원희 on 5/24/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RatingScoreSummaryView: View {
+struct RatingIndicatorView: View {
     let state: RatingIndicatorState
 
     var body: some View {
@@ -32,13 +32,7 @@ struct RatingScoreSummaryView: View {
                     ))
                 }
                 
-            case .error(let message):
-                VStack(spacing: 8) {
-                    Text("죄송합니다. 평가 요약 정보를 불러오지 못했어요.")
-                        .font(.headline)
-                    Text(message)
-                        .font(.subheadline)
-                }
+            case .error(let message): ErrorCurtain("평가 지표를 불러오지 못했어요.")
             }
         }
         .padding(.vertical, 40)

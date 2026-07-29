@@ -57,7 +57,7 @@ struct TagAdditionView: View {
             case .searchable: searchingContainer
             }
         }
-        .background(Color.init(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
     }
     
     private var exploringContainer: some View {

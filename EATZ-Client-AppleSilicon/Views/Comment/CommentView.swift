@@ -32,7 +32,7 @@ struct CommentView: View {
                 CommentEditor(authManager: authManager, viewModel: viewModel)
             }
         }
-        .background(Color.init(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
         .toolbarBackground(.hidden, for: .tabBar)
         .navigationTitle(viewModel.navigationTitleLabel)
         .navigationBarTitleDisplayMode(.inline)
@@ -82,10 +82,11 @@ struct CommentView: View {
         }
         
     }
+    
     @ViewBuilder
     private var recipeEssentialWrapperView: some View {
         if let recipeEssential = viewModel.recipeEssential {
-            RecipeEssentialView(recipeEssential)
+            RecipeEssentialView(recipeEssential, style: .white)
         } else {
             EmptyView()
         }

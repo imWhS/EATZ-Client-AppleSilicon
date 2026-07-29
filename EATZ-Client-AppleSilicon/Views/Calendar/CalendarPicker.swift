@@ -157,6 +157,6 @@ struct CalendarPickerSummarySection: View {
         .frame(maxWidth: .infinity)
         .frame(minHeight: 30)
         .padding(20)
-        .background(Color.init(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
     }
 }

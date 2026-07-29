@@ -39,7 +39,7 @@ struct CookableView: View {
                 })
             }
             .animation(.easeInOut(duration: 0.3), value: isSearchFieldFocused)
-            .background(Color.init(hex: "F9F9F9"))
+            .background(Color.backgroundPrimary)
             .contentShape(Rectangle())
             .onTapGesture { isSearchFieldFocused = false }
             .navigationTitle("바로 요리")
@@ -143,7 +143,7 @@ private struct CookableFilterToggleButton: View {
             HStack(alignment: .center, spacing: 12) {
                 CookableButtonDescriptionsView(
                     titleLabel: "요리 가능",
-                    subtitleLabel: "보관함 속 재료, 도구로 요리할 수 있는 레시피만 찾습니다.")
+                    subtitleLabel: "보관함 속 재료, 도구로 요리할 수 있는 레시피만 찾아요.")
                 Spacer()
                 CheckToggleCircled(isToggled: isCookableOnly)
             }

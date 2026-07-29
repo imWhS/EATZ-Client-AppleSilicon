@@ -8,7 +8,9 @@
 import SwiftUI
 
 extension Color {
-    static let highlight = Color(hex: "F23F18")
+    static let auth = Color("auth")
+    static let rating = Color("Colors/rating")
+    static let backgroundPrimary = Color("Colors/backgroundPrimary")
 }
 
 extension Color {

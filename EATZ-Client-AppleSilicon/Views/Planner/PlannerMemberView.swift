@@ -37,8 +37,8 @@ struct PlannerMemberView: View {
             }
         }
         .task { viewModel.prepareDataIfNeeded() }
-        .onChange(of: router.path) { _, newPath in
-            if newPath.isEmpty { viewModel.prepareDataIfNeeded() }
+        .onChange(of: router.path) { _, path in
+            if path.isEmpty { viewModel.prepareDataIfNeeded() }
         }
         .alert(
             viewModel.alert?.title ?? "",
@@ -123,7 +123,7 @@ enum PlannerMemberAlert {
     var actions: some View {
         switch self {
         case .sessionExpired: Button("확인", role: .cancel) {}
-        case .error(_, let message): Button("확인", role: .cancel) {}
+        case .error: Button("확인", role: .cancel) {}
         }
     }
     

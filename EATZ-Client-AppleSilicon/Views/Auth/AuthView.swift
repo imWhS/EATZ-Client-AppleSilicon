@@ -100,7 +100,7 @@ struct AuthView: View {
                 }
             }
             .padding(.vertical, 20)
-            .background(Color.init(hex: "F9F9F9"))
+            .background(Color.backgroundPrimary)
         }
     }
     

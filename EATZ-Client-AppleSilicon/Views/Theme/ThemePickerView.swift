@@ -47,7 +47,7 @@ struct ThemePickerView: View {
             }
             .padding(.vertical, 20)
         }
-        .background(Color.init(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
         .coordinateSpace(name: "scroll")
     }
     
@@ -101,9 +101,9 @@ struct ThemePickerView: View {
         GeometryReader { proxy in
             let scrollYOffset = proxy.frame(in: .named("scroll")).minY
             Color.clear
-                .onChange(of: scrollYOffset) { offset in
+                .onChange(of: scrollYOffset) { _, scrollYOffset in
                     withAnimation(.easeInOut(duration: 0.2)) {
-                        viewModel.showNavigationBarTitle = offset < -100
+                        viewModel.showNavigationBarTitle = scrollYOffset < -100
                     }
                 }
         }

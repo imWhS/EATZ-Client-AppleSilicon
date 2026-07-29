@@ -9,10 +9,25 @@ import SwiftUI
 import Kingfisher
 
 struct RecipeEssentialView: View {
+    enum Style {
+        case gray
+        case white
+        
+        var background: Color {
+            switch self {
+            case .gray: Color.backgroundPrimary
+            case .white: Color.white
+            }
+        }
+    }
+    
     var recipeEssential: RecipeEssentialWithAuthor?
     
-    init(_ recipeEssential: RecipeEssentialWithAuthor? = nil) {
+    var style: Style
+    
+    init(_ recipeEssential: RecipeEssentialWithAuthor? = nil, style: Style = .gray) {
         self.recipeEssential = recipeEssential
+        self.style = style
     }
     
     var body: some View {
@@ -38,7 +53,7 @@ struct RecipeEssentialView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.white)
+                .background(style.background)
                 .cornerRadius(8)
                 .clipped()
                 .padding(.horizontal, 20)

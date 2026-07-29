@@ -25,7 +25,7 @@ struct RatingEditorScorePickerView: View {
                 Image("rating-star")
                     .resizable()
                     .frame(width: starSize, height: starSize)
-                    .foregroundStyle(index <= score ? Color(hex: "D69E5C") : Color(hex: "ECECEC"))
+                    .foregroundStyle(index <= score ? Color.rating : Color(hex: "ECECEC"))
                     .scaleEffect(tappedIndex == index ? 0.8 : 1)
                     .onTapGesture {
                         tappedIndex = index

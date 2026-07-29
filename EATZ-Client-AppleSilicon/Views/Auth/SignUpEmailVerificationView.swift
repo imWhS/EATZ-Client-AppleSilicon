@@ -33,7 +33,7 @@ struct SignUpEmailVerificationView: View {
             }
             resendSection
         }
-        .background(Color.init(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
         .toolbar {
             titleToolbarItem
         }

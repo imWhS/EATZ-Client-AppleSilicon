@@ -53,7 +53,7 @@ struct RatingEditor: View {
                 
                 viewModel.loadInitial(recipeId, mode, authManager)
             }
-            .onChange(of: authManager.currentUser) { _, newUser in
+            .onChange(of: authManager.currentUser) {
                 viewModel.validateAndPrepareUser(authManager)
             }
             .onChange(of: viewModel.routingAction) { _, routingAction in
@@ -89,13 +89,13 @@ struct RatingEditor: View {
                         textViewScrollID: self.textViewScrollID)
                 }
                 .padding(.vertical, 28)
+                .background(Color.backgroundPrimary)
             }
-            .onChange(of: viewModel.currentDraft.content) { _, _ in
+            .onChange(of: viewModel.currentDraft.content) {
                 withAnimation {
                     proxy.scrollTo(textViewScrollID, anchor: .bottom)
                 }
             }
-            .background(Color.init(hex: "F9F9F9"))
         }
     }
     

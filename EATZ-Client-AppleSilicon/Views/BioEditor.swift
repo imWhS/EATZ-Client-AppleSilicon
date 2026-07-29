@@ -30,7 +30,7 @@ struct BioEditor: View {
     }
     
     private var viewStateContent: some View {
-        VStack {
+        Group {
             switch viewModel.viewState {
             case .loading: LoadingCurtain(title: "회원님의 소개를 불러오고 있어요...")
             case .loaded: mainContent
@@ -41,6 +41,7 @@ struct BioEditor: View {
             case .unauthorized: CommonUnauthorizedStateView()
             }
         }
+        .background(Color.backgroundPrimary)
     }
     
     private var dismissToolbarItem: some ToolbarContent {

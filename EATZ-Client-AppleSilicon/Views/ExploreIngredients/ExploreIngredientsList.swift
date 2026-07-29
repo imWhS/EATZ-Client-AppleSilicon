@@ -72,9 +72,9 @@ struct ExploreIngredientsList: View {
             GeometryReader { proxy in
                 let scrollYOffset = proxy.frame(in: .named("scroll")).minY
                 Color.clear
-                    .onChange(of: scrollYOffset) { _, offset in
+                    .onChange(of: scrollYOffset) { _, scrollYOffset in
                         withAnimation(.easeInOut(duration: 0.2)) {
-                            viewModel.showNavigationBarTitle = offset < -100
+                            viewModel.showNavigationBarTitle = scrollYOffset < -100
                         }
                     }
             }

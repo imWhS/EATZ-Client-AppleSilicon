@@ -39,7 +39,7 @@ struct RecipeEditorImageView: View {
         .aspectRatio(1, contentMode: .fit)
         .clipped()
         .ignoresSafeArea()
-        .background(Color.init(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }

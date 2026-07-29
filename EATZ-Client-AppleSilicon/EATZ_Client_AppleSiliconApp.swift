@@ -23,7 +23,7 @@ struct EATZ_Client_AppleSiliconApp: App {
                     handleDeepLink(url)
                 }
         }
-        .onChange(of: scenePhase) { scenePhase in
+        .onChange(of: scenePhase) { _, scenePhase in
             /// 앱이 foreground 상태로 전환됐을 때, 여전히 세션이 유효한지 검증합니다.
             if scenePhase == .active {
                 AuthGlobalPresenter.shared.processPendingDeepLink()

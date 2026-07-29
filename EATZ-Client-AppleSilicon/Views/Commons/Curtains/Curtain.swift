@@ -57,6 +57,7 @@ struct Curtain<Header: View, Footer: View>: View {
             Spacer()
         }
         .padding(20)
+        .background(Color.backgroundPrimary)
         .frame(maxWidth: .infinity)
     }
 }

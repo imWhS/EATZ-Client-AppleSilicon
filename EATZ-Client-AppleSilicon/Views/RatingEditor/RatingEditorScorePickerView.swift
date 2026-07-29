@@ -38,7 +38,7 @@ struct RatingEditorScorePickerView: View {
                         .spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0),
                         value: tappedIndex
                     )
-                    .accessibility(label: Text("별점: \(index)점"))
+                    .accessibility(label: Text("점수: \(index)점"))
             }
         }
     }

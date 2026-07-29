@@ -121,7 +121,7 @@ struct AuthView: View {
                 .lineLimit(2)
             Text(context.subMessage)
                 .font(Font.system(size: 14, weight: .medium))
-                .foregroundStyle(Color.init(hex: "A5A5A5"))
+                .foregroundStyle(Color.gray35)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
         }
@@ -133,7 +133,7 @@ struct AuthView: View {
             HorizontalDivider()
             Text("이메일 주소로 가입한 계정에 로그인합니다. 이메일 주소로 가입한 계정이 없으면 가입을 진행합니다. 또한, 시작함으로써 이용 약관 및 개인 정보 처리 방침에 동의하는 것으로 간주합니다.")
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color.init(hex: "C5C5C5"))
+                .foregroundStyle(Color.gray15)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(20)

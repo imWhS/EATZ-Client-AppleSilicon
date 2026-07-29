@@ -74,7 +74,7 @@ struct RecipeEditorDefaultInfoImageSection: View {
     private var processingView: some View {
         RecipeEditorImageSectionContainer {
             ProgressView("대표 사진을 처리하고 있어요...")
-                .foregroundStyle(Color.init(hex: "BEBEB9"))
+                .foregroundStyle(Color.gray20)
         }
     }
     
@@ -86,7 +86,7 @@ struct RecipeEditorDefaultInfoImageSection: View {
                     Text("레시피의 대표 사진을 추가하세요.")
                         .font(.system(size: 17, weight: .medium))
                 }
-                .foregroundStyle(Color.init(hex: "BEBEB9"))
+                .foregroundStyle(Color.gray20)
             }
         }
     }

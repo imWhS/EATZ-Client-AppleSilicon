@@ -38,7 +38,7 @@ struct UserBlocklistMemberView: View {
             case .content(let pagedBlocklist): getContentView(pagedBlocklist)
             }
         }
-        .background(Color(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
         .navigationTitle("차단 사용자 관리")
         .navigationBarTitleDisplayMode(.inline)
         .task { viewModel.prepareDataIfNeeded() }
@@ -80,7 +80,7 @@ struct UserBlocklistMemberView: View {
                     HStack {
                         Text(viewModel.totalElementsLabel)
                             .font(.system(size: 14, weight: .medium))
-                            .foregroundStyle(Color.init(hex: "C2C2C2"))
+                            .foregroundStyle(Color.gray20)
                             .padding(.leading, 20)
                         Spacer()
                         

@@ -49,7 +49,7 @@ struct LogInView: View {
             Text("'\(viewModel.email)' 이메일 주소로 가입한 계정으로 로그인하려면, 설정한 암호를 입력하세요.")
                 .font(Font.system(size: 14, weight: .medium))
                 .multilineTextAlignment(.center)
-                .foregroundStyle(Color.init(hex: "A5A5A5"))
+                .foregroundStyle(Color.gray35)
                 .lineLimit(nil)
                 .padding(.horizontal, 20)
                 .fixedSize(horizontal: false, vertical: true)
@@ -97,7 +97,7 @@ struct LogInView: View {
                 }
                 .font(.system(size: 12, weight: .medium))
                 .multilineTextAlignment(.center)
-                .foregroundStyle(Color.init(hex: "A5A5A5"))
+                .foregroundStyle(Color.gray35)
             }
             .padding(20)
         }

@@ -57,7 +57,7 @@ struct ThemePickerView: View {
                 .font(.system(size: 30, weight: .bold))
             Text("원하는 주제의 태그가 달린 레시피만 둘러볼 수 있어요.")
                 .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(Color.init(hex: "A1A1A1"))
+                .foregroundStyle(Color.gray35)
         }
         .padding(.vertical, 20)
     }
@@ -73,7 +73,7 @@ struct ThemePickerView: View {
             .padding(.horizontal, 20)
             Text("모든 레시피를 둘러봅니다.")
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color.init(hex: "A1A1A1"))
+                .foregroundStyle(Color.gray35)
         }
         .padding(.vertical, 20)
     }

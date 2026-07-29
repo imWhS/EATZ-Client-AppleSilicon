@@ -49,7 +49,7 @@ struct RecipeEssentialView: View {
                             .lineLimit(1)
                         Text(recipeEssential.authorUsername)
                             .font(.system(size: 12, weight: .medium))
-                            .foregroundStyle(Color.init(hex: "8F8F8F"))
+                            .foregroundStyle(Color.gray35)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)

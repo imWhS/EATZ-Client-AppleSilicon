@@ -37,7 +37,7 @@ struct RecipeDetailSummarySection: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("태그")
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color(hex: "BCBCBC"))
+                    .foregroundStyle(Color.gray35)
                 RecipeTagCloudView(tags: recipe.tags)
             }
         } else { EmptyView() }

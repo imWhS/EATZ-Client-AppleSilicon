@@ -25,7 +25,7 @@ struct RecipeDetailRequirementsHeaderCookable: View {
                         .font(.system(size: 17, weight: .semibold))
                     Text("모든 도구와 재료가 준비되어 있어요.\n지금 바로 요리해볼까요?")
                         .font(.system(size: 17))
-                        .foregroundStyle(Color.init(hex: "828282"))
+                        .foregroundStyle(Color.gray50)
                         .multilineTextAlignment(.center)
                         .fixedSize(horizontal: false, vertical: true)
                 }

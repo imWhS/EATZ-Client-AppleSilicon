@@ -151,10 +151,10 @@ private struct ExploreListItemBottomView: View {
         return Button(action: action) {
             HStack(spacing: 4) {
                 Image(imageName)
-                    .foregroundStyle(isDisabled ? Color.init(hex: "A5A5A5") : Color.accentColor)
+                    .foregroundStyle(isDisabled ? Color.gray35 : Color.accentColor)
                 Text(String(count))
                     .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(Color.init(hex: "8B8B8B"))
+                    .foregroundStyle(Color.gray35)
             }
             .frame(maxWidth: .infinity)
             .padding(6)

@@ -46,11 +46,6 @@ class CookableRecipeListViewModel: ObservableObject {
         return auth.isLoggedIn ? sorts : sorts.filter( { $0 != .FEWEST_MISSING_REQUIREMENTS } )
     }
     
-    var navigationTitleLabel: String {
-        let count = pagedRecipes.totalElements
-        return 0 < count ? "\(count)개의 레시피" : "레시피"
-    }
-    
     init(searchCriteria: CookableSearchCriteria, auth: AuthProvider = AuthManager.shared) {
         self.searchCriteria = searchCriteria
         self.auth = auth

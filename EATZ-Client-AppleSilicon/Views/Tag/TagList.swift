@@ -33,7 +33,7 @@ struct TagList: View {
         HStack {
             Text("연관 태그 추가")
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color.init(hex: "BEBEB9"))
+                .foregroundStyle(Color.gray20)
             Spacer()
         }
         .padding(.horizontal ,20)

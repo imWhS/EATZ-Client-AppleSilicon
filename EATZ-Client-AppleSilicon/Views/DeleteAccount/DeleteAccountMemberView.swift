@@ -24,7 +24,7 @@ struct DeleteAccountMemberView: View {
             case .authenticated(let user): contentView.id(user.id)
             }
         }
-            .background(Color(hex: "F9F9F9"))
+            .background(Color.backgroundPrimary)
             .navigationTitle("계정 삭제")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -47,7 +47,7 @@ struct DeleteAccountMemberView: View {
                         Text("미리 알아두어야 할 정보")
                             .font(.system(size: 17, weight: .medium))
                             .multilineTextAlignment(.center)
-                            .foregroundStyle(Color.init(hex: "A1A1A1"))
+                            .foregroundStyle(Color.gray35)
                     }
                 }
                 .padding(.vertical, 32)
@@ -63,7 +63,7 @@ struct DeleteAccountMemberView: View {
                     HorizontalDivider(padding: 20)
                     Text("계속 진행하면, 위 내용을 이해한 후 계정을 삭제하는 것으로 간주합니다.")
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(Color.init(hex: "C5C5C5"))
+                        .foregroundStyle(Color.gray35)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.horizontal, 20)

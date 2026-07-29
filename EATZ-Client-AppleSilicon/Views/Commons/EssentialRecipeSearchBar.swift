@@ -40,7 +40,7 @@ struct EssentialRecipeSearchBar: View {
                 .animation(.spring(response: 0.3, dampingFraction: 0.8), value: isFocused)
             }
             .padding(.vertical, 12)
-            .background(isFocused || style == .floating ? Color.white : Color(hex: "ECECEC"))
+            .background(isFocused || style == .floating ? Color.white : Color.gray8)
             .cornerRadius(16)
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
@@ -63,7 +63,7 @@ struct EssentialRecipeSearchBar: View {
                 .font(.system(size: 14, weight: .semibold))
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
-                .background(Color.init(hex: "ECECEC"))
+                .background(Color.buttonSecondary)
                 .cornerRadius(8)
         }
         .buttonStyle(PlainButtonStyle())
@@ -87,7 +87,7 @@ private struct EssentialRecipeSearchBarFieldView: View {
         HStack(spacing: 6) {
             HStack {
                 Image("recipe-list-search")
-                    .foregroundStyle(isFocused ? .black : Color.init(hex: "707070") )
+                    .foregroundStyle(isFocused ? .black : Color.gray60 )
                 VStack(alignment: .leading, spacing: 2) {
                     searchFieldTopSection
                     searchFieldBottomSection
@@ -104,7 +104,7 @@ private struct EssentialRecipeSearchBarFieldView: View {
             if !isFocused {
                 Text("레시피 제목, 내용")
                     .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(Color.init(hex: "707070"))
+                    .foregroundStyle(Color.gray60)
             }
             TextField("", text: $keyword)
                 .font(.system(size: 17, weight: .semibold))
@@ -115,7 +115,7 @@ private struct EssentialRecipeSearchBarFieldView: View {
     private var searchFieldBottomSection: some View {
         Text("레시피 검색")
             .font(.system(size: 12, weight: .medium))
-            .foregroundStyle(isFocused ? .black : Color.init(hex: "707070") )
+            .foregroundStyle(isFocused ? .black : Color.gray60 )
     }
     
     private var clearSearchFieldButton: some View {

@@ -36,7 +36,7 @@ struct RatingIndicatorAverageView: View {
                             Text("5")
                         }
                         .font(.system(size: 64, weight: .light))
-                        .foregroundStyle(Color.init(hex: "ECECEC"))
+                        .foregroundStyle(Color.buttonSecondary)
                     }
                 }
             }
@@ -50,7 +50,7 @@ struct RatingIndicatorAverageView: View {
                     DotSeparatorView()
                     Text("\(count ?? 0)개의 평가")
                         .font(.system(size: 17, weight: .medium))
-                        .foregroundStyle(Color.init(hex: "8F8F8F"))
+                        .foregroundStyle(Color.gray35)
                 }
                 
             }

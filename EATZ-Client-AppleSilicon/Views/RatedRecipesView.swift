@@ -34,6 +34,7 @@ struct RatedRecipesView: View {
                 ) { self.additionalActionMenu(recipe: recipe) }
             }
         )
+        .background(Color.backgroundPrimary)
         .alert(item: $alert) { item in item.alert }
         .sheet(item: $sheet, content: buildSheet)
         .fullScreenCover(

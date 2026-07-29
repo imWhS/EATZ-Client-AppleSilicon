@@ -28,7 +28,7 @@ struct BasicTextEditorStyleModifier: ViewModifier {
                     .cornerRadius(12)
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color(hex: "EEEEEE"), lineWidth: 1)
+                            .stroke(Color.gray4, lineWidth: 1)
                     )
             }
     }

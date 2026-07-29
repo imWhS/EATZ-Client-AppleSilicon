@@ -61,7 +61,7 @@ struct CommentEditor: View {
         HStack {
             Text("댓글 수정 중")
                 .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(Color.init(hex: "8F8F8F"))
+                .foregroundStyle(Color.gray20)
             Spacer()
             Button("취소", action: viewModel.cancelEditingComment)
                 .fontWeight(.semibold)
@@ -110,16 +110,11 @@ struct CommentEditor: View {
     
     private var commentUnavailableView: some View {
         VStack(spacing: 12) {
-//            if authManager.currentUser?.id == viewModel.recipeEssential?.authorId {
-//                Button(action: {  }) { Text("댓글 기능 사용") }
-//                    .buttonStyle(SmallRoundedButtonStyle(type: .primary))
-//            }
-//            
             Text("댓글 기능이 해제된 레시피예요. 댓글 기능을 사용하도록 설정했을 때 달린 댓글만 볼 수 있어요.")
                 .font(.system(size: 12, weight: .medium))
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity, alignment: .center)
-                .foregroundStyle(Color.init(hex: "BCBCBC"))
+                .foregroundStyle(Color.gray20)
         }
         .padding(20)
     }

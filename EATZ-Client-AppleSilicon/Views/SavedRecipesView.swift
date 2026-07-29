@@ -34,6 +34,7 @@ struct SavedRecipesView: View {
                 )
             }
         )
+        .background(Color.backgroundPrimary)
         .alert(item: $alert) { $0.alert }
         .sheet(item: $sheet, content: buildSheet)
         .fullScreenCover(

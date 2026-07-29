@@ -66,7 +66,6 @@ struct RecipeBasicPagedList<EmptyViewContent: View, MenuContent: View>: View {
                 headerContent: listHeader,
                 menuContent: menuContent
             )
-            .background(Color(hex: "F9F9F9"))
         }
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: recipes)
     }
@@ -75,7 +74,7 @@ struct RecipeBasicPagedList<EmptyViewContent: View, MenuContent: View>: View {
         HStack {
             Text(viewModel.totalElementsLabel)
                 .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(Color.init(hex: "C2C2C2"))
+                .foregroundStyle(Color.gray20)
                 .padding(.leading, 20)
             Spacer()
         }

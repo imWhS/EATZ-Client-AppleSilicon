@@ -42,7 +42,7 @@ struct ThemeItem: View {
                 .padding(.horizontal, 16)
                 .contentShape(Rectangle())
             }
-            .buttonStyle(PressedListItemStyle(defaultColor: Color.clear, pressedColor: Color.init(hex: "ECECEC")))
+            .buttonStyle(PressedListItemStyle(defaultColor: Color.clear, pressedColor: Color.buttonSecondary))
             if showDivider {
                 HorizontalDivider(padding: 0).padding(.leading, 16 + 26 + 12)
             }
@@ -55,7 +55,7 @@ struct ThemeItem: View {
                 Text(emoji)
             } else {
                 Text(String(theme.name.prefix(1)))
-                    .foregroundStyle(Color.init(hex: "D2D2D2"))
+                    .foregroundStyle(Color.gray20)
             }
         }
         .font(.system(size: 24, weight: .semibold))

@@ -24,7 +24,7 @@ struct FloatingTitleTextFieldOld: View {
             if let title = title {
                 Text(title)
                     .font(Font.system(size: 12, weight: .semibold))
-                    .foregroundStyle(isFocused ? Color.accentColor : Color.init(hex: "CBCBCB"))
+                    .foregroundStyle(isFocused ? Color.accentColor : Color.gray25)
             }
             TextField(placeholder ?? "", text: $text)
                 .font(Font.system(size: 17, weight: .medium))
@@ -37,7 +37,7 @@ struct FloatingTitleTextFieldOld: View {
                 .frame(height: 19)
                 .submitLabel(submitLabel)
                 .onSubmit(onSubmit ?? ({}))
-                .foregroundStyle(isFocused ? Color.accentColor : Color.init(hex: "CBCBCB"))
+                .foregroundStyle(isFocused ? Color.accentColor : Color.gray25)
         }
 //        .frame(height: 68)
         .padding(.horizontal, 16)
@@ -46,7 +46,7 @@ struct FloatingTitleTextFieldOld: View {
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(isFocused ? Color.accentColor : Color.init(hex: "EEEEEE"), lineWidth: 1)
+                .stroke(isFocused ? Color.accentColor : .gray8, lineWidth: 1)
         )
         .onTapGesture {
             isFocused = true

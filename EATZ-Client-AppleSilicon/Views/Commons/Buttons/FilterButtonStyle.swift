@@ -15,7 +15,7 @@ struct FilterButtonStyle: ButtonStyle {
             .foregroundStyle(.black)
             .frame(height: 30)
             .padding(.horizontal, 10)
-            .background(configuration.isPressed ? Color.init(hex: "ECECEC") : Color.init(hex: "ECECEC"))
+            .background(configuration.isPressed ? Color.buttonSecondary : Color.buttonSecondary)
             .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
             .cornerRadius(14)
             .animation(.easeOut(duration: 0.2), value: configuration.isPressed)

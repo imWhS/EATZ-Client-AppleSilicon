@@ -61,7 +61,7 @@ struct ManagementProfileView: View {
                 processingOverlayView
             }
         }
-        .background(Color(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
         .animation(.easeIn(duration: 0.2), value: viewModel.isProcessing)
     }
     
@@ -205,7 +205,7 @@ private struct ManagementProfileSection<Content: View, Actions: View>: View {
                 ForEach(descriptions, id: \.self) { description in
                     Text(description)
                         .font(.system(size: 12))
-                        .foregroundStyle(Color.init(hex: "828282"))
+                        .foregroundStyle(Color.gray50)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }

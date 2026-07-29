@@ -22,7 +22,7 @@ struct SelectableKitchenwareList<Manager: SelectableKitchenwareManager>: View {
     
     var body: some View {
         Group {
-            if searchKeyword.isEmpty { kitchenwareList }
+            if searchKeyword.isEmpty { allKitchenwaresView }
             else { searchStateView }
         }
         .background(Color.white)
@@ -31,41 +31,73 @@ struct SelectableKitchenwareList<Manager: SelectableKitchenwareManager>: View {
     
     @ViewBuilder
     private var searchStateView: some View {
-        switch searchState {
-        case .searching: LoadingCurtain(title: "도구를 검색하고 있어요...")
-        case .searched: searchedKitchenwareList
-        case .error(let message): ErrorCurtain(message)
-        case .empty:
-            Curtain(
-                title: "원하는 도구가 없어요.",
-                description: "'\(searchKeyword)'와 관련있는 도구를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요."
-            )
+        VStack(spacing: 0) {
+            searchResultHeader
+            switch searchState {
+            case .searching: LoadingCurtain(title: "도구를 찾고 있어요...")
+            case .searched: searchedKitchenwareList
+            case .error(let message): ErrorCurtain(message)
+            case .empty:
+                Curtain(
+                    title: "원하는 도구가 없어요.",
+                    description: "'\(searchKeyword)' 관련 도구를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요."
+                )
+            }
         }
     }
     
     private var searchedKitchenwareList: some View {
-        ingredientList(kitchenwares: searchedKitchenwares)
-    }
-    
-    private var kitchenwareList: some View {
-        ingredientList(kitchenwares: kitchenwares)
-    }
-    
-    private func ingredientList(kitchenwares: [Kitchenware]) -> some View {
         ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(kitchenwares) { kitchenware in
-                    SelectableKitchenwareItem<Manager>(
-                        kitchenware,
-                        isSelected: isItemSelected(kitchenware),
-                        isDisabled: isItemDisabled(kitchenware),
-                        onToggleSelection: { onToggleSelection(kitchenware) }
-                    )
-                }
-//                if !listState.isEmpty {
-//                    ListPageTailView(hasNextPage: listState.hasNextPage, onAppearAction: onLoadMore)
-//                }
+            kitchenwareList(kitchenwares: searchedKitchenwares)
+        }
+    }
+    
+    private var allKitchenwaresView: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                Text("모든 도구")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(Color.gray20)
+                    .padding(.leading, 20)
+                    .padding(.top, 20)
+                kitchenwareList(kitchenwares: kitchenwares)
             }
         }
+    }
+    
+    private var searchSubtitleLabel: String {
+        if searchKeyword.isEmpty {
+            return ""
+        } else {
+            return "'\(searchKeyword)' 관련 도구 찾는 중"
+        }
+    }
+    
+    private var searchResultHeader: some View {
+        VStack(spacing: 0) {
+            VStack(spacing: 2) {
+                Text("도구 검색")
+                    .font(.system(size: 17, weight: .semibold))
+                Text(searchSubtitleLabel)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color.gray35)
+            }
+            .padding(20)
+            HorizontalDivider()
+        }
+    }
+    
+    private func kitchenwareList(kitchenwares: [Kitchenware]) -> some View {
+        LazyVStack(spacing: 0) {
+            ForEach(kitchenwares) { kitchenware in
+                SelectableKitchenwareItem<Manager>(
+                    kitchenware,
+                    isSelected: isItemSelected(kitchenware),
+                    isDisabled: isItemDisabled(kitchenware),
+                    onToggleSelection: { onToggleSelection(kitchenware) }
+                )
+            }
+        }
+        .padding(.vertical, 16)
     }
 }

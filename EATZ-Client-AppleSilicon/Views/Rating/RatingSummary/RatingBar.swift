@@ -33,13 +33,13 @@ struct RatingBar: View {
                     Image("rating-star")
                         .resizable()
                         .frame(width: 13, height: 13)
-                        .foregroundStyle(Color.init(hex: "ECECEC"))
+                        .foregroundStyle(Color.buttonSecondary)
                 }
             }
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {
                     Capsule()
-                        .fill(Color.init(hex: "ECECEC"))
+                        .fill(Color.buttonSecondary)
                         .frame(height: 8)
                     Capsule()
                         .fill(Color.rating)

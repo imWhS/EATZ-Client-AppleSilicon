@@ -50,7 +50,7 @@ struct SelectableIngredientItem<Manager: SelectableIngredientManager>: View {
     private var pantryStatusText: some View {
         Text("보관 중")
             .font(.system(size: 14, weight: .semibold))
-            .foregroundStyle(Color.init(hex: "D0D0D0"))
+            .foregroundStyle(Color.gray15)
             .frame(height: 32)
             .padding(.leading, 4)
             .padding(.trailing, 8)

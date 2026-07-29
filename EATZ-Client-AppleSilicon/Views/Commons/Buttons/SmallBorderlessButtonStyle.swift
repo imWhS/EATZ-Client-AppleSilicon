@@ -25,7 +25,7 @@ struct SmallBorderlessButtonStyle: ButtonStyle {
         case .normal:
             foregroundColor = Color.accentColor
         case .disabled:
-            foregroundColor = Color.init(hex: "D0D0D0")
+            foregroundColor = Color.gray15
         }
         
         return configuration.label
@@ -33,7 +33,7 @@ struct SmallBorderlessButtonStyle: ButtonStyle {
             .foregroundStyle(foregroundColor)
             .padding(.horizontal, 8)
             .padding(.vertical, 6)
-            .background(configuration.isPressed ? Color.init(hex: "ECECEC") : .clear)
+            .background(configuration.isPressed ? Color.buttonSecondary : .clear)
             .cornerRadius(12)
             .scaleEffect(configuration.isPressed ? 0.965 : 1.0)
             .opacity(configuration.isPressed ? 0.5 : 1.0)

@@ -25,10 +25,10 @@ struct BigRoundedButtonStyle: ButtonStyle {
             backgroundColor = .accentColor
             foregroundColor = .white
         case .secondary:
-            backgroundColor = Color.init(hex: "ECECEC")
+            backgroundColor = Color.buttonSecondary
             foregroundColor = .accentColor
         case .disabled:
-            backgroundColor = Color.init(hex: "ECECEC")
+            backgroundColor = Color.buttonSecondary
             foregroundColor = .accentColor
         }
         

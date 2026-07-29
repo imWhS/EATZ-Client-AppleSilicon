@@ -76,7 +76,7 @@ struct MyAccountHeader: View {
                         .foregroundStyle(Color.black)
                     Text("프로필 관리")
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(Color.init(hex: "BEBEB9"))
+                        .foregroundStyle(Color.gray20)
                 }
                 Spacer()
                 ArrowDownCircled20()

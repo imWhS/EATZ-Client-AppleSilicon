@@ -31,7 +31,7 @@ struct SignUpCreationUsernameView: View {
                 .font(.system(size: 30, weight: .bold))
             Text(viewModel.email)
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color.init(hex: "7F7F7F"))
+                .foregroundStyle(Color.gray35)
                 .padding(.horizontal, 10)
                 .frame(height: 22)
                 .cornerRadius(11)
@@ -44,7 +44,7 @@ struct SignUpCreationUsernameView: View {
                 }
                 .font(Font.system(size: 14, weight: .medium))
                 .multilineTextAlignment(.center)
-                .foregroundStyle(Color.init(hex: "A5A5A5"))
+                .foregroundStyle(Color.gray35)
                 .lineLimit(nil)
                 .padding(.horizontal, 20)
                 .fixedSize(horizontal: false, vertical: true)

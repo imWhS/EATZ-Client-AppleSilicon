@@ -46,7 +46,7 @@ struct MyAccountViewOld: View {
                 case .unauthorized: MyAccountUnauthorizedView(onLogIn: viewModel.requireAuthView)
                 }
             }
-            .background(Color(hex: "F9F9F9"))
+            .background(Color.backgroundPrimary)
             .toolbar(.hidden, for: .navigationBar)
             .navigationTitle(MainTabItems.myAccount.title)
             .navigationBarTitleDisplayMode(.inline)
@@ -151,7 +151,7 @@ struct MyAccountUnauthorizedView: View {
                 Text("나만의 레시피를 만들고, 가지고 있는 재료와 도구를 보관함에 추가해 체계적으로 관리할 수 있어요. 또한, EATZ에서의 모든 활동과 계정을 관리할 수 있어요.")
                     .font(.system(size: 17, weight: .medium))
                     .multilineTextAlignment(.center)
-                    .foregroundStyle(Color.init(hex: "A1A1A1"))
+                    .foregroundStyle(Color.gray35)
             }
             .padding(20)
             Spacer()
@@ -169,7 +169,7 @@ struct MyAccountUnauthorizedView: View {
                 Text("로그인 또는 가입 후 계속 진행할 수 있어요.")
                     .font(.system(size: 12, weight: .medium))
                     .multilineTextAlignment(.center)
-                    .foregroundStyle(Color.init(hex: "A1A1A1"))
+                    .foregroundStyle(Color.gray35)
             }
             .padding(20)
         }

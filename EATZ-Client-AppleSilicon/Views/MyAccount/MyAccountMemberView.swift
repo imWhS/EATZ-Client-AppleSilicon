@@ -32,7 +32,7 @@ struct MyAccountMemberView: View {
                 case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
                 }
             }
-            .background(Color(hex: "F9F9F9"))
+            .background(Color.backgroundPrimary)
             .toolbar(.hidden, for: .navigationBar)
             .navigationTitle(MainTabItems.myAccount.title)
             .navigationBarTitleDisplayMode(.inline)

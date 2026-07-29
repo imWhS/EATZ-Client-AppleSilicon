@@ -25,7 +25,7 @@ struct SelectableIngredientList<Manager: SelectableIngredientManager>: View {
     
     var body: some View {
         Group {
-            if searchKeyword.isEmpty { ingredientList }
+            if searchKeyword.isEmpty { allIngredientsView }
             else { searchStateView }
         }
         .background(Color.white)
@@ -34,51 +34,86 @@ struct SelectableIngredientList<Manager: SelectableIngredientManager>: View {
     
     @ViewBuilder
     private var searchStateView: some View {
-        switch searchState {
-        case .searching: LoadingCurtain(title: "재료를 검색하고 있어요...")
-        case .searched: searchedIngredientList
-        case .error(let message): ErrorCurtain(message)
-        case .empty:
-            Curtain(
-                title: "원하는 재료가 없어요.",
-                description: "'\(searchKeyword)'와 관련있는 재료를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요."
-            )
+        VStack(spacing: 0) {
+            searchResultHeader
+            switch searchState {
+            case .searching: LoadingCurtain(title: "재료를 찾고 있어요...")
+            case .searched: searchedIngredientList
+            case .error(let message): ErrorCurtain(message)
+            case .empty:
+                Curtain(
+                    title: "원하는 재료가 없어요.",
+                    description: "'\(searchKeyword)' 관련 재료를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요."
+                )
+            }
         }
     }
     
     private var searchedIngredientList: some View {
-        ingredientList(
-            listState: pagedSearchedIngredients,
-            onLoadMore: onLoadMoreSearchedIngredients
-        )
+        ScrollView {
+            ingredientList(
+                listState: pagedSearchedIngredients,
+                onLoadMore: onLoadMoreSearchedIngredients
+            )
+        }
     }
     
-    private var ingredientList: some View {
-        ingredientList(
-            listState: pagedIngredients,
-            onLoadMore: onLoadMoreIngredients
-        )
+    private var allIngredientsView: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                Text("모든 재료")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(Color.gray20)
+                    .padding(.leading, 20)
+                    .padding(.top, 20)
+                ingredientList(
+                    listState: pagedIngredients,
+                    onLoadMore: onLoadMoreIngredients
+                )
+            }
+        }
+    }
+    
+    private var searchSubtitleLabel: String {
+        if searchKeyword.isEmpty {
+            return ""
+        } else {
+            return "'\(searchKeyword)' 관련 재료 찾는 중"
+        }
+    }
+    
+    private var searchResultHeader: some View {
+        VStack(spacing: 0) {
+            VStack(spacing: 2) {
+                Text("재료 검색")
+                    .font(.system(size: 17, weight: .semibold))
+                Text(searchSubtitleLabel)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color.gray35)
+            }
+            .padding(20)
+            HorizontalDivider()
+        }
     }
     
     private func ingredientList(
         listState: Paged<Ingredient>,
         onLoadMore: @escaping () -> Void
     ) -> some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(listState.items) { ingredient in
-                    SelectableIngredientItem<Manager>(
-                        ingredient,
-                        isSelected: isItemSelected(ingredient),
-                        isDisabled: isItemDisabled(ingredient),
-                        onToggleSelection: { onToggleSelection(ingredient) }
-                    )
-                    .environmentObject(manager)
-                }
-                if !listState.isEmpty {
-                    ListPageTailView(hasNextPage: listState.hasNextPage, onAppearAction: onLoadMore)
-                }
+        LazyVStack(spacing: 0) {
+            ForEach(listState.items) { ingredient in
+                SelectableIngredientItem<Manager>(
+                    ingredient,
+                    isSelected: isItemSelected(ingredient),
+                    isDisabled: isItemDisabled(ingredient),
+                    onToggleSelection: { onToggleSelection(ingredient) }
+                )
+                .environmentObject(manager)
+            }
+            if !listState.isEmpty {
+                ListPageTailView(hasNextPage: listState.hasNextPage, onAppearAction: onLoadMore)
             }
         }
+        .padding(.vertical, 16)
     }
 }

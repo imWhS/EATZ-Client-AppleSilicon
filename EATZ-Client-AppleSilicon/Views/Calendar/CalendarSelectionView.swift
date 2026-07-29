@@ -56,7 +56,7 @@ private struct CalendarWeekdaysView: View {
                     Text(weekdaySymbols[index])
                         .font(.system(size: 14, weight: .medium))
                         .frame(maxWidth: .infinity)
-                        .foregroundStyle(Color.init(hex: "A1A1A1"))
+                        .foregroundStyle(Color.gray35)
                 }
             }
             .padding(.horizontal, 20)

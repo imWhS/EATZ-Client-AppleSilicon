@@ -81,7 +81,7 @@ struct ExploreRecipeSearchView: View {
         
         switch viewModel.viewState {
         case .idle: idleView
-        case .initialLoading: LoadingCurtain(title: "레시피를 검색하고 있어요...")
+        case .initialLoading: LoadingCurtain(title: "레시피를 찾고 있어요...")
         case .loaded:
             ExploreRecipeGridList(
                 pagedRecipes: viewModel.pagedRecipes,
@@ -93,7 +93,7 @@ struct ExploreRecipeSearchView: View {
         case .empty(let keyword):
             Curtain(
                 title: "원하는 레시피가 없어요.",
-                description: "'\(keyword)'에 해당하는 레시피를 하나도 찾지 못했어요.\n다른 검색어를 사용하거나, 필터 옵션을 변경해보세요."
+                description: "'\(keyword)' 관련 레시피를 하나도 찾지 못했어요.\n다른 검색어를 사용하거나, 필터 옵션을 변경해보세요."
             )
         case .error(let message):
             ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
@@ -108,11 +108,11 @@ struct ExploreRecipeSearchView: View {
                 Text("\(tag?.name ?? "모든") 레시피 목록에서 검색")
                     .font(.system(size: 17, weight: .semibold))
                     .multilineTextAlignment(.center)
-                    .foregroundStyle(Color.init(hex: "8B8B8B"))
+                    .foregroundStyle(Color.gray35)
                     .fixedSize(horizontal: false, vertical: true)
                 Text("검색어를 입력해보세요.")
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.init(hex: "A1A1A1"))
+                    .foregroundStyle(Color.gray35)
             }
             Spacer()
         }

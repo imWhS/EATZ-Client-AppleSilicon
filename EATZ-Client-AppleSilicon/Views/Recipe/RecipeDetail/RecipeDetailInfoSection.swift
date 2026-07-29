@@ -85,7 +85,7 @@ struct RecipeDetailInfoDescriptionView: View {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("레시피 작성자")
                                     .font(.system(size: 12, weight: .medium))
-                                    .foregroundStyle(Color(hex: "BCBCBC"))
+                                    .foregroundStyle(Color.gray20)
                                 HStack {
                                     Text(authorUsername)
                                         .font(.system(size: 17, weight: .semibold))
@@ -153,7 +153,7 @@ struct RecipeDetailInfoAuthorViewN: View {
                 .font(.system(size: 12, weight: .semibold))
             Text(createdAt.formattedRelative)
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color(hex: "BCBCBC"))
+                .foregroundStyle(Color.gray20)
         }
     }
 }
@@ -264,7 +264,7 @@ struct RecipeDetailInfoReactionView: View {
                             Spacer()
                             Text("아직 평가한 사람이 없어요.\n첫 평가를 남겨보세요.")
                                 .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(Color(hex: "BCBCBC"))
+                                .foregroundStyle(Color.gray20)
                         }
                     }
                 }
@@ -289,7 +289,7 @@ struct RecipeDetailInfoReactionView: View {
                             Spacer()
                             Text(commentGuideLabel)
                                 .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(Color(hex: "BCBCBC"))
+                                .foregroundStyle(Color.gray20)
                         }
                     }
                 }
@@ -357,10 +357,10 @@ private struct RecipeDetailReactionButtonStyle: ButtonStyle {
         
         switch type {
         case .normal:
-            backgroundColor = Color.init(hex: "ECECEC")
+            backgroundColor = Color.buttonSecondary
             foregroundColor = .accentColor
         case .disabled:
-            backgroundColor = Color.init(hex: "ECECEC")
+            backgroundColor = Color.buttonSecondary
             foregroundColor = .accentColor
         }
         

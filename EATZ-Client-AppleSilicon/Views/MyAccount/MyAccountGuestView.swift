@@ -41,7 +41,7 @@ struct MyAccountGuestView: View {
                 Text("나만의 레시피를 만들고, 가지고 있는 재료와 도구를 보관함에 추가해 체계적으로 관리할 수 있어요. 또한, EATZ에서의 모든 활동과 계정을 관리할 수 있어요.")
                     .font(.system(size: 17, weight: .medium))
                     .multilineTextAlignment(.center)
-                    .foregroundStyle(Color.init(hex: "A1A1A1"))
+                    .foregroundStyle(Color.gray35)
             }
             .padding(20)
             Spacer()

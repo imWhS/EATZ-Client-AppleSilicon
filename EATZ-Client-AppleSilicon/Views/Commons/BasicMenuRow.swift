@@ -29,7 +29,7 @@ enum BasicMenuRowStyle {
         case .info(let trailing):
             Text(trailing)
                 .font(.system(size: 17, weight: .medium))
-                .foregroundStyle(Color.init(hex: "A5A5A5"))
+                .foregroundStyle(Color.gray35)
         default: EmptyView()
         }
     }
@@ -74,7 +74,7 @@ struct BasicMenuRow: View {
                         if let subtitle = subtitle {
                             Text(subtitle)
                                 .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(Color.init(hex: "BEBEB9"))
+                                .foregroundStyle(Color.gray35)
                         }
                     }
                     Spacer()

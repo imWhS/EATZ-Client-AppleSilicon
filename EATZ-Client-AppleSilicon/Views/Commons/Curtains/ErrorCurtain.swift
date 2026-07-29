@@ -28,12 +28,12 @@ struct ErrorCurtain: View {
                 VStack(spacing: 8) {
                     Text("문제가 발생했어요.")
                         .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(Color.init(hex: "8B8B8B"))
+                        .foregroundStyle(Color.gray35)
                     if let message = message {
                         Text(message)
                             .font(.system(size: 12, weight: .medium))
                             .multilineTextAlignment(.center)
-                            .foregroundStyle(Color.init(hex: "A1A1A1"))
+                            .foregroundStyle(Color.gray35)
                     }
                 }
                 if let onRetry = onRetry {
@@ -43,7 +43,6 @@ struct ErrorCurtain: View {
             Spacer()
         }
         .padding(20)
-        .background(Color.backgroundPrimary)
         .frame(maxWidth: .infinity)
     }
 }

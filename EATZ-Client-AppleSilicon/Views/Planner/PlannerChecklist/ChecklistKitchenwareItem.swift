@@ -56,6 +56,7 @@ struct ChecklistKitchenwareItem: View {
                 Circle().stroke(Color.gray.opacity(0.2), lineWidth: 1)
             )
             .contentShape(Circle())
+            .padding(.vertical, 0.5)
     }
     
     private var actionMenu: some View {

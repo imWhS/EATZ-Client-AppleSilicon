@@ -35,7 +35,7 @@ struct VerticalLabeledValueView: View {
             Group {
                 Text(label)
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color(hex: "BCBCBC"))
+                    .foregroundStyle(Color.gray35)
                 Text(value)
                     .font(style.font)
                     .foregroundStyle(.black)

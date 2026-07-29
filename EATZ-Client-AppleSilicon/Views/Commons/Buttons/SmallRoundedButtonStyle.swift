@@ -24,14 +24,14 @@ struct SmallRoundedButtonStyle: ButtonStyle {
             backgroundColor = .accentColor
             foregroundColor = .white
         case .secondary:
-            backgroundColor = Color.init(hex: "ECECEC")
+            backgroundColor = Color.buttonSecondary
             foregroundColor = .accentColor
         case .danger:
-            backgroundColor = Color.init(hex: "ECECEC")
+            backgroundColor = Color.buttonSecondary
             foregroundColor = .red
         case .disabled:
-            backgroundColor = Color.init(hex: "F7F7F7")
-            foregroundColor = Color.init(hex: "D0D0D0")
+            backgroundColor = Color.gray2
+            foregroundColor = Color.gray15
         }
         
         @ViewBuilder

@@ -53,7 +53,7 @@ struct RecipeCreatorInfoEditor: View {
                             Text("'URL 주소'에 원작자의 이름 또는 원문이 게시되어 있는 매체(서비스)로 이동할 수 있는 URL 주소를 입력하세요.")
                         }
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(Color.init(hex: "8F8F8F"))
+                        .foregroundStyle(Color.gray35)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     

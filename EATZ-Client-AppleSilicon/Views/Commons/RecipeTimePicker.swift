@@ -126,7 +126,7 @@ struct RecipeTimePicker: View {
             }
             Text(timeBreakdownLabel)
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color.init(hex: "8F8F8F"))
+                .foregroundStyle(Color.gray35)
         }
         .font(Font.system(size: 17, weight: .semibold))
         .foregroundStyle(.black)

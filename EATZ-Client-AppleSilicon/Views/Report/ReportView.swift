@@ -97,7 +97,7 @@ struct ReportView: View {
                     Text("관련 있는 카테고리가 없으면, '기타'를 탭하세요.")
                 }
                 .font(.system(size: 12, weight: .medium))
-                .foregroundColor(.init(hex: "A1A1A1"))
+                .foregroundColor(.gray35)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 20)
             }
@@ -142,7 +142,7 @@ struct ReportView: View {
                 }
                 .font(.system(size: 17, weight: .medium))
             }
-            .foregroundColor(.init(hex: "A1A1A1"))
+            .foregroundColor(.gray35)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }

@@ -15,10 +15,10 @@ struct PlannerPlanListEmptyView: View {
             VStack(spacing: 4) {
                 Text("추가한 레시피가 없어요.")
                     .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(Color.init(hex: "777777"))
+                    .foregroundStyle(Color.gray35)
                 Text("+ 버튼을 탭해서 레시피를 추가해보세요.")
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.init(hex: "BEBEB9"))
+                    .foregroundStyle(Color.gray20)
             }
             .frame(maxWidth: .infinity)
             .frame(height: height)

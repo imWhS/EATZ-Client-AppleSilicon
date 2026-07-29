@@ -17,6 +17,6 @@ struct RecipeDetailRequirementsHeaderTitle: View {
     var body: some View {
         Text(title)
             .font(.system(size: 12, weight: .medium))
-            .foregroundStyle(Color.init(hex: "C2C2C2"))
+            .foregroundStyle(Color.gray20)
     }
 }

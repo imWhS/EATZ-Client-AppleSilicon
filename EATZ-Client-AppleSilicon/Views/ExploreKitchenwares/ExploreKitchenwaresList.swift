@@ -27,28 +27,41 @@ struct ExploreKitchenwaresList: View {
         .searchable(text: $searchKeyword, prompt: "도구 이름으로 검색")
     }
     
-    private var searchResultHeader: some View {
-        VStack {
-            Text("도구 검색")
-                .font(.headline)
-                .padding(12)
-            HorizontalDivider()
-        }
-    }
-    
     @ViewBuilder
     private var searchStateView: some View {
         VStack(spacing: 0) {
             searchResultHeader
             switch searchState {
-            case .searching: LoadingCurtain(title: "도구를 검색하고 있어요...")
+            case .searching: LoadingCurtain(title: "도구를 찾고 있어요...")
             case .searched: searchResultView
             case .error(let message): ErrorCurtain(message)
             case .empty:
                 Curtain(
                     title: "원하는 도구가 없어요.",
-                    description: "'\(searchKeyword)'에 해당하는 도구를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요.")
+                    description: "'\(searchKeyword)' 관련 도구를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요.")
             }
+        }
+    }
+    
+    private var searchSubtitleLabel: String {
+        if searchKeyword.isEmpty {
+            return ""
+        } else {
+            return "'\(searchKeyword)' 관련 도구 찾는 중"
+        }
+    }
+    
+    private var searchResultHeader: some View {
+        VStack(spacing: 0) {
+            VStack(spacing: 2) {
+                Text("도구 검색")
+                    .font(.system(size: 17, weight: .semibold))
+                Text(searchSubtitleLabel)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color.gray35)
+            }
+            .padding(20)
+            HorizontalDivider()
         }
     }
     
@@ -93,7 +106,7 @@ struct ExploreKitchenwaresList: View {
             Text("모든 도구를 탐색하거나, 원하는 도구를 검색해보세요. 가지고 있는 도구를 보관함에 추가해보세요.")
                 .font(.system(size: 14, weight: .medium))
                 .multilineTextAlignment(.center)
-                .foregroundStyle(Color.init(hex: "A1A1A1"))
+                .foregroundStyle(Color.gray35)
         }
         .padding(20)
     }

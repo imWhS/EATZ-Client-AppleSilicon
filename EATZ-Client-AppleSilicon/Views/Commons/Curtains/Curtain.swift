@@ -40,12 +40,12 @@ struct Curtain<Header: View, Footer: View>: View {
                 VStack(spacing: 8) {
                     Text(title)
                         .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(Color.init(hex: "8B8B8B"))
+                        .foregroundStyle(Color.gray35)
                     if let description = description {
                         Text(description)
                             .font(.system(size: 12, weight: .medium))
                             .multilineTextAlignment(.center)
-                            .foregroundStyle(Color.init(hex: "A1A1A1"))
+                            .foregroundStyle(Color.gray35)
                     }
                 }
                 if let action = action {
@@ -57,7 +57,6 @@ struct Curtain<Header: View, Footer: View>: View {
             Spacer()
         }
         .padding(20)
-        .background(Color.backgroundPrimary)
         .frame(maxWidth: .infinity)
     }
 }

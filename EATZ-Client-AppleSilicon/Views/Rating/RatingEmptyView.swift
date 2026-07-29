@@ -21,7 +21,7 @@ struct RatingEmptyView: View {
                         .font(.system(size: 17, weight: .semibold))
                     Text("아직 아무도 이 레시피에 평가를 등록하지 않았어요.")
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(Color.init(hex: "8F8F8F"))
+                        .foregroundStyle(Color.gray35)
                 }
             }
             Spacer()

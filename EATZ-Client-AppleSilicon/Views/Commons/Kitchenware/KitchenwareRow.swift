@@ -14,7 +14,7 @@ enum KitchenwareRowAppearance {
     
     var background: Color {
         switch self {
-        case .filled: .init(hex: "F8F8F8")
+        case .filled: .gray2
         case .outlined: .clear
         }
     }
@@ -22,7 +22,7 @@ enum KitchenwareRowAppearance {
     var borderColor: Color {
         switch self {
         case .filled: .clear
-        case .outlined: .black.opacity(0.075)
+        case .outlined: .black.opacity(0.08)
         }
     }
 }
@@ -54,7 +54,11 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
         .frame(minHeight: 48)
         .background(appearance.background)
         .cornerRadius(14)
-        .border(color: appearance.borderColor, width: 1, radius: 14)
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .stroke(appearance.borderColor, lineWidth: 1)
+        )
+        .padding(.vertical, 0.5)
     }
     
     private var leading: some View {

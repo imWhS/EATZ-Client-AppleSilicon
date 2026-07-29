@@ -19,10 +19,10 @@ struct RatingCardContentView: View {
             VStack(spacing: 16) {
                 HorizontalDivider(padding: 0)
                 Text(content)
+                    .font(.system(size: 17, weight: .medium))
                     .lineLimit(nil)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
             }
         } else {
             EmptyView()

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MyAccountSettingsView: View {
+    @Environment(\.openURL) private var openURL
+    
     @EnvironmentObject private var router: Router
     @EnvironmentObject private var authManager: AuthManager
     @State private var alert: MyAccountSettingsAlert?
@@ -31,19 +33,27 @@ struct MyAccountSettingsView: View {
                     
                     SettingsSectionCard(title: "사용자 지원") {
                         BasicMenuRow("새로운 소식", .action) {
-                            
+                            if let url = EatzLinks.newsAndUpdatesURL {
+                                openURL(url)
+                            }
                         }
-                        BasicMenuRow("개발자에게 편지 쓰기", false, .action, "admin@eatz.io") {
-                            
+                        BasicMenuRow("개발자에게 편지 쓰기", false, .action, EatzLinks.developerEmailString) {
+                            if let url = SupportEmailUtli.createEmailURL() {
+                                openURL(url)
+                            }
                         }
                     }
                     
                     SettingsSectionCard(title: "정보") {
                         BasicMenuRow("이용 약관 및 정책", .action) {
-                            print("약관 링크 이동")
+                            if let url = EatzLinks.termsOfServiceURL {
+                                openURL(url)
+                            }
                         }
                         BasicMenuRow("개인 정보 처리 방침", .action) {
-                            print("처리방침 링크 이동")
+                            if let url = EatzLinks.privacyPolicyURL {
+                                openURL(url)
+                            }
                         }
                         BasicMenuRow("Open Source License") {
                             router.push(.openSourceLicense)
@@ -54,7 +64,7 @@ struct MyAccountSettingsView: View {
                     }
                     if authManager.isLoggedIn {
                         HStack {
-                            Button("로그아웃", action: handleLogOutAction)
+                            Button("로그 아웃", action: handleLogOutAction)
                                 .buttonStyle(SmallRoundedButtonStyle(type: .danger))
                             
                             Button(action: { router.push(.deleteAccount) } ) {
@@ -82,7 +92,7 @@ struct MyAccountSettingsView: View {
                         VStack(spacing: 2) {
                             Group {
                                 Text("© 2026 Wonhee Son. All rights reserved.")
-                                Link("heextory@icloud.com", destination: URL(string: "mailto:heextory@icloud.com")!)
+                                Link(EatzLinks.developerEmailString, destination: URL(string: EatzLinks.developerEmailString)!)
                                 Link("github.com/imWhS", destination: URL(string: "https://github.com/imWhS")!)
                             }
                             .font(.system(size: 10, weight: .medium))

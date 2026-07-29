@@ -7,7 +7,7 @@
 
 import Foundation
 
- struct ExploreSearchCriteria: Equatable, Codable, Hashable {
+struct ExploreSearchCriteria: Equatable, Codable, Hashable {
     var keyword: String = ""
     var maxTotalTime: Int?
     var servings: Int?

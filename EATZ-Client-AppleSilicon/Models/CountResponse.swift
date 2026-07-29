@@ -7,6 +7,6 @@
 
 import Foundation
 
-class CountResponse: Decodable {
+struct CountResponse: Decodable {
     let count: Int
 }

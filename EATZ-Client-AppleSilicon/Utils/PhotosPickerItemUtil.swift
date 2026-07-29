@@ -8,7 +8,7 @@
 import SwiftUI
 import PhotosUI
 
-enum PhotosPickerItemUtility {
+enum PhotosPickerItemUtil {
     static func toUIImage(for item: PhotosPickerItem) async throws -> UIImage {
         guard let data = try await item.loadTransferable(type: Data.self) else {
             throw ProcessError.loadFailed

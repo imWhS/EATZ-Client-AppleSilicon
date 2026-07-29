@@ -81,7 +81,8 @@ struct RecipeViewN: View {
             .task(id: recipeId) {
                 viewModel.loadInitial(for: recipeId, authManager.currentUser)
             }
-            .onChange(of: authManager.currentUser) { previous, new in viewModel.handleCurrentUserChanged(recipeId, previous, new)}
+            .onChange(of: authManager.currentUser) { previousUser, newUser in
+                viewModel.handleCurrentUserChanged(recipeId, previousUser, newUser)}
             .onChange(of: viewModel.routingAction) { _, routingAction in
                 switch routingAction {
                 case .dismiss: dismiss.callAsFunction()

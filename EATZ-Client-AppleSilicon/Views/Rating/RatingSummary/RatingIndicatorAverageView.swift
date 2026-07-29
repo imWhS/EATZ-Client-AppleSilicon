@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RatingSummaryAverageView: View {
+struct RatingIndicatorAverageView: View {
     let averageScore: Double?
     let count: Int?
     var isPlaceholder: Bool = false
@@ -60,5 +60,5 @@ struct RatingSummaryAverageView: View {
 }
 
 #Preview {
-    RatingSummaryAverageView(averageScore: 3.8, count: 30)
+    RatingIndicatorAverageView(averageScore: 3.8, count: 30)
 }

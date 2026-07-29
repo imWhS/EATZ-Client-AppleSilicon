@@ -8,13 +8,6 @@
 import SwiftUI
 import FSCalendar
 
-/// 달력에서의 날짜 선택 모드를 정의합니다.
-enum CalendarSelectionMode {
-    case single // 단일 날짜 선택 모드
-    case range // 기간 선택 모드
-    case multiple // 날짜 개별 다중 선택 모드
-}
-
 struct CalendarView: UIViewRepresentable {
     /// 선택된 날짜 목록입니다.
     @Binding private var selectedDates: [Date]
@@ -269,4 +262,9 @@ struct CalendarView: UIViewRepresentable {
     }
 }
 
-
+/// 달력에서의 날짜 선택 모드를 정의합니다.
+enum CalendarSelectionMode {
+    case single // 단일 날짜 선택 모드
+    case range // 기간 선택 모드
+    case multiple // 날짜 개별 다중 선택 모드
+}

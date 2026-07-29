@@ -14,7 +14,7 @@ struct RecipeEditorImageSectionContainer<Content: View>: View {
         content
             .frame(maxWidth: .infinity)
             .padding(20)
-            .background(Color.init(hex: "F9F9F9"))
+            .background(Color.backgroundPrimary)
             .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }

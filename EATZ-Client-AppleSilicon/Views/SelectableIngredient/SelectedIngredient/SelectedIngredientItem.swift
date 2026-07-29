@@ -37,5 +37,5 @@ struct SelectedIngredientItem: View {
         SelectedIngredientItem(name: "돼지고기 앞다리살", onDeselect: {print("제거")})
     }
     .padding(20)
-    .background(Color.init(hex: "F9F9F9"))
+    .background(Color.backgroundPrimary)
 }

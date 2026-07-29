@@ -29,8 +29,10 @@ class CalendarCell: FSCalendarCell {
         
         // 오늘 날짜에 해당하는 셀에 사용될 뷰를 정의합니다.
         let todayLayer = CAShapeLayer()
-        todayLayer.fillColor = UIColor.systemBlue.withAlphaComponent(0.1).cgColor
-        todayLayer.strokeColor = UIColor.systemBlue.withAlphaComponent(0.1).cgColor
+//        todayLayer.fillColor = UIColor.init(hex: "BFD8DA").withAlphaComponent(1).cgColor
+//        todayLayer.strokeColor = UIColor.init(hex: "BFD8DA").withAlphaComponent(1).cgColor
+        todayLayer.fillColor = UIColor.clear.cgColor
+        todayLayer.strokeColor = Color.black.opacity(0.075).cgColor
         todayLayer.isHidden = true
         self.contentView.layer.insertSublayer(todayLayer, at: 0)
         self.todayLayer = todayLayer
@@ -38,7 +40,7 @@ class CalendarCell: FSCalendarCell {
         // 선택할 수 있는 셀(선택되지 않은 셀)에 사용될 뷰를 정의합니다.
         let borderLayer = CAShapeLayer()
         borderLayer.fillColor = UIColor.clear.cgColor
-        borderLayer.strokeColor = UIColor.init(hex: "CECECE").cgColor
+        borderLayer.strokeColor = Color.init(hex: "ECECEC").cgColor
         borderLayer.lineWidth = 1.0
         borderLayer.isHidden = true
         self.contentView.layer.insertSublayer(borderLayer, below: self.titleLabel.layer)
@@ -46,7 +48,7 @@ class CalendarCell: FSCalendarCell {
 
         // 선택된 셀에 사용될 뷰를 정의합니다.
         let selectionFillLayer = CAShapeLayer()
-        selectionFillLayer.fillColor = UIColor.systemBlue.cgColor
+        selectionFillLayer.fillColor = UIColor.init(hex: "00BECA").withAlphaComponent(1).cgColor
         selectionFillLayer.isHidden = true
         self.contentView.layer.insertSublayer(selectionFillLayer, above: self.borderLayer)
         self.selectionFillLayer = selectionFillLayer
@@ -112,7 +114,7 @@ class CalendarCell: FSCalendarCell {
         if dateIsToday {
             // 3순위: 오늘 날짜 (선택되지 않음)
             todayLayer.isHidden = false
-            titleLabel.textColor = .systemBlue
+            titleLabel.textColor = .init(hex: "00BECA")
         } else if isPlaceholder {
             // 4순위: 이전/다음 달의 날짜
             borderLayer.isHidden = false

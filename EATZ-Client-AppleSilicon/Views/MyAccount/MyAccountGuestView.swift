@@ -22,6 +22,7 @@ struct MyAccountGuestView: View {
                 coverSection
                 bottomActionSection
             }
+            .background(Color.backgroundPrimary)
             .toolbar(.hidden, for: .navigationBar)
             .navigationTitle(MainTabItems.myAccount.title)
             .navigationBarTitleDisplayMode(.inline)

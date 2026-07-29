@@ -46,8 +46,8 @@ struct ExploreRecipeSearchView: View {
         rootView
             .refreshable { await viewModel.refresh() }
             .task(id: authManager.currentUser) { viewModel.prepareDataIfNeeded() }
-            .onChange(of: viewModel.navigationRoute) { route in
-                guard let route = route else { return }
+            .onChange(of: viewModel.navigationRoute) { _, navigationRoute in
+                guard let route = navigationRoute else { return }
                 router.push(route)
                 viewModel.navigationRoute = nil
             }
@@ -72,6 +72,7 @@ struct ExploreRecipeSearchView: View {
             default: stateView
             }
         }
+        .background(Color.backgroundPrimary)
     }
     
     @ViewBuilder

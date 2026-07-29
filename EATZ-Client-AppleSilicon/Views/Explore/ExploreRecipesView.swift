@@ -43,8 +43,8 @@ struct ExploreRecipesView: View {
             .task(id: filters) { viewModel.updateListOptions(newFilters: filters, newSort: sort) }
             .task(id: sort) { viewModel.updateListOptions(newFilters: filters, newSort: sort) }
             .task(id: authManager.currentUser) { viewModel.prepareDataIfNeeded() }
-            .onChange(of: viewModel.navigationRoute) { _, route in
-                guard let route = route else { return }
+            .onChange(of: viewModel.navigationRoute) { _, navigationRoute in
+                guard let route = navigationRoute else { return }
                 router.push(route)
                 viewModel.navigationRoute = nil }
             .alert(item: $viewModel.alert) { $0.alert }
@@ -64,6 +64,7 @@ struct ExploreRecipesView: View {
             default: stateView
             }
         }
+        .background(Color.backgroundPrimary)
     }
     
     @ViewBuilder

@@ -35,6 +35,6 @@ struct RootTabView: View {
                 .tag(MainTabItems.myAccount)
                 .environmentObject(myAccountRouter)
         }
-        .onChange(of: selection) { newSelection in selection = newSelection }
+        .onChange(of: selection) { _, selection in self.selection = selection }
     }
 }

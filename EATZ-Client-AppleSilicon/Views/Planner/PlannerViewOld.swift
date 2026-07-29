@@ -22,8 +22,8 @@ struct PlannerViewOld: View {
                 }
         }
         .task(id: viewModel.currentUser) { viewModel.prepareDataIfNeeded() }
-        .onChange(of: router.path) { _, newPath in
-            if newPath.isEmpty { viewModel.prepareDataIfNeeded() }
+        .onChange(of: router.path) { _, path in
+            if path.isEmpty { viewModel.prepareDataIfNeeded() }
         }
         .alert(
             viewModel.alert?.title ?? "",

@@ -146,8 +146,8 @@ struct UserBlockShowLearnMoreView: View {
         GeometryReader { proxy in
             let offset = proxy.frame(in: .named("scroll")).minY
             Color.clear
-                .onChange(of: offset) { _, newOffset in
-                    let shouldShow = newOffset < -140
+                .onChange(of: offset) { _, offset in
+                    let shouldShow = offset < -140
                     if showNavigationBarTitle != shouldShow {
                         withAnimation(.easeInOut(duration: 0.2)) {
                             showNavigationBarTitle = shouldShow

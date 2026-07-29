@@ -71,11 +71,6 @@ private struct LikedIngredientList: View {
                         ingredient,
                         onAction: onAction
                     )
-//                    .onAppear {
-//                        if ingredient.id == pagedIngredients.items.last?.id {
-//                            onLoadMore()
-//                        }
-//                    }
                 }
                 ListPageTailView(hasNextPage: pagedIngredients.hasNextPage, onAppearAction: onLoadMore)
             }

@@ -41,8 +41,8 @@ struct MyAccountMemberView: View {
             }
         }
         .task { viewModel.prepareDataIfNeeded() }
-        .onChange(of: router.path) { _, newPath in
-            if newPath.isEmpty { viewModel.prepareDataIfNeeded() }
+        .onChange(of: router.path) { _, path in
+            if path.isEmpty { viewModel.prepareDataIfNeeded() }
         }
         .onChange(of: authManager.state, isSessionExpired)
         .alert(

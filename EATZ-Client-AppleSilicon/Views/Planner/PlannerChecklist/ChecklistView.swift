@@ -55,7 +55,8 @@ struct ChecklistView: View {
                 }
             }
         }
-        .background(Color.init(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
+//        .background(Color.yellow)
         .navigationTitle(titleLabel)
         .toolbar {
             titleToolbarItem
@@ -164,8 +165,8 @@ private struct ChecklistContentView: View {
         GeometryReader { proxy in
             let offset = proxy.frame(in: .named("scroll")).minY
             Color.clear
-                .onChange(of: offset) { _, newOffset in
-                    let shouldShow = newOffset < -50
+                .onChange(of: offset) { _, offset in
+                    let shouldShow = offset < -50
                     if viewModel.showNavigationBarTitle != shouldShow {
                         withAnimation(.easeInOut(duration: 0.2)) {
                             viewModel.showNavigationBarTitle = shouldShow

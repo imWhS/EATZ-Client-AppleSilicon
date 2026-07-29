@@ -31,7 +31,7 @@ struct IngredientPicker: View {
             case .loaded: mainContentView
             case .unauthorized: CommonUnauthorizedStateView()
             case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
-            case .empty: Curtain(title: "보여드릴재료가 없어요.")
+            case .empty: Curtain(title: "보여드릴 재료가 없어요.")
             }
         }
     }
@@ -63,6 +63,7 @@ struct IngredientPicker: View {
                 onDeselectIngredient: viewModel.toggleSelection,
                 placeholder: "목록에서 레시피에 추가할 재료를 선택하거나,\n원하는 재료 이름으로 검색해서 레시피에 추가할 재료를 선택하세요.")
         }
+        .background(Color.backgroundPrimary)
     }
     
     private var dismissToolbarItem: some ToolbarContent {

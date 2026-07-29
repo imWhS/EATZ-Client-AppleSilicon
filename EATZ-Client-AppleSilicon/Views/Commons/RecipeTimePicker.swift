@@ -135,7 +135,7 @@ struct RecipeTimePicker: View {
         .background(Color.clear)
         .cornerRadius(12)
         .padding()
-        .background(Color.init(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
     }
     
     private var prepTimePickerView: some View {

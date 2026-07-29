@@ -46,7 +46,7 @@ struct AuthResetPasswordView: View {
             case .validationFailed: ErrorCurtain("올바르지 않거나, 만료된 링크로 접근하신 것 같아요. 처음부터 다시 시도해주세요.")
             }
         }
-        .background(Color.init(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
     }
 }
 

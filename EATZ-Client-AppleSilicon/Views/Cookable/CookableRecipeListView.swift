@@ -42,7 +42,7 @@ struct CookableRecipeListView: View {
                     description: "이전 화면으로 돌아가서, 키워드나 옵션을 바꾼 후 다시 시도해보세요.").transition(.opacity)
             }
         }
-        .background(Color.init(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
         .animation(.easeInOut(duration: 0.3), value: viewModel.viewState)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { titleToolbarItem }

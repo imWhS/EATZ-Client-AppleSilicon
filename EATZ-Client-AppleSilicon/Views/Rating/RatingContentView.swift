@@ -28,6 +28,28 @@ struct RatingContentView: View {
         self.recipeId = recipeId
     }
     
+    var body: some View {
+        VStack(spacing: 0) {
+            if 0 < pagedRatings.totalElements {
+                ScrollView {
+                    VStack(spacing: 0) {
+                        RecipeEssentialView(recipeEssential, style: .gray)
+                        RatingIndicatorView(state: viewModel.indicatorState)
+                        userContextView
+                        RatingList(
+                            pagedRatings: pagedRatings,
+                            onLoadMore: { viewModel.loadMoreRatings(currentUser: authManager.currentUser, recipeId: recipeId) },
+                            onDelete: { type in viewModel.handleDelete(type, recipeId) },
+                            onBlock: viewModel.handleBlockUser,
+                            onReport: viewModel.handleReportRating,
+                            onHide: { _ in }) }
+                }
+            } else {
+                emptyStateView
+            }
+        }
+    }
+    
     private var userContextView: some View {
         VStack(spacing: 20) {
             RatingSectionCommonHeaderView(title: "내 평가")
@@ -41,28 +63,6 @@ struct RatingContentView: View {
                     onDeleteTapped: { rating in viewModel.handleDelete(.mine(rating), recipeId) })
             } else {
                 RatingGuestView(onLogIn: authManager.requireAuthView)
-            }
-        }
-    }
-    
-    var body: some View {
-        VStack(spacing: 0) {
-            if 0 < pagedRatings.totalElements {
-                ScrollView {
-                    VStack(spacing: 0) {
-                        RecipeEssentialView(recipeEssential)
-                        RatingScoreSummaryView(state: viewModel.indicatorState)
-                        userContextView
-                        RatingList(
-                            pagedRatings: pagedRatings,
-                            onLoadMore: { viewModel.loadMoreRatings(currentUser: authManager.currentUser, recipeId: recipeId) },
-                            onDelete: { type in viewModel.handleDelete(type, recipeId) },
-                            onBlock: viewModel.handleBlockUser,
-                            onReport: viewModel.handleReportRating,
-                            onHide: { _ in }) }
-                }
-            } else {
-                emptyStateView
             }
         }
     }

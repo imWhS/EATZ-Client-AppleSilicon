@@ -1,5 +1,5 @@
 //
-//  RatingSummaryDistributionView.swift
+//  RatingIndicatorDistributionView.swift
 //  EATZ-Client-AppleSilicon
 //
 //  Created by 손원희 on 5/24/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RatingSummaryDistributionView: View {
+struct RatingIndicatorDistributionView: View {
     var distribution: RatingIndicatorScoresDistribution? = nil
     var isPlaceholder: Bool = false
     

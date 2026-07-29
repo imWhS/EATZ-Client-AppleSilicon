@@ -23,7 +23,7 @@ struct SelectedIngredientBar: View {
                     .transition(.opacity.animation(.easeInOut(duration: 0.2)))
             }
         }
-        .background(Color.init(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
     }
     
     private var mainContentView: some View {

@@ -29,7 +29,7 @@ struct RatingCard<Footer: View>: View {
             RatingCardContentView(content: rating.content)
         }
         .padding(24)
-        .background(Color.init(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
         .cornerRadius(24)
         .padding(.horizontal, 20)
     }

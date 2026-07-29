@@ -47,11 +47,11 @@ struct CommentEditor: View {
         .padding(.top, viewModel.isEditing ? 12 : 20)
         .padding(.bottom, 20)
         .background(Color.white)
-        .onChange(of: viewModel.isEditorFocused) { oldValue, newValue in
-            self.isCommentFieldFocusedInternal = newValue
+        .onChange(of: viewModel.isEditorFocused) { _, isEditorFocused in
+            self.isCommentFieldFocusedInternal = isEditorFocused
         }
-        .onChange(of: isCommentFieldFocusedInternal) { oldValue, newValue in
-            viewModel.isEditorFocused = newValue
+        .onChange(of: isCommentFieldFocusedInternal) { _, isCommentFieldFocusedInternal in
+            viewModel.isEditorFocused = isCommentFieldFocusedInternal
         }
         .animation(.easeInOut, value: viewModel.editingContent)
         .animation(.easeInOut, value: viewModel.isEditing)

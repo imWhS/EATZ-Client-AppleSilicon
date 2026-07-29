@@ -61,6 +61,7 @@ struct ManagementProfileView: View {
                 processingOverlayView
             }
         }
+        .background(Color(hex: "F9F9F9"))
         .animation(.easeIn(duration: 0.2), value: viewModel.isProcessing)
     }
     

@@ -21,7 +21,7 @@ struct SignUpSetPasswordView: View {
             }
             Spacer()
         }
-        .background(Color.init(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
         .toolbar {
             titleToolbarItem
             doneToolbarItem

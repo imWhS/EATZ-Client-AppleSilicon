@@ -30,7 +30,7 @@ struct ReportView: View {
                             getCategoriesSection(categories)
                         }
                     }
-                    .background(Color.init(hex: "F9F9F9"))
+                    .background(Color.backgroundPrimary)
                 case .error(let message): ErrorCurtain(message, onRetry: { viewModel.load(authManager) })
                 case .unauthorized: CommonUnauthorizedStateView()
                 }
@@ -45,7 +45,7 @@ struct ReportView: View {
             }
         }
         .task { viewModel.loadInitial(resource, authManager) }
-        .onChange(of: authManager.currentUser) { _, _ in
+        .onChange(of: authManager.currentUser) {
             viewModel.validateAndPrepareUser(authManager)
         }
         .onChange(of: viewModel.routingAction) { _, routingAction in

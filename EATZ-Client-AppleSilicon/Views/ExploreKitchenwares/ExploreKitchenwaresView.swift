@@ -39,7 +39,7 @@ struct ExploreKitchenwaresView: View {
                     .environmentObject(viewModel)
                 case .unauthorized: CommonUnauthorizedStateView()
                 case .error(let message): ErrorCurtain(message)
-                case .empty: Curtain(title: "보여드릴도구가 없어요.")
+                case .empty: Curtain(title: "보여드릴 도구가 없어요.")
                 }
             }
             .navigationBarTitleDisplayMode(.inline)

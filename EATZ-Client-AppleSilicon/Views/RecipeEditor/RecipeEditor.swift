@@ -47,7 +47,7 @@ struct RecipeEditor: View {
             viewModel.loadInitial(mode, authManager)
         }
         .onChange(of: viewModel.selectedPhotoItem) { viewModel.handlePhotoSelection() }
-        .onChange(of: authManager.currentUser) { _, newUser in
+        .onChange(of: authManager.currentUser) {
             viewModel.validateAndPrepareUser(authManager)
         }
         .onChange(of: viewModel.routingAction) { _, routingAction in
@@ -189,7 +189,7 @@ enum RecipeEditorAlert: Identifiable {
         case .incompleteDraft: return "incompleteDraft"
         case .userChanged: return "userChanged"
         case .sessionExpired: return "sessionExpired"
-        case .error(let title, let message): return "error\((title == nil) ? "-\(title)" : "")-\(message)"
+        case .error(let title, let message): return "error-\(title ?? "")-\(message)"
         }
     }
     

@@ -71,9 +71,9 @@ struct ExploreKitchenwaresList: View {
             GeometryReader { proxy in
                 let scrollYOffset = proxy.frame(in: .named("scroll")).minY
                 Color.clear
-                    .onChange(of: scrollYOffset) { offset in
+                    .onChange(of: scrollYOffset) { _, scrollYOffset in
                         withAnimation(.easeInOut(duration: 0.2)) {
-                            showNavigationBarTitle = offset < -100
+                            showNavigationBarTitle = scrollYOffset < -100
                         }
                     }
             }

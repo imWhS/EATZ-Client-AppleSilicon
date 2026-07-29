@@ -39,10 +39,10 @@ struct RatingBar: View {
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {
                     Capsule()
-                        .fill(Color(.systemGray5))
+                        .fill(Color.init(hex: "ECECEC"))
                         .frame(height: 8)
                     Capsule()
-                        .fill(Color.init(hex: "D69E5C"))
+                        .fill(Color.rating)
                         .frame(
                             width: animatedRatio * proxy.size.width,
                             height: 8
@@ -56,9 +56,9 @@ struct RatingBar: View {
                         }
                     }
                 }
-                .onChange(of: ratio) { newValue in
+                .onChange(of: ratio) { _, ratio in
                     withAnimation(.easeInOut(duration: 0.5)) {
-                        animatedRatio = newValue
+                        animatedRatio = ratio
                     }
                 }
             }

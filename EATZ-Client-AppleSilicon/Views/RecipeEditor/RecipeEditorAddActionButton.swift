@@ -40,6 +40,6 @@ struct RecipeEditorAddActionButton: View {
         RecipeEditorAddActionButton(text: "재료 추가", onAdd: {print("추가")})
     }
     .padding(20)
-    .background(Color.init(hex: "F9F9F9"))
+    .background(Color.backgroundPrimary)
 }
 

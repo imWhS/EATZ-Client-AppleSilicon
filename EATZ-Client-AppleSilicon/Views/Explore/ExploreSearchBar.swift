@@ -33,11 +33,7 @@ struct ExploreSearchBar: View {
         .shadow(color: Color.black.opacity(0.1), radius: 12, x: 0, y: 2)
         .padding(.horizontal, 20)
         .padding(.top, 20)
-//        .onChange(of: keyword) { keyword in
-//            self.isSearchMode = !keyword.isEmpty
-//            print("## is search mode: \(isSearchMode)")
-//        }
-        .onChange(of: isFocused) { isFocused in
+        .onChange(of: isFocused) { _, isFocused in
             /// isFocused가 `true`인 경우에만 검색 모드로 전환합니다.
             /// 다른 뷰가 push되는 등의 이유로 isFocused가 `false`가 되더라도, 검색 모드를 해제하지 않도록 처리합니다.
             if isFocused { self.isSearchMode = isFocused }

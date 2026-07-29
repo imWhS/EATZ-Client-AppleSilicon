@@ -52,7 +52,7 @@ struct RecipeDetailRequirementsHeaderUncookable: View {
         }
         .frame(maxWidth: .infinity)
         .padding(24)
-        .background(Color.init(hex: "F9F9F9"))
+        .background(Color.backgroundPrimary)
         .cornerRadius(24)
     }
     

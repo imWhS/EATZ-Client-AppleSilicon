@@ -40,7 +40,7 @@ struct ReportDescriptionView: View {
                     .padding(.vertical, 20)
                     Spacer()
                 }
-                .background(Color.init(hex: "F9F9F9"))
+                .background(Color.backgroundPrimary)
             } else if case .unauthorized = viewModel.state {
                 CommonUnauthorizedStateView()
             } else { EmptyView() }

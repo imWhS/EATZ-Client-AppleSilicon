@@ -32,6 +32,7 @@ struct LoadingCurtain: View {
             Spacer()
         }
         .padding(20)
+        .background(Color.backgroundPrimary)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

@@ -101,7 +101,7 @@ private struct EssentialRecipeSearchBarFieldView: View {
     
     private var searchFieldTopSection: some View {
         ZStack(alignment: .leading) {
-            if !isFocused {
+            if !isFocused && keyword.isEmpty {
                 Text("레시피 제목, 내용")
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(Color.gray60)

@@ -1,0 +1,9 @@
+{
+  "id" : "a8c0104f-aa74-4216-8faf-97f72120f013",
+  "targets" : [
+    {
+      "id" : "ee4f9b7b-0183-4fc7-aa2d-dcd51fe2d5d3",
+      "name" : "EATZ-Client-AppleSilicon"
+    }
+  ]
+}

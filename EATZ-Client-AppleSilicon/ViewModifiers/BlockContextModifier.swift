@@ -16,6 +16,11 @@ struct BlockContextModifier: ViewModifier {
     
     private var blockService = UserBlockService.shared
     
+    init(targetUser: Binding<UserEssential?>, onSuccess: @escaping () -> Void) {
+        self._targetUser = targetUser
+        self.onSuccess = onSuccess
+    }
+    
     func body(content: Content) -> some View {
         content
             .onChange(of: targetUser) { _, newTargetUser in

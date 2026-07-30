@@ -172,6 +172,9 @@ struct RecipeTimePicker: View {
                 onComplete(cookingTime, prepTime)
                 dismiss()
             }
+            .fontWeight(.semibold)
+            .tint(Color.accentColor)
+            .buttonStyle(.borderedProminent)
             .disabled(isCookingTimeZero)
         }
     }

@@ -157,6 +157,8 @@ struct RecipeEditor: View {
             } else {
                 Button("완료", action: viewModel.handleSubmit)
                     .fontWeight(.semibold)
+                    .tint(Color.accentColor)
+                    .buttonStyle(.borderedProminent)
                     .disabled(!viewModel.isSubmittable || viewModel.state != .content)
             }
         }

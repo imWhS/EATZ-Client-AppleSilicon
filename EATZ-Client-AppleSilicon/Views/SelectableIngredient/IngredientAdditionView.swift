@@ -98,6 +98,8 @@ struct IngredientAdditionView: View {
         ToolbarItem(placement: .topBarTrailing) {
             Button("완료", action: { viewModel.complete() })
                 .fontWeight(.semibold)
+                .tint(Color.accentColor)
+                .buttonStyle(.borderedProminent)
                 .disabled(viewModel.selectedIngredients.isEmpty)
         }
     }

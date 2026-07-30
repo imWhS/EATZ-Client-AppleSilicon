@@ -88,6 +88,9 @@ struct ServingsPicker: View {
                 onComplete(servings)
                 dismiss()
             }
+            .fontWeight(.semibold)
+            .tint(Color.accentColor)
+            .buttonStyle(.borderedProminent)
             .disabled(isServingsZero)
         }
     }

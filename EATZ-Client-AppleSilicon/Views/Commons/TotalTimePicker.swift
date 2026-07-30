@@ -106,6 +106,9 @@ struct TotalTimePicker: View {
                 onComplete(totalTimeInMinutes)
                 dismiss()
             }
+            .fontWeight(.semibold)
+            .tint(Color.accentColor)
+            .buttonStyle(.borderedProminent)
             .disabled(isTotalTimeZero)
         }
     }

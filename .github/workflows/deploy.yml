@@ -1,0 +1,39 @@
+name: EATZ TestFlight Deploy
+
+on:
+  push:
+    branches: # push를 통한 자동 실행 트리거 브랜치 지정 
+      - develop 
+      - main     
+  workflow_dispatch: # GitHub를 통한 수동 배포 설정
+
+jobs:
+  deploy:
+    runs-on: macos-14 # 애플 실리콘 기반의 가상 환경 설정
+
+    steps:
+      - name: 소스 코드를 불러옵니다.
+        uses: actions/checkout@v4
+
+      - name: Ruby 및 Fastlane을 구성합니다.
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Fastlane을 통한 업로드/배포를 시작합니다.
+        env:
+          # 가상 환경의 환경 변수 설정
+          MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+          APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
+          APPSTORE_P8_KEY: ${{ secrets.APPSTORE_P8_KEY }}
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "main 브랜치 push를 감지해서, Fastlane을 통해 App Store 배포(release lane)를 시작할게요."
+            bundle exec fastlane release
+          else
+            echo "develop 브랜치 push를 감지해서, Fastlane을 통해 TestFlight 업로드(beta lane)를 시작할게요."
+            bundle exec fastlane beta
+          fi

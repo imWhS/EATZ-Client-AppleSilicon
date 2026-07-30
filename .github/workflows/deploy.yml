@@ -26,9 +26,9 @@ jobs:
           # 가상 환경의 환경 변수 설정
           MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
-          APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
-          APPSTORE_P8_KEY: ${{ secrets.APPSTORE_P8_KEY }}
+          APP_STORE_ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
+          APP_STORE_KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
+          APP_STORE_P8_KEY: ${{ secrets.APP_STORE_P8_KEY }}
         run: |
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
             echo "main 브랜치 push를 감지해서, Fastlane을 통해 App Store 배포(release lane)를 시작할게요."

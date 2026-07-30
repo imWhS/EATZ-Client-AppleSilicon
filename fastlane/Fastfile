@@ -48,7 +48,9 @@ platform :ios do
     # Xcode Archive를 이용한 애플리케이션 빌드
     build_app(
       project: "EATZ-Client-AppleSilicon.xcodeproj",
-      scheme: "EATZ-Client-AppleSilicon"
+      scheme: "EATZ-Client-AppleSilicon",
+      configuration: "Release",
+      export_method: "app-store"
     )
 
     # TestFlight 업로드
@@ -89,7 +91,9 @@ platform :ios do
     # Xcode Archive를 이용한 애플리케이션 빌드
     build_app(
       project: "EATZ-Client-AppleSilicon.xcodeproj",
-      scheme: "EATZ-Client-AppleSilicon"
+      scheme: "EATZ-Client-AppleSilicon",
+      configuration: "Release",
+      export_method: "app-store"
     )
 
     # App Store Connect로 빌드 업로드

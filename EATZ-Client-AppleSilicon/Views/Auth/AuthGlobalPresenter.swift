@@ -26,19 +26,17 @@ class AuthGlobalPresenter {
     // MARK: - 공개 메서드
     
     func setPendingResetPasswordToken(_ token: String) {
-        self.pendingResetToken = token
+        pendingResetToken = token
     }
     
     func processPendingDeepLink() {
-        // 보류 중인 토큰이 없으면 아무 것도 안 함
+        // 보류 중인 토큰이 없으면 실행을 멈춥니다.
         guard let token = pendingResetToken else { return }
 
-        // 실행했으므로 토큰을 nil로 초기화 (중복 실행 방지)
-        self.pendingResetToken = nil
+        // 중복 실행을 방지하기 위해, 토큰을 nil로 초기화합니다.
+        pendingResetToken = nil
 
-        // (D) 이제 topViewController()가 확실히 존재하므로,
-        //     원래의 present 함수를 호출
-        self.presentResetPasswordView(token: token)
+        presentResetPasswordView(token: token)
     }
     
     
@@ -128,7 +126,7 @@ class AuthGlobalPresenter {
             }
         } else {
             // AuthView 위에 다른 뷰가 present 된 상황인 경우: 플래그만 초기화
-            self.isAuthViewPresented = false
+            isAuthViewPresented = false
         }
     }
     /// AuthView를 dismiss 합니다.
@@ -141,7 +139,7 @@ class AuthGlobalPresenter {
             }
         } else {
             // AuthView 위에 다른 뷰가 present 된 상황인 경우: 플래그만 초기화
-            self.isResetPasswordViewPresented = false
+            isResetPasswordViewPresented = false
         }
     }
 }

@@ -57,7 +57,10 @@ struct BioEditor: View {
     
     private var doneToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
-            Button("완료", action: viewModel.submit).disabled(viewModel.isUpdatingBio)
+            Button("완료", action: viewModel.submit)
+                .fontWeight(.semibold)
+                .tint(Color.accentColor)
+                .buttonStyle(.borderedProminent)
         }
     }
     

@@ -68,6 +68,9 @@ struct CalendarPicker: View {
                 onComplete(makeSelectionResult())
                 dismiss()
             }
+            .fontWeight(.semibold)
+            .tint(Color.accentColor)
+            .buttonStyle(.borderedProminent)
             .disabled(selectedDates.isEmpty)
         }
     }

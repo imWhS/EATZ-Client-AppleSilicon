@@ -121,6 +121,8 @@ struct RatingEditor: View {
                 Button("완료", action: viewModel.handleSubmit)
                     .fontWeight(.semibold)
                     .disabled(!viewModel.isSubmittable)
+                    .tint(Color.accentColor)
+                    .buttonStyle(.borderedProminent)
             }
         }
     }

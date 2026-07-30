@@ -87,6 +87,8 @@ struct RecipeCreatorInfoEditor: View {
                     ToolbarItem(placement: .confirmationAction) {
                         Button("완료", action: saveAndDismiss)
                             .fontWeight(.semibold)
+                            .tint(Color.accentColor)
+                            .buttonStyle(.borderedProminent)
                             .disabled(!isFormValid)
                     }
                 }

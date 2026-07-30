@@ -79,7 +79,10 @@ struct IngredientPicker: View {
     
     private var doneToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            Button("완료", action: { viewModel.complete() }).fontWeight(.semibold)
+            Button("완료", action: { viewModel.complete() })
+                .fontWeight(.semibold)
+                .tint(Color.accentColor)
+                .buttonStyle(.borderedProminent)
         }
     }
 }

@@ -26,8 +26,8 @@ struct UserBlockShowLearnMoreView: View {
             .coordinateSpace(name: "scroll")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                dismissToolbarItem
                 titleToolbarItem
-                doneToolBarItem
             }
         }
         
@@ -46,13 +46,12 @@ struct UserBlockShowLearnMoreView: View {
         }
     }
     
-    private var doneToolBarItem: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
-            Button("완료") {
-                dismiss()
+    private var dismissToolbarItem: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            Button(action: { dismiss() }) {
+                Image(systemName: "xmark")
+                    .font(.system(size: 17, weight: .semibold))
             }
-            .fontWeight(.semibold)
-            .foregroundColor(.primary)
         }
     }
     

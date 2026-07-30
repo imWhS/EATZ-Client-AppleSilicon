@@ -45,6 +45,9 @@ struct SelectableIngredientChildList<Manager: SelectableIngredientManager>: View
     private var doneToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Button("완료", action: { manager.complete() })
+                .fontWeight(.semibold)
+                .tint(Color.accentColor)
+                .buttonStyle(.borderedProminent)
         }
     }
 }

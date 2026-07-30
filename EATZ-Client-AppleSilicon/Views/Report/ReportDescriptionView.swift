@@ -68,7 +68,10 @@ struct ReportDescriptionView: View {
     
     private var submitToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            Button("완료", action: viewModel.handleSubmit).fontWeight(.semibold)
+            Button("완료", action: viewModel.handleSubmit)
+                .fontWeight(.semibold)
+                .tint(Color.accentColor)
+                .buttonStyle(.borderedProminent)
         }
     }
     

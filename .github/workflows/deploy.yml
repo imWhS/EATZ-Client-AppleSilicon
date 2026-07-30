@@ -15,7 +15,7 @@ jobs:
       - name: 소스 코드를 불러옵니다.
         uses: actions/checkout@v4
 
-      - name: 🛠️ 가상 맥북의 Xcode 버전을 16으로 변경
+      - name: 가상 환경의 Xcode 버전을 16.*으로 변경합니다.
         run: |
           XCODE_PATH=$(ls -d /Applications/Xcode*.app | sort -rV | head -n 1)
           echo "선택된 Xcode 경로: $XCODE_PATH"

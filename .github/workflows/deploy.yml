@@ -17,7 +17,7 @@ jobs:
 
       - name: 🛠️ 가상 맥북의 Xcode 버전을 16으로 변경
         run: |
-          XCODE_PATH=$(ls -d /Applications/Xcode_16*.app | head -n 1)
+          XCODE_PATH=$(ls -d /Applications/Xcode_26*.app | head -n 1)
           sudo xcode-select -s "$XCODE_PATH/Contents/Developer"
           xcodebuild -version
 

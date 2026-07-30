@@ -168,11 +168,10 @@ private struct AuthFrontView: View {
     let showMessages: Bool
     
     var body: some View {
-        VStack {
-            Text("EATZ")
-                .font(Font.system(size: 52, weight: .heavy))
-        }
-        .frame(maxWidth: .infinity)
+        Image("eatz-logo")
+            .resizable()
+            .scaledToFit()
+            .frame(height: 52)
     }
 }
 

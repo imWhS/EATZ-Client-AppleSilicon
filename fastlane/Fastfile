@@ -55,7 +55,8 @@ platform :ios do
       project: "EATZ-Client-AppleSilicon.xcodeproj",
       scheme: "EATZ-Client-AppleSilicon",
       configuration: "Release",
-      export_method: "app-store"
+      export_method: "app-store",
+      xcargs: "CODE_SIGN_STYLE=Manual PROVISIONING_PROFILE_SPECIFIER='match AppStore com.heextory.eatz'"
     )
 
     # TestFlight 업로드
@@ -103,7 +104,8 @@ platform :ios do
       project: "EATZ-Client-AppleSilicon.xcodeproj",
       scheme: "EATZ-Client-AppleSilicon",
       configuration: "Release",
-      export_method: "app-store"
+      export_method: "app-store",
+      xcargs: "CODE_SIGN_STYLE=Manual PROVISIONING_PROFILE_SPECIFIER='match AppStore com.heextory.eatz'"
     )
 
     # App Store Connect로 빌드 업로드

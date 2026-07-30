@@ -45,6 +45,11 @@ platform :ios do
       build_number: latest_build_number + 1
     )
 
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "EATZ-Client-AppleSilicon.xcodeproj"
+    )
+
     # Xcode Archive를 이용한 애플리케이션 빌드
     build_app(
       project: "EATZ-Client-AppleSilicon.xcodeproj",
@@ -86,6 +91,11 @@ platform :ios do
     )
     increment_build_number(
       build_number: latest_build_number + 1
+    )
+
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "EATZ-Client-AppleSilicon.xcodeproj"
     )
 
     # Xcode Archive를 이용한 애플리케이션 빌드

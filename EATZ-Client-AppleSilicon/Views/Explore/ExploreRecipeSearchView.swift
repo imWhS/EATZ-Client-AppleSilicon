@@ -31,7 +31,7 @@ struct ExploreRecipeSearchView: View {
         sort: Binding<ExploreRecipesSort>,
         selectableSortOptions: [ExploreRecipesSort],
         onFilter: @escaping (ExploreSheet) -> Void,
-        onTappedRecipe: @escaping (ExploreRecipe) -> Void,
+        onTappedRecipe: @escaping (ExploreRecipe) -> Void
     ) {
         self._viewModel = StateObject(wrappedValue: ExploreRecipeSearchViewModel(searchCriteriaPublisher: searchCriteriaPublisher))
         self._tag = tag

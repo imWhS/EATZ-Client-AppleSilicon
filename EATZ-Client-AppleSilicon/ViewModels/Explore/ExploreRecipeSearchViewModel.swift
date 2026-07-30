@@ -80,7 +80,7 @@ class ExploreRecipeSearchViewModel: ObservableObject {
     /// 그래서 뷰에서 `.task`를 사용하지 않고, 키워드 입력이 일정 시간 멈췄을 때에만 요청에 필요한 데이터를 하나로 묶어서 API를 호출하기 위해 Combine을 사용합니다.
     init(
         auth: AuthProvider = AuthManager.shared,
-        searchCriteriaPublisher: AnyPublisher<(String, ExploreFilters, ExploreRecipesSort), Never>,
+        searchCriteriaPublisher: AnyPublisher<(String, ExploreFilters, ExploreRecipesSort), Never>
     ) {
         self.auth = auth
         

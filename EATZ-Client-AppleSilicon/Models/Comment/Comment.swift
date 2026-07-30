@@ -17,7 +17,7 @@ struct Comment: Identifiable, Codable, Equatable, Hashable {
     
     func permissions(
         for currentUser: CurrentUser?,
-        recipeAuthorId: Int64,
+        recipeAuthorId: Int64
     ) -> Set<CommentPermission> {
         var result: Set<CommentPermission> = []
         

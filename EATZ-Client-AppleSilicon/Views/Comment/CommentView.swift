@@ -74,7 +74,7 @@ struct CommentView: View {
                     onBlock: viewModel.handleBlockUser,
                     onReport: viewModel.handleReportComment,
                     onUpdate: viewModel.startEditingComment,
-                    onDelete: viewModel.handleDelete,
+                    onDelete: viewModel.handleDelete
                 )
             case .error(let message):
                 ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)

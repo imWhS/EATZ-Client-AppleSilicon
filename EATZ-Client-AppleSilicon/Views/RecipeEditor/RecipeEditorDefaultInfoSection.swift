@@ -84,7 +84,7 @@ struct RecipeEditorDefaultInfoSection: View {
                     font: .systemFont(ofSize: 17),
                     padding: .init(top: 20, leading: 0, bottom: 20, trailing: 0),
                     cornerRadius: 0,
-                    stroke: .clear,
+                    stroke: .clear
                 )
                 .focused($focusedField, equals: .description)
                 HorizontalDivider(padding: 0)

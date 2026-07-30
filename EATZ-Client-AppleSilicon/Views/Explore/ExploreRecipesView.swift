@@ -27,7 +27,7 @@ struct ExploreRecipesView: View {
         sort: Binding<ExploreRecipesSort>,
         selectableSortOptions: [ExploreRecipesSort],
         onFilter: @escaping (ExploreSheet) -> Void,
-        onTappedRecipe: @escaping (ExploreRecipe) -> Void,
+        onTappedRecipe: @escaping (ExploreRecipe) -> Void
     ) {
         self._tag = tag
         self._filters = filters

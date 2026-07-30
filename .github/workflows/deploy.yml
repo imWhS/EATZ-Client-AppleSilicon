@@ -15,6 +15,12 @@ jobs:
       - name: 소스 코드를 불러옵니다.
         uses: actions/checkout@v4
 
+      - name: 🛠️ 가상 맥북의 Xcode 버전을 16으로 변경
+        run: |
+          XCODE_PATH=$(ls -d /Applications/Xcode_16*.app | head -n 1)
+          sudo xcode-select -s "$XCODE_PATH/Contents/Developer"
+          xcodebuild -version
+
       - name: Ruby 및 Fastlane을 구성합니다.
         uses: ruby/setup-ruby@v1
         with:

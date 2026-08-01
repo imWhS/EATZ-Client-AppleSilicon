@@ -5,7 +5,7 @@
 //  Created by 손원희 on 5/17/25.
 //
 
-import Foundation
+import SwiftUI
 import Alamofire
 
 final class RecipeService {
@@ -75,9 +75,17 @@ final class RecipeService {
     }
     
     func fetchRecipeUrl(id: Int64, completion: @escaping (Result<RecipeOutboundResponse, NetworkError>) -> Void) {
+        let deviceId = UIDevice.current.identifierForVendor?.uuidString ?? UUID().uuidString
+        let timeZoneId = TimeZone.current.identifier
+        let headers: [String : String] = [
+            "X-Device-ID": deviceId,
+            "Time-Zone": timeZoneId
+        ]
+        
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)/urls/\(id)",
             method: .post,
+            headers: headers,
             completion: completion)
     }
     

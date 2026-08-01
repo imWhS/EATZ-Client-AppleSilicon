@@ -42,12 +42,12 @@ final class AuthService {
         password: String,
         completion: @escaping (Result<Void, NetworkError>) -> Void
     ) {
-        let signUp = SignUp(username: username, email: email, password: password)
+        let request = SignUpRequest(username: username, email: email, password: password)
         
         networkClient.requestPublicNoContent(
             endpointUrl: "\(commonEndpointUrl)/sign-up",
             method: .post,
-            parameters: signUp,
+            parameters: request,
             completion: completion
         )
     }
@@ -98,12 +98,12 @@ final class AuthService {
         password: String,
         completion: @escaping (Result<(accessToken: String, user: CurrentUser), NetworkError>) -> Void
     ) {
-        let logIn = LogIn(email: email, password: password)
+        let request = LogInRequest(email: email, password: password)
         
         networkClient.authRequest(
             endpointUrl: "/login",
             disableApiBaseUrl: true,
-            parameters: logIn
+            parameters: request
         ) { result in
             switch result {
             case .success(let authTokens):
@@ -141,27 +141,27 @@ final class AuthService {
     }
     
     func checkVerificationStatus(email: String, completion: @escaping (Result<Void, NetworkError>) -> Void) {
-        let checkVerificationStatus = CheckVerificationStatus(email: email)
-        
+        let request = CheckVerificationStatusRequest(email: email)
         networkClient.requestPublicNoContent(
             endpointUrl: "\(commonEndpointUrl)/sign-up/email-validation/status",
             method: .get,
-            parameters: checkVerificationStatus,
+            parameters: request,
             completion: completion
         )
     }
     
     func sendValidationCode(email: String, completion: @escaping (Result<SendVerificationCodeResponse, NetworkError>) -> Void) {
-        let sendValidationCode = SendValidationCode(email: email)
+        let timeZoneId = TimeZone.current.identifier
+        let request = SendValidationCodeRequest(email: email, timeZoneId: timeZoneId)
         networkClient.requestPublic(
             endpointUrl: "\(commonEndpointUrl)/sign-up/email-validation",
             method: .post,
-            parameters: sendValidationCode,
+            parameters: request,
             completion: completion)
     }
     
     func verifyValidationCode(email: String, code: String, completion: @escaping (Result<Void, NetworkError>) -> Void) {
-        let verifyValidationCode = VerifyValidationCode(email: email, code: code)
-        networkClient.requestPublicNoContent(endpointUrl: "\(commonEndpointUrl)/sign-up/email-validation/verify", method: .post, parameters: verifyValidationCode, completion: completion)
+        let request = VerifyValidationCodeRequest(email: email, code: code)
+        networkClient.requestPublicNoContent(endpointUrl: "\(commonEndpointUrl)/sign-up/email-validation/verify", method: .post, parameters: request, completion: completion)
     }
 }

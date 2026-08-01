@@ -258,13 +258,15 @@ class NetworkClient {
     public func request<D: Decodable>(
         endpointUrl: String,
         method: HTTPMethod,
-        parameters: D? = nil,
+//        parameters: D? = nil,
+        headers: [String : String]? = nil,
         completion: @escaping (Result<D, NetworkError>) -> Void)
     {
         self.request(
             endpointUrl: endpointUrl,
             method: method,
             parameters: nil as String?,
+            headers: headers,
             completion: completion
         )
     }
@@ -273,6 +275,7 @@ class NetworkClient {
         endpointUrl: String,
         method: HTTPMethod,
         parameters: E? = nil,
+        headers: [String : String]? = nil,
         encodingType: EncodingType = .auto,
         completion: @escaping (Result<D, NetworkError>) -> Void)
     {
@@ -281,6 +284,7 @@ class NetworkClient {
             endpointUrl: endpointUrl,
             method: method,
             parameters: parameters,
+            headers: headers,
             encodingType: encodingType,
             completion: completion
         )
@@ -294,7 +298,7 @@ class NetworkClient {
         requestPublic(
             endpointUrl: endpointUrl,
             method: method,
-            parameters: nil as [String: String]?,
+            parameters: nil as [String : String]?,
             completion: completion
         )
     }
@@ -403,6 +407,7 @@ class NetworkClient {
         endpointUrl: String,
         method: HTTPMethod,
         parameters: E? = nil,
+        headers: [String : String]? = nil,
         encodingType: EncodingType = .auto,
         completion: @escaping (Result<D, NetworkError>
         ) -> Void)
@@ -416,11 +421,14 @@ class NetworkClient {
         print("[NetworkClient.performDecodableRequest] \(session === authSession ? "AUTH" : "PUBLIC") | \(method.rawValue) \(url.absoluteString) 요청 시도")
         let encoder = getEncoder(method: method, type: encodingType)
         
+        let afHeaders = headers.map { HTTPHeaders($0) }
+        
         session.request(
                 url,
                 method: method,
                 parameters: parameters,
-                encoder: encoder)
+                encoder: encoder,
+                headers: afHeaders)
             .validate(statusCode: 200 ..< 300)
             .responseDecodable(of: D.self, decoder: Self.springBootLocalDateTimeJsonDecoder) { response in
                 let statusCode = response.response?.statusCode ?? 0

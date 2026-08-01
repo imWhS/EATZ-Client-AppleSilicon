@@ -9,5 +9,7 @@ import Foundation
 
 struct IngredientEssential: Hashable, Equatable, Codable, Identifiable {
     let id: Int64
+    let parentCoupled: Bool
+    let coupledParentName: String?
     let name: String
 }

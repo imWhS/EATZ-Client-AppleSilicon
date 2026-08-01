@@ -14,7 +14,7 @@ struct RecipeDetailRequirementsIngredientItem: View {
     
     var body: some View {
         IngredientRow(ingredient,
-                      appearance: .outlined,
+                      style: .outlined,
                       isEnabled: isLoggedIn,
                       icon: icon,
                       trailing: trailing)

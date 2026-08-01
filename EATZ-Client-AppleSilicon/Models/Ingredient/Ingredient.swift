@@ -12,6 +12,8 @@
  */
 struct Ingredient: Codable, Identifiable, Hashable, IngredientDisplayable {
     var id: Int64
+    var parentCoupled: Bool
+    var coupledParentName: String?
     var name: String
     var hasChildren: Bool
     var ownedByUser: Bool
@@ -19,6 +21,8 @@ struct Ingredient: Codable, Identifiable, Hashable, IngredientDisplayable {
     
     init(from root: IngredientBasic) {
         self.id = root.id
+        self.parentCoupled = root.parentCoupled
+        self.coupledParentName = root.coupledParentName
         self.name = root.name
         self.hasChildren = root.hasChildren
         self.ownedByUser = root.ownedByUser
@@ -27,6 +31,8 @@ struct Ingredient: Codable, Identifiable, Hashable, IngredientDisplayable {
     
     init(from child: IngredientDetailResponse.Child) {
         self.id = child.id
+        self.parentCoupled = child.parentCoupled
+        self.coupledParentName = child.coupledParentName
         self.name = child.name
         self.hasChildren = child.hasChildren
         self.ownedByUser = child.ownedByUser
@@ -34,6 +40,10 @@ struct Ingredient: Codable, Identifiable, Hashable, IngredientDisplayable {
     }
     
     func toIngredientEssential() -> IngredientEssential {
-        return IngredientEssential(id: self.id, name: self.name)
+        return IngredientEssential(
+            id: self.id,
+            parentCoupled: self.parentCoupled,
+            coupledParentName: self.coupledParentName,
+            name: self.name)
     }
 }

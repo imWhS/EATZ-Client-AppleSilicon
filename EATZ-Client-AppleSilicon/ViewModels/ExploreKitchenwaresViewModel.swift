@@ -13,7 +13,7 @@ class ExploreKitchenwaresViewModel: ObservableObject {
     // MARK: - 뷰 상태 프로퍼티 (View State Properties)
     
     @Published var viewState: ExploreKitchenwaresViewState = .loading
-    @Published var searchState: ExploreKitchenwareListViewSearchState = .searching
+    @Published var searchState: ExploreKitchenwareListSearchState = .searching
     @Published var pagedKitchenwares: Paged<Kitchenware> = .initial
     
     @Published var showNavigationBarTitle = false
@@ -281,7 +281,7 @@ enum ExploreKitchenwaresViewState {
     case empty
 }
 
-enum ExploreKitchenwareListViewSearchState {
+enum ExploreKitchenwareListSearchState {
     case searching
     case searched
     case error(message: String)

@@ -30,9 +30,12 @@ struct SelectedIngredientBar: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
                 ForEach(ingredients) { ingredient in
-                    SelectedIngredientItem(name: ingredient.name, onDeselect: {
-                        onDeselectIngredient(ingredient)
-                    })
+                    SelectedIngredientItem(
+                        parentCoupled: ingredient.parentCoupled,
+                        coupledParentName: ingredient.coupledParentName,
+                        name: ingredient.name,
+                        onDeselect: { onDeselectIngredient(ingredient) }
+                    )
                 }
             }
             .padding(.horizontal, 20)

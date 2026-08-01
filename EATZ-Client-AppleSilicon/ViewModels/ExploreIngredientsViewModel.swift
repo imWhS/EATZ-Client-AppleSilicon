@@ -13,7 +13,7 @@ class ExploreIngredientsViewModel: ObservableObject {
     // MARK: - 뷰 상태 프로퍼티 (View State Properties)
     
     @Published var viewState: ExploreIngredientsViewState = .loading
-    @Published var searchState: ExploreIngredientListViewSearchState = .searching
+    @Published var searchState: ExploreIngredientListSearchState = .searching
     @Published var pagedIngredients: Paged<Ingredient> = .initial
     @Published var childListState: [Int64: ExploreIngredientsViewState] = [:]
     
@@ -341,7 +341,7 @@ enum ExploreIngredientsViewState {
     case error(message: String)
 }
 
-enum ExploreIngredientListViewSearchState {
+enum ExploreIngredientListSearchState {
     case searching
     case searched
     case error(message: String)

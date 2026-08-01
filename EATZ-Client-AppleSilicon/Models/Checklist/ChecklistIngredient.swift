@@ -7,6 +7,8 @@
 
 struct ChecklistIngredient : Hashable, Equatable, Codable, Identifiable {
     let id: Int64
+    let parentCoupled: Bool
+    let coupledParentName: String?
     let name: String
     var missing: Bool
     var likedByUser: Bool

@@ -1,5 +1,5 @@
 //
-//  IngredientSelectionItem.swift
+//  SelectedTagItem.swift
 //  EATZ-Client-AppleSilicon
 //
 //  Created by 손원희 on 7/22/25.
@@ -7,9 +7,7 @@
 
 import SwiftUI
 
-struct SelectedIngredientItem: View {
-    let parentCoupled: Bool
-    let coupledParentName: String?
+struct SelectedTagItem: View {
     let name: String
     var isFullWidth: Bool = false
     var onDeselect: () -> Void
@@ -18,15 +16,7 @@ struct SelectedIngredientItem: View {
         Button(action: onDeselect) {
             HStack(alignment: .center, spacing: 4) {
                 HStack(spacing: 4) {
-                    Group {
-                        if parentCoupled,
-                           let coupledParentName = coupledParentName,
-                           coupledParentName.isEmpty == false {
-                            Text(coupledParentName)
-                                .foregroundStyle(Color.gray60)
-                        }
-                        Text(name)
-                    }
+                    Text(name)
                     .font(.system(size: 17, weight: .medium))
                     
                     if isFullWidth { Spacer() }

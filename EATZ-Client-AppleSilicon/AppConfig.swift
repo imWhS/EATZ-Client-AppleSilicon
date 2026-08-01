@@ -18,7 +18,8 @@ struct AppConfig {
         print("현재 서버 도메인: \(urlString)")
         #endif
         
-        return urlString
+//        return urlString
+        return "http://localhost:8080"
     }
     
     static var apiBaseUrl: String {

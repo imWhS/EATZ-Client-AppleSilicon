@@ -9,6 +9,8 @@ import Foundation
 
 protocol IngredientDisplayable {
     var id: Int64 { get }
+    var parentCoupled: Bool { get }
+    var coupledParentName: String? { get } 
     var name: String { get }
     var hasChildren: Bool { get }
     var ownedByUser: Bool { get set }

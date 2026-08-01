@@ -27,7 +27,7 @@ struct RecipeEditorTagsSection: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
                             ForEach(draft.tagNames, id: \.self) { tagName in
-                                SelectedIngredientItem(
+                                SelectedTagItem(
                                     name: tagName,
                                     onDeselect: {
                                         draft.tagNames.removeAll { $0 == tagName }

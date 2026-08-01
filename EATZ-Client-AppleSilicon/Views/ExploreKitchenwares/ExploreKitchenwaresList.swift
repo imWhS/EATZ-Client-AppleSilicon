@@ -12,7 +12,7 @@ struct ExploreKitchenwaresList: View {
     let pagedSearchedKitchenwares: Paged<Kitchenware>
     @Binding var searchKeyword: String
     
-    var searchState: ExploreKitchenwareListViewSearchState
+    var searchState: ExploreKitchenwareListSearchState
     let onItemAction: (KitchenwareItemAction) -> Void
     @Binding var showNavigationBarTitle: Bool
     let onLoadMoreKitchenwares: () -> Void

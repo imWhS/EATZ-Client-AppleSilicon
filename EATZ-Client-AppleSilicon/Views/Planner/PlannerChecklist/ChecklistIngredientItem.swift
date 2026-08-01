@@ -33,9 +33,20 @@ struct ChecklistIngredientItem: View {
     var body: some View {
         HStack {
             Image(ingredient.missing ? "recipe-ingredients-cookable-needed" : "recipe-ingredients-cookable-added")
-            Text(ingredient.name)
-                .font(.system(size: 17, weight: .medium))
-            Spacer()
+            
+            HStack(spacing: 4) {
+                Group {
+                    if ingredient.parentCoupled,
+                       let coupledParentName = ingredient.coupledParentName,
+                       coupledParentName.isEmpty == false {
+                        Text(coupledParentName)
+                            .foregroundStyle(Color.gray60)
+                    }
+                    Text(ingredient.name)
+                        .font(.system(size: 17, weight: .medium))
+                    Spacer()
+                }
+            }
             
             if isLoading {
                 ProgressView()

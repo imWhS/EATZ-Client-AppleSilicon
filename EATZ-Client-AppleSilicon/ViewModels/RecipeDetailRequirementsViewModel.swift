@@ -60,7 +60,7 @@ class RecipeDetailRequirementsViewModel: ObservableObject {
         var error: NetworkError?
         
         group.enter()
-        RecipeService.shared.fetchIngredients(id: recipeId) { [weak self] result in
+        RecipeService.shared.fetchIngredients(id: recipeId) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let ingredients): loadedIngredients = ingredients
@@ -71,7 +71,7 @@ class RecipeDetailRequirementsViewModel: ObservableObject {
         }
         
         group.enter()
-        RecipeService.shared.fetchKitchenwares(id: recipeId) { [weak self] result in
+        RecipeService.shared.fetchKitchenwares(id: recipeId) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let kitchenwares): loadedKitchenwares = kitchenwares

@@ -8,39 +8,20 @@
 import SwiftUI
 import Kingfisher
 
-enum KitchenwareRowAppearance {
-    case filled
-    case outlined
-    
-    var background: Color {
-        switch self {
-        case .filled: .gray2
-        case .outlined: .clear
-        }
-    }
-    
-    var borderColor: Color {
-        switch self {
-        case .filled: .clear
-        case .outlined: .black.opacity(0.08)
-        }
-    }
-}
-
 struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: View {
     let kitchenware: K
-    let appearance: KitchenwareRowAppearance
+    let style: KitchenwareRowStyle
     let isEnabled: Bool
     @ViewBuilder let icon: Icon
     @ViewBuilder let trailing: Trailing
     
     init(_ kitchenware: K,
-         appearance: KitchenwareRowAppearance = .filled,
+         style: KitchenwareRowStyle = .filled,
          isEnabled: Bool = true,
          @ViewBuilder _ icon: @escaping () -> Icon = { EmptyView() },
          @ViewBuilder trailing: @escaping () -> Trailing) {
         self.kitchenware = kitchenware
-        self.appearance = appearance
+        self.style = style
         self.isEnabled = isEnabled
         self.icon = icon()
         self.trailing = trailing()
@@ -52,11 +33,11 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
             trailing
         }
         .frame(minHeight: 48)
-        .background(appearance.background)
+        .background(style.background)
         .cornerRadius(14)
         .overlay(
             RoundedRectangle(cornerRadius: 14)
-                .stroke(appearance.borderColor, lineWidth: 1)
+                .stroke(style.borderColor, lineWidth: 1)
         )
         .padding(.vertical, 0.5)
     }
@@ -90,6 +71,25 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
                 .font(.system(size: 17, weight: .medium))
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+}
+
+enum KitchenwareRowStyle {
+    case filled
+    case outlined
+    
+    var background: Color {
+        switch self {
+        case .filled: .gray2
+        case .outlined: .clear
+        }
+    }
+    
+    var borderColor: Color {
+        switch self {
+        case .filled: .clear
+        case .outlined: .black.opacity(0.08)
         }
     }
 }

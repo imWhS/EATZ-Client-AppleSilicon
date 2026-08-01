@@ -10,7 +10,7 @@ import SwiftUI
 struct ExploreIngredientsList: View {
     @EnvironmentObject var viewModel: ExploreIngredientsViewModel
     
-    var searchState: ExploreIngredientListViewSearchState { viewModel.searchState }
+    var searchState: ExploreIngredientListSearchState { viewModel.searchState }
     
     var pagedIngredients: Paged<Ingredient> { viewModel.pagedIngredients }
     var pagedSearchedIngredients: Paged<Ingredient> { viewModel.pagedSearchedIngredients }

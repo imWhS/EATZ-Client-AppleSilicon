@@ -216,7 +216,7 @@ private struct ChecklistUncookableSection: View {
             VStack(spacing: 20) {
                 HorizontalDivider()
                 VStack(spacing: 0) {
-                    Text("이미 위의 재료와 도구를 모두 가지고 있다면, 지금 바로 보관함에 재료와 도구를 추가해 보세요.")
+                    Text("이미 위의 재료와 도구를 모두 가지고 있다면, 지금 바로 보관함에 재료와 도구를 추가해보세요.")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(Color.gray35)
                         .multilineTextAlignment(.center)

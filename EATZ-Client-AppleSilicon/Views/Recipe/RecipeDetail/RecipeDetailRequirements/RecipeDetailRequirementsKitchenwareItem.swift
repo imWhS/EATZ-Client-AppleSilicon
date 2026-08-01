@@ -14,7 +14,7 @@ struct RecipeDetailRequirementsKitchenwareItem: View {
     let onAction: (RecipeDetailRequirementsAction) -> Void
     
     var body: some View {
-        KitchenwareRow(kitchenware, appearance: .outlined, isEnabled: isLoggedIn, icon, trailing: trailing)
+        KitchenwareRow(kitchenware, style: .outlined, isEnabled: isLoggedIn, icon, trailing: trailing)
             .padding(.horizontal, 4)
     }
     

@@ -62,8 +62,14 @@ struct RecipeEditorRequirementsSection: View {
                             
                             VStack {
                                 ForEach(draft.ingredients, id: \.id) { ingredient in
-                                    SelectedIngredientItem(name: ingredient.name, isFullWidth: true, onDeselect: { draft.ingredients.removeAll { $0.id == ingredient.id } })
-                                        .padding(.horizontal, 20)
+                                    SelectedIngredientItem(
+                                        parentCoupled: ingredient.parentCoupled,
+                                        coupledParentName: ingredient.coupledParentName,
+                                        name: ingredient.name,
+                                        isFullWidth: true,
+                                        onDeselect: { draft.ingredients.removeAll { $0.id == ingredient.id } }
+                                    )
+                                    .padding(.horizontal, 20)
                                 }
                             }
                         }

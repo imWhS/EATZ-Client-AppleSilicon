@@ -33,6 +33,8 @@ struct Recipe: Codable, Equatable, Hashable {
 
 struct RecipeIngredient: Codable, Equatable, Hashable, Identifiable, IngredientDisplayable {
     var id: Int64
+    var parentCoupled: Bool
+    var coupledParentName: String?
     var name: String
     var hasChildren: Bool { false }
     var ownedByUser: Bool

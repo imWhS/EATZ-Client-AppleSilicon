@@ -1,14 +1,13 @@
 //
-//  SignUp.swift
+//  LogIn.swift
 //  EATZ-Client-AppleSilicon
 //
-//  Created by 손원희 on 3/19/26.
+//  Created by 손원희 on 3/18/26.
 //
 
 import Foundation
 
-struct SignUp : Encodable {
-    let username: String
+struct LogInRequest : Encodable {
     let email: String
     let password: String
 }

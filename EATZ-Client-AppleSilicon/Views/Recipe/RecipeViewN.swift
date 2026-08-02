@@ -67,6 +67,7 @@ struct RecipeViewN: View {
     
     var body: some View {
         recipeView
+            .applySoftScrollEdgeEffectStyle()
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("레시피")
             .navigationDestination(for: RecipeTag.self) { tag in

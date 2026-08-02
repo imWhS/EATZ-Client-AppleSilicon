@@ -19,7 +19,10 @@ struct RecipeDetailInfoSection: View {
                 createdAt: recipe.createdAt,
                 authorUsername: recipe.author.username,
                 authorImageUrl: recipe.author.imageUrl,
-                authorBio: recipe.author.bio)
+                authorBio: recipe.author.bio,
+                creatorName: recipe.creatorName,
+                creatorUrl: recipe.creatorUrl
+            )
             RecipeDetailInfoReactionView(
                 recipe.id,
                 ratingSummary: recipe.ratingIndicatorSummary,
@@ -32,13 +35,29 @@ struct RecipeDetailInfoSection: View {
 }
 
 struct RecipeDetailInfoDescriptionView: View {
-//    let recipe: Recipe
+    @Environment(\.openURL) private var openURL
+    
     let description: String
     let createdAt: Date
     
     let authorUsername: String
     let authorImageUrl: String?
     let authorBio: String?
+    
+    let creatorName: String?
+    let creatorUrl: String?
+    
+    private var hasCreator: Bool {
+        if let creatorName = creatorName, !creatorName.isEmpty {
+            return true
+        }
+
+        if let creatorUrl = creatorUrl, !creatorUrl.isEmpty {
+            return true
+        }
+        
+        return false
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -79,23 +98,11 @@ struct RecipeDetailInfoDescriptionView: View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 16) {
                 Group {
-                    HStack(spacing: 20) {
-                        HStack(spacing: 10) {
-                            ProfileImageView(imageUrl: authorImageUrl, size: 40)
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("레시피 작성자")
-                                    .font(.system(size: 12, weight: .medium))
-                                    .foregroundStyle(Color.gray20)
-                                HStack {
-                                    Text(authorUsername)
-                                        .font(.system(size: 17, weight: .semibold))
-                                    DotSeparatorView()
-                                    Text(createdAt.formattedRelative)
-                                        .font(.system(size: 17, weight: .medium))
-                                }
-                            }
-                            Spacer()
+                    VStack(spacing: 20) {
+                        if hasCreator {
+                            creatorSection
                         }
+                        authorSection
                     }
                     
                     if let bio = authorBio {
@@ -111,6 +118,58 @@ struct RecipeDetailInfoDescriptionView: View {
             }
         }
         .padding(.horizontal, 20)
+    }
+    
+    private var creatorSection: some View {
+        HStack(spacing: 10) {
+            Circle().stroke(Color.gray.opacity(0.2), lineWidth: 1)
+                .overlay(
+                    Text("!")
+                        .font(.system(size: 17, weight: .bold))
+                        .foregroundStyle(Color.gray15)
+                )
+                .frame(width: 40, height: 40)
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text("출처")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color.gray35)
+                HStack {
+                    Group {
+                        if let creatorName = creatorName {
+                            if let urlString = creatorUrl, let url = URL(string: urlString) {
+                                Link(creatorName, destination: url)
+                            } else {
+                                Text(creatorName)
+                            }
+                        } else if let urlString = creatorUrl, let url = URL(string: urlString) {
+                            Link(urlString, destination: url)
+                        }
+                    }
+                    .font(.system(size: 17, weight: .medium))
+                }
+            }
+            Spacer()
+        }
+    }
+    
+    private var authorSection: some View {
+        HStack(spacing: 10) {
+            ProfileImageView(imageUrl: authorImageUrl, size: 40)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("레시피 작성자")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color.gray35)
+                HStack {
+                    Text(authorUsername)
+                        .font(.system(size: 17, weight: .semibold))
+                    DotSeparatorView()
+                    Text(createdAt.formattedRelative)
+                        .font(.system(size: 17, weight: .medium))
+                }
+            }
+            Spacer()
+        }
     }
 }
 

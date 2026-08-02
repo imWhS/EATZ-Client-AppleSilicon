@@ -11,8 +11,17 @@ enum SupportEmailUtli {
     static func createEmailURL() -> URL? {
         let subject = "[EATZ] (여기를 지우고 제목을 작성해 주세요!)"
         
-        let eatzVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "알 수 없음"
-        let iosVersion = UIDevice.current.systemVersion
+        var clientVersion: String {
+            Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "알 수 없음"
+        }
+        
+        var iosVersion: String {
+            UIDevice.current.systemVersion
+        }
+        
+        var clientBuildNumber: String {
+            Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+       }
         
         let body =
                 """
@@ -20,7 +29,7 @@ enum SupportEmailUtli {
                 
                 —
                 아래 내용은 지우지 말고 그대로 남겨주세요!
-                * EATZ iOS 버전: \(eatzVersion)
+                * EATZ iOS 버전: \(clientVersion) (\(clientBuildNumber))
                 * iOS 버전: \(iosVersion)
                 """
         

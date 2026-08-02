@@ -65,7 +65,7 @@ struct IngredientAdditionView: View {
         if viewModel.searchKeyword.isEmpty {
             return ""
         } else {
-            return "'\(viewModel.searchKeyword)' 관련 재료 찾는 중"
+            return "'\(viewModel.searchKeyword)' 관련 재료"
         }
     }
     

@@ -109,7 +109,7 @@ struct ChecklistPlanItem: View {
                 }
             }
             
-            Button {
+            Button(role: .destructive) {
                 onAction(plan, .report)
             } label: {
                 Label("레시피 신고", systemImage: "exclamationmark.bubble")

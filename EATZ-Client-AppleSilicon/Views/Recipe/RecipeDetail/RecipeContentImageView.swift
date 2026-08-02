@@ -16,12 +16,17 @@ struct RecipeContentImageView: View {
     }
     
     var body: some View {
-        Group {
-            KFImage(URL(imageUrlString: imageUrl))
-                .resizable()
-                .aspectRatio(1, contentMode: .fit)
-                .clipped()
-                .ignoresSafeArea()
-        }
+        Color.clear
+            .aspectRatio(1, contentMode: .fit)
+            .overlay (
+                KFImage(URL(imageUrlString: imageUrl))
+                    .placeholder {
+                        ProgressView()
+                    }
+                    .resizable()
+                    .scaledToFill()
+                    .ignoresSafeArea()
+            )
+            .clipShape(Rectangle())
     }
 }

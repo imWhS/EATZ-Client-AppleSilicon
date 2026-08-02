@@ -23,8 +23,8 @@ struct HorizontalRecipeCard: View {
                     }
                 }
                 .resizable()
-                .aspectRatio(1, contentMode: .fit)
-                .frame(width: size)
+                .aspectRatio(contentMode: .fill)
+                .frame(width: size, height: size)
                 .background(Color.white)
                 .cornerRadius(12)
         }

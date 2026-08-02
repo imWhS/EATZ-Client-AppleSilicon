@@ -39,7 +39,7 @@ struct RecipeEssentialView: View {
                             ProgressView()
                         }
                         .resizable()
-                        .scaledToFill()
+                        .aspectRatio(contentMode: .fill)
                         .frame(width: 60, height: 60)
                         .clipped()
                     VStack(alignment: .leading, spacing: 4) {

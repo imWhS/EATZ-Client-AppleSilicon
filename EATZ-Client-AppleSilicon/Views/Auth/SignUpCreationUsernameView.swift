@@ -81,6 +81,9 @@ struct SignUpCreationUsernameView: View {
             Button(action: viewModel.signUp) {
                 Text("완료").fontWeight(.semibold)
             }
+            .fontWeight(.semibold)
+            .tint(Color.accentColor)
+            .buttonStyle(.borderedProminent)
             .disabled(viewModel.password.isEmpty)
         }
     }

@@ -144,12 +144,14 @@ extension CookableRecipeListViewModel {
     }
     
     private func handleReportRecipe(for recipe: CookableRecipe) {
-        reportResource = ReportResource(
-            id: recipe.id,
-            authorId: recipe.authorId,
-            authorUsername: recipe.authorUsername,
-            type: .RECIPE,
-            content: recipe.title)
+        auth.performWhenLoggedIn {
+            self.reportResource = ReportResource(
+                id: recipe.id,
+                authorId: recipe.authorId,
+                authorUsername: recipe.authorUsername,
+                type: .RECIPE,
+                content: recipe.title)
+        }
     }
     
     func presentCalendar(for id: Int64) {

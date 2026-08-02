@@ -29,10 +29,11 @@ struct SelectedKitchenwareItem: View {
     private var kitchenwareImage: some View {
         if let imageUrl = imageUrl {
             KFImage(URL(imageUrlString: imageUrl))
-                .resizable()
                 .placeholder {
                     Circle().fill(Color.white)
                 }
+                .resizable()
+                .aspectRatio(contentMode: .fill)
                 .frame(width: 48, height: 48)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .overlay(

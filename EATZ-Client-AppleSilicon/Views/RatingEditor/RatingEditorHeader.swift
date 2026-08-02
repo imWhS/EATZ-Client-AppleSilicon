@@ -20,7 +20,7 @@ struct RatingEditorHeader: View {
                         .background(Color.white)
                 }
                 .resizable()
-                .scaledToFill()
+                .aspectRatio(contentMode: .fill)
                 .frame(width: 104, height: 104)
                 .clipped()
                 .cornerRadius(16)

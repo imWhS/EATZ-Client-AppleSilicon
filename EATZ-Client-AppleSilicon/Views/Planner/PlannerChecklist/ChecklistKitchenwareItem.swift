@@ -46,10 +46,11 @@ struct ChecklistKitchenwareItem: View {
     
     private var imageView: some View {
         KFImage(URL(imageUrlString: kitchenware.imageUrl ?? ""))
-            .resizable()
             .placeholder {
                 Circle().fill(Color.white)
             }
+            .resizable()
+            .aspectRatio(contentMode: .fill)
             .frame(width: 48, height: 48)
             .clipShape(Circle())
             .overlay(

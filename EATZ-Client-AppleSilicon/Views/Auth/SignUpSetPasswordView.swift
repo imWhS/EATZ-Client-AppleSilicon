@@ -95,7 +95,11 @@ struct SignUpSetPasswordView: View {
     private var doneToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Button(action: viewModel.validatePassword) {
-                Text("완료").font(.system(size: 17, weight: .semibold))
+                Text("완료")
+                    .fontWeight(.semibold)
+                    .tint(Color.accentColor)
+                    .buttonStyle(.borderedProminent)
+                
             }
             .disabled(viewModel.password.count < 8)
         }

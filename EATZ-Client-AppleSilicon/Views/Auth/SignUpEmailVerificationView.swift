@@ -156,7 +156,10 @@ struct SignUpEmailVerificationView: View {
     private var doneToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Button(action: {}) {
-                Text("완료").fontWeight(.semibold)
+                Text("완료")
+                    .fontWeight(.semibold)
+                    .tint(Color.accentColor)
+                    .buttonStyle(.borderedProminent)
             }
         }
     }

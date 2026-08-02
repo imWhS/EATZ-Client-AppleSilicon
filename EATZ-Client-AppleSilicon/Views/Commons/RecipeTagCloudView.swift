@@ -62,14 +62,12 @@ struct RecipeTagCloudView: View {
     var body: some View {
         TagCloudLayout(spacing: 6) {
             ForEach(Array(tags.enumerated()), id: \.1.id) { (index, tag) in
-                NavigationLink(value: tag) {
-                    HStack(spacing: 6) {
-                        Text(tag.name)
-                            .font(.system(size: 12, weight: .medium))
-                            .foregroundStyle(Color.black)
-                        if index < tags.count - 1 {
-                            DotSeparatorView(diameter: 1.5)
-                        }
+                HStack(spacing: 6) {
+                    Text(tag.name)
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(Color.black)
+                    if index < tags.count - 1 {
+                        DotSeparatorView(diameter: 1.5)
                     }
                 }
             }

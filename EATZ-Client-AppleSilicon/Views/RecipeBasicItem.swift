@@ -47,7 +47,6 @@ struct RecipeBasicItem<MenuContent: View>: View {
     
     private var imageView: some View {
         KFImage(URL(imageUrlString: recipe.imageUrl))
-            .resizable()
             .placeholder {
                 VStack {
                     ProgressView()
@@ -55,6 +54,8 @@ struct RecipeBasicItem<MenuContent: View>: View {
                 }
                 .background(Color.buttonSecondary)
             }
+            .resizable()
+            .aspectRatio(contentMode: .fill)
             .frame(width: 96, height: 96)
     }
     

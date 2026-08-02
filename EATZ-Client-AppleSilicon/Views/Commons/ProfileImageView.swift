@@ -14,11 +14,12 @@ struct ProfileImageView: View {
     
     var body: some View {
         KFImage(URL(imageUrlString: imageUrl))
-            .resizable()
             .placeholder {
                 Circle()
                     .fill(Color.white)
             }
+            .resizable()
+            .aspectRatio(contentMode: .fill)
             .frame(width: size, height: size)
             .clipShape(Circle())
             .overlay(

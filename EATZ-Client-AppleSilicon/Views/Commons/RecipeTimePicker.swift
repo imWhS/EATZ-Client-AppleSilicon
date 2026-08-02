@@ -46,7 +46,7 @@ struct RecipeTimePicker: View {
         cookingTime == 0
     }
     
-    private var timeBreakdownLabel: String {
+    private var totalTimeDetailLabel: String {
         let cookingTimeLabel = getFormattedTime(for: cookingTime)
         let prepTimeLabel = getFormattedTime(for: prepTime)
         return "요리 시간 \(cookingTimeLabel) + 준비 시간 \(prepTimeLabel)"
@@ -124,7 +124,7 @@ struct RecipeTimePicker: View {
             HStack {
                 Text("소요 시간 \(totalTimeLabel)")
             }
-            Text(timeBreakdownLabel)
+            Text(totalTimeDetailLabel)
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(Color.gray35)
         }
@@ -135,7 +135,6 @@ struct RecipeTimePicker: View {
         .background(Color.clear)
         .cornerRadius(12)
         .padding()
-        .background(Color.backgroundPrimary)
     }
     
     private var prepTimePickerView: some View {
@@ -145,8 +144,10 @@ struct RecipeTimePicker: View {
                 minutes: $prepDurationTime.m
             )
             Spacer()
+            HorizontalDivider()
             prepTimePickerSummaryCardView
         }
+        .background(Color.clear)
         .navigationTitle("준비 시간")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

@@ -40,3 +40,14 @@ extension View {
         modifier(BorderModifier(color: color, width: width, radius: radius))
     }
 }
+
+extension View {
+    @ViewBuilder
+    func applySoftScrollEdgeEffectStyle() -> some View {
+        if #available(iOS 26.0, *) {
+            self.scrollEdgeEffectStyle(.soft, for: .top)
+        } else {
+            self
+        }
+    }
+}

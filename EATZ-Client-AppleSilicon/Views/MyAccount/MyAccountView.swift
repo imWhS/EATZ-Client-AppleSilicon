@@ -21,5 +21,6 @@ struct MyAccountView: View {
                 MyAccountMemberView(authManager).id(user.id)
             }
         }
+        .background(Color.backgroundPrimary)
     }
 }

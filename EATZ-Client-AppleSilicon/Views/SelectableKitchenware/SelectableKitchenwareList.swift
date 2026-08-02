@@ -69,7 +69,7 @@ struct SelectableKitchenwareList<Manager: SelectableKitchenwareManager>: View {
         if searchKeyword.isEmpty {
             return ""
         } else {
-            return "'\(searchKeyword)' 관련 도구 찾는 중"
+            return "'\(searchKeyword)' 관련 도구"
         }
     }
     

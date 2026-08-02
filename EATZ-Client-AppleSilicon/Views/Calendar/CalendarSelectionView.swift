@@ -94,7 +94,8 @@ private struct CalendarHeaderView: View {
                 changeMonthButton(direction: .next, text: nextMonthLabel)
             }
         }
-        .padding(20)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 20)
     }
     
     private func changeMonthButton(direction: CalendarSelectionChangeMonthDirection, text: String) -> some View {

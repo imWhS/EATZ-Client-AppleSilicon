@@ -69,7 +69,10 @@ struct RecipeContentView: View {
                 createdAt: recipe.createdAt,
                 authorUsername: recipe.author.username,
                 authorImageUrl: recipe.author.imageUrl,
-                authorBio: recipe.author.bio)
+                authorBio: recipe.author.bio,
+                creatorName: recipe.creatorName,
+                creatorUrl: recipe.creatorUrl
+            )
             RecipeDetailInfoReactionView(
                 recipe.id,
                 ratingSummary: recipe.ratingIndicatorSummary,

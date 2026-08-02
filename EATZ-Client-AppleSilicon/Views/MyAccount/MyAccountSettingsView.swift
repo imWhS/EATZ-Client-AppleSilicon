@@ -14,9 +14,13 @@ struct MyAccountSettingsView: View {
     @EnvironmentObject private var authManager: AuthManager
     @State private var alert: MyAccountSettingsAlert?
     
-    var clientVersion: String {
+    var clientBuildNumber: String {
+        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+   }
+    
+    var iOSClientVersion: String {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
-        return "iOS \(version)"
+        return "iOS - \(version) (\(clientBuildNumber))"
     }
     
     var body: some View {
@@ -58,7 +62,7 @@ struct MyAccountSettingsView: View {
                         BasicMenuRow("Open Source License") {
                             router.push(.openSourceLicense)
                         }
-                        BasicMenuRow("버전", false, .info(trailing: clientVersion)) {
+                        BasicMenuRow("버전", false, .info(trailing: iOSClientVersion)) {
                             print("버전 확인")
                         }
                     }
@@ -79,29 +83,7 @@ struct MyAccountSettingsView: View {
                 }
                 .padding(.top, 20)
                 
-                VStack(spacing: 6) {
-                    Group {
-                        HStack {
-                            Group {
-                                Text("EATZ")
-                                DotSeparatorView()
-                                Text(clientVersion)
-                            }
-                            .font(.system(size: 14, weight: .bold))
-                        }
-                        VStack(spacing: 2) {
-                            Group {
-                                Text("© 2026 Wonhee Son. All rights reserved.")
-                                Link(EatzLinks.developerEmailString, destination: URL(string: EatzLinks.developerEmailString)!)
-                                Link("github.com/imWhS", destination: URL(string: "https://github.com/imWhS")!)
-                            }
-                            .font(.system(size: 10, weight: .medium))
-                        }
-                    }
-                    .foregroundStyle(Color.gray20)
-                    .tint(Color.gray20)
-                }
-                .padding(.vertical, 20)
+                footer
             }
         }
         .background(Color.backgroundPrimary.ignoresSafeArea())
@@ -119,6 +101,28 @@ struct MyAccountSettingsView: View {
     private func handleLogOutAction() {
         guard let username = authManager.currentUser?.username else { return }
         alert = .confirmLogOut(username: username, logOutAction: authManager.logOut)
+    }
+    
+    private var footer: some View {
+        VStack(spacing: 6) {
+            Group {
+                HStack {
+                    Text("EATZ")
+                        .font(.system(size: 14, weight: .bold))
+                }
+                VStack(spacing: 2) {
+                    Group {
+                        Text("© 2026 Wonhee Son. All rights reserved.")
+                        Link(EatzLinks.developerEmailString, destination: URL(string: EatzLinks.developerEmailString)!)
+                        Link("github.com/imWhS", destination: URL(string: "https://github.com/imWhS")!)
+                    }
+                    .font(.system(size: 10, weight: .medium))
+                }
+            }
+            .foregroundStyle(Color.gray20)
+            .tint(Color.gray20)
+        }
+        .padding(.vertical, 20)
     }
 }
 

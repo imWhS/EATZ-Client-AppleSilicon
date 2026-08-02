@@ -59,7 +59,7 @@ struct KitchenwareAdditionView: View {
         if viewModel.searchKeyword.isEmpty {
             return ""
         } else {
-            return "'\(viewModel.searchKeyword)' 관련 도구 찾는 중"
+            return "'\(viewModel.searchKeyword)' 관련 도구"
         }
     }
     

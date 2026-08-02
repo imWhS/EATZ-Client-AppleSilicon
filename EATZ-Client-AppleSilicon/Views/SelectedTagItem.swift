@@ -13,26 +13,27 @@ struct SelectedTagItem: View {
     var onDeselect: () -> Void
     
     var body: some View {
-        Button(action: onDeselect) {
-            HStack(alignment: .center, spacing: 4) {
-                HStack(spacing: 4) {
-                    Text(name)
-                    .font(.system(size: 17, weight: .medium))
-                    
-                    if isFullWidth { Spacer() }
-                }
-                Image("remove-14")
-            }
-            .frame(height: 38)
-            .padding(.horizontal, 12)
-            .background(Color.white)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.black.opacity(0.075), lineWidth: 1)
-            )
-            .padding(.vertical, 0.5)
+        HStack(alignment: .center, spacing: 4) {
+            leadingView
+            Remove14Button(action: onDeselect)
         }
-        .buttonStyle(.plain)
+        .frame(height: 38)
+        .padding(.horizontal, 12)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.black.opacity(0.075), lineWidth: 1)
+        )
+        .padding(.vertical, 0.5)
+    }
+    
+    private var leadingView: some View {
+        HStack(spacing: 4) {
+            Text(name)
+                .font(.system(size: 17, weight: .medium))
+            
+            if isFullWidth { Spacer() }
+        }
     }
 }

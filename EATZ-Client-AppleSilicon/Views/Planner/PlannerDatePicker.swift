@@ -60,7 +60,12 @@ struct PlannerDatePicker: View {
     private var mainContent: some View {
         VStack(spacing: 0) {
             header
-            calendarSection
+            CalendarSelectionView(
+                currentMonth: $viewModel.currentMonth,
+                selectedDates: $viewModel.selectedDates,
+                mode: .single,
+                disabledDates: viewModel.plannedDates
+            )
         }
     }
     
@@ -73,16 +78,7 @@ struct PlannerDatePicker: View {
                 .multilineTextAlignment(.center)
                 .foregroundStyle(Color.gray35)
         }
-        .padding(.vertical, 20)
-    }
-    
-    private var calendarSection: some View {
-        CalendarSelectionView(
-            currentMonth: $viewModel.currentMonth,
-            selectedDates: $viewModel.selectedDates,
-            mode: .single,
-            disabledDates: viewModel.plannedDates
-        )
+        .padding(.vertical, 12)
     }
 }
 

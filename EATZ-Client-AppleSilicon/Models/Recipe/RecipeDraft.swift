@@ -42,6 +42,8 @@ struct RecipeDraft: Equatable {
             kitchenwares = recipe.kitchenwares
             tagNames = recipe.tagNames
             isCommentEnabled = recipe.isCommentEnabled
+            creatorName = recipe.creatorName
+            creatorUrl = recipe.creatorUrl
         } else {
             imageUrl = ""
             title = ""
@@ -53,6 +55,8 @@ struct RecipeDraft: Equatable {
             ingredients = []
             kitchenwares = []
             tagNames = []
+            creatorName = nil
+            creatorUrl = nil
         }
     }
     

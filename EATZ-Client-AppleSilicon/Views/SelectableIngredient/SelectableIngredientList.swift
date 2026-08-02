@@ -78,7 +78,7 @@ struct SelectableIngredientList<Manager: SelectableIngredientManager>: View {
         if searchKeyword.isEmpty {
             return ""
         } else {
-            return "'\(searchKeyword)' 관련 재료 찾는 중"
+            return "'\(searchKeyword)' 관련 재료"
         }
     }
     

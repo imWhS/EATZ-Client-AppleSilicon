@@ -52,10 +52,11 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
     
     private var kitchenwareImage: some View {
         KFImage(URL(imageUrlString: kitchenware.imageUrl ?? ""))
-            .resizable()
             .placeholder {
                 Circle().fill(Color.white)
             }
+            .resizable()
+            .aspectRatio(contentMode: .fill)
             .frame(width: 48, height: 48)
             .clipShape(Circle())
             .overlay(

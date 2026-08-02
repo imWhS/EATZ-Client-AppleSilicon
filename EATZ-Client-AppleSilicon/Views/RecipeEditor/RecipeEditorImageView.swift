@@ -23,23 +23,26 @@ struct RecipeEditorImageView: View {
     }
     
     var body: some View {
-        Group {
-            if let uiImage = uiImage {
-                Image(uiImage: uiImage)
-                    .resizable()
-            } else {
-                KFImage(URL(imageUrlString: imageUrl))
-                    .placeholder {
-                        ProgressView("대표 사진을 불러오고 있어요...")
-                            .foregroundStyle(Color.gray20)
+        Color.clear
+            .aspectRatio(1, contentMode: .fit)
+            .background(Color.backgroundPrimary)
+            .overlay (
+                Group {
+                    if let uiImage = uiImage {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFill()
+                    } else {
+                        KFImage(URL(imageUrlString: imageUrl))
+                            .placeholder {
+                                ProgressView("대표 사진을 불러오고 있어요...")
+                                    .foregroundStyle(Color.gray20)
+                            }
+                            .resizable()
+                            .scaledToFill()
                     }
-                    .resizable()
-            }
-        }
-        .aspectRatio(1, contentMode: .fit)
-        .clipped()
-        .ignoresSafeArea()
-        .background(Color.backgroundPrimary)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }

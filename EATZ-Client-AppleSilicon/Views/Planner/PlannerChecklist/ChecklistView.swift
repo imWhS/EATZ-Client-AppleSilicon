@@ -56,7 +56,6 @@ struct ChecklistView: View {
             }
         }
         .background(Color.backgroundPrimary)
-//        .background(Color.yellow)
         .navigationTitle(titleLabel)
         .toolbar {
             titleToolbarItem

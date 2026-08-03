@@ -17,7 +17,7 @@ struct RatingEmptyView: View {
             VStack(spacing: 20) {
                 Image("rating-empty")
                 VStack(spacing: 8) {
-                    Text("평가가 없어요.")
+                    Text("보여드릴 평가가 없어요.")
                         .font(.system(size: 17, weight: .semibold))
                     Text("아직 아무도 이 레시피에 평가를 등록하지 않았어요.")
                         .font(.system(size: 12, weight: .medium))

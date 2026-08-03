@@ -8,4 +8,4 @@
 // Configuration settings file format documentation can be found at:
 // https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
 
-BASE_URL = http:/$()/13.125.162.66:8080
+BASE_URL = https:/$()/api.eatz-server.cloud

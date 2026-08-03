@@ -51,5 +51,7 @@ struct RecipeItemThumbnail: View {
             .resizable()
             .aspectRatio(contentMode: .fill)
             .frame(width: width, height: width)
+            .contentShape(Rectangle())
+            .clipped()
     }
 }

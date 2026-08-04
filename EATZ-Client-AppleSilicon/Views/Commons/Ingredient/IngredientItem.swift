@@ -49,7 +49,7 @@ struct IngredientItem<Destination: View>: View {
         HStack(spacing: 0) {
             Group {
                 actionButton(image: ingredient.likedByUser ? "like-filled-18" : "like-stroked-18", action: handleToggleLike)
-                actionButton(image: ingredient.ownedByUser ? "remove-from-pantry-18" : "add-to-pantry-18", action: handleTogglePantry)
+                actionButton(image: ingredient.ownedByUser ? "remove-from-pantry-18" : "add-circled-18", action: handleTogglePantry)
             }
             .buttonStyle(SmallBorderlessButtonStyle())
         }

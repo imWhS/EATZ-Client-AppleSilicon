@@ -18,9 +18,9 @@ struct RecipeEditorRequirementsSection: View {
                 RecipeEditorSectionHeaderView(title: "준비물", description: "레시피를 요리하기 위해 준비해야 할 항목을 추가해보세요.")
                 VStack(alignment: .leading, spacing: 20) {
                     VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            RecipeEditorAddActionButton(text: "도구 추가", onAdd: onShowKitchenwarePicker)
-                            RecipeEditorAddActionButton(text: "재료 추가", onAdd: onShowIngredientPicker)
+                        HStack(spacing: 8) {
+                            RecipeEditorAddActionButton(text: "도구 추가", action: onShowKitchenwarePicker)
+                            RecipeEditorAddActionButton(text: "재료 추가", action: onShowIngredientPicker)
                         }
                     }
                     .padding(.horizontal, 20)

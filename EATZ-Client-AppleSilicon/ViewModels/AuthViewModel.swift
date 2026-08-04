@@ -80,7 +80,7 @@ class AuthViewModel: ObservableObject {
         }
         
         if !email.isValidEmail {
-            alert = .emailInvalid(message: "올바른 형태의 이메일 주소인지 확인해보세요.")
+            alert = .emailInvalid(message: "올바른 형식의 이메일 주소인지 확인해보세요.")
             return
         }
         

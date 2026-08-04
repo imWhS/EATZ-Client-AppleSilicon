@@ -32,7 +32,7 @@ struct RatingIndicatorView: View {
                     ))
                 }
                 
-            case .error(let message): ErrorCurtain("평가 지표를 불러오지 못했어요.")
+            case .error(let message): ErrorCurtain("평가 지표를 불러오지 못했어요. \(message)")
             }
         }
         .padding(.vertical, 40)

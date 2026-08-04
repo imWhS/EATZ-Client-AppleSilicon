@@ -29,7 +29,7 @@ struct MyAccountPantryKitchenwareSection: View {
     private func contentView(_ count: Int) -> some View {
         MyAccountPantryItemContainer(title: "내 도구 보관함", count: count, onDetailTapped: onDetailTapped) {
             HStack {
-                VerticalAlignedButton(image: "search-18", title: "도구 둘러보기", verticalPadding: 12, highlightCornerRadius: 12, action: onSearchKitchenwares)
+                VerticalAlignedIconTitleButton(image: "search-18", title: "도구 둘러보기", verticalPadding: 12, highlightCornerRadius: 12, action: onSearchKitchenwares)
             }
             .padding(8)
         }

@@ -98,7 +98,7 @@ private struct ExploreItemDetailView: View {
                 Label("신고", systemImage: "exclamationmark.bubble")
             }
         } label: {
-            ArrowDownCircled20()
+            ArrowDownCircled24()
                 .padding(4)
                 .contentShape(Rectangle())
         }
@@ -115,7 +115,7 @@ private struct ExploreListItemBottomView: View {
     }
     
     var body: some View {
-        HStack(alignment: .center) {
+        HStack(alignment: .center, spacing: 3.5) {
             likeToggleButton
             VerticalDivider(padding: 0)
             commentButton
@@ -127,12 +127,12 @@ private struct ExploreListItemBottomView: View {
     private var likeToggleButton: some View {
         if recipe.likedByUser {
             return bottomCountButton(
-                imageName: "like-filled-16",
+                imageName: "like-filled-18",
                 count: recipe.likedCount,
                 action: { onAction(recipe, .like) })
         } else {
             return bottomCountButton(
-                imageName: "like-stroked-16",
+                imageName: "like-stroked-18",
                 count: recipe.likedCount,
                 action: { onAction(recipe, .like) }
             )
@@ -141,7 +141,7 @@ private struct ExploreListItemBottomView: View {
     
     private var commentButton: some View {
         return bottomCountButton(
-            imageName: "comment-filled-16",
+            imageName: "comment-18",
             count: recipe.commentCount,
             isDisabled: isInitialCommentDisabled,
             action: isInitialCommentDisabled ? {} : { onAction(recipe, .comment) })
@@ -150,16 +150,17 @@ private struct ExploreListItemBottomView: View {
     private func bottomCountButton(imageName: String, count: Int, isDisabled: Bool = false, action: @escaping () -> Void) -> some View {
         return Button(action: action) {
             HStack(spacing: 4) {
+                Spacer()
                 Image(imageName)
                     .foregroundStyle(isDisabled ? Color.gray35 : Color.accentColor)
                 Text(String(count))
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(Color.gray35)
+                Spacer()
             }
             .frame(maxWidth: .infinity)
             .padding(6)
         }
-        .buttonStyle(ScaleDownButtonStyle(cornerRadius: 8, isDisabled: isDisabled))
-        .padding(8)
+        .buttonStyle(SquareHighlightButtonStyle(cornerRadius: 12, isDisabled: isDisabled))
     }
 }

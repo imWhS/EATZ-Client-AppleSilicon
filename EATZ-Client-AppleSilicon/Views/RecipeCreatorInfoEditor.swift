@@ -28,7 +28,6 @@ struct RecipeCreatorInfoEditor: View {
         self._name = name
         self._url = url
         
-        // 외부에서 받은 값으로 내부 상태를 초기화
         _localSourceName = State(initialValue: name.wrappedValue ?? "")
         _localSourceUrl = State(initialValue: url.wrappedValue ?? "")
     }
@@ -37,7 +36,7 @@ struct RecipeCreatorInfoEditor: View {
         // '출처 이름'이 비어있지 않거나,
         let isNameValid = !localSourceName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         // '출처 링크'가 올바른 URL 형태일 경우 true를 반환합니다.
-        let isUrlValid = isValidUrl(string: localSourceUrl)
+        let isUrlValid = localSourceUrl.isValidURL
         
         return isNameValid || isUrlValid
     }
@@ -98,23 +97,6 @@ struct RecipeCreatorInfoEditor: View {
             }
         }
         .presentationDetents([.medium])
-    }
-    
-    private func isValidUrl(string: String) -> Bool {
-        // 공백을 제거한 문자열이 비어있으면 유효하지 않음
-        let trimmedString = string.trimmingCharacters(in: .whitespacesAndNewlines)
-        if trimmedString.isEmpty {
-            return false
-        }
-        
-        // URL 객체를 생성하고, scheme과 host가 있는지 확인하여 기본적인 유효성을 검사
-        if let url = URL(string: trimmedString),
-           url.scheme != nil,
-           url.host != nil {
-            return true
-        }
-        
-        return false
     }
     
     private func saveAndDismiss() {

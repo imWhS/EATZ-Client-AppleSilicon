@@ -52,11 +52,11 @@ struct ChecklistIngredientItem: View {
                 ProgressView()
             } else {
                 if !ingredient.missing {
-                    actionButton(image: "add-to-pantry-18", action: { onAction(ingredient.id, .addToPantry) }).opacity(0).disabled(true)
+                    actionButton(image: "add-circled-20", action: { onAction(ingredient.id, .addToPantry) }).opacity(0).disabled(true)
                     actionMenu
                 }
                 else {
-                    actionButton(image: "add-to-pantry-18", action: { onAction(ingredient.id, .addToPantry) })
+                    actionButton(image: "add-circled-22", action: { onAction(ingredient.id, .addToPantry) })
                 }
             }
         }
@@ -86,7 +86,7 @@ struct ChecklistIngredientItem: View {
                 }
             }
         } label: {
-            ArrowDownCircled20()
+            ArrowDownCircled24()
                 .padding(4)
         }
     }

@@ -40,7 +40,7 @@ struct PlannerUnauthorizedView: View {
                 Button(action: onLogIn) {
                     Text("이메일로 시작").frame(maxWidth: .infinity)
                 }
-                .buttonStyle(BigRoundedButtonStyle(type: .primary))
+                .buttonStyle(CapsuleLargeButtonStyle(appearance: .primary))
                 Text("로그인 또는 가입 후 계속 진행할 수 있어요.")
                     .font(.system(size: 12, weight: .medium))
                     .multilineTextAlignment(.center)

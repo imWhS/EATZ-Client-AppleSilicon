@@ -69,7 +69,7 @@ struct MyAccountSettingsView: View {
                     if authManager.isLoggedIn {
                         HStack {
                             Button("로그아웃", action: handleLogOutAction)
-                                .buttonStyle(SmallRoundedButtonStyle(type: .danger))
+                                .buttonStyle(CapsuleMediumButtonStyle(status: .danger))
                             
                             Button(action: { router.push(.deleteAccount) } ) {
                                 HStack {
@@ -77,7 +77,7 @@ struct MyAccountSettingsView: View {
                                     Image("arrow-right-6.8")
                                 }
                             }
-                            .buttonStyle(SmallRoundedButtonStyle(type: .danger))
+                            .buttonStyle(CapsuleMediumButtonStyle(status: .danger))
                         }
                     }
                 }

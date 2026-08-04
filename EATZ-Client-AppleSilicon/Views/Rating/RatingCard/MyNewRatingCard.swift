@@ -29,7 +29,7 @@ struct MyNewRatingCard: View {
                         Text("새 평가")
                             .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(BigRoundedButtonStyle(type: .primary))
+                    .buttonStyle(CapsuleLargeButtonStyle(appearance: .primary))
                     Text("아직 이 레시피를 평가하지 않았어요.\n레시피의 요리 경험을 공유해보세요.")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(Color.gray35)

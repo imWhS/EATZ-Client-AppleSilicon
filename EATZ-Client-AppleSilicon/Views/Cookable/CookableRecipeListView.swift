@@ -71,7 +71,7 @@ struct CookableRecipeListView: View {
     
     private var listHeader: some View {
         VStack(spacing: 0) {
-            Text("지금, 요리할 수 있는\n\(viewModel.pagedRecipes.totalElements)개의 레시피")
+            Text("지금, 요리할만한\n\(viewModel.pagedRecipes.totalElements)개의 레시피")
                 .font(.system(size: 26, weight: .bold))
                 .lineSpacing(6)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -128,7 +128,7 @@ private struct CookableRecipeListToggleButton: View {
             }) {
                 CheckToggleCircled(isToggled: isCookableOnly)
             }
-            Text("요리 가능")
+            Text("바로 요리 가능")
                 .font(.system(size: 14, weight: .medium))
                 .foregroundStyle(Color.black)
         }

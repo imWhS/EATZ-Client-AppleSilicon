@@ -67,7 +67,7 @@ struct RecipeTagCloudView: View {
                         .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(Color.black)
                     if index < tags.count - 1 {
-                        DotSeparatorView(diameter: 1.5)
+                        DotSeparator(diameter: 1.5)
                     }
                 }
             }

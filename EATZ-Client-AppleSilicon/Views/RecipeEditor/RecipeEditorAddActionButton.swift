@@ -9,14 +9,12 @@ import SwiftUI
 
 struct RecipeEditorAddActionButton: View {
     var text: String
-    var onAdd: () -> Void
+    var action: () -> Void
     
     var body: some View {
-        Button(action: {
-            onAdd()
-        }) {
+        Button(action: action) {
             VStack(spacing: 4) {
-                Image(systemName: "plus.circle.fill")
+                Image("add-circled-filled-20")
                 Text(text)
                     .font(.system(size: 12, weight: .semibold))
             }
@@ -37,7 +35,7 @@ struct RecipeEditorAddActionButton: View {
 
 #Preview {
     VStack {
-        RecipeEditorAddActionButton(text: "재료 추가", onAdd: {print("추가")})
+        RecipeEditorAddActionButton(text: "재료 추가", action: {print("추가")})
     }
     .padding(20)
     .background(Color.backgroundPrimary)

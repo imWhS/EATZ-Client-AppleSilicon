@@ -121,15 +121,13 @@ struct ManagementProfileView: View {
                 "등록한 사진이 없다면, 기본 프로필 사진이 보여져요."
             ]
         ) {
-            if let imageUrl = viewModel.imageUrl {
-                ProfileImageView(imageUrl: imageUrl, size: 140)
-            }
+            ProfileImageView(imageUrl: viewModel.imageUrl, size: 140)
         } actions: {
             HStack {
                 Spacer()
                 if viewModel.imageUrl != nil {
                     Button("삭제", action: viewModel.handleDeleteProfileImage)
-                        .buttonStyle(SmallRoundedButtonStyle(type: .danger))
+                        .buttonStyle(CapsuleMediumButtonStyle(status: .danger))
                 }
                 PhotosPicker(
                     selection: $viewModel.selectedPhotoItem,
@@ -138,7 +136,7 @@ struct ManagementProfileView: View {
                         Text(viewModel.imageUrl != nil ? "변경" : "설정")
                             
                     }
-                    .buttonStyle(SmallRoundedButtonStyle(type: .secondary))
+                    .buttonStyle(CapsuleMediumButtonStyle(status: .secondary))
             }
         }
     }
@@ -158,10 +156,10 @@ struct ManagementProfileView: View {
                 Spacer()
                 if viewModel.bio != "" {
                     Button("삭제", action: viewModel.handleDeleteBio)
-                        .buttonStyle(SmallRoundedButtonStyle(type: .danger))
+                        .buttonStyle(CapsuleMediumButtonStyle(status: .danger))
                 }
                 Button("편집", action: viewModel.handleEditBio)
-                    .buttonStyle(SmallRoundedButtonStyle(type: .secondary))
+                    .buttonStyle(CapsuleMediumButtonStyle(status: .secondary))
             }
         }
     }

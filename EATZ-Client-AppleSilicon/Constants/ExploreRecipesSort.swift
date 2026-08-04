@@ -15,7 +15,7 @@ enum ExploreRecipesSort: String, Identifiable, Codable, CaseIterable, Equatable,
     
     var id: Self { self }
     
-    /// 뷰에 사용하는 한글 이름입니다.
+    /// 뷰에서 사용하는 한글 이름입니다.
     var displayName: String {
         switch self {
         case .TRENDING: return "추천"

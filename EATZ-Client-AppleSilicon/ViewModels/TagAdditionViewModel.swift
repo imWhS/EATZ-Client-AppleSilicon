@@ -30,8 +30,9 @@ class TagAdditionViewModel: ObservableObject {
     
     @Published var searchKeyword: String = "" {
         didSet {
-            viewState = searchKeyword.isEmpty ? .explorable : .searchable
-            if searchKeyword.isEmpty { handleClearKeywordInput() }
+            let trimmedSearchKeyword = searchKeyword.trimmingCharacters(in: .whitespacesAndNewlines)
+            viewState = trimmedSearchKeyword.isEmpty ? .explorable : .searchable
+            if trimmedSearchKeyword.isEmpty { handleClearKeywordInput() }
         }
     }
     
@@ -138,7 +139,8 @@ class TagAdditionViewModel: ObservableObject {
             // 중복된 검색어는 무시합니다.
             .removeDuplicates()
             .sink { [weak self] keyword in
-                self?.searchTags(keyword: keyword)
+                let trimmedKeyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
+                self?.searchTags(keyword: trimmedKeyword)
             }
             .store(in: &cancellables)
     }
@@ -274,12 +276,13 @@ extension TagAdditionViewModel {
     }
     
     func loadMoreSearchedTags() {
-        guard !searchKeyword.isEmpty,
+        let trimmedSearchKeyword = searchKeyword.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedSearchKeyword.isEmpty,
               pagedSearchedTags.hasNextPage,
               !pagedSearchedTags.isLoadingNextPage else { return }
         
         pagedSearchedTags.isLoadingNextPage = true
-        loadSearchedTags(keyword: searchKeyword, page: pagedSearchedTags.page + 1, searchId: currentSearchId) {
+        loadSearchedTags(keyword: trimmedSearchKeyword, page: pagedSearchedTags.page + 1, searchId: currentSearchId) {
             self.pagedSearchedTags.isLoadingNextPage = false
         }
     }

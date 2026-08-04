@@ -59,9 +59,9 @@ struct RecipeDetailRequirementsHeaderUncookable: View {
     private var addAllToPantryButton: some View {
         Button(action: onAddAllRequirements) {
             HStack(spacing: 4) {
-                Image("add-to-pantry-14").foregroundStyle(Color.white)
+                Image("add-circled-16").foregroundStyle(Color.white)
                 Text("모두 보관함에 추가")
             }}
-        .buttonStyle(SmallRoundedButtonStyle(type: .primary))
+        .buttonStyle(CapsuleMediumButtonStyle(status: .primary))
     }
 }

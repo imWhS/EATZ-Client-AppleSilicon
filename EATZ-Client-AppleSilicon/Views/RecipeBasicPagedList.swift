@@ -74,7 +74,7 @@ struct RecipeBasicPagedList<EmptyViewContent: View, MenuContent: View>: View {
         HStack {
             Text(viewModel.totalElementsLabel)
                 .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(Color.gray20)
+                .foregroundStyle(Color.gray35)
                 .padding(.leading, 20)
             Spacer()
         }

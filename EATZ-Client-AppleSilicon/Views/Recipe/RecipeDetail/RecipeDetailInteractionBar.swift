@@ -28,26 +28,26 @@ struct RecipeDetailInteractionBar: View {
         Button(action: onShowRecipeTapped) {
             Text("레시피 보기").frame(maxWidth: .infinity)
         }
-        .buttonStyle(BigRoundedButtonStyle(type: .primary))
+        .buttonStyle(CapsuleLargeButtonStyle(appearance: .primary))
         .padding(.horizontal, 20)
         .padding(.top, 10)
     }
     
     private var subButtonsSection: some View {
         HStack(spacing: 4) {
-            VerticalAlignedButton(
+            VerticalAlignedIconTitleButton(
                 image: isLiked ? "like-filled-18" : "like-stroked-18",
                 title: (likedCount == 0) ? "좋아요" : "\(likedCount)") {
                 onLikeTapped()
             }
             VerticalDivider(padding: 10)
-            VerticalAlignedButton(
-                image: "add-circle-20",
+            VerticalAlignedIconTitleButton(
+                image: "add-circled-20",
                 title: "플래너에 추가") {
                 onAddToPlannerTapped()
             }
             VerticalDivider(padding: 10)
-            VerticalAlignedButton(
+            VerticalAlignedIconTitleButton(
                 image: isSaved ?  "recipe-list-item-save-filled" : "recipe-list-item-save-stroked",
                 title: isSaved ? "저장 취소" : "저장") {
                 onToggleSaveTapped()

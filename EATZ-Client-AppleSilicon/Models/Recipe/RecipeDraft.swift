@@ -113,7 +113,7 @@ struct RecipeDraft: Equatable {
     }
     
     func hasInvalidUrl() -> Bool {
-        url.trimmingCharacters(in: .whitespaces).isEmpty
+        !url.isValidURL || url.trimmingCharacters(in: .whitespaces).isEmpty
     }
     
     func hasInvalidDescription() -> Bool {

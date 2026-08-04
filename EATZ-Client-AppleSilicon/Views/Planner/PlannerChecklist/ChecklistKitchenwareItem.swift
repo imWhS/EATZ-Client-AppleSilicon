@@ -38,7 +38,7 @@ struct ChecklistKitchenwareItem: View {
             } else {
                 if !kitchenware.missing { actionMenu }
                 else {
-                    actionButton(image: "add-to-pantry-18", action: { onAction(kitchenware.id, .addToPantry) })
+                    actionButton(image: "add-circled-20", action: { onAction(kitchenware.id, .addToPantry) })
                 }
             }
         }
@@ -68,7 +68,7 @@ struct ChecklistKitchenwareItem: View {
                 Label("보관함에서 제거", systemImage: "trash")
             }
         } label: {
-            ArrowDownCircled20()
+            ArrowDownCircled24()
         }
     }
     

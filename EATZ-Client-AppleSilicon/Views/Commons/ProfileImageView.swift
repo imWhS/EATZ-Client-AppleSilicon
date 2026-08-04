@@ -15,8 +15,9 @@ struct ProfileImageView: View {
     var body: some View {
         KFImage(URL(imageUrlString: imageUrl))
             .placeholder {
-                Circle()
-                    .fill(Color.white)
+                Image("profile")
+                    .resizable()
+                    .foregroundStyle(Color.gray20)
             }
             .resizable()
             .aspectRatio(contentMode: .fill)
@@ -30,5 +31,8 @@ struct ProfileImageView: View {
 }
 
 #Preview {
-    ProfileImageView(imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLiKmxv4M0fkn7aA-Sh4V1kA0LO_KgAQp9NHsaEQ6F918AGzmeT8qdhZc0lpM3jhy2u6c&usqp=CAU", size: 28)
+    VStack {
+        ProfileImageView(imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLiKmxv4M0fkn7aA-Sh4V1kA0LO_KgAQp9NHsaEQ6F918AGzmeT8qdhZc0lpM3jhy2u6c&usqp=CAU", size: 28)
+        ProfileImageView(imageUrl: "", size: 28)
+    }
 }

@@ -63,7 +63,8 @@ struct CommentView: View {
                     title: "보여드릴 댓글이 없어요.",
                     description: "아직 아무도 이 레시피에 댓글을 등록하지 않았어요.",
                     header: {
-                        Image("comment-empty")
+                        Image("comment-40")
+                            .foregroundStyle(Color.gray15)
                     })
             case .initialLoading:
                 LoadingCurtain(title: "레시피에 달린 댓글 목록을 불러오고 있어요...")

@@ -8,12 +8,11 @@
 import Foundation
 
 extension URL {
-    /// 서버에서 내려주는 이미지 경로를 조합하여 완전한 URL로 만듭니다.
-    /// - Parameter imagePath: 예) "/uploads/images/users/profiles/uuid.jpeg"
+    /// 서버 도메인을 포함하는, 요청 가능한 이미지 URL를 만듭니다.
+    /// - Parameter imageUrlString: Ex. "/uploads/images/users/profiles/uuid.jpeg"
     init?(imageUrlString: String?) {
         guard let url = imageUrlString, !url.isEmpty else { return nil }
         
-        // 카카오/구글 프로필 등 이미 완벽한 외부 HTTP 주소일 경우 그대로 사용
         if url.hasPrefix("http") {
             self.init(string: url)
         } else {

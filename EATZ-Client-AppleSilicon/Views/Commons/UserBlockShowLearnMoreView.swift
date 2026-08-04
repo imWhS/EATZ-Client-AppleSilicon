@@ -108,12 +108,12 @@ struct UserBlockShowLearnMoreView: View {
         .padding(.vertical, 20)
     }
     
-    private func actionButton(title: String, type: BigRoundedButtonType, action: @escaping () -> Void) -> some View {
+    private func actionButton(title: String, type: CapsuleLargeButtonAppearance, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Text(title)
                 .frame(maxWidth: .infinity)
         }
-        .buttonStyle(BigRoundedButtonStyle(type: type))
+        .buttonStyle(CapsuleLargeButtonStyle(appearance: type))
         .padding(.horizontal, 20)
     }
     

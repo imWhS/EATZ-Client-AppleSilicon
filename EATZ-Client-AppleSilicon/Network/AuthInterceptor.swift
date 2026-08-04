@@ -93,7 +93,7 @@ final class AuthInterceptor: RequestInterceptor, @unchecked Sendable {
                 print("[AuthInterceptor.retry] \(method) \(path) | 토큰 재발급을 성공했어요! 대기열의 요청 \(requestsToProcess.count)개를 재시도 처리할게요.")
                 requestsToProcess.forEach { $0(.retry) }
                 
-            case .failure(let error):
+            case .failure:
                 /// 토큰 재발급 실패: 서버에서 해당 사용자의 세션을 만료시켰기 때문에, 해당 상황에 대응하는 로직을 실행합니다.
                 print("[AuthInterceptor.retry] \(method) \(path) | 토큰 재발급 실패. AuthManager에게 세션 만료 처리를 위임할게요. | 현재 대기열의 요청 수: \(requestsToProcess.count)")
                 

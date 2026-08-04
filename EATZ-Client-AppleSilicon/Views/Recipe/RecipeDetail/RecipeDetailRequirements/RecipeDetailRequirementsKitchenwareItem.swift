@@ -38,7 +38,7 @@ struct RecipeDetailRequirementsKitchenwareItem: View {
     private var actionButtonContainer: some View {
         HStack(spacing: 0) {
             Group {
-                actionButton(image: kitchenware.ownedByUser ? "remove-from-pantry-18" : "add-to-pantry-18", action: handleTogglePantry)
+                actionButton(image: kitchenware.ownedByUser ? "remove-from-pantry-18" : "add-circled-18", action: handleTogglePantry)
             }
             .buttonStyle(SmallBorderlessButtonStyle())
         }

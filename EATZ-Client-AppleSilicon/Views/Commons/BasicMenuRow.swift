@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum BasicMenuRowStyle {
+enum BasicMenuRowType {
     case navigation
     case action
     case destructiveAction
@@ -38,27 +38,27 @@ enum BasicMenuRowStyle {
 struct BasicMenuRow: View {
     let label: String
     let hasDivider: Bool
-    let style: BasicMenuRowStyle
+    let type: BasicMenuRowType
     let subtitle: String?
     let action: () -> Void
     
-    private var disabled: Bool {
-        if case .info = style { return true }
+    private var isDisabled: Bool {
+        if case .info = type { return true }
         else { return false }
     }
     
-    init(_ label: String, _ hasDivider: Bool = true, _ style: BasicMenuRowStyle = .navigation, _ subtitle: String? = nil, onTapped: @escaping () -> Void) {
+    init(_ label: String, _ hasDivider: Bool = true, _ style: BasicMenuRowType = .navigation, _ subtitle: String? = nil, onTapped: @escaping () -> Void) {
         self.label = label
         self.hasDivider = hasDivider
-        self.style = style
+        self.type = style
         self.subtitle = subtitle
         self.action = onTapped
     }
     
-    init(_ label: String, _ style: BasicMenuRowStyle = .navigation, _ subtitle: String? = nil, onTapped: @escaping () -> Void) {
+    init(_ label: String, _ style: BasicMenuRowType = .navigation, _ subtitle: String? = nil, onTapped: @escaping () -> Void) {
         self.label = label
         self.hasDivider = true
-        self.style = style
+        self.type = style
         self.subtitle = subtitle
         self.action = onTapped
     }
@@ -70,7 +70,7 @@ struct BasicMenuRow: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(label)
                             .font(.system(size: 17, weight: .semibold))
-                            .foregroundStyle(style.labelForegroundColor)
+                            .foregroundStyle(type.labelForegroundColor)
                         if let subtitle = subtitle {
                             Text(subtitle)
                                 .font(.system(size: 12, weight: .medium))
@@ -78,12 +78,12 @@ struct BasicMenuRow: View {
                         }
                     }
                     Spacer()
-                    style.trailingIcon
+                    type.trailingIcon
                 }
                 .padding(10)
             }
             .buttonStyle(SquareHighlightButtonStyle(cornerRadius: 12))
-            .disabled(disabled)
+            .disabled(isDisabled)
             .padding(.horizontal, 10)
             .padding(.bottom, 10)
             if hasDivider {

@@ -84,11 +84,12 @@ class PlannerRecipePickerViewModel: ObservableObject {
         // 검색 모드 활성화 여부에 따라 필요한 데이터만 불러옵니다.
         // 뷰는 기본적으로 초기에 저장한 레시피 목록을 보여주지만, 뷰가 다시 화면에 보여진 경우(다른 sheet에 가려졌다가 다시 보여진 경우)에는 저장한 레시피 목록, 레시피 검색 결과 목록 중 하나를 보여줄 수 있기에, 레시피 검색 결과 목록 불러오기 분기 여부도 확인합니다.
         if isSearchMode {
+            let trimmedKeyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
             // 검색 모드일 때, 키워드가 유효하고 아직 레시피 검색 결과 목록이 불러와지지 않은 경우에만 레시피 검색 결과 목록을 불러옵니다.
             // 단, 로그인 상태의 뷰가 화면에 보여졌을 때(이전에 present 된 적 있을 때) 이미 불러온 레시피 검색 결과 목록 데이터가 있는 .searched 상태라면 기존 스크롤 위치를 유지하기 위해 불러오지 않습니다.
-            if !keyword.isEmpty && searchState != .searched {
+            if !trimmedKeyword.isEmpty && searchState != .searched {
                 searchState = .searching
-                searchRecipes(keyword: keyword, page: 0)
+                searchRecipes(keyword: trimmedKeyword, page: 0)
             }
         } else {
             // 검색 모드가 아닐 때, 아직 저장한 레시피 목록이 불러와지지 않은 경우에만 저장한 레시피 목록을 불러옵니다.
@@ -111,12 +112,13 @@ class PlannerRecipePickerViewModel: ObservableObject {
     }
     
     func loadMoreSearchedRecipes() {
-        guard !keyword.isEmpty,
+        let trimmedKeyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedKeyword.isEmpty,
                 pagedSearchedRecipes.hasNextPage,
                 !pagedSearchedRecipes.isLoadingNextPage else { return }
         
         pagedSearchedRecipes.isLoadingNextPage = true
-        searchRecipes(keyword: keyword, page: pagedSearchedRecipes.page + 1) {
+        searchRecipes(keyword: trimmedKeyword, page: pagedSearchedRecipes.page + 1) {
             self.pagedSearchedRecipes.isLoadingNextPage = false
         }
     }
@@ -147,11 +149,12 @@ class PlannerRecipePickerViewModel: ObservableObject {
             .removeDuplicates() // 같은 검색어는 무시
             .sink { [weak self] keyword in
                 guard let self = self else { return }
-                if keyword.isEmpty {
+                let trimmedKeyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
+                if trimmedKeyword.isEmpty {
                     self.pagedSearchedRecipes = .initial
                 } else {
                     self.searchState = .searching
-                    self.searchRecipes(keyword: keyword, page: 0)
+                    self.searchRecipes(keyword: trimmedKeyword, page: 0)
                 }
             }
             .store(in: &cancellables)

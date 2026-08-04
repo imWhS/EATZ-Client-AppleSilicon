@@ -14,11 +14,13 @@ struct RatingEmptyView: View {
     var body: some View {
         VStack {
             Spacer()
-            VStack(spacing: 20) {
-                Image("rating-empty")
-                VStack(spacing: 8) {
+            VStack(spacing: 12) {
+                Image("rating-star-40")
+                    .foregroundStyle(Color.gray15)
+                VStack(spacing: 4) {
                     Text("보여드릴 평가가 없어요.")
                         .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(Color.gray35)
                     Text("아직 아무도 이 레시피에 평가를 등록하지 않았어요.")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(Color.gray35)
@@ -29,7 +31,7 @@ struct RatingEmptyView: View {
             Button(action: onRegister) {
                 Text(isLoggedIn ? "새 평가" : "로그인 후 평가").frame(maxWidth: .infinity)
             }
-            .buttonStyle(BigRoundedButtonStyle(type: .primary))
+            .buttonStyle(CapsuleLargeButtonStyle(appearance: .primary))
             .padding(20)
         }
         

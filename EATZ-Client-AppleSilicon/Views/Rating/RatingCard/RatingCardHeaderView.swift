@@ -35,7 +35,7 @@ struct RatingCardHeaderView: View {
                     Group {
                         if let createdAt = self.createdAt {
                             Text("\(createdAt.formattedRelative)")
-                            DotSeparatorView(diameter: 2)
+                            DotSeparator(diameter: 2)
                         }
                         Text("\(score)점")
                     }

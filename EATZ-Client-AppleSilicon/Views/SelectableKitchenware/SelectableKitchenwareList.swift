@@ -57,7 +57,7 @@ struct SelectableKitchenwareList<Manager: SelectableKitchenwareManager>: View {
             VStack(alignment: .leading, spacing: 0) {
                 Text("모든 도구")
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(Color.gray20)
+                    .foregroundStyle(Color.gray35)
                     .padding(.leading, 20)
                     .padding(.top, 20)
                 kitchenwareList(kitchenwares: kitchenwares)

@@ -224,7 +224,7 @@ final class AuthManager: ObservableObject, AuthProvider {
                     print("[AuthManager.performSessionValidation] 세션 유효성 검증을 성공했어요. 로그인 상태로 설정할게요.")
                     self?.state = .authenticated(user: currentUser)
                     completion?()
-                case .failure(let failure):
+                case .failure:
                     print("[AuthManager.performSessionValidation] 세션 유효성 검증을 실패했어요. 로그아웃 처리할게요.")
                     self?.logOut()
                 }

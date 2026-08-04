@@ -85,7 +85,7 @@ struct CommentEditor: View {
                 )
             }
             Button("게시", action: viewModel.handleSubmitEdit)
-                .buttonStyle(SmallRoundedButtonStyle(type: .primary))
+                .buttonStyle(CapsuleMediumButtonStyle(status: .primary))
         }
     }
     
@@ -121,7 +121,7 @@ struct CommentEditor: View {
     
     private var signWithEmailButton: some View {
         Button(action: authManager.requireAuthView) { Text("이메일로 시작") }
-            .buttonStyle(SmallRoundedButtonStyle(type: .primary))
+            .buttonStyle(CapsuleMediumButtonStyle(status: .primary))
             .accentColor(Color.init(hex: "55C374"))
     }
 }

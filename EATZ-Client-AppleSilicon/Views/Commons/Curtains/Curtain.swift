@@ -37,7 +37,7 @@ struct Curtain<Header: View, Footer: View>: View {
             Spacer()
             VStack(spacing: 12) {
                 header()
-                VStack(spacing: 8) {
+                VStack(spacing: 4) {
                     Text(title)
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(Color.gray35)
@@ -50,7 +50,7 @@ struct Curtain<Header: View, Footer: View>: View {
                 }
                 if let action = action {
                     Button(actionTitle ?? "다시 시도", action: action)
-                        .buttonStyle(SmallRoundedButtonStyle(type: .secondary))
+                        .buttonStyle(CapsuleMediumButtonStyle(status: .secondary))
                 }
                 footer()
             }

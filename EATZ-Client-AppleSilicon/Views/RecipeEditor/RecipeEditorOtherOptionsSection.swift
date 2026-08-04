@@ -46,7 +46,7 @@ struct RecipeEditorOtherOptionsSection: View {
                         hasPadding: false
                     )
                     Spacer()
-                    ArrowDownCircled20()
+                    ArrowDownCircled24()
                 }
                 .padding(10)
             }

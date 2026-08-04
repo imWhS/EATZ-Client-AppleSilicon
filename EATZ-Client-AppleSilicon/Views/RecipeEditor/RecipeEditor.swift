@@ -84,7 +84,7 @@ struct RecipeEditor: View {
                     onShowIngredientPicker: { viewModel.sheet = .ingredientPicker })
                 RecipeEditorTagsSection(
                     draft: $viewModel.currentDraft,
-                    onShowTagPicker: { viewModel.sheet = .tagPicker })
+                    onShowTagPickerTapped: { viewModel.sheet = .tagPicker })
                 RecipeEditorOtherOptionsSection(
                     draft: $viewModel.currentDraft,
                     timeSummaryLabel: viewModel.timeSummaryLabel,

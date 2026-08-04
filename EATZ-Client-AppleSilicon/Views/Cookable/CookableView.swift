@@ -42,7 +42,7 @@ struct CookableView: View {
             .background(Color.backgroundPrimary)
             .contentShape(Rectangle())
             .onTapGesture { isSearchFieldFocused = false }
-            .navigationTitle("바로 요리")
+            .navigationTitle(MainTabItems.cookable.title)
             .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(for: ViewRoute.self) { route in
                 DestinationView(route)
@@ -52,7 +52,7 @@ struct CookableView: View {
     
     private var header: some View {
         VStack {
-            Text("지금, 요리할\n레시피를 찾아볼까요?")
+            Text("지금, 요리할만한\n레시피를 찾아볼까요?")
                 .font(.system(size: 30, weight: .bold))
                 .lineSpacing(8)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -80,7 +80,7 @@ struct CookableView: View {
                         .padding(.vertical, 20)
                     CookableFilterButton(
                         titleLabel: viewModel.servingsLabel,
-                        subtitleLabel: "제공량",
+                        subtitleLabel: "1회 제공량",
                         action: { viewModel.sheet = .servingsPicker })
                 }
                 .fixedSize(horizontal: false, vertical: true)
@@ -142,7 +142,7 @@ private struct CookableFilterToggleButton: View {
         Button(action: action) {
             HStack(alignment: .center, spacing: 12) {
                 CookableButtonDescriptionsView(
-                    titleLabel: "요리 가능",
+                    titleLabel: "바로 요리 가능",
                     subtitleLabel: "보관함 속 재료, 도구로 요리할 수 있는 레시피만 찾아요.")
                 Spacer()
                 CheckToggleCircled(isToggled: isCookableOnly)

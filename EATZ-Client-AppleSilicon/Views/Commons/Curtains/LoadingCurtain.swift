@@ -15,10 +15,11 @@ struct LoadingCurtain: View {
     }
 
     var body: some View {
-        VStack(spacing: 12) {
+        VStack {
             Spacer()
-            ProgressView {
-                VStack(spacing: 8) {
+            VStack(spacing: 12) {
+                ProgressView()
+                VStack(spacing: 4) {
                     Text(title)
                         .font(.system(size: 17, weight: .semibold))
                         .multilineTextAlignment(.center)

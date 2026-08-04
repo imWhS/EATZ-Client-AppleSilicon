@@ -192,8 +192,9 @@ class IngredientAdditionViewModel: ObservableObject, SelectableIngredientManager
     }
     
     private func handleSearchInput(keyword: String) {
+        let trimmedKeyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
         // 검색어가 비어있으면 검색 결과를 비우고 루트 재료 목록을 불러옵니다.
-        if keyword.isEmpty {
+        if trimmedKeyword.isEmpty {
             pagedSearchedIngredients = .initial
             // pagedIngredients가 비어있을 경우에만 루트 재료 목록을 다시 불러옵니다.
             if pagedIngredients.isEmpty {
@@ -202,7 +203,7 @@ class IngredientAdditionViewModel: ObservableObject, SelectableIngredientManager
         } else {
             // 검색어가 있으면 검색 API를 호출합니다.
             searchState = .searching
-            searchIngredients(keyword: keyword)
+            searchIngredients(keyword: trimmedKeyword)
         }
     }
     
@@ -266,14 +267,14 @@ class IngredientAdditionViewModel: ObservableObject, SelectableIngredientManager
     
     /// 전역 게스트 상태가 됐을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextAsGuest() {
-        alert = .sessionExpired(dismissAction: onDismiss ?? {})
+        alert = .sessionExpired(dismissAction: onDismiss)
         viewState = .unauthorized
         clearAllContextData()
     }
     
     /// 이전과 다른 사용자로 변경했을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextForNewUser() {
-        alert = .userChanged(dismissAction: onDismiss ?? {})
+        alert = .userChanged(dismissAction: onDismiss)
         viewState = .unauthorized
         clearAllContextData()
     }

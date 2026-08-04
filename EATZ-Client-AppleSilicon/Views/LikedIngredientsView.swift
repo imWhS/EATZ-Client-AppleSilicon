@@ -73,7 +73,7 @@ private struct LikedIngredientList: View {
             VStack(alignment: .leading, spacing: 0) {
                 Text(totalElementsLabel)
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(Color.gray20)
+                    .foregroundStyle(Color.gray35)
                     .padding(.leading, 20)
                     .padding(.vertical, 20)
                 LazyVStack(spacing: 8) {

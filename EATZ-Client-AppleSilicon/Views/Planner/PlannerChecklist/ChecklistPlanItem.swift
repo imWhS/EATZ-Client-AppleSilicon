@@ -8,17 +8,13 @@
 import SwiftUI
 import Kingfisher
 
-enum ChecklistPlanItemAction {
-    case save, unsave, like, unlike, report
-}
-
 struct ChecklistPlanItem: View {
     @EnvironmentObject private var router: Router
     
     let plan: ChecklistPlan
     let onAction: (ChecklistPlan, ChecklistPlanItemAction) -> Void
     
-    private let cardWidth: CGFloat = 124
+    private let cardWidth: CGFloat = 134
     
     init(_ plan: ChecklistPlan, onAction: @escaping (ChecklistPlan, ChecklistPlanItemAction) -> Void) {
         self.plan = plan
@@ -43,20 +39,18 @@ struct ChecklistPlanItem: View {
                     .cornerRadius(8)
                     .padding(8)
                 }
-                HStack(alignment: .center, spacing: 2) {
-                    VStack(spacing: 4) {
-                        RecipeItemEssentialInfoView(
-                            cookingTime: plan.recipeCookingTime,
-                            prepTime: plan.recipePrepTime,
-                            ratingAverageScore: nil,
-                            ratingCount: nil,
-                            showRating: false
-                        )
-                    }
+                HStack(alignment: .center, spacing: 0) {
+                    RecipeItemEssentialInfoView(
+                        cookingTime: plan.recipeCookingTime,
+                        prepTime: plan.recipePrepTime,
+                        ratingAverageScore: nil,
+                        ratingCount: nil,
+                        showRating: false
+                    )
                     Spacer()
                     actionMenu
                 }
-                .padding(12)
+                .padding(10)
             }
             .frame(width: cardWidth)
             .background(.white)
@@ -115,9 +109,13 @@ struct ChecklistPlanItem: View {
                 Label("레시피 신고", systemImage: "exclamationmark.bubble")
             }
         } label: {
-            ArrowDownCircled20()
+            ArrowDownCircled24()
                 .padding(4)
                 .contentShape(Rectangle())
         }
     }
+}
+
+enum ChecklistPlanItemAction {
+    case save, unsave, like, unlike, report
 }

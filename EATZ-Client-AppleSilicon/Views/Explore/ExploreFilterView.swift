@@ -47,7 +47,7 @@ struct ExploreFilterView: View {
                 }
                 VerticalDivider(padding: 0)
                     .frame(maxHeight: 38)
-                ExploreFilterButton(servingsLabel, "제공량") {
+                ExploreFilterButton(servingsLabel, "1회 제공량") {
                     onAction(.servingsPicker)
                 }
             }
@@ -73,7 +73,7 @@ private struct ExploreFilterButton: View {
                     Text(label)
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(Color.black)
-                    ArrowDownCircled20()
+                    ArrowDownCircled24()
                 }
                 Text(subtitle)
                     .font(.system(size: 12, weight: .medium))

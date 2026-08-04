@@ -28,7 +28,7 @@ final class TokenManager {
         }
     }
     
-    /// 키체인에서 액세스 토큰을 불러옵니다. 없으면 'nil'을 반환합니다.
+    /// 키체인에서 액세스 토큰을 불러옵니다. 없으면 `nil`을 반환합니다.
     func loadAccessToken() -> String? {
         if let token = KeychainManager.load(key: accessTokenKey) { return token }
         else {

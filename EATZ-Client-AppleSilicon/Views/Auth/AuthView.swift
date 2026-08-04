@@ -148,7 +148,7 @@ struct AuthView: View {
         }
     }
     
-    private func authActionButton(title: String, type: BigRoundedButtonType, action: @escaping () -> Void) -> some View {
+    private func authActionButton(title: String, type: CapsuleLargeButtonAppearance, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack {
                 Text(title)
@@ -158,7 +158,7 @@ struct AuthView: View {
             }
             .frame(maxWidth: .infinity)
         }
-        .buttonStyle(BigRoundedButtonStyle(type: type))
+        .buttonStyle(CapsuleLargeButtonStyle(appearance: type))
         .padding(.horizontal, 20)
     }
 }

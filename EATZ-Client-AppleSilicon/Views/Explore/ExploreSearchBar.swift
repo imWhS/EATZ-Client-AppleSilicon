@@ -43,7 +43,7 @@ struct ExploreSearchBar: View {
     
     private var keywordAreaView: some View {
         HStack(spacing: 8) {
-            Image("recipe-list-search")
+            Image("search-18")
                 .padding(.leading, 20)
             VStack(alignment: .leading, spacing: 2) {
                 ZStack(alignment: .leading) {
@@ -99,7 +99,7 @@ struct ExploreSearchBar: View {
                 Image("category")
                     .padding(.leading, 11)
                 
-                // 카테고리 라벨: isFocused 상태에 따라 너비가 변합니다.
+                // 테마 라벨: isFocused 상태에 따라 너비가 변합니다.
                 Text("테마")
                     .font(.system(size: 14, weight: .semibold))
                     .fixedSize()
@@ -110,8 +110,7 @@ struct ExploreSearchBar: View {
                     .clipped()
             }
             .foregroundStyle(theme != nil ? Color.white : Color.accentColor)
-            .frame(maxHeight: 34)
-            .frame(minWidth: 34)
+            .frame(minWidth: 34, maxHeight: 34)
             .background(theme != nil ? Color.accentColor : Color.buttonSecondary)
             .clipShape(Capsule())
             .padding(.trailing, 16)

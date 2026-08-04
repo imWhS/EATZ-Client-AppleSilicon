@@ -122,18 +122,15 @@ struct RecipeDetailInfoDescriptionView: View {
     
     private var creatorSection: some View {
         HStack(spacing: 10) {
-            Circle().stroke(Color.gray.opacity(0.2), lineWidth: 1)
-                .overlay(
-                    Text("!")
-                        .font(.system(size: 17, weight: .bold))
-                        .foregroundStyle(Color.gray15)
-                )
+            Image("info-200")
+                .resizable()
+                .foregroundStyle(Color.gray15)
                 .frame(width: 40, height: 40)
             
             VStack(alignment: .leading, spacing: 4) {
                 Text("출처")
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.gray35)
+                    .foregroundStyle(Color.gray20)
                 HStack {
                     Group {
                         if let creatorName = creatorName {
@@ -163,7 +160,7 @@ struct RecipeDetailInfoDescriptionView: View {
                 HStack {
                     Text(authorUsername)
                         .font(.system(size: 17, weight: .semibold))
-                    DotSeparatorView()
+                    DotSeparator()
                     Text(createdAt.formattedRelative)
                         .font(.system(size: 17, weight: .medium))
                 }
@@ -303,7 +300,7 @@ struct RecipeDetailInfoReactionView: View {
     
     private var ratingButton: some View {
         RecipeDetailReactionButton(
-            icon: "recipe-rating",
+            icon: "rating-star-16",
             title: "평가",
             type: .normal,
             action: { onRatingTapped(recipeId) }) {
@@ -332,7 +329,7 @@ struct RecipeDetailInfoReactionView: View {
     
     private var commentButton: some View {
         RecipeDetailReactionButton(
-            icon: "recipe-comment",
+            icon: "comment-16",
             title: "댓글",
             maxWidth: 80,
             type: isInitialCommentDisabled ? .disabled : .normal,

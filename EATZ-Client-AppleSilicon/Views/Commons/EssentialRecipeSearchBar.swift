@@ -34,7 +34,7 @@ struct EssentialRecipeSearchBar: View {
         HStack {
             ZStack {
                 HStack(spacing: 0) {
-                    EssentialRecipeSearchBarFieldView(keyword: $keyword, isFocused: $isFocused, onClear: { keyword = "" })
+                    EssentialRecipeSearchBarField(keyword: $keyword, isFocused: $isFocused, onClear: { keyword = "" })
                     cancelButton
                 }
                 .animation(.spring(response: 0.3, dampingFraction: 0.8), value: isFocused)
@@ -78,7 +78,7 @@ struct EssentialRecipeSearchBar: View {
     }
 }
 
-private struct EssentialRecipeSearchBarFieldView: View {
+private struct EssentialRecipeSearchBarField: View {
     @Binding var keyword: String
     @FocusState.Binding var isFocused: Bool
     let onClear: () -> Void
@@ -86,7 +86,7 @@ private struct EssentialRecipeSearchBarFieldView: View {
     var body: some View {
         HStack(spacing: 6) {
             HStack {
-                Image("recipe-list-search")
+                Image("search-18")
                     .foregroundStyle(isFocused ? .black : Color.gray60 )
                 VStack(alignment: .leading, spacing: 2) {
                     searchFieldTopSection

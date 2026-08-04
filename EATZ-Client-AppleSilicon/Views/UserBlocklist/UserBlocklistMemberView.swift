@@ -86,7 +86,7 @@ struct UserBlocklistMemberView: View {
                         
                         HStack {
                             Button("더 알아보기", action: { self.presentLearnMore = true })
-                                .buttonStyle(SmallBorderlessButtonStyle(type: .normal))
+                                .buttonStyle(SmallBorderlessButtonStyle(status: .normal))
                         }
                         .padding(.trailing, 12)
                     }
@@ -140,7 +140,7 @@ private struct BlockedUserRow: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     Button("차단 해제", action: onUnblockTapped)
-                        .buttonStyle(SmallRoundedButtonStyle(type: .secondary))
+                        .buttonStyle(CapsuleMediumButtonStyle(status: .secondary))
                 }
             }
             .padding(.vertical, verticalPadding)

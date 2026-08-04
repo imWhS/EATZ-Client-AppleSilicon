@@ -19,19 +19,19 @@ struct RootTabView: View {
     var body: some View {
         TabView(selection: $selection) {
             CookableView()
-                .tabItem { Label(MainTabItems.cookable.title, systemImage: MainTabItems.cookable.systemImage) }
+                .tabItem { Label(MainTabItems.cookable.title, image: MainTabItems.cookable.image) }
                 .tag(MainTabItems.cookable)
                 .environmentObject(todayRouter)
             ExploreView()
-                .tabItem { Label(MainTabItems.explore.title, systemImage: MainTabItems.explore.systemImage) }
+                .tabItem { Label(MainTabItems.explore.title, image: MainTabItems.explore.image) }
                 .tag(MainTabItems.explore)
                 .environmentObject(exploreRouter)
             PlannerView()
-                .tabItem { Label(MainTabItems.planner.title, systemImage: MainTabItems.planner.systemImage) }
+                .tabItem { Label(MainTabItems.planner.title, image: MainTabItems.planner.image) }
                 .tag(MainTabItems.planner)
                 .environmentObject(plannerRouter)
             MyAccountView()
-                .tabItem { Label(MainTabItems.myAccount.title, systemImage: MainTabItems.myAccount.systemImage) }
+                .tabItem { Label(MainTabItems.myAccount.title, image: MainTabItems.myAccount.image) }
                 .tag(MainTabItems.myAccount)
                 .environmentObject(myAccountRouter)
         }

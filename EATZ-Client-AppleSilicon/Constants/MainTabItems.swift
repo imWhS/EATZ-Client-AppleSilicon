@@ -18,7 +18,7 @@ enum MainTabItems: String, CaseIterable, Identifiable {
     
     var title: String {
         switch self {
-        case .cookable: return "바로 요리"
+        case .cookable: return "요리하기"
         case .explore: return "둘러보기"
         case .planner: return "플래너"
         case .myAccount: return "내 계정"
@@ -26,12 +26,12 @@ enum MainTabItems: String, CaseIterable, Identifiable {
         }
     }
     
-    var systemImage: String {
+    var image: String {
         switch self {
-        case .cookable: return "house"
-        case .explore: return "magnifyingglass"
-        case .planner: return "calendar"
-        case .myAccount: return "person.circle"
+        case .cookable: return "cookable-tab"
+        case .explore: return "explore-tab"
+        case .planner: return "planner-tab"
+        case .myAccount: return "my-account-tab"
         case .hello: return "person.badge.plus"
         }
     }

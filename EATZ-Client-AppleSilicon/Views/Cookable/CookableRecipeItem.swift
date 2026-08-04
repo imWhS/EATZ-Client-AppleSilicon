@@ -137,7 +137,7 @@ struct CookableRecipeItem: View {
                 Label("신고", systemImage: "exclamationmark.bubble")
             }
         } label: {
-            ArrowDownCircled20()
+            ArrowDownCircled24()
                 .padding(4)
                 .contentShape(Rectangle())
         }

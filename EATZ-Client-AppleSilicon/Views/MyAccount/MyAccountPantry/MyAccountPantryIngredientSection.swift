@@ -40,9 +40,9 @@ struct MyAccountPantryIngredientSection: View {
     private func contentView(_ count: Int) -> some View {
         MyAccountPantryItemContainer(title: "내 재료 보관함", count: count, onDetailTapped: onDetailTapped) {
             HStack(spacing: 4) {
-                VerticalAlignedButton(image: "search-18", title: "재료 둘러보기", verticalPadding: 8, highlightCornerRadius: 8, action: onSearchIngredients)
+                VerticalAlignedIconTitleButton(image: "search-18", title: "재료 둘러보기", verticalPadding: 8, highlightCornerRadius: 8, action: onSearchIngredients)
                 VerticalDivider(padding: 8)
-                VerticalAlignedButton(image: "like-filled-16", title: "좋아하는 재료", verticalPadding: 8, highlightCornerRadius: 8, action: onPresentLikedIngredients)
+                VerticalAlignedIconTitleButton(image: "like-filled-16", title: "좋아하는 재료", verticalPadding: 8, highlightCornerRadius: 8, action: onPresentLikedIngredients)
             }
             .padding(8)
         }

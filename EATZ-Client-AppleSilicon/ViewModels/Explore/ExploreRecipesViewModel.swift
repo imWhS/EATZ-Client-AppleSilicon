@@ -143,12 +143,14 @@ class ExploreRecipesViewModel: ObservableObject {
     }
     
     private func handleReportRecipe(for recipe: ExploreRecipe) {
-        reportResource = ReportResource(
-            id: recipe.id,
-            authorId: recipe.authorId,
-            authorUsername: recipe.authorUsername,
-            type: .RECIPE,
-            content: recipe.title)
+        auth.performWhenLoggedIn {
+            self.reportResource = ReportResource(
+                id: recipe.id,
+                authorId: recipe.authorId,
+                authorUsername: recipe.authorUsername,
+                type: .RECIPE,
+                content: recipe.title)
+        }
     }
     
     private func loadRecipes(page: Int, completion: @escaping () -> Void = {}) {

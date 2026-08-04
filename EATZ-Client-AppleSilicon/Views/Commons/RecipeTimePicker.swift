@@ -113,7 +113,7 @@ struct RecipeTimePicker: View {
             }
             .frame(maxWidth: .infinity)
         }
-        .buttonStyle(BigRoundedButtonStyle(type: .secondary))
+        .buttonStyle(CapsuleLargeButtonStyle(appearance: .secondary))
         .padding()
         .opacity(isCookingTimeZero ? 0.5 : 1)
         .disabled(isCookingTimeZero)

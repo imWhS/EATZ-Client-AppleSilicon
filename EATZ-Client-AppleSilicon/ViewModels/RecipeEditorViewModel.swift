@@ -86,7 +86,7 @@ class RecipeEditorViewModel: ObservableObject {
     
     var servingsLabel: String {
         if let servings = currentDraft.servings { return "\(servings)인" }
-        else { return "제공량 추가" }
+        else { return "1회 제공량 추가" }
     }
     
     var creatorSummaryLabel: String {
@@ -406,7 +406,7 @@ extension RecipeEditorViewModel {
             return false
         }
         if currentDraft.hasInvalidServings() {
-            alert = .incompleteDraft(message: "제공량을 추가해주세요. 제공량은 필수 항목이며, 최소 1인 이상이어야 해요.")
+            alert = .incompleteDraft(message: "1회 제공량을 추가해주세요. 1회 제공량은 필수 항목이며, 최소 1인 이상이어야 해요.")
             return false
         }
         return true

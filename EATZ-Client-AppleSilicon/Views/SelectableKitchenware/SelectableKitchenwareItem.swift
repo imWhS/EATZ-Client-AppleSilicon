@@ -47,7 +47,7 @@ struct SelectableKitchenwareItem<Manager: SelectableKitchenwareManager>: View {
     private var pantryStatusText: some View {
         Text("보관 중")
             .font(.system(size: 14, weight: .semibold))
-            .foregroundStyle(Color.gray15)
+            .foregroundStyle(Color.gray35)
             .frame(height: 32)
             .padding(.leading, 4)
             .padding(.trailing, 8)
@@ -61,6 +61,6 @@ struct SelectableKitchenwareItem<Manager: SelectableKitchenwareManager>: View {
                 else { Text("선택") }
             }
         }
-        .buttonStyle(SmallRoundedButtonStyle(type: isDisabled ? .disabled : (isSelected ? .secondary : .primary)))
+        .buttonStyle(CapsuleMediumButtonStyle(status: isDisabled ? .disabled : (isSelected ? .secondary : .primary)))
     }
 }

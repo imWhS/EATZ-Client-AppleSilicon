@@ -227,12 +227,12 @@ private struct ChecklistUncookableSection: View {
                         onAddAllRequirements()
                     }) {
                         HStack(spacing: 6) {
-                            Image("add-to-pantry-14").foregroundStyle(Color.white)
+                            Image("add-circled-16").foregroundStyle(Color.white)
                             Text("모두 보관함에 추가")
                         }
                         .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(BigRoundedButtonStyle(type: .primary))
+                    .buttonStyle(CapsuleLargeButtonStyle(appearance: .primary))
                     .padding(.horizontal, 20)
                     .padding(.vertical, 10)
                 }

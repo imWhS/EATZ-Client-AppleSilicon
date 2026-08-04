@@ -47,7 +47,7 @@ struct RatingIndicatorAverageView: View {
                 } else {
                     Text("평균 점수")
                         .font(.system(size: 17, weight: .semibold))
-                    DotSeparatorView()
+                    DotSeparator()
                     Text("\(count ?? 0)개의 평가")
                         .font(.system(size: 17, weight: .medium))
                         .foregroundStyle(Color.gray35)

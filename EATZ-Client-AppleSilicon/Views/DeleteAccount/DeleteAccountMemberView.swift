@@ -10,11 +10,11 @@ import SwiftUI
 struct DeleteAccountMemberView: View {
     @EnvironmentObject private var router: Router
     @EnvironmentObject var authManager: AuthManager 
-    
-    private let userItemHorizontalPadding: CGFloat = 20
-    private let profileImageSize: CGFloat = 40
-    private let userItemProfileImageLabelSpacing: CGFloat = 12
-    private let userItemVerticalPadding: CGFloat = 16
+//    
+//    private let userItemHorizontalPadding: CGFloat = 20
+//    private let profileImageSize: CGFloat = 40
+//    private let userItemProfileImageLabelSpacing: CGFloat = 12
+//    private let userItemVerticalPadding: CGFloat = 16
     
     var body: some View {
         Group {
@@ -79,7 +79,7 @@ struct DeleteAccountMemberView: View {
                     }
                     .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(BigRoundedButtonStyle(type: .secondary))
+                .buttonStyle(CapsuleLargeButtonStyle(appearance: .secondary))
                 .padding(.horizontal, 20)
             }
             .padding(.vertical, 20)

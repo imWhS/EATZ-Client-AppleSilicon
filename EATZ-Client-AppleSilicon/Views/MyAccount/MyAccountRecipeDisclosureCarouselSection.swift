@@ -37,10 +37,4 @@ struct MyAccountRecipeDisclosureCarouselSection: View {
                 onRecipeTapped: onRecipeTapped)
         }
     }
-    
-    func createRecipeCountLabel(_ recipeCount: Int?) -> String? {
-        if let recipeCount = recipeCount, 0 < recipeCount {
-            return "\(recipeCount)개의 레시피"
-        } else { return nil }
-    }
 }

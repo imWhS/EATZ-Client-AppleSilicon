@@ -82,12 +82,13 @@ class IngredientPickerViewModel: ObservableObject, SelectableIngredientManager {
     }
     
     func loadMoreSearchedIngredients() {
+        let trimmedSearchKeyword = searchKeyword.trimmingCharacters(in: .whitespacesAndNewlines)
         guard pagedSearchedIngredients.hasNextPage
               && !pagedSearchedIngredients.isLoadingNextPage
-              && !searchKeyword.isEmpty else { return }
+              && !trimmedSearchKeyword.isEmpty else { return }
         
         pagedSearchedIngredients.isLoadingNextPage = true
-        searchIngredients(keyword: searchKeyword, page: pagedSearchedIngredients.page + 1) {
+        searchIngredients(keyword: trimmedSearchKeyword, page: pagedSearchedIngredients.page + 1) {
             self.pagedSearchedIngredients.isLoadingNextPage = false
         }
     }
@@ -163,7 +164,10 @@ class IngredientPickerViewModel: ObservableObject, SelectableIngredientManager {
     }
     
     private func searchIngredients(keyword: String, page: Int = 0, completion: @escaping () -> Void = {}) {
-        ingredientService.search(name: keyword, page: page) { [weak self] result in
+        let trimmedKeyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmedKeyword.isEmpty { return }
+        
+        ingredientService.search(name: trimmedKeyword, page: page) { [weak self] result in
             guard let self = self else { completion(); return }
             
             DispatchQueue.main.async {
@@ -198,8 +202,9 @@ class IngredientPickerViewModel: ObservableObject, SelectableIngredientManager {
     }
     
     private func handleSearchInput(keyword: String) {
+        let trimmedKeyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
         // 검색어가 비어 있으면 검색 결과를 비우고 루트 목록을 불러옵니다.
-        if keyword.isEmpty {
+        if trimmedKeyword.isEmpty {
             pagedSearchedIngredients = .initial
             // pagedIngredients가 비어있을 경우에만 루트 재료 목록을 다시 불러옵니다.
             if pagedIngredients.isEmpty {
@@ -208,7 +213,7 @@ class IngredientPickerViewModel: ObservableObject, SelectableIngredientManager {
         } else {
             // 검색어가 있으면 검색 API를 호출합니다.
             searchState = .searching
-            searchIngredients(keyword: keyword)
+            searchIngredients(keyword: trimmedKeyword)
         }
     }
     

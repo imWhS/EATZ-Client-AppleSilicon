@@ -318,8 +318,9 @@ extension ExploreIngredientsViewModel {
     }
     
     private func handleSearchInput(keyword: String) {
+        let trimmedKeyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
         // 검색어가 비어 있으면 검색 결과를 비우고 루트 목록을 불러옵니다.
-        if keyword.isEmpty {
+        if trimmedKeyword.isEmpty {
             pagedSearchedIngredients = .initial
             // pagedIngredients가 비어있을 경우에만 루트 재료 목록을 다시 불러옵니다.
             if pagedIngredients.isEmpty {

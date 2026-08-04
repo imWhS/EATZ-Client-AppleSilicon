@@ -36,12 +36,13 @@ class ExploreRecipeSearchViewModel: ObservableObject {
     ///
     /// 유효한 검색 조건이 갖춰져 있는지 확인한 후, 유효한 경우 튜플 타입으로 반환합니다.
     private var searchContext: (filters: ExploreFilters, sort: ExploreRecipesSort, keyword: String)? {
-        guard let filters = filters, let sort = sort, !keyword.isEmpty
+        let trimmedKeyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let filters = filters, let sort = sort, !trimmedKeyword.isEmpty
         else {
             return nil
         }
         
-        return (filters, sort, keyword)
+        return (filters, sort, trimmedKeyword)
     }
 
     private var keyword: String = ""
@@ -109,7 +110,7 @@ class ExploreRecipeSearchViewModel: ObservableObject {
     }
     
     func refresh() async {
-        guard let context = searchContext else {
+        guard searchContext != nil else {
             resetToIdle()
             return
         }
@@ -133,7 +134,7 @@ class ExploreRecipeSearchViewModel: ObservableObject {
     /// - 화면에 표시 중인 기존 데이터가 최신 상태를 반영하지 못하거나 필요 없어진 경우: Ex. 필터, 정렬 옵션 또는 검색어 변경 시
     /// - `prepareDataIfNeeded`가 데이터를 업데이트해야 할 필요가 있다고 판단한 경우
     private func resetAndLoadAll() {
-        guard let context = searchContext else {
+        guard searchContext != nil else {
             resetToIdle()
             return
         }
@@ -298,7 +299,7 @@ extension ExploreRecipeSearchViewModel {
         
         recipeService.fetchExploreRecipes(
             searchCriteria: ExploreSearchCriteria(
-                keyword: keyword,
+                keyword: context.keyword,
                 maxTotalTime: context.filters.totalTime,
                 servings: context.filters.servings,
                 tagId: context.filters.tagId,
@@ -343,10 +344,6 @@ extension ExploreRecipeSearchViewModel {
     
     private func index(of recipeId: Int64) -> Int? {
         pagedRecipes.items.firstIndex(where: { $0.id == recipeId })
-    }
-
-    private func reportRecipe(of recipe: CookableRecipe) {
-//        self.alert = .report(title: recipe.title)
     }
     
 }

@@ -76,10 +76,10 @@ struct MyAccountHeader: View {
                         .foregroundStyle(Color.black)
                     Text("프로필 관리")
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(Color.gray20)
+                        .foregroundStyle(Color.gray35)
                 }
                 Spacer()
-                ArrowDownCircled20()
+                ArrowDownCircled24()
             }
             .padding(12)
         }
@@ -95,7 +95,7 @@ struct MyAccountHeader: View {
                 Text("새 레시피")
                     .frame(maxWidth: .infinity)
             }
-            .buttonStyle(BigRoundedButtonStyle(type: member == nil ? .disabled : .primary))
+            .buttonStyle(CapsuleLargeButtonStyle(appearance: member == nil ? .disabled : .primary))
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 10)

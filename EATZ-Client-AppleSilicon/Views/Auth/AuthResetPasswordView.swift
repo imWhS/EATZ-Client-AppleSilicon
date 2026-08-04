@@ -112,7 +112,7 @@ private struct ResetPasswordSetupView: View {
                     }
                     .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(BigRoundedButtonStyle(type: .primary))
+                .buttonStyle(CapsuleLargeButtonStyle(appearance: .primary))
             }
         }
         .padding(20)

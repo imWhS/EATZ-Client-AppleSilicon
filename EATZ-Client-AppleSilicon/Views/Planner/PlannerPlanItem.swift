@@ -89,7 +89,7 @@ struct PlannerPlanItem: View {
             Button {
                 action(.addToPlanner)
             } label: {
-                Label("다른 날짜에도 추가", systemImage: "calendar.badge.plus")
+                Label("다른 날짜에도 추가", systemImage: "add-circled-20")
             }
             
             Divider()
@@ -127,7 +127,7 @@ struct PlannerPlanItem: View {
                 Label("레시피 신고", systemImage: "exclamationmark.bubble")
             }
         } label: {
-            ArrowDownCircled20()
+            ArrowDownCircled24()
                 .padding(.horizontal, 8)
                 .contentShape(Rectangle())
         }

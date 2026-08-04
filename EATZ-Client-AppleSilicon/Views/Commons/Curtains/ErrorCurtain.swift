@@ -24,20 +24,26 @@ struct ErrorCurtain: View {
     var body: some View {
         VStack {
             Spacer()
-            VStack(spacing: 12) {
-                VStack(spacing: 8) {
-                    Text("문제가 발생했어요.")
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(Color.gray35)
-                    if let message = message {
-                        Text(message)
-                            .font(.system(size: 12, weight: .medium))
-                            .multilineTextAlignment(.center)
+            VStack(spacing: 20) {
+                VStack(spacing: 12) {
+                    Image("closed-200")
+                        .resizable()
+                        .frame(width: 32, height: 32)
+                        .foregroundStyle(Color.init(hex: "DF8686"))
+                    VStack(spacing: 4) {
+                        Text("문제가 발생했어요.")
+                            .font(.system(size: 17, weight: .semibold))
                             .foregroundStyle(Color.gray35)
+                        if let message = message {
+                            Text(message)
+                                .font(.system(size: 12, weight: .medium))
+                                .multilineTextAlignment(.center)
+                                .foregroundStyle(Color.gray35)
+                        }
                     }
                 }
                 if let onRetry = onRetry {
-                    Button("다시 시도", action: onRetry).buttonStyle(SmallRoundedButtonStyle(type: .secondary))
+                    Button("다시 시도", action: onRetry).buttonStyle(CapsuleMediumButtonStyle(status: .secondary))
                 }
             }
             Spacer()
@@ -45,4 +51,8 @@ struct ErrorCurtain: View {
         .padding(20)
         .frame(maxWidth: .infinity)
     }
+}
+
+#Preview {
+    ErrorCurtain("헉...") {}
 }

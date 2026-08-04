@@ -258,8 +258,9 @@ extension ExploreKitchenwaresViewModel {
     }
     
     private func handleSearchInput(keyword: String) {
+        let trimmedKeyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
         // 검색어가 비어 있으면 검색 결과를 비우고 도구 목록을 불러옵니다.
-        if keyword.isEmpty {
+        if trimmedKeyword.isEmpty {
             pagedSearchedKitchenwares = .initial
             // pagedIngredients가 비어있을 경우에만 도구 목록을 다시 불러옵니다.
             if pagedKitchenwares.isEmpty {
@@ -268,7 +269,7 @@ extension ExploreKitchenwaresViewModel {
         } else {
             // 검색어가 있으면 검색 API를 호출합니다.
             searchState = .searching
-            searchKitchenwares(keyword: keyword)
+            searchKitchenwares(keyword: trimmedKeyword)
         }
     }
 }

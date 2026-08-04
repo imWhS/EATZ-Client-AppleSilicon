@@ -439,7 +439,7 @@ extension MyAccountViewModelOld {
         userPantryService.addKitchenwares(ids: kitchenwares.map(\.id)) { result in
             switch result {
             case .success: print("성공!")
-            case .failure(let networkError): print("실패 ㅜ")
+            case .failure: print("실패 ㅜ")
             }
         }
     }

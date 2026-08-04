@@ -161,7 +161,7 @@ private struct PlannerPlanListFooterView: View {
         Button(action: { onAddPlan(self.date) }) {
             Image("add-12")
         }
-        .buttonStyle(SmallRoundedButtonStyle(type: .secondary, isIconOnly: true))
+        .buttonStyle(CapsuleMediumButtonStyle(status: .secondary, isIconOnly: true))
     }
 }
 

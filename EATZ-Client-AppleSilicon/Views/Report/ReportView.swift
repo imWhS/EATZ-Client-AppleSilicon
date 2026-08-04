@@ -119,7 +119,7 @@ struct ReportView: View {
                         .foregroundStyle(.black)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Spacer()
-                    Image("arrow-right-circled")
+                    Image("arrow-right-14")
                 }
                 .padding(16)
                 .background(.white)

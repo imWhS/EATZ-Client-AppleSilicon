@@ -38,7 +38,14 @@ struct ExploreKitchenwaresList: View {
             case .empty:
                 Curtain(
                     title: "원하는 도구가 없어요.",
-                    description: "'\(searchKeyword)' 관련 도구를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요.")
+                    description: "'\(searchKeyword)' 관련 도구를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요.",
+                    header: {
+                        Image("info-200")
+                            .resizable()
+                            .foregroundStyle(Color.gray15)
+                            .frame(width: 40, height: 40)
+                    }
+                )
             }
         }
     }

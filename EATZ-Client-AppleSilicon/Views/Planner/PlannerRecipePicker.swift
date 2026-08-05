@@ -87,8 +87,12 @@ struct PlannerRecipePicker: View {
         case .empty:
             Curtain(
             title: "저장한 레시피가 없어요.",
-            description: "플래너에 추가할 레시피를 검색해보세요."
-            )
+            description: "플래너에 추가할 레시피를 검색해보세요.",
+            header: {
+                Image("save-40")
+                    .foregroundStyle(Color.gray15)
+            }
+        )
         case .error(let message): ErrorCurtain(message)
         }
     }
@@ -109,8 +113,14 @@ struct PlannerRecipePicker: View {
                 onLoadMore: viewModel.loadMoreSearchedRecipes)
             case .empty:
                 Curtain(
-                title: "원하는 레시피가 없어요.",
-                description: "'\(viewModel.keyword)' 관련 레시피를 하나도 찾지 못했어요.\n다른 키워드로 다시 검색해보세요."
+                    title: "원하는 레시피가 없어요.",
+                    description: "'\(viewModel.keyword)' 관련 레시피를 하나도 찾지 못했어요.\n다른 키워드로 다시 검색해보세요.",
+                    header: {
+                        Image("info-200")
+                            .resizable()
+                            .foregroundStyle(Color.gray15)
+                            .frame(width: 40, height: 40)
+                    }
                 )
             case .error(let message): ErrorCurtain(message)
             }

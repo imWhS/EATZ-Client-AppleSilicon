@@ -15,7 +15,7 @@ struct MyKitchenwarePantryView: View {
     var body: some View {
         Group {
             switch viewModel.viewState {
-            case .loading: LoadingCurtain(title: "보관함 속 도구들을 불러오고 있어요...")
+            case .loading: LoadingCurtain(title: "보관함 속의 모든 도구를 불러오고 있어요...")
             case .loaded:
                 MyKitchenwarePantryList(
                     pagedKitchenwares: viewModel.pagedKitchenwares,
@@ -23,10 +23,17 @@ struct MyKitchenwarePantryView: View {
                     onClear: viewModel.handleClearPantry,
                     onAction: viewModel.handleItemAction
                 )
-            case .empty: Curtain(
-                title: "보관 중인 도구가 없어요.",
-                description: "보관함에 아무 도구를 추가하지 않았어요."
-            )
+            case .empty:
+                Curtain(
+                    title: "보관하고 있는 도구가 없어요.",
+                    description: "보관함에 아무 도구를 추가하지 않았어요.",
+                    header: {
+                        Image("info-200")
+                            .resizable()
+                            .foregroundStyle(Color.gray15)
+                            .frame(width: 40, height: 40)
+                    }
+                )
             case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
             case .unauthorized: CommonUnauthorizedStateView()
             }

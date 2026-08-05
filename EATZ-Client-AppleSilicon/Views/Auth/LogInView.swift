@@ -21,7 +21,7 @@ struct LogInView: View {
                 else {
                    Button("완료", action: viewModel.logIn) 
                         .fontWeight(.semibold)
-                        .tint(Color.accentColor)
+                        .tint(Color.auth)
                         .buttonStyle(.borderedProminent)
                }
            }
@@ -87,7 +87,7 @@ struct LogInView: View {
                     ProgressView()
                 } else {
                     Button("암호 다시 설정", action: viewModel.resetPassword)
-                        .buttonStyle(CapsuleMediumButtonStyle(status: .secondary))
+                        .buttonStyle(CapsuleButtonMediumStyle(status: .authSecondary))
                 }
                 
                 Group {

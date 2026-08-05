@@ -36,6 +36,14 @@ class CookableRecipeListViewModel: ObservableObject {
     /// - 로그인 상태가 아니면 `nil`이 됩니다.
     @Published var currentUser: CurrentUser?
     
+    var navigationTitleLabel: String {
+        "요리할만한 레시피"
+    }
+    
+    var navigationSubtitleLabel: String {
+        "\(pagedRecipes.totalElements)개의 레시피"
+    }
+    
     private let auth: AuthProvider
     
     private var cancellables = Set<AnyCancellable>()

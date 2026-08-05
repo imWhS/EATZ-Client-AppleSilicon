@@ -60,8 +60,7 @@ struct PlannerGuestView: View {
                 Button(action: authManager.requireAuthView) {
                     Text("이메일로 시작").frame(maxWidth: .infinity)
                 }
-                .buttonStyle(CapsuleLargeButtonStyle(appearance: .primary))
-                .accentColor(Color.init(hex: "55C374"))
+                .buttonStyle(CapsuleLargeButtonStyle(appearance: .authPrimary))
                 Text("로그인 또는 가입 후 계속 진행할 수 있어요.")
                     .font(.system(size: 12, weight: .medium))
                     .multilineTextAlignment(.center)

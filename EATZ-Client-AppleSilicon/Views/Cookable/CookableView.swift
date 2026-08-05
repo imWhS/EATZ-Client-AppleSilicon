@@ -30,10 +30,13 @@ struct CookableView: View {
     
     private var mainContent: some View {
         NavigationStack(path: $router.path) {
-            VStack(spacing: 0) {
-                if !isSearchFieldFocused { header }
-                filterSection
-                Spacer()
+            ScrollView {
+                VStack(spacing: 0) {
+                    if !isSearchFieldFocused { header }
+                    filterSection
+                }
+            }
+            .safeAreaInset(edge: .bottom) {
                 CookableSearchButton(isShowing: !isSearchFieldFocused, action: {
                     router.push(.cookable(searchCriteria: viewModel.searchCriteria))
                 })
@@ -60,7 +63,7 @@ struct CookableView: View {
                 .transition(.opacity.combined(with: .move(edge: .top)))
         }
         .padding(.horizontal, 40)
-        .padding(.top, 40)
+        .padding(.top, 80)
         .padding(.bottom, 12)
         .transition(.opacity.combined(with: .move(edge: .top)))
     }
@@ -86,10 +89,11 @@ struct CookableView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal, 20)
                 HorizontalDivider()
-                    .padding(.horizontal, 20)
-                CookableFilterToggleButton(
-                    isCookableOnly: $viewModel.searchCriteria.isCookableOnly,
-                    action: viewModel.toggleCookableOnly)
+                        .padding(.horizontal, 20)
+                    CookableFilterToggleButton(
+                        isCookableOnly: $viewModel.searchCriteria.isCookableOnly,
+                        isEnabled: viewModel.auth.isLoggedIn,
+                        action: viewModel.toggleCookableOnly)
             }
         }
     }
@@ -136,21 +140,35 @@ private struct CookableFilterButton: View {
 
 private struct CookableFilterToggleButton: View {
     @Binding var isCookableOnly: Bool
+    let isEnabled: Bool
     let action: () -> Void
     
     var body: some View {
-        Button(action: action) {
-            HStack(alignment: .center, spacing: 12) {
-                CookableButtonDescriptionsView(
-                    titleLabel: "바로 요리 가능",
-                    subtitleLabel: "보관함 속 재료, 도구로 요리할 수 있는 레시피만 찾아요.")
-                Spacer()
-                CheckToggleCircled(isToggled: isCookableOnly)
+        HStack {
+            if isEnabled {
+                Toggle(isOn: $isCookableOnly) {
+                    HStack(spacing: 6) {
+                        CookableButtonDescriptionsView(
+                            titleLabel: "바로 요리 가능",
+                            subtitleLabel: "보관함 속 재료, 도구만으로 지금 바로 요리할 수 있는 레시피만 찾아요.")
+                        Spacer()
+                    }
+                }
+                .tint(.accent)
+                .padding(20)
+                .disabled(!isEnabled)
+                .opacity(isEnabled ? 1 : 0.2)
+            } else {
+                HStack(spacing: 6) {
+                    CookableButtonDescriptionsView(
+                        titleLabel: "바로 요리 가능",
+                        subtitleLabel: "로그인 또는 가입하면, 지금 바로 요리할 수 있는 레시피만 찾을 수 있어요.")
+                    Button("이메일로 시작", action: action)
+                        .buttonStyle(CapsuleButtonMediumStyle(status: .authPrimary))
+                }
+                .padding(20)
             }
-            .padding(20)
-            .contentShape(Rectangle())
         }
-        .buttonStyle(CookableButtonHighlightStyle())
         .padding(.horizontal, 20)
     }
 }

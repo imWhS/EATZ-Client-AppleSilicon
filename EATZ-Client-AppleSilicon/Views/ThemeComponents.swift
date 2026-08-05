@@ -73,7 +73,15 @@ struct ThemeAllSection: View {
                 } else if pagedThemes.isLoadingNextPage {
                     LoadingCurtain(title: "모든 테마를 불러오고 있어요...")
                 } else {
-                    Curtain(title: "보여드릴 테마가 없어요.")
+                    Curtain(
+                        title: "보여드릴 테마가 없어요.",
+                        header: {
+                            Image("info-200")
+                                .resizable()
+                                .foregroundStyle(Color.gray15)
+                                .frame(width: 40, height: 40)
+                        }
+                    )
                 }
             }
         }

@@ -26,7 +26,11 @@ struct LikedIngredientsView: View {
                         title: "좋아하는 재료가 없어요.",
                         description: "좋아할만한 재료를 찾아볼까요?",
                         actionTitle: "재료 둘러보기",
-                        action: { presentExploreIngredientsView = true }
+                        action: { presentExploreIngredientsView = true },
+                        header: {
+                            Image("like-40")
+                                .foregroundStyle(Color.gray15)
+                        }
                     )
                 case .unauthorized: CommonUnauthorizedStateView()
                 case .error(let message): ErrorCurtain(message)

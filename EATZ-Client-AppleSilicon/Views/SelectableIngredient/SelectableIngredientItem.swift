@@ -64,6 +64,6 @@ struct SelectableIngredientItem<Manager: SelectableIngredientManager>: View {
                 else { Text("선택") }
             }
         }
-        .buttonStyle(CapsuleMediumButtonStyle(status: isDisabled ? .disabled : (isSelected ? .secondary : .primary)))
+        .buttonStyle(CapsuleButtonMediumStyle(status: isDisabled ? .disabled : (isSelected ? .secondary : .primary)))
     }
 }

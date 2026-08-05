@@ -93,7 +93,7 @@ struct RecipeBasicCommonActionMenuView<ExtraMenu: View>: View {
         
         if let onAddToPlannerTapped = onAddToPlannerTapped {
             Button(action: onAddToPlannerTapped) {
-                Label("플래너에 추가", systemImage:  "add-circled-20")
+                Label("플래너에 추가", systemImage: "plus.circle")
             }
         }
         

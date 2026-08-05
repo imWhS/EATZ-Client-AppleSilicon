@@ -49,7 +49,7 @@ struct PlannerDatePicker: View {
     private var viewStateContent: some View {
         Group {
             switch viewModel.viewState {
-            case .loading: LoadingCurtain(title: "회원님의 플랜들을 불러오고 있어요...")
+            case .loading: LoadingCurtain(title: "회원님의 모든 플랜을 불러오고 있어요...")
             case .loaded: mainContent
             case .unauthorized: CommonUnauthorizedStateView()
             case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)

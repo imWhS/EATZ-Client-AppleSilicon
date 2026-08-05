@@ -25,7 +25,7 @@ struct RecipeEditorOtherOptionsSection: View {
                 onAction: onShowTimePicker)
             buttonRow(
                 title: servingsLabel, // 제공량
-                description: "레시피로 완성될 요리의 양을 설정하세요.",
+                description: "레시피를 한 번 요리했을 때 완성될 요리의 양을 설정하세요.",
                 onAction: onShowServingsPicker)
             buttonRow(
                 title: creatorSummaryLabel,

@@ -65,7 +65,11 @@ struct SavedRecipesView: View {
     private func emptyView() -> some View {
         Curtain(
             title: "저장한 레시피가 없어요.",
-            description: "둘러보기, 레시피 화면 등에서 저장한 레시피가 여기에 나타나요."
+            description: "둘러보기, 레시피 화면 등에서 저장한 레시피가 여기에 나타나요.",
+            header: {
+                Image("save-40")
+                    .foregroundStyle(Color.gray15)
+            }
         )
     }
     

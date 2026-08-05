@@ -130,7 +130,7 @@ struct RecipeDetailInfoDescriptionView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("출처")
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.gray20)
+                    .foregroundStyle(Color.gray35)
                 HStack {
                     Group {
                         if let creatorName = creatorName {
@@ -154,7 +154,7 @@ struct RecipeDetailInfoDescriptionView: View {
         HStack(spacing: 10) {
             ProfileImageView(imageUrl: authorImageUrl, size: 40)
             VStack(alignment: .leading, spacing: 4) {
-                Text("레시피 작성자")
+                Text("작성자")
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(Color.gray35)
                 HStack {
@@ -318,7 +318,7 @@ struct RecipeDetailInfoReactionView: View {
                     } else {
                         VStack {
                             Spacer()
-                            Text("아직 평가한 사람이 없어요.\n첫 평가를 남겨보세요.")
+                            Text("아직 평가한 사람이 없어요.\n첫 평가를 등록해보세요.")
                                 .font(.system(size: 12, weight: .medium))
                                 .foregroundStyle(Color.gray20)
                         }

@@ -43,7 +43,7 @@ struct ErrorCurtain: View {
                     }
                 }
                 if let onRetry = onRetry {
-                    Button("다시 시도", action: onRetry).buttonStyle(CapsuleMediumButtonStyle(status: .secondary))
+                    Button("다시 시도", action: onRetry).buttonStyle(CapsuleButtonMediumStyle(status: .secondary))
                 }
             }
             Spacer()

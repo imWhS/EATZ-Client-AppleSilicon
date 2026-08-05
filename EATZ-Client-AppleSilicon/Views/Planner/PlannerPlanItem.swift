@@ -8,13 +8,6 @@
 import SwiftUI
 import Kingfisher
 
-enum PlannerPlanItemAction {
-    case removeFromPlanner, addToPlanner
-    case like, unlike
-    case save, unsave
-    case report
-}
-
 struct PlannerPlanItem: View {
     let plan: PlannerPlan
     let onAction: (PlannerPlan, PlannerPlanItemAction) -> Void
@@ -89,7 +82,7 @@ struct PlannerPlanItem: View {
             Button {
                 action(.addToPlanner)
             } label: {
-                Label("다른 날짜에도 추가", systemImage: "add-circled-20")
+                Label("다른 날짜에도 추가", systemImage: "plus.circle")
             }
             
             Divider()
@@ -132,4 +125,11 @@ struct PlannerPlanItem: View {
                 .contentShape(Rectangle())
         }
     }
+}
+
+enum PlannerPlanItemAction {
+    case removeFromPlanner, addToPlanner
+    case like, unlike
+    case save, unsave
+    case report
 }

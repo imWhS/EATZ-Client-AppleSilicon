@@ -57,7 +57,7 @@ struct UserBlocklistMemberView: View {
     private var emptyContentView: some View {
         Curtain(
             title: "차단한 사용자가 없어요.",
-            description: "아직 아무 사용자도 차단하지 않았어요.\n다른 사용자가 작성한 레시피, 댓글, 평가 등의 콘텐츠가 보이는 화면에서 특정 사용자를 차단할 수 있어요.",
+            description: "아직 아무도 차단하지 않았어요.\n다른 사용자가 작성한 레시피, 댓글, 평가 등의 콘텐츠가 보이는 화면에서 특정 사용자를 차단할 수 있어요.",
             actionTitle: "더 알아보기",
             action: { presentLearnMore = true },
             header: {
@@ -140,7 +140,7 @@ private struct BlockedUserRow: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     Button("차단 해제", action: onUnblockTapped)
-                        .buttonStyle(CapsuleMediumButtonStyle(status: .secondary))
+                        .buttonStyle(CapsuleButtonMediumStyle(status: .secondary))
                 }
             }
             .padding(.vertical, verticalPadding)

@@ -154,7 +154,7 @@ struct CalendarPickerSummarySection: View {
                 } label: {
                     Text("초기화")
                 }
-                .buttonStyle(CapsuleMediumButtonStyle(status: .secondary))
+                .buttonStyle(CapsuleButtonMediumStyle(status: .secondary))
             }
         }
         .frame(maxWidth: .infinity)

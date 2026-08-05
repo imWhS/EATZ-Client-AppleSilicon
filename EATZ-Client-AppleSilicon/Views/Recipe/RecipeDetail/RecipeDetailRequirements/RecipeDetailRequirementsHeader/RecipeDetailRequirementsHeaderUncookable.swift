@@ -39,7 +39,7 @@ struct RecipeDetailRequirementsHeaderUncookable: View {
                 Image("recipe-ingredients-cookable-unavailable")
                     .shadow(color: Color.init(hex: "F2B518").opacity(0.75), radius: 8, x: 0, y: 4)
                 VStack(spacing: 4) {
-                    Text("지금 요리할 수 없는 레시피")
+                    Text("바로 요리할 수 없는 레시피")
                         .font(.system(size: 17, weight: .semibold))
                     Text("\(missingKitchenwareLabel)\(missingIngredientLabel)가 부족해요. 이미 필요한 도구와 재료를 모두 보유하고 있다면, 보관함에 추가해두세요.")
                         .font(.system(size: 17))
@@ -62,6 +62,6 @@ struct RecipeDetailRequirementsHeaderUncookable: View {
                 Image("add-circled-16").foregroundStyle(Color.white)
                 Text("모두 보관함에 추가")
             }}
-        .buttonStyle(CapsuleMediumButtonStyle(status: .primary))
+        .buttonStyle(CapsuleButtonMediumStyle(status: .primary))
     }
 }

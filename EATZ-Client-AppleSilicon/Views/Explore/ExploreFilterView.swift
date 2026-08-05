@@ -84,6 +84,6 @@ private struct ExploreFilterButton: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(CookableButtonHighlightStyle())
-        .padding(.vertical, 10)
+        .padding(.top, 10)
     }
 }

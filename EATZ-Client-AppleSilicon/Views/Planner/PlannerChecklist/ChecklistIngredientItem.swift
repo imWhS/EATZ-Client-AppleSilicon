@@ -40,6 +40,7 @@ struct ChecklistIngredientItem: View {
                        let coupledParentName = ingredient.coupledParentName,
                        coupledParentName.isEmpty == false {
                         Text(coupledParentName)
+                            .font(.system(size: 17, weight: .medium))
                             .foregroundStyle(Color.gray60)
                     }
                     Text(ingredient.name)

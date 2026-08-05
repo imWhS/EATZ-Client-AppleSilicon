@@ -39,7 +39,16 @@ struct ExploreIngredientsChildList: View {
             case .loaded: listView
             case .error(let message): ErrorCurtain(message)
             case .unauthorized: CommonUnauthorizedStateView()
-            default: Curtain(title: "\(parentName)의 하위 재료가 하나도 없어요.")
+            default:
+                Curtain(
+                    title: "\(parentName)의 하위 재료가 하나도 없어요.",
+                    header: {
+                        Image("info-200")
+                            .resizable()
+                            .foregroundStyle(Color.gray15)
+                            .frame(width: 40, height: 40)
+                    }
+                )
             }
         }
     }

@@ -61,7 +61,7 @@ struct CommentView: View {
             case .empty:
                 Curtain(
                     title: "보여드릴 댓글이 없어요.",
-                    description: "아직 아무도 이 레시피에 댓글을 등록하지 않았어요.",
+                    description: "아직 아무도 이 레시피에 댓글을 남기지 않았어요.",
                     header: {
                         Image("comment-40")
                             .foregroundStyle(Color.gray15)

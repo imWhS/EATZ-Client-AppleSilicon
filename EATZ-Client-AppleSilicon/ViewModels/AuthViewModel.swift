@@ -46,6 +46,8 @@ class AuthViewModel: ObservableObject {
     
     @Published var isAlreadyVerified: Bool = false
     
+    @Published var lastValidationCode: String = ""
+    
     /// 로그인 성공 시 호출해야 할 클로저입니다.
     let onLogInSuccess: (String, CurrentUser) -> Void
     
@@ -54,6 +56,15 @@ class AuthViewModel: ObservableObject {
     private let userService = UserService.shared
     private let authService = AuthService.shared
     
+    var isPasswordValid: Bool {
+        return password.count >= 8 && password.count <= 64
+    }
+
+    var isUsernameValid: Bool {
+        let regexPattern = "^[a-z0-9_.]{4,20}$"
+        return username.range(of: regexPattern, options: .regularExpression) != nil
+    }
+
     init(onLogInSuccess: @escaping (String, CurrentUser) -> Void) {
         self.onLogInSuccess = onLogInSuccess
         
@@ -192,10 +203,8 @@ class AuthViewModel: ObservableObject {
             self?.isLoadingForResetPassword = false
             guard let self = self else { return }
             switch result {
-            case .success:
-                self.alert = .sentResetPasswordMail
-            case .failure(let networkError):
-                self.alert = .error(message: networkError.userMessage)
+            case .success: self.alert = .sentResetPasswordMail
+            case .failure(let networkError): self.alert = .error(message: networkError.userMessage)
             }
         }
     }
@@ -243,16 +252,31 @@ class AuthViewModel: ObservableObject {
         }
     }
     
+    func validateValidationCode() {
+        if !validationCode.allSatisfy({ $0.isNumber }) {
+            validationCode = lastValidationCode
+            alert = .verificationCodeInvalid
+        } else if validationCode.count > 6 {
+            validationCode = lastValidationCode
+        } else {
+            lastValidationCode = validationCode
+            if validationCode.count == 6 {
+                verifyValidationCode()
+            }
+        }
+    }
+    
     func verifyValidationCode() {
         if isAlreadyVerified {
-            self.navigationPath.append(.signUpSetPassword)
+            navigationPath.append(.signUpSetPassword)
             return
         }
         
-        self.isLoading = true
-        self.authService.verifyValidationCode(email: self.email, code: self.validationCode) { [weak self] result in
+        isLoading = true
+        authService.verifyValidationCode(email: email, code: validationCode) { [weak self] result in
             guard let self = self else { return }
             self.isLoading = false
+            
             DispatchQueue.main.async {
                 switch result {
                 case .success:
@@ -270,11 +294,38 @@ class AuthViewModel: ObservableObject {
         }
     }
     
+    func validateUsername() {
+        if !isUsernameValid {
+            alert = .invalidUsernameInput
+            return
+        }
+        
+        isLoading = true
+        
+        authService.checkUsernameDuplication(username: username) { [weak self] result in
+            guard let self = self else { return }
+            self.isLoading = false
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
+                    let isDuplicated = response.duplicated
+                    if isDuplicated {
+                        self.alert = .duplicatedUsername
+                    } else {
+                        self.signUp()
+                    }
+                case .failure(let networkError): self.alert = .error(message: networkError.userMessage)
+                }
+            }
+        }
+    }
+
     func validatePassword() {
-        if password.count < 8 {
-            self.alert = .invalidPasswordInput
+        if !isPasswordValid {
+            alert = .invalidPasswordInput
         } else {
-            self.proceedToUsername()
+            proceedToUsername()
         }
     }
     
@@ -283,17 +334,14 @@ class AuthViewModel: ObservableObject {
     }
     
     func signUp() {
-        self.isLoading = true
-        self.authService.signUp(username: username, email: email, password: password) { [weak self] result in
+        isLoading = true
+        authService.signUp(username: username, email: email, password: password) { [weak self] result in
             guard let self = self else { return }
-
             self.isLoading = false
             
             switch result {
-            case .success:
-                self.logIn()
-            case .failure(let networkError):
-                self.alert = .error(message: networkError.userMessage)
+            case .success: self.logIn()
+            case .failure(let networkError): self.alert = .error(message: networkError.userMessage)
             }
         }
     }
@@ -314,7 +362,8 @@ enum AuthAlert: Identifiable {
     case verificationCodeInvalid
     case sentResetPasswordMail
     case invalidPasswordInput
-    case invalidVerificationCodeInput
+    case invalidUsernameInput
+    case duplicatedUsername
     case exceededSendVerificationCodeLimit(email: String, dailyLimits: Int)
     case error(message: String)
     
@@ -325,8 +374,9 @@ enum AuthAlert: Identifiable {
         case .resentVerifyCode: return "sentVerifyCode"
         case .verificationCodeInvalid: return "verificationCodeInvalid"
         case .sentResetPasswordMail: return "sentResetPasswordMail"
-        case .invalidPasswordInput: return "invalidPassword"
-        case .invalidVerificationCodeInput: return "invalidVerificationCode"
+        case .invalidPasswordInput: return "invalidPasswordInput"
+        case .invalidUsernameInput: return "invalidUsernameInput"
+        case .duplicatedUsername: return "duplicatedUsername"
         case .exceededSendVerificationCodeLimit: return "exceededSendVerificationCodeLimit"
         case .error: return "error"
         }
@@ -364,16 +414,22 @@ enum AuthAlert: Identifiable {
                 message: Text("암호를 다시 설정할 수 있는 링크를 편지에 담아 보내드렸어요."),
                 dismissButton: .default(Text("확인"))
             )
-        case .invalidVerificationCodeInput:
-            return Alert(
-                title: Text("올바르지 않은 인증 코드"),
-                message: Text("인증 코드는 6개의 숫자로 이루어져 있어요."),
-                dismissButton: .default(Text("확인"))
-            )
         case .invalidPasswordInput:
             return Alert(
                 title: Text("올바르지 않은 암호"),
-                message: Text("암호는 최소 8자리 이상의 길이로 설정해야 합니다."),
+                message: Text("암호는 최소 8자부터 최대 64자까지의 길이로 설정해주세요."),
+                dismissButton: .default(Text("확인"))
+            )
+        case .invalidUsernameInput:
+            return Alert(
+                title: Text("올바르지 않은 사용자 이름"),
+                message: Text("사용자 이름은 최소 4자부터 최대 20자 길이여야 하며, 영문 소문자, 숫자, 밑줄(_), 마침표(.)만 사용할 수 있어요."),
+                dismissButton: .default(Text("확인"))
+            )
+        case .duplicatedUsername:
+            return Alert(
+                title: Text("사용할 수 없는 사용자 이름"),
+                message: Text("이미 다른 계정에서 사용되고 있는 사용자 이름이에요."),
                 dismissButton: .default(Text("확인"))
             )
         case .exceededSendVerificationCodeLimit(let email, let dailyLimits):

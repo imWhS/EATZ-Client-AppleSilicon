@@ -10,7 +10,6 @@ import SwiftUI
 struct SignUpEmailVerificationView: View {
     @EnvironmentObject private var viewModel: AuthViewModel
     @FocusState private var isValidationCodeFocused: Bool
-    @State private var lastValidationCode: String = ""
     
     var body: some View {
         VStack(spacing: 0) {
@@ -37,21 +36,11 @@ struct SignUpEmailVerificationView: View {
         .toolbar {
             titleToolbarItem
         }
-        .onChange(of: viewModel.validationCode) { _, validationCode in
-            if !validationCode.allSatisfy({ $0.isNumber }) {
-                viewModel.validationCode = self.lastValidationCode
-                viewModel.alert = .invalidVerificationCodeInput
-            } else if validationCode.count > 6 {
-                viewModel.validationCode = self.lastValidationCode
-            } else {
-                self.lastValidationCode = validationCode
-                if validationCode.count == 6 {
-                    viewModel.verifyValidationCode()
-                }
-            }
+        .onChange(of: viewModel.validationCode) {
+            viewModel.validateValidationCode()
         }
         .onAppear {
-            self.lastValidationCode = viewModel.validationCode
+            viewModel.lastValidationCode = viewModel.validationCode
         }
     }
     
@@ -141,7 +130,6 @@ struct SignUpEmailVerificationView: View {
             onSubmit: { viewModel.verifyValidationCode() }
         )
         .padding(.horizontal, 20)
-        .padding(.vertical, 20)
         .disabled(viewModel.isLoading)
         .opacity(viewModel.isLoading ? 0.5 : 1)
     }

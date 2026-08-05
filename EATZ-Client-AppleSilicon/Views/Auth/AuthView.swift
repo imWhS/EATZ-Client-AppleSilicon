@@ -57,7 +57,7 @@ struct AuthView: View {
                         case .logIn: LogInView()
                         case .signUpEmailVerification: SignUpEmailVerificationView()
                         case .signUpSetPassword: SignUpSetPasswordView()
-                        case .signUpCreateUsername: SignUpCreationUsernameView()
+                        case .signUpCreateUsername: SignUpCreateUsernameView()
                         }
                     }
                     .environmentObject(viewModel)

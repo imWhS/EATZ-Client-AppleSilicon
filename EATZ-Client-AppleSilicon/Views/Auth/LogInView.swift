@@ -19,10 +19,11 @@ struct LogInView: View {
             ToolbarItem(placement: .topBarTrailing) {
                if viewModel.isLoading { ProgressView() }
                 else {
-                   Button("완료", action: viewModel.logIn) 
+                   Button("완료", action: viewModel.logIn)
                         .fontWeight(.semibold)
                         .tint(Color.auth)
                         .buttonStyle(.borderedProminent)
+                        .disabled(!viewModel.isPasswordValid)
                }
            }
         }

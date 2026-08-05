@@ -164,4 +164,17 @@ final class AuthService {
         let request = VerifyValidationCodeRequest(email: email, code: code)
         networkClient.requestPublicNoContent(endpointUrl: "\(commonEndpointUrl)/sign-up/email-validation/verify", method: .post, parameters: request, completion: completion)
     }
+    
+    func checkUsernameDuplication(username: String, completion: @escaping (Result<CheckUsernameDuplicationResponse, NetworkError>) -> Void) {
+        guard let encodedUsername = username.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            return
+        }
+        
+        let request = CheckUsernameDuplicationRequest(username: encodedUsername)
+        networkClient.requestPublic(
+            endpointUrl: "\(commonEndpointUrl)/users/check-username",
+            method: .get,
+            parameters: request,
+            completion: completion)
+    }
 }

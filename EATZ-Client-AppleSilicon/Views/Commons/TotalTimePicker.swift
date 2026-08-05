@@ -113,20 +113,3 @@ struct TotalTimePicker: View {
         }
     }
 }
-
-struct TodayTotalTimePickerView_Preview_Wrapper: View {
-    @State private var totalTime: Int = 100
-    
-    var body: some View {
-        VStack {}
-            .sheet(isPresented: .constant(true)) {
-                TotalTimePicker(totalTimeInMinutes: 100) { totalTime in
-                    print("시간: \(totalTime)")
-                }
-            }
-    }
-}
-
-#Preview {
-    TodayTotalTimePickerView_Preview_Wrapper()
-}

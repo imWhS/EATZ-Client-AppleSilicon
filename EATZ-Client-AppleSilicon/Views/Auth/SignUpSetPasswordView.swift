@@ -13,13 +13,22 @@ struct SignUpSetPasswordView: View {
     @State private var isPasswordVisible: Bool = false
     
     var body: some View {
-        VStack(spacing: 20) {
-            header
-            VStack(spacing: 10) {
-                PasswordView(password: $viewModel.password, isFocused: $isPasswordFocused, isPasswordVisible: $isPasswordVisible, onSubmit: viewModel.validatePassword)
-                showPasswordToggleView
+        ScrollView {
+            VStack(spacing: 20) {
+                header
+                VStack(spacing: 10) {
+                    PasswordView(
+                        password: $viewModel.password,
+                        isFocused: $isPasswordFocused,
+                        isPasswordVisible: $isPasswordVisible,
+                        onSubmit: viewModel.validatePassword)
+                    showPasswordToggleView
+                }
+                AuthSignUpGuideView(guides: [
+                    "암호는 최소 8자부터 최대 64자까지의 길이로 구성되어야 해요."
+                ])
+                Spacer()
             }
-            Spacer()
         }
         .background(Color.backgroundPrimary)
         .toolbar {
@@ -34,15 +43,14 @@ struct SignUpSetPasswordView: View {
                 .font(.system(size: 30, weight: .bold))
             Text(viewModel.email)
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color.gray35)
+                .foregroundStyle(Color.gray50)
                 .padding(.horizontal, 10)
                 .frame(height: 22)
                 .cornerRadius(11)
-                .border(color: .init(hex: "E5E5E5"), width: 1)
+                .border(color: .gray8, width: 1)
             VStack(spacing: 8) {
                 Group {
-                    Text("위 이메일 주소로 계정을 새로 만듭니다. 로그인할 때 사용할 암호를 입력하세요.")
-                    Text("암호는 최소 8자리 이상의 길이여야 합니다.")
+                    Text("위 이메일 주소로 계정을 새로 만들어요. 로그인할 때 사용할 암호를 입력하세요.")
                 }
                 .font(Font.system(size: 14, weight: .medium))
                 .multilineTextAlignment(.center)
@@ -88,7 +96,7 @@ struct SignUpSetPasswordView: View {
     
     private var titleToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            Text("이메일 인증")
+            Text("암호 설정")
                 .opacity(0)
         }
     }
@@ -97,12 +105,11 @@ struct SignUpSetPasswordView: View {
         ToolbarItem(placement: .topBarTrailing) {
             Button(action: viewModel.validatePassword) {
                 Text("완료")
-                    .fontWeight(.semibold)
-                    .tint(Color.auth)
-                    .buttonStyle(.borderedProminent)
-                
             }
-            .disabled(viewModel.password.count < 8)
+            .fontWeight(.semibold)
+            .tint(Color.auth)
+            .buttonStyle(.borderedProminent)
+            .disabled(!viewModel.isPasswordValid)
         }
     }
 }

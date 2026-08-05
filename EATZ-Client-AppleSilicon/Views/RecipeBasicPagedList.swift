@@ -16,7 +16,7 @@ struct RecipeBasicPagedList<EmptyViewContent: View, MenuContent: View>: View {
     @ViewBuilder let menuContent: (RecipeBasic) -> MenuContent
     
     private var recipes: [RecipeBasic] { viewModel.pagedRecipes.items }
-    private let navigationTitle: String
+    private let navigationTitleLabel: String
     private let auth: AuthProvider
     
     init(
@@ -28,7 +28,7 @@ struct RecipeBasicPagedList<EmptyViewContent: View, MenuContent: View>: View {
     ) {
         self.viewModel = viewModel
         self.auth = auth
-        self.navigationTitle = navigationTitle
+        self.navigationTitleLabel = navigationTitle
         self.emptyView = emptyView
         self.menuContent = menuContent
     }
@@ -39,7 +39,7 @@ struct RecipeBasicPagedList<EmptyViewContent: View, MenuContent: View>: View {
                 viewModel.setDismissAction(dismiss.callAsFunction)
                 viewModel.prepareDataIfNeeded()
             }
-            .navigationTitle(navigationTitle)
+            .navigationTitle(navigationTitleLabel)
             .alert(item: $viewModel.alert) { $0.alert }
     }
     

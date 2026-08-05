@@ -103,7 +103,7 @@ struct AuthView: View {
                         onSubmit: viewModel.validateEmail
                     )
                     .padding(.horizontal, 20)
-                    authActionButton(title: "시작", type: .primary, action: viewModel.validateEmail)
+                    authActionButton(title: "시작", action: viewModel.validateEmail)
                 }
             }
             .padding(.vertical, 20)
@@ -148,7 +148,7 @@ struct AuthView: View {
         }
     }
     
-    private func authActionButton(title: String, type: CapsuleLargeButtonAppearance, action: @escaping () -> Void) -> some View {
+    private func authActionButton(title: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack {
                 Text(title)
@@ -158,7 +158,7 @@ struct AuthView: View {
             }
             .frame(maxWidth: .infinity)
         }
-        .buttonStyle(CapsuleLargeButtonStyle(appearance: type))
+        .buttonStyle(CapsuleLargeButtonStyle(appearance: .authPrimary))
         .padding(.horizontal, 20)
     }
 }
@@ -208,7 +208,7 @@ enum AuthContext: Identifiable {
         case .logIn, .authRequiredAction:
             return "로그인 할 계정 또는 가입에 사용할 이메일 주소를 입력하세요."
         case .sessionExpired:
-            return "직전과 다른 계정으로 로그인하거나,\n새 계정을 만들어서 로그인하면 직전 작업이 종료될 수 있어요."
+            return "다른 계정으로 로그인하거나,\n새 계정을 만들어서 로그인하면 직전 작업이 종료될 수 있어요."
         }
     }
 }

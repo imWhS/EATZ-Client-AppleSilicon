@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PlannerPlanList: View {
-    @EnvironmentObject var viewModel: PlannerViewModelOld
+    @EnvironmentObject var viewModel: PlannerMemberViewModel
     
     let date: Date
     let plans: [PlannerPlan]?
@@ -46,7 +46,7 @@ struct PlannerPlanList: View {
     
     private var emptyContentView: some View {
         PlannerPlanListGuideView(
-            title: "요리할 레시피가 없어요.",
+            title: "플랜이 없어요.",
             subtitle: detailLabel,
             height: contentViewHeight
         )
@@ -161,7 +161,7 @@ private struct PlannerPlanListFooterView: View {
         Button(action: { onAddPlan(self.date) }) {
             Image("add-12")
         }
-        .buttonStyle(CapsuleMediumButtonStyle(status: .secondary, isIconOnly: true))
+        .buttonStyle(CapsuleButtonMediumStyle(status: .secondary, isIconOnly: true))
     }
 }
 

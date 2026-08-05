@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension Color {
-    static let auth = Color("auth")
+    static let auth = Color("Colors/auth")
     static let rating = Color("Colors/rating")
     static let backgroundPrimary = Color("Colors/backgroundPrimary")
     static let buttonSecondary = Color("Colors/buttonSecondary")

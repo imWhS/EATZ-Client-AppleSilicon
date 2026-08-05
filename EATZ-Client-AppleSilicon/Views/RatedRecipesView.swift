@@ -67,7 +67,13 @@ struct RatedRecipesView: View {
     func emptyView() -> some View {
         Curtain(
             title: "평가한 레시피가 없어요.",
-            description: "레시피 평가 화면에서 평가한 레시피가 여기에 나타나요."
+            description: "레시피 평가 화면에서 평가한 레시피가 여기에 나타나요.",
+            header: {
+                Image("rating-star-40")
+                    .resizable()
+                    .foregroundStyle(Color.gray15)
+                    .frame(width: 40, height: 40)
+            }
         )
     }
     

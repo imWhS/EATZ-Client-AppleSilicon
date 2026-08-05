@@ -73,16 +73,20 @@ struct RecipeDetailRequirementsContentView: View {
                 titleSection
                 VStack(alignment: .leading, spacing: 0) {
                     headerSection
-                    RecipeDetailRequirementsKitchenwareSection(
-                        isLoggedIn: isLoggedIn,
-                        kitchenwares: kitchenwares,
-                        missingKitchenwareCount: missingKitchenwareCount,
-                        onAction: onAction)
-                    RecipeDetailRequirementsIngredientSection(
-                        isLoggedIn: isLoggedIn,
-                        ingredients: ingredients,
-                        missingIngredientCount: missingIngredientCount,
-                        onAction: onAction)
+                    if !kitchenwares.isEmpty {
+                        RecipeDetailRequirementsKitchenwareSection(
+                            isLoggedIn: isLoggedIn,
+                            kitchenwares: kitchenwares,
+                            missingKitchenwareCount: missingKitchenwareCount,
+                            onAction: onAction)
+                    }
+                    if !ingredients.isEmpty {
+                        RecipeDetailRequirementsIngredientSection(
+                            isLoggedIn: isLoggedIn,
+                            ingredients: ingredients,
+                            missingIngredientCount: missingIngredientCount,
+                            onAction: onAction)
+                    }
                 }
             }
             .padding(.vertical, 10)

@@ -25,8 +25,9 @@ class CookableViewModel: ObservableObject {
         return "\(servings)인"
     }
     
+    let auth: AuthProvider
+    
     private var cancellables = Set<AnyCancellable>()
-    private let auth: AuthProvider
     private static let userDefaultsKey = "cookableSearchCriteria" // UserDefaults에 데이터를 저장하고, 불러올 때 사용할 고유 키
 
     init(auth: AuthProvider = AuthManager.shared) {

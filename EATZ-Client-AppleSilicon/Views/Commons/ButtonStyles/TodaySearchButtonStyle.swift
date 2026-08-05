@@ -12,7 +12,7 @@ struct TodaySearchButtonStyle: ButtonStyle {
         return configuration.label
             .font(Font.system(size: 17, weight: .semibold))
             .foregroundStyle(.white)
-            .frame(width: 74, height: 74)
+            .frame(width: 68, height: 68)
             .background(Color.accentColor)
             .cornerRadius(37)
             .scaleEffect(configuration.isPressed ? 0.965 : 1.0)

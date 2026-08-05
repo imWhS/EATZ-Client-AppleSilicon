@@ -43,7 +43,7 @@ struct TagAdditionView: View {
                 Button("추가", action: {
                     viewModel.confirmSelection(.new(viewModel.searchKeyword))
                 })
-                .buttonStyle(CapsuleMediumButtonStyle(status: .primary))
+                .buttonStyle(CapsuleButtonMediumStyle(status: .primary))
             }
             .padding(20)
         }
@@ -76,7 +76,7 @@ struct TagAdditionView: View {
     private var searchingContainer: some View {
         switch viewModel.searchState {
         case .searching:
-            Curtain(title: "태그를 찾고 있어요...")
+            LoadingCurtain(title: "태그를 찾고 있어요...")
         case .searched(let pagedSearchedTags):
             TagList(
                 pagedTags: pagedSearchedTags,
@@ -86,7 +86,14 @@ struct TagAdditionView: View {
         case .searchedEmpty(let keyword):
             Curtain(
                 title: "원하는 태그가 없어요.",
-                description: "'\(keyword)' 관련 재료를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요.")
+                description: "'\(keyword)' 관련 재료를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요.",
+                header: {
+                    Image("info-200")
+                        .resizable()
+                        .foregroundStyle(Color.gray15)
+                        .frame(width: 40, height: 40)
+                }
+            )
         case .error(let message): ErrorCurtain(message)
         }
     }

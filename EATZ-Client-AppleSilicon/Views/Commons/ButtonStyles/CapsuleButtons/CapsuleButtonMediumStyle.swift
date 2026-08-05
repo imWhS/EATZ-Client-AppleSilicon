@@ -1,5 +1,5 @@
 //
-//  CapsuleMediumButtonStatus.swift
+//  CapsuleButtonMediumStyle.swift
 //  Eatz-AppleSilicon
 //
 //  Created by 손원희 on 4/6/25.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-enum CapsuleMediumButtonStatus {
-    case primary, secondary, danger, disabled
+enum CapsuleButtonMediumStatus {
+    case primary, authPrimary, secondary, authSecondary, danger, disabled
 }
 
-struct CapsuleMediumButtonStyle: ButtonStyle {
-    var status: CapsuleMediumButtonStatus
+struct CapsuleButtonMediumStyle: ButtonStyle {
+    var status: CapsuleButtonMediumStatus
     var isIconOnly: Bool = false
     
     func makeBody(configuration: Configuration) -> some View {
@@ -23,9 +23,15 @@ struct CapsuleMediumButtonStyle: ButtonStyle {
         case .primary:
             backgroundColor = .accentColor
             foregroundColor = .white
+        case .authPrimary:
+            backgroundColor = .auth
+            foregroundColor = .white
         case .secondary:
             backgroundColor = Color.buttonSecondary
             foregroundColor = .accentColor
+        case .authSecondary:
+            backgroundColor = Color.buttonSecondary
+            foregroundColor = .auth
         case .danger:
             backgroundColor = Color.buttonSecondary
             foregroundColor = .red

@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "comment-40.png",
+      "filename" : "comment-40.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "comment-40 1.png",
+      "filename" : "comment-40 1.svg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "comment-40 2.png",
+      "filename" : "comment-40 2.svg",
       "idiom" : "universal",
       "scale" : "3x"
     }

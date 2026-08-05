@@ -17,7 +17,7 @@ struct TagItem: View {
                 Text(name)
                     .foregroundStyle(.black)
                 Spacer()
-                Button("추가", action: onAdd).buttonStyle(CapsuleMediumButtonStyle(status: .secondary))
+                Button("추가", action: onAdd).buttonStyle(CapsuleButtonMediumStyle(status: .secondary))
             }
             .padding(.vertical, 12)
             

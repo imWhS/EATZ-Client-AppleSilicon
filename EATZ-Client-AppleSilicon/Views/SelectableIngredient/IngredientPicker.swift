@@ -31,7 +31,16 @@ struct IngredientPicker: View {
             case .loaded: mainContentView
             case .unauthorized: CommonUnauthorizedStateView()
             case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
-            case .empty: Curtain(title: "보여드릴 재료가 없어요.")
+            case .empty:
+                Curtain(
+                    title: "보여드릴 재료가 없어요.",
+                    header: {
+                        Image("info-200")
+                            .resizable()
+                            .foregroundStyle(Color.gray15)
+                            .frame(width: 40, height: 40)
+                    }
+                )
             }
         }
     }

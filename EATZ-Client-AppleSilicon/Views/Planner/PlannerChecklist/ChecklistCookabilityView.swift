@@ -54,28 +54,34 @@ struct ChecklistCookabilityView: View {
     var body: some View {
         VStack(spacing: 0) {
             planList
-            VStack(spacing: 0) {
-                kitchenwareList
-                ingredientList
+            
+            if !sortedKitchenwares.isEmpty && !sortedIngredients.isEmpty {
+                HorizontalDivider()
+                VStack(spacing: 0) {
+                    if !sortedKitchenwares.isEmpty {
+                        kitchenwareList
+                    }
+                    
+                    if !sortedIngredients.isEmpty {
+                        ingredientList
+                    }
+                }
+                .padding(.vertical, 10)
             }
-            .padding(.vertical, 10)
         }
     }
     
     private var planList: some View {
-        VStack(spacing: 0) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                VStack(spacing: 0) {
-                    LazyHStack {
-                        ForEach(cookability.plans) { plan in
-                            ChecklistPlanItem(plan, onAction: onPlanItemAction)
-                        }
+        ScrollView(.horizontal, showsIndicators: false) {
+            VStack(spacing: 0) {
+                LazyHStack {
+                    ForEach(cookability.plans) { plan in
+                        ChecklistPlanItem(plan, onAction: onPlanItemAction)
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 20)
                 }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
             }
-            HorizontalDivider()
         }
     }
     

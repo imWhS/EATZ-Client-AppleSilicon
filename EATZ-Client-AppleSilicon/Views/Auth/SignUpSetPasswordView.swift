@@ -67,6 +67,7 @@ struct SignUpSetPasswordView: View {
                     .padding(.horizontal, 20)
                     .opacity(isPasswordVisible ? 1 : 0)
                     .disabled(!isPasswordVisible)
+                    .tint(Color.auth)
                 FloatingTitleSecureField(title: "암호", placeholder: nil, text: $password, isFocused: $isFocused, onSubmit: onSubmit)
                     .padding(.horizontal, 20)
                     .opacity(isPasswordVisible ? 0 : 1)
@@ -80,7 +81,7 @@ struct SignUpSetPasswordView: View {
             Text("암호 보기")
                 .font(.system(size: 14, weight: .medium))
         }
-        .tint(.accent)
+        .tint(Color.auth)
         .padding(.horizontal, 20)
         .padding(.vertical, 6)
     }
@@ -97,7 +98,7 @@ struct SignUpSetPasswordView: View {
             Button(action: viewModel.validatePassword) {
                 Text("완료")
                     .fontWeight(.semibold)
-                    .tint(Color.accentColor)
+                    .tint(Color.auth)
                     .buttonStyle(.borderedProminent)
                 
             }

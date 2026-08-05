@@ -25,6 +25,12 @@ struct MyRecipesView: View {
                     title: "등록한 레시피가 없어요.",
                     actionTitle: "새 레시피",
                     action: { self.fullScreenCover = .recipeEditor(mode: .create) },
+                    header: {
+                        Image("info-200")
+                            .resizable()
+                            .foregroundStyle(Color.gray15)
+                            .frame(width: 40, height: 40)
+                    },
                     footer: {
                         Text("새 레시피를 등록해볼까요?")
                             .font(.system(size: 12, weight: .medium))

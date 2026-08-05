@@ -72,6 +72,7 @@ struct PlannerMemberView: View {
             }
             .animation(.easeInOut(duration: 0.2), value: viewModel.planCountInDateRange)
         }
+        .background(Color.backgroundPrimary)
         .refreshable { await viewModel.refresh() }
     }
     
@@ -85,6 +86,7 @@ struct PlannerMemberView: View {
                     onPlanAction: viewModel.handlePlanItemAction)
             }
         }
+        .padding(.bottom, 20)
     }
     
     @ViewBuilder

@@ -38,13 +38,21 @@ struct CookableRecipeListView: View {
             case .error(let message): ErrorCurtain(message, onRetry: viewModel.resetAndLoadAll).transition(.opacity)
             case .empty:
                 Curtain(
-                    title: "지금 요리할 수 있는 레시피가 없어요.",
-                    description: "이전 화면으로 돌아가서, 키워드나 옵션을 바꾼 후 다시 시도해보세요.").transition(.opacity)
+                    title: "요리할만한 레시피가 없어요.",
+                    description: "이전 화면으로 돌아가서, 키워드나 옵션을 바꾼 후 다시 시도해보세요.",
+                    header: {
+                        Image("info-200")
+                            .resizable()
+                            .foregroundStyle(Color.gray15)
+                            .frame(width: 40, height: 40)
+                    }
+                ).transition(.opacity)
             }
         }
         .background(Color.backgroundPrimary)
         .animation(.easeInOut(duration: 0.3), value: viewModel.viewState)
         .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(viewModel.navigationTitleLabel)
         .toolbar { titleToolbarItem }
     }
     
@@ -71,7 +79,7 @@ struct CookableRecipeListView: View {
     
     private var listHeader: some View {
         VStack(spacing: 0) {
-            Text("지금, 요리할만한\n\(viewModel.pagedRecipes.totalElements)개의 레시피")
+            Text("요리할만한 레시피\n총 \(viewModel.pagedRecipes.totalElements)개 찾았어요.")
                 .font(.system(size: 26, weight: .bold))
                 .lineSpacing(6)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -97,9 +105,14 @@ struct CookableRecipeListView: View {
     
     private var titleToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            Text("\(viewModel.pagedRecipes.totalElements)개의 레시피")
-                .font(.headline)
-                .opacity(viewModel.showNavigationBarTitle ? 1 : 0)
+            VStack {
+                Text(viewModel.navigationTitleLabel)
+                    .font(.system(size: 17, weight: .semibold))
+                Text(viewModel.navigationSubtitleLabel)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color.gray35)
+            }
+            .opacity(viewModel.showNavigationBarTitle ? 1 : 0)
         }
     }
     
@@ -122,12 +135,10 @@ private struct CookableRecipeListToggleButton: View {
     var isEnabled: Bool
     
     var body: some View {
-        HStack(spacing: 6) {
-            Button(action: {
-                isCookableOnly.toggle()
-            }) {
-                CheckToggleCircled(isToggled: isCookableOnly)
-            }
+        HStack(spacing: 8) {
+            Toggle(isOn: $isCookableOnly) {}
+                .tint(.accent)
+                .labelsHidden()
             Text("바로 요리 가능")
                 .font(.system(size: 14, weight: .medium))
                 .foregroundStyle(Color.black)

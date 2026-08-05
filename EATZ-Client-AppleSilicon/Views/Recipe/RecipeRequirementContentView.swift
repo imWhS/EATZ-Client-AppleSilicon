@@ -38,16 +38,27 @@ struct RecipeRequirementContentView: View {
                 titleSection
                 VStack(alignment: .leading, spacing: 0) {
                     headerSection
-                    RecipeDetailRequirementsKitchenwareSection(
-                        isLoggedIn: isMember,
-                        kitchenwares: kitchenwares,
-                        missingKitchenwareCount: missingKitchenwareCount,
-                        onAction: onRequirementsAction)
-                    RecipeDetailRequirementsIngredientSection(
-                        isLoggedIn: isMember,
-                        ingredients: ingredients,
-                        missingIngredientCount: missingIngredientCount,
-                        onAction: onRequirementsAction)
+                    if !kitchenwares.isEmpty {
+                        RecipeDetailRequirementsKitchenwareSection(
+                            isLoggedIn: isMember,
+                            kitchenwares: kitchenwares,
+                            missingKitchenwareCount: missingKitchenwareCount,
+                            onAction: onRequirementsAction)
+                    }
+                    if !ingredients.isEmpty {
+                        RecipeDetailRequirementsIngredientSection(
+                            isLoggedIn: isMember,
+                            ingredients: ingredients,
+                            missingIngredientCount: missingIngredientCount,
+                            onAction: onRequirementsAction)
+                    }
+                    
+                    if kitchenwares.isEmpty && ingredients.isEmpty {
+                        Text("레시피를 요리하기 위해 필요한 준비물이 없어요.")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(Color.gray35)
+                            .padding(20)
+                    }
                 }
             }
             .padding(.vertical, 10)

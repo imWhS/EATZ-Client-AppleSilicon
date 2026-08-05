@@ -58,7 +58,7 @@ struct ExploreRecipesView: View {
     
     @ViewBuilder
     private var rootView: some View {
-        VStack {
+        VStack(spacing: 0) {
             switch viewModel.viewState {
             case .loaded: ScrollView { stateView }
             default: stateView
@@ -84,7 +84,13 @@ struct ExploreRecipesView: View {
         case .empty:
             Curtain(
                 title: "보여드릴 레시피가 없어요.",
-                description: "카테고리나 필터 옵션을 변경해보세요."
+                description: "카테고리나 필터 옵션을 변경해보세요.",
+                header: {
+                    Image("info-200")
+                        .resizable()
+                        .foregroundStyle(Color.gray15)
+                        .frame(width: 40, height: 40)
+                }
             )
         case .error(let message): ErrorCurtain(message, onRetry: viewModel.resetAndLoadAll)
         }

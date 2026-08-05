@@ -35,23 +35,27 @@ struct Curtain<Header: View, Footer: View>: View {
     var body: some View {
         VStack {
             Spacer()
-            VStack(spacing: 12) {
-                header()
-                VStack(spacing: 4) {
-                    Text(title)
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(Color.gray35)
-                    if let description = description {
-                        Text(description)
-                            .font(.system(size: 12, weight: .medium))
-                            .multilineTextAlignment(.center)
+            VStack(spacing: 20) {
+                VStack(spacing: 12) {
+                    header()
+                    VStack(spacing: 4) {
+                        Text(title)
+                            .font(.system(size: 17, weight: .semibold))
                             .foregroundStyle(Color.gray35)
+                        if let description = description {
+                            Text(description)
+                                .font(.system(size: 12, weight: .medium))
+                                .multilineTextAlignment(.center)
+                                .foregroundStyle(Color.gray35)
+                        }
                     }
                 }
+                
                 if let action = action {
                     Button(actionTitle ?? "다시 시도", action: action)
-                        .buttonStyle(CapsuleMediumButtonStyle(status: .secondary))
+                        .buttonStyle(CapsuleButtonMediumStyle(status: .secondary))
                 }
+        
                 footer()
             }
             Spacer()

@@ -127,7 +127,7 @@ struct ManagementProfileView: View {
                 Spacer()
                 if viewModel.imageUrl != nil {
                     Button("삭제", action: viewModel.handleDeleteProfileImage)
-                        .buttonStyle(CapsuleMediumButtonStyle(status: .danger))
+                        .buttonStyle(CapsuleButtonMediumStyle(status: .danger))
                 }
                 PhotosPicker(
                     selection: $viewModel.selectedPhotoItem,
@@ -136,7 +136,7 @@ struct ManagementProfileView: View {
                         Text(viewModel.imageUrl != nil ? "변경" : "설정")
                             
                     }
-                    .buttonStyle(CapsuleMediumButtonStyle(status: .secondary))
+                    .buttonStyle(CapsuleButtonMediumStyle(status: .secondary))
             }
         }
     }
@@ -156,10 +156,10 @@ struct ManagementProfileView: View {
                 Spacer()
                 if viewModel.bio != "" {
                     Button("삭제", action: viewModel.handleDeleteBio)
-                        .buttonStyle(CapsuleMediumButtonStyle(status: .danger))
+                        .buttonStyle(CapsuleButtonMediumStyle(status: .danger))
                 }
                 Button("편집", action: viewModel.handleEditBio)
-                    .buttonStyle(CapsuleMediumButtonStyle(status: .secondary))
+                    .buttonStyle(CapsuleButtonMediumStyle(status: .secondary))
             }
         }
     }

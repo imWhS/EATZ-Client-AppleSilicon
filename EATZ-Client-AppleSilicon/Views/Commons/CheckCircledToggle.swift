@@ -1,5 +1,5 @@
 //
-//  ArrowDownCircled.swift
+//  CheckCircledToggle.swift
 //  EATZ-Client-AppleSilicon
 //
 //  Created by 손원희 on 10/2/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CheckToggleCircled: View {
+struct CheckCircledToggle: View {
     let isToggled: Bool
     
     var body: some View {
@@ -24,12 +24,12 @@ struct CheckToggleCircled: View {
 #Preview {
     HStack {
         VStack(spacing: 12) {
-            CheckToggleCircled(isToggled: true)
+            CheckCircledToggle(isToggled: true)
             Text("토글이 켜진 상태")
                 .font(.system(size: 12, weight: .semibold))
         }
         VStack(spacing: 12) {
-            CheckToggleCircled(isToggled: false)
+            CheckCircledToggle(isToggled: false)
             Text("토글이 꺼진 상태")
                 .font(.system(size: 12, weight: .semibold))
         }

@@ -82,7 +82,7 @@ struct SignUpCreationUsernameView: View {
                 Text("완료").fontWeight(.semibold)
             }
             .fontWeight(.semibold)
-            .tint(Color.accentColor)
+            .tint(Color.auth)
             .buttonStyle(.borderedProminent)
             .disabled(viewModel.password.isEmpty)
         }

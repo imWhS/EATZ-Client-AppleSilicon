@@ -70,7 +70,7 @@ struct SignUpCreateUsernameView: View {
             isFocused: $isUsernameFocused,
             isAutocorrectionDisabled: true,
             capitalization: .never,
-            keyboardType: .default,
+            keyboardType: .asciiCapable,
             onSubmit: viewModel.validateUsername
         )
         .padding(.horizontal, 20)

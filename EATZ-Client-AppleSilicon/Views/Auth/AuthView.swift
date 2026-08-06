@@ -51,6 +51,7 @@ struct AuthView: View {
     var body: some View {
         NavigationStack(path: $viewModel.navigationPath) {
             contentView
+                .navigationTitle("계정")
                 .navigationDestination(for: AuthViewModel.AuthNavigationPath.self) { path in
                     Group {
                         switch path {

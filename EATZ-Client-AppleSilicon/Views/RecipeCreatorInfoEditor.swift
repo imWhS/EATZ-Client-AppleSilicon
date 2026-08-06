@@ -47,32 +47,30 @@ struct RecipeCreatorInfoEditor: View {
                 VStack(spacing: 20) {
                     VStack(spacing: 8) {
                         Group {
-                            Text("레시피의 원작자 또는 원문이 있는 경우, 관련 정보를 포함하면 다른 사용자들이 레시피의 출처를 확인할 수 있어요.")
-                            Text("'이름'에 원작자의 이름 또는 원문이 게시되어 있는 매체(서비스)의 이름을 입력하세요.")
-                            Text("'URL 주소'에 원작자의 이름 또는 원문이 게시되어 있는 매체(서비스)로 이동할 수 있는 URL 주소를 입력하세요.")
+                            // 출처 이름 입력 필드
+                            FloatingTitleTextField(title: "이름", placeholder: "", isInvalid: false, text: $localSourceName, isFocused: $isSourceNameFieldFocused, onSubmit: {
+                                isSourceUrlFieldFocused = true
+                            })
+                            
+                            // 출처 URL 주소 입력 필드
+                            FloatingTitleTextField(title: "URL 주소", placeholder: "", isInvalid: false, text: $localSourceUrl, isFocused: $isSourceUrlFieldFocused, keyboardType: .URL, submitLabel: .done, onSubmit: {
+                                if isFormValid {
+                                    saveAndDismiss()
+                                }
+                            })
                         }
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(Color.gray35)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 20)
                     }
                     
-                    VStack(spacing: 20) {
-                        // 출처 이름 입력 필드
-                        FloatingTitleTextField(title: "이름", placeholder: "", isInvalid: false, text: $localSourceName, isFocused: $isSourceNameFieldFocused, onSubmit: {
-                            isSourceUrlFieldFocused = true
-                        })
-                        
-                        // 출처 URL 주소 입력 필드
-                        FloatingTitleTextField(title: "URL 주소", placeholder: "", isInvalid: false, text: $localSourceUrl, isFocused: $isSourceUrlFieldFocused, keyboardType: .URL, submitLabel: .done, onSubmit: {
-                            if isFormValid {
-                                saveAndDismiss()
-                            }
-                        })
-                    }
+                    GuideView(guides: [
+                        "레시피의 원작자가 있는 경우, 원작자의 정보를 확인할 수 있는 출처를 추가해야 해요.",
+                        "레시피의 원작자 정보를 추가하면 다른 사람들에게 레시피와 레시피의 출처가 함께 공개돼요.",
+                        "'이름'에 원작자의 이름 또는 원문이 게시되어 있는 매체(서비스)의 이름을 입력하세요.",
+                        "'URL 주소'에 원작자의 정보 또는 원문이 게시되어 있는 매체(서비스)로 이동할 수 있는 URL 주소를 입력하세요."
+                    ])
                     Spacer()
                 }
-                .padding(20)
-                .navigationTitle("출처 설정")
+                .navigationTitle("출처 편집")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {

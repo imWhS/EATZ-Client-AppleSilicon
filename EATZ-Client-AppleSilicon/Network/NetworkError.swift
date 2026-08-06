@@ -111,21 +111,21 @@ enum NetworkError: Error {
                 case .networkConnectionLost:
                     return "네트워크 연결이 끊어졌어요."
                 case .timedOut:
-                    return "서버의 응답이 지연되고 있어서, 연결을 끊었어요."
+                    return "요청에 대한 응답이 지연되고 있어서 연결을 끊었어요. 잠시 후에 다시 시도해주세요."
                 case .cannotFindHost, .cannotConnectToHost, .dnsLookupFailed:
-                    return "서버에 연결할 수 없어요."
+                    return "서버에 연결할 수 없어요. 잠시 후에 다시 시도해주세요."
                 case .badServerResponse, .resourceUnavailable:
-                    return "해당 요청을 이용할 수 없어요."
+                    return "요청을 처리할 수 없어요. 잠시 후에 다시 시도해주세요."
                 case .secureConnectionFailed:
-                    return "서버와의 보안 연결에 실패했어요. 잠시 후 다시 시도해주세요."
+                    return "서버와의 보안 연결에 실패했어요. 잠시 후에 다시 시도해주세요."
                 case .cannotLoadFromNetwork:
-                    return "네트워크에서 데이터를 불러올 수 없어요."
+                    return "네트워크에서 데이터를 불러올 수 없어요. 잠시 후에 다시 시도해주세요."
                 default:
                     break
                 }
             }
             print("[NetworkError] afError | \(afError.localizedDescription)")
-            return "알 수 없는 네트워크 오류가 발생했어요. 다시 시도해보시겠어요?"
+            return "알 수 없는 네트워크 오류가 발생했어요."
         case .serverError(_, let errorResponse):
             return errorResponse?.message ?? "서버에서 문제가 발생했어요."
         case .unknown(let message):

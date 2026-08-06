@@ -126,7 +126,7 @@ struct RecipeTimePicker: View {
             }
             Text(totalTimeDetailLabel)
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color.gray35)
+                .foregroundStyle(Color.gray50)
         }
         .font(Font.system(size: 17, weight: .semibold))
         .foregroundStyle(.black)

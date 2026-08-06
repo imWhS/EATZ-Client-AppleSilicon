@@ -85,6 +85,7 @@ struct RecipeEditorDefaultInfoImageSection: View {
                     Image("image")
                     Text("보관함 또는 앨범에서 레시피의 대표 사진을 선택하세요.")
                         .font(.system(size: 17, weight: .medium))
+                        .multilineTextAlignment(.center)
                 }
                 .foregroundStyle(Color.gray20)
             }

@@ -15,6 +15,7 @@ struct TagItem: View {
         VStack(spacing: 0) {
             HStack {
                 Text(name)
+                    .font(.system(size: 17, weight: .medium))
                     .foregroundStyle(.black)
                 Spacer()
                 Button("추가", action: onAdd).buttonStyle(CapsuleButtonMediumStyle(status: .secondary))

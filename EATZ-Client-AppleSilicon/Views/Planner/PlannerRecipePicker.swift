@@ -107,7 +107,7 @@ struct PlannerRecipePicker: View {
             switch viewModel.searchState {
             case .searching: LoadingCurtain(title: "레시피를 찾고 있어요...")
             case .searched: PlannerRecipePickerRecipeList(
-                headerTitle: "검색 결과",
+                headerTitle: "'\(viewModel.keyword)' 관련 레시피",
                 pagedRecipes: viewModel.pagedSearchedRecipes,
                 onRecipeTapped: viewModel.addToPlanner,
                 onLoadMore: viewModel.loadMoreSearchedRecipes)

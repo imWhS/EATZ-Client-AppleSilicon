@@ -32,8 +32,8 @@ struct TagList: View {
     private var searchResultHeader: some View {
         HStack {
             Text("연관 태그 추가")
-                .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color.gray20)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(Color.gray35)
             Spacer()
         }
         .padding(.horizontal ,20)

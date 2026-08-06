@@ -12,6 +12,8 @@ struct SignUpSetPasswordView: View {
     @FocusState private var isPasswordFocused: Bool
     @State private var isPasswordVisible: Bool = false
     
+    private var navigationTitle: String = "암호 설정"
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -24,13 +26,14 @@ struct SignUpSetPasswordView: View {
                         onSubmit: viewModel.validatePassword)
                     showPasswordToggleView
                 }
-                AuthSignUpGuideView(guides: [
+                GuideView(guides: [
                     "암호는 최소 8자부터 최대 64자까지의 길이로 구성되어야 해요."
                 ])
                 Spacer()
             }
         }
         .background(Color.backgroundPrimary)
+        .navigationTitle(navigationTitle)
         .toolbar {
             titleToolbarItem
             doneToolbarItem
@@ -39,7 +42,7 @@ struct SignUpSetPasswordView: View {
     
     private var header: some View {
         VStack(spacing: 12) {
-            Text("암호 설정")
+            Text(navigationTitle)
                 .font(.system(size: 30, weight: .bold))
             Text(viewModel.email)
                 .font(.system(size: 12, weight: .medium))
@@ -96,7 +99,7 @@ struct SignUpSetPasswordView: View {
     
     private var titleToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            Text("암호 설정")
+            Text(navigationTitle)
                 .opacity(0)
         }
     }

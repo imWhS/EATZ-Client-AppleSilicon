@@ -19,6 +19,11 @@ class BioEditorViewModel: ObservableObject {
     
     @Published var bio: String = ""
     
+    var isBioValid: Bool {
+        let trimmedBio = bio.trimmingCharacters(in: .whitespacesAndNewlines)
+        return 0 < trimmedBio.count && trimmedBio.count <= 200
+    }
+    
     private var currentUser: CurrentUser?
     
     // MARK: - 기본 설정 프로퍼티

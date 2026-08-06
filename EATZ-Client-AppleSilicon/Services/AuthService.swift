@@ -172,7 +172,7 @@ final class AuthService {
         
         let request = CheckUsernameDuplicationRequest(username: encodedUsername)
         networkClient.requestPublic(
-            endpointUrl: "\(commonEndpointUrl)/users/check-username",
+            endpointUrl: "\(commonEndpointUrl)/auth/check-username",
             method: .get,
             parameters: request,
             completion: completion)

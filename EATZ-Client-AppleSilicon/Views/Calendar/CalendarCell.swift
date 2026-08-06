@@ -46,7 +46,7 @@ class CalendarCell: FSCalendarCell {
 
         // 선택된 셀에 사용될 뷰를 정의합니다.
         let selectionFillLayer = CAShapeLayer()
-        selectionFillLayer.fillColor = UIColor.init(hex: "00BECA").withAlphaComponent(1).cgColor
+        selectionFillLayer.fillColor = UIColor(Color.accent).cgColor
         selectionFillLayer.isHidden = true
         self.contentView.layer.insertSublayer(selectionFillLayer, above: self.borderLayer)
         self.selectionFillLayer = selectionFillLayer

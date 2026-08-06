@@ -14,13 +14,18 @@ struct MyAccountSettingsView: View {
     @EnvironmentObject private var authManager: AuthManager
     @State private var alert: MyAccountSettingsAlert?
     
-    var clientBuildNumber: String {
-        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+    var clientBuildNumber: String? {
+        Bundle.main.infoDictionary?["CFBundleVersion"] as? String
    }
     
     var iOSClientVersion: String {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
-        return "iOS - \(version) (\(clientBuildNumber))"
+        
+        if let buildNumber = clientBuildNumber {
+            return "iOS - \(version) (\(buildNumber))"
+        } else {
+            return "iOS - \(version)"
+        }
     }
     
     var body: some View {

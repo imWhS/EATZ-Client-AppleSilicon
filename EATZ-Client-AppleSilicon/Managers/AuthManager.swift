@@ -35,7 +35,6 @@ enum AuthState: Equatable {
 /// `authState`는  'Single source of truth' 원칙에 의해 반드시 AuthManager에 의해서만 변경될 수 있습니다.
 /// 인증 관련한 UI 처리는 GlobalPresenter에게 맡깁니다.
 final class AuthManager: ObservableObject, AuthProvider {
-    // MARK: - 싱글톤 객체 프로퍼티
     
     static let shared = AuthManager()
     

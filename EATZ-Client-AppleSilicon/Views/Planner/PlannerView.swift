@@ -37,7 +37,7 @@ struct PlannerView: View {
     
     private func isSessionExpired(oldState: AuthState, newState: AuthState) {
         if case .authenticated = oldState, case .unauthorized = newState {
-            self.alert = .sessionExpired
+            alert = .sessionExpired
         }
     }
 }

@@ -281,7 +281,7 @@ enum ManagementProfileAlert: Identifiable {
         switch self {
         case .deleteImageConfirmation: Text("회원님의 대표 사진을 삭제할까요? 삭제된 사진은 복구할 수 없어요.")
         case .imageDeleted: Text("회원님의 대표 사진을 삭제했어요.")
-        case .deleteBioConfirmation: Text("회원님의 대표 사진을 삭제할까요? 삭제된 사진은 복구할 수 없어요.")
+        case .deleteBioConfirmation: Text("회원님의 소개를 삭제할까요?")
         case .bioDeleted: Text("회원님의 소개를 삭제했어요.")
         case .bioUpdated: Text("편집하신 소개를 업데이트했어요.")
         case .userChanged: Text("기존과 다른 사용자로 로그인됐어요. 프로필 관리를 종료할게요.")

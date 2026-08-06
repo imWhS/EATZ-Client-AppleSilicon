@@ -216,7 +216,6 @@ class PlannerRecipePickerViewModel: ObservableObject {
 
 extension PlannerRecipePickerViewModel {
     private func loadSavedRecipes(page: Int, completion: @escaping () -> Void = {}) {
-        print("DBG | \(#function)")
         userService.fetchSavedRecipes(page: page, size: 10) { [weak self] result in
             guard let self = self else { completion(); return }
             

@@ -61,12 +61,13 @@ struct BioEditor: View {
                 .fontWeight(.semibold)
                 .tint(Color.accentColor)
                 .buttonStyle(.borderedProminent)
+                .disabled(!viewModel.isBioValid)
         }
     }
     
     private var mainContent: some View {
         ScrollView {
-            VStack(spacing: 0) {
+            VStack(spacing: 20) {
                 DynamicHeightTextView(
                     text: $viewModel.bio,
                     placeholder: "탭해서 소개 입력",
@@ -77,6 +78,10 @@ struct BioEditor: View {
                 .padding(.horizontal, 20)
                 .disabled(viewModel.isUpdatingBio)
                 .opacity(viewModel.isUpdatingBio ? 0.5 : 1)
+                
+                GuideView(guides: [
+                    "소개는 최대 200자까지의 길이로 구성되어야 해요.",
+                ])
             }
         }
     }

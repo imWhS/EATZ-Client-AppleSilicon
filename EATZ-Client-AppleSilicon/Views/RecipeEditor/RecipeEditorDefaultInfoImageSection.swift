@@ -64,7 +64,7 @@ struct RecipeEditorDefaultInfoImageSection: View {
                 selection: $selectedPhotoItem,
                 matching: .images,
                 photoLibrary: .shared()) {
-                    Text(hasImage ? "대표 사진 변경" : "대표 사진 추가")
+                    Text(hasImage ? "대표 사진 변경" : "대표 사진 선택")
                 }
                 .buttonStyle(CapsuleButtonMediumStyle(status: isProcessing ? .disabled : .primary))
         }
@@ -83,7 +83,7 @@ struct RecipeEditorDefaultInfoImageSection: View {
             VStack(spacing: 8) {
                 Group {
                     Image("image")
-                    Text("레시피의 대표 사진을 추가하세요.")
+                    Text("보관함 또는 앨범에서 레시피의 대표 사진을 선택하세요.")
                         .font(.system(size: 17, weight: .medium))
                 }
                 .foregroundStyle(Color.gray20)

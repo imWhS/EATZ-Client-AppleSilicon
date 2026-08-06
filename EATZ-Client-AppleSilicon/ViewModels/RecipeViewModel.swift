@@ -148,7 +148,6 @@ extension RecipeViewModel {
             switch result {
             case .success(let response):
                 let recipeUrl = response.recipeUrl
-                print("DBG | \(#function) recipe url: \(recipeUrl)")
             case .failure(let networkError):
                 self.alert = .error(message: networkError.userMessage)
             }

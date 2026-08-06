@@ -12,6 +12,7 @@
 		7B5EFB2A3016227B001B13FB /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7B5EFB293016227B001B13FB /* Debug.xcconfig */; };
 		7B5EFB2E3016228D001B13FB /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7B5EFB2D3016228D001B13FB /* Release.xcconfig */; };
 		7B90F76E2E3F2E4F00C3C75E /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7B90F76D2E3F2E4F00C3C75E /* FSCalendar */; };
+		7BC1AEFB30247840008AEF99 /* MarkdownView in Frameworks */ = {isa = PBXBuildFile; productRef = 7BC1AEFA30247840008AEF99 /* MarkdownView */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 			files = (
 				7B199FF02FDCF4E70008D9D8 /* Alamofire in Frameworks */,
 				7B3B406F2DD9FE8C0020BA09 /* Kingfisher in Frameworks */,
+				7BC1AEFB30247840008AEF99 /* MarkdownView in Frameworks */,
 				7B90F76E2E3F2E4F00C3C75E /* FSCalendar in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -104,6 +106,7 @@
 				7B3B406E2DD9FE8C0020BA09 /* Kingfisher */,
 				7B90F76D2E3F2E4F00C3C75E /* FSCalendar */,
 				7B199FEF2FDCF4E70008D9D8 /* Alamofire */,
+				7BC1AEFA30247840008AEF99 /* MarkdownView */,
 			);
 			productName = "EATZ-Client-AppleSilicon";
 			productReference = 7BA18CC42DD5FFC40026A491 /* EATZ-Client-AppleSilicon.app */;
@@ -137,6 +140,7 @@
 				7BA18D502DD602F40026A491 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				7B3B406D2DD9FE8C0020BA09 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				7B90F76C2E3F2E4F00C3C75E /* XCRemoteSwiftPackageReference "FSCalendar" */,
+				7BC1AEF930247840008AEF99 /* XCRemoteSwiftPackageReference "MarkdownView" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7BA18CC52DD5FFC40026A491 /* Products */;
@@ -317,6 +321,7 @@
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -326,7 +331,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.heextory.eatz;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -364,6 +369,7 @@
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -373,7 +379,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.heextory.eatz;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -436,6 +442,14 @@
 				minimumVersion = 5.10.2;
 			};
 		};
+		7BC1AEF930247840008AEF99 /* XCRemoteSwiftPackageReference "MarkdownView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/LiYanan2004/MarkdownView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -453,6 +467,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7B90F76C2E3F2E4F00C3C75E /* XCRemoteSwiftPackageReference "FSCalendar" */;
 			productName = FSCalendar;
+		};
+		7BC1AEFA30247840008AEF99 /* MarkdownView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7BC1AEF930247840008AEF99 /* XCRemoteSwiftPackageReference "MarkdownView" */;
+			productName = MarkdownView;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

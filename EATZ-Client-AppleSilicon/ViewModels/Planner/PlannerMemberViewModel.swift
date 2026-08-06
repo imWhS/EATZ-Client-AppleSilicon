@@ -293,8 +293,8 @@ extension PlannerMemberViewModel {
         
         let originalPlans = plans
         
-        if self.plansByDate[dateKey]?.indices.contains(index) == true {
-            self.plansByDate[dateKey]?.remove(at: index)
+        if plansByDate[dateKey]?.indices.contains(index) == true {
+            plansByDate[dateKey]?.remove(at: index)
         } else { return }
         
         UserPlanService.shared.deletePlan(for: plan.id) { [weak self] result in

@@ -25,18 +25,18 @@ struct PlannerDatePicker: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar { dismissToolbarItem }
         }
-            .alert(item: $viewModel.alert) { $0.alert }
-            .task {
-                viewModel.setCompleteActions(onDismiss: dismiss.callAsFunction, onComplete: onComplete)
-                viewModel.prepareDataIfNeeded()
-            }
-            .onChange(of: viewModel.currentMonth) { _, currentMonth in
-                viewModel.loadPlannedDates(for: currentMonth)
-            }
-            .onChange(of: viewModel.selectedDates) { _, selectedDates in
-                guard let selectedDate = selectedDates.first else { return }
-                viewModel.addToPlanner(on: selectedDate)
-            }
+        .alert(item: $viewModel.alert) { $0.alert }
+        .task {
+            viewModel.setCompleteActions(onDismiss: dismiss.callAsFunction, onComplete: onComplete)
+            viewModel.prepareDataIfNeeded()
+        }
+        .onChange(of: viewModel.currentMonth) { _, currentMonth in
+            viewModel.loadPlannedDates(for: currentMonth)
+        }
+        .onChange(of: viewModel.selectedDates) { _, selectedDates in
+            guard let selectedDate = selectedDates.first else { return }
+            viewModel.addToPlanner(on: selectedDate)
+        }
     }
     
     private var dismissToolbarItem: some ToolbarContent {

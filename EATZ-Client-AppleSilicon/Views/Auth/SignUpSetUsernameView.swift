@@ -12,12 +12,14 @@ struct SignUpCreateUsernameView: View {
     @FocusState private var isUsernameFocused: Bool
     @State private var isPasswordVisible: Bool = false
     
+    private var navigationTitle: String = "사용자 이름 설정"
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 header
                 usernameFieldView
-                AuthSignUpGuideView(guides: [
+                GuideView(guides: [
                     "사용자 이름은 최소 4자부터 최대 20자까지의 길이로 구성되어야 하며, 알파벳 소문자, 숫자, 밑줄(_), 마침표(.)만 사용할 수 있어요.",
                     "사용자 이름은 나중에 변경할 수 없어요."
                 ])
@@ -25,6 +27,7 @@ struct SignUpCreateUsernameView: View {
             }
         }
         .background(Color.backgroundPrimary)
+        .navigationTitle(navigationTitle)
         .toolbar {
             titleToolbarItem
             doneToolbarItem
@@ -33,7 +36,7 @@ struct SignUpCreateUsernameView: View {
     
     private var header: some View {
         VStack(spacing: 12) {
-            Text("사용자 이름 설정")
+            Text(navigationTitle)
                 .font(.system(size: 30, weight: .bold))
             Text(viewModel.email)
                 .font(.system(size: 12, weight: .medium))
@@ -67,7 +70,7 @@ struct SignUpCreateUsernameView: View {
             isFocused: $isUsernameFocused,
             isAutocorrectionDisabled: true,
             capitalization: .never,
-            keyboardType: .default,
+            keyboardType: .asciiCapable,
             onSubmit: viewModel.validateUsername
         )
         .padding(.horizontal, 20)
@@ -77,7 +80,7 @@ struct SignUpCreateUsernameView: View {
     
     private var titleToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            Text("사용자 이름 설정")
+            Text(navigationTitle)
                 .opacity(0)
         }
     }

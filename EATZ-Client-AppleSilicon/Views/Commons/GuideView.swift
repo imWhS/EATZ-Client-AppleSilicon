@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AuthSignUpGuideView: View {
+struct GuideView: View {
     let guides: [String]
     
     var body: some View {
@@ -32,5 +32,5 @@ struct AuthSignUpGuideView: View {
 }
 
 #Preview {
-    AuthSignUpGuideView(guides: ["테스트 가이드 1", "내용이 아주 아주 아주 조금 조금 더 더 아주 아주 아주 조금 조금 더 더 긴 테스트 가이드 2"])
+    GuideView(guides: ["테스트 가이드 1", "내용이 아주 아주 아주 조금 조금 더 더 아주 아주 아주 조금 조금 더 더 긴 테스트 가이드 2"])
 }

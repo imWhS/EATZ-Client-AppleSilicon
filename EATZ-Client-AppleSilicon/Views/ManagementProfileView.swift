@@ -100,7 +100,7 @@ struct ManagementProfileView: View {
     private var usernameSection: some View {
         ManagementProfileSection(
             title: "사용자 이름",
-            footers: [
+            guides: [
                 "EATZ에서 레시피 또는 댓글, 평가 등의 활동을 할 때 다른 사람들에게 보여지는 이름이에요.",
                 "사용자의 고유 이름이기 때문에 변경할 수 없어요."
             ]
@@ -116,7 +116,7 @@ struct ManagementProfileView: View {
     private var imageSection: some View {
         ManagementProfileSection(
             title: "대표 사진",
-            footers: [
+            guides: [
                 "EATZ에서 레시피 또는 댓글, 평가 등의 활동을 할 때 다른 사람들에게 보여지는 사진이에요.",
                 "등록한 사진이 없다면, 기본 프로필 사진이 보여져요."
             ]
@@ -144,7 +144,7 @@ struct ManagementProfileView: View {
     private var bioSection: some View {
         ManagementProfileSection(
             title: "소개",
-            footers: ["다른 사람들이 회원님이 EATZ에 등록한 레시피를 볼 때, 회원님에 대해 알 수 있게 도와줄 문구에요."]
+            guides: ["다른 사람들이 회원님이 EATZ에 등록한 레시피를 볼 때, 회원님에 대해 알 수 있게 도와줄 문구에요."]
         ) {
             if viewModel.bio != "" {
                 Text(viewModel.bio)
@@ -167,25 +167,25 @@ struct ManagementProfileView: View {
 
 private struct ManagementProfileSection<Content: View, Actions: View>: View {
     let title: String
-    let footers: [String]?
+    let guides: [String]?
     @ViewBuilder let content: Content
     @ViewBuilder let actions: Actions?
     
     init(title: String,
-         footers: [String]? = nil,
+         guides: [String]? = nil,
          @ViewBuilder content: () -> Content) where Actions == EmptyView {
         self.title = title
-        self.footers = footers
+        self.guides = guides
         self.content = content()
         self.actions = EmptyView()
     }
     
     init(title: String,
-         footers: [String]? = nil,
+         guides: [String]? = nil,
          @ViewBuilder content: () -> Content,
          @ViewBuilder actions: () -> Actions) {
         self.title = title
-        self.footers = footers
+        self.guides = guides
         self.content = content()
         self.actions = actions()
     }
@@ -196,32 +196,21 @@ private struct ManagementProfileSection<Content: View, Actions: View>: View {
             .foregroundStyle(Color.black)
     }
     
-    @ViewBuilder
-    private var footerTextList: some View {
-        if let descriptions = footers {
-            VStack(alignment: .leading, spacing: 8) {
-                ForEach(descriptions, id: \.self) { description in
-                    Text(description)
-                        .font(.system(size: 12))
-                        .foregroundStyle(Color.gray50)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-            }
-        } else { EmptyView() }
-    }
-    
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 20) {
                 Group {
                     titleText
                     content
-                    VStack(spacing: 12) {
-                        footerTextList
-                        actions
-                    }
                 }
                 .padding(.horizontal, 20)
+                VStack(spacing: 20) {
+                    if let guides = guides {
+                        GuideView(guides: guides)
+                    }
+                    actions
+                        .padding(.horizontal, 20)
+                }
             }
             
             HorizontalDivider()

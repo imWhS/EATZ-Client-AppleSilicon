@@ -11,7 +11,7 @@ struct GuideView: View {
     let guides: [String]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 4) {
             Group {
                 ForEach(guides, id: \.self) { guide in
                     HStack(alignment: .top) {

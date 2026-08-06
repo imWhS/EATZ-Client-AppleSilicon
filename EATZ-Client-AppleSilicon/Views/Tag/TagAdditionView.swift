@@ -38,6 +38,7 @@ struct TagAdditionView: View {
             Divider()
             HStack {
                 TextField("탭해서 태그 입력", text: $viewModel.searchKeyword)
+                    .font(.system(size: 17, weight: .medium))
                     .focused($isTextFieldFocused)
                     .submitLabel(.done)
                 Button("추가", action: {

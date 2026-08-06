@@ -15,6 +15,7 @@ struct LogInView: View {
     var body: some View {
         mainContent
         .navigationTitle("로그인")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                if viewModel.isLoading { ProgressView() }

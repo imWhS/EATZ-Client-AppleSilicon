@@ -20,7 +20,7 @@ struct LikedRecipesView: View {
     var body: some View {
         RecipeBasicPagedList(
             viewModel,
-            navigationTitle: "좋아하는 레시피",
+            navigationTitleLabel: "좋아하는 레시피",
             emptyView: emptyView,
             menuContent: { recipe in
                 RecipeBasicCommonActionMenuView(

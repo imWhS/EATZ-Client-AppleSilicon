@@ -22,13 +22,13 @@ struct RecipeBasicPagedList<EmptyViewContent: View, MenuContent: View>: View {
     init(
         _ viewModel: RecipeBasicListViewModel,
         auth: AuthProvider = AuthManager.shared,
-        navigationTitle: String,
+        navigationTitleLabel: String,
         @ViewBuilder emptyView: @escaping () -> EmptyViewContent,
         @ViewBuilder menuContent: @escaping (RecipeBasic) -> MenuContent
     ) {
         self.viewModel = viewModel
         self.auth = auth
-        self.navigationTitleLabel = navigationTitle
+        self.navigationTitleLabel = navigationTitleLabel
         self.emptyView = emptyView
         self.menuContent = menuContent
     }

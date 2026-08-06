@@ -19,7 +19,7 @@ struct MyRecipesView: View {
     var body: some View {
         RecipeBasicPagedList(
             viewModel,
-            navigationTitle: "내 레시피",
+            navigationTitleLabel: "내 레시피",
             emptyView: {
                 Curtain(
                     title: "등록한 레시피가 없어요.",

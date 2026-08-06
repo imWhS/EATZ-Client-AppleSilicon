@@ -20,7 +20,7 @@ struct RatedRecipesView: View {
     var body: some View {
         RecipeBasicPagedList(
             viewModel,
-            navigationTitle: "평가한 레시피",
+            navigationTitleLabel: "평가한 레시피",
             emptyView: emptyView,
             menuContent: { recipe in
                 RecipeBasicCommonActionMenuView(

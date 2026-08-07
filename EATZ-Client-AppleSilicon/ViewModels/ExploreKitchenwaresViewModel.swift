@@ -9,7 +9,6 @@ import SwiftUI
 import Combine
 
 class ExploreKitchenwaresViewModel: ObservableObject {
-    
     // MARK: - 뷰 상태 프로퍼티 (View State Properties)
     
     @Published var viewState: ExploreKitchenwaresViewState = .loading
@@ -126,7 +125,7 @@ class ExploreKitchenwaresViewModel: ObservableObject {
 extension ExploreKitchenwaresViewModel {
     func loadMoreKitchenwares() {
         guard pagedKitchenwares.hasNextPage
-                || !pagedKitchenwares.isLoadingNextPage else { return }
+                && !pagedKitchenwares.isLoadingNextPage else { return }
         
         pagedKitchenwares.isLoadingNextPage = true
         loadKitchenwares(page: pagedKitchenwares.page + 1) {
@@ -136,8 +135,8 @@ extension ExploreKitchenwaresViewModel {
     
     func loadMoreSearchedIngredients() {
         guard pagedSearchedKitchenwares.hasNextPage
-                || !pagedSearchedKitchenwares.isLoadingNextPage
-                || !searchKeyword.isEmpty else { return }
+                && !pagedSearchedKitchenwares.isLoadingNextPage
+                && !searchKeyword.isEmpty else { return }
         
         pagedSearchedKitchenwares.isLoadingNextPage = true
         searchKitchenwares(keyword: searchKeyword, page: pagedSearchedKitchenwares.page + 1) {
@@ -193,8 +192,7 @@ extension ExploreKitchenwaresViewModel {
                         self.viewState = .empty
                         break
                     }
-                    
-                   
+                     
                     self.pagedKitchenwares.appendPage(
                         kitchenwares,
                         page: response.page,

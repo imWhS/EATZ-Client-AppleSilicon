@@ -37,7 +37,7 @@ struct RecipeDetailInfoSection: View {
 struct RecipeDetailInfoDescriptionView: View {
     @Environment(\.openURL) private var openURL
     
-    let description: String
+    let description: String?
     let createdAt: Date
     
     let authorUsername: String
@@ -85,13 +85,16 @@ struct RecipeDetailInfoDescriptionView: View {
         }
     }
     
+    @ViewBuilder
     private var descriptionView: some View {
-        Text(description)
-            .font(.system(size: 17))
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .multilineTextAlignment(.leading)
-            .fixedSize(horizontal: false, vertical: true)
-            .padding(.horizontal, 20)
+        if let description = description {
+            Text(description)
+                .font(.system(size: 17))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 20)
+        }
     }
     
     private var authorView: some View {

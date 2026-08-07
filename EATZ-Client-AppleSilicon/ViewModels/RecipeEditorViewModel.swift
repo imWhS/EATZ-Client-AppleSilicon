@@ -107,7 +107,7 @@ class RecipeEditorViewModel: ObservableObject {
         return isImageValid &&
             !currentDraft.hasInvalidTitle() &&
             !currentDraft.hasInvalidUrl() &&
-            !currentDraft.hasInvalidDescription() &&
+//            !currentDraft.hasInvalidDescription() &&
             !currentDraft.hasInvalidCookingTime() &&
             !currentDraft.hasInvalidServings()
     }
@@ -396,10 +396,10 @@ extension RecipeEditorViewModel {
             return false
         }
         
-        if currentDraft.hasInvalidDescription() {
-            alert = .incompleteDraft(message: "레시피 설명을 입력해주세요. 레시피 설명은 필수 항목이에요.")
-            return false
-        }
+//        if currentDraft.hasInvalidDescription() {
+//            alert = .incompleteDraft(message: "레시피 설명을 입력해주세요. 레시피 설명은 필수 항목이에요.")
+//            return false
+//        }
         
         if currentDraft.hasInvalidCookingTime() {
             alert = .incompleteDraft(message: "소요 시간을 추가해주세요. 소요 시간은 필수 항목이며, 최소 1분 이상이어야 해요.")

@@ -14,9 +14,9 @@ class KitchenwarePickerViewModel: ObservableObject, SelectableKitchenwareManager
     
     // MARK: - 뷰 상태 프로퍼티 (View State Properties)
     
-    @Published var searchState: SelectableKitchenwareSearchState = .searching
     @Published var viewState: SelectableKitchenwareViewState = .loading
-    @Published var kitchenwares: [Kitchenware] = []
+    @Published var searchState: SelectableKitchenwareSearchState = .searching
+    @Published var pagedKitchenwares: Paged<Kitchenware> = .initial
     
     /// 화면에 표시할 alert
     /// - 아무 alert도 표시하지 않는 경우 `nil`이 됩니다.
@@ -25,7 +25,7 @@ class KitchenwarePickerViewModel: ObservableObject, SelectableKitchenwareManager
     // MARK: - 사용자 context 관련 프로퍼티
     
     @Published var searchKeyword = ""
-    @Published var searchedKitchenwares: [Kitchenware] = []
+    @Published var pagedSearchedKitchenwares: Paged<Kitchenware> = .initial
     @Published var selectedKitchenwares: [KitchenwareEssential] = []
     
     private var currentUser: CurrentUser?
@@ -45,7 +45,6 @@ class KitchenwarePickerViewModel: ObservableObject, SelectableKitchenwareManager
     // MARK: - 의존성
     
     private lazy var authManager = AuthManager.shared
-    private let kitchenwareService = KitchenwareService.shared
     
     init(initialSelection: Binding<[KitchenwareEssential]>) {
         self.selectionBinding = initialSelection
@@ -98,39 +97,97 @@ class KitchenwarePickerViewModel: ObservableObject, SelectableKitchenwareManager
     
     func isDisabled(_ item: Kitchenware) -> Bool { false }
     
-    private func loadKitchenwares() {
-        kitchenwareService.fetchAllKitchenwares { [weak self] result in
-            guard let self = self else { return }
+    func loadMoreKitchenwares() {
+        guard pagedKitchenwares.hasNextPage
+                && !pagedKitchenwares.isLoadingNextPage else { return }
+        
+        pagedKitchenwares.isLoadingNextPage = true
+        loadKitchenwares(page: pagedKitchenwares.page + 1) {
+            self.pagedKitchenwares.isLoadingNextPage = false
+        }
+    }
+    
+    func loadMoreSearchedKitchenwares() {
+        guard pagedSearchedKitchenwares.hasNextPage,
+              !pagedSearchedKitchenwares.isLoadingNextPage,
+              !searchKeyword.isEmpty else { return }
+        
+        pagedSearchedKitchenwares.isLoadingNextPage = true
+        searchKitchenwares(keyword: searchKeyword, page: pagedSearchedKitchenwares.page + 1) {
+            self.pagedSearchedKitchenwares.isLoadingNextPage = false
+        }
+    }
+    
+    func loadKitchenwares(page: Int = 0, completion: @escaping () -> Void = {}) {
+        KitchenwareService.shared.fetchAllKitchenwares(page: page, size: 10) { [weak self] result in
+            guard let self = self else { completion(); return }
+            if case .unauthorized = self.viewState { completion(); return }
             
             DispatchQueue.main.async {
                 switch result {
                 case .success(let response):
-                    self.kitchenwares = response.content.map { return Kitchenware(from: $0) }
+                    let kitchenwares = response.content.map { return Kitchenware(from: $0) }
+                    
+                    if page == 0 && kitchenwares.isEmpty {
+                        self.pagedKitchenwares = .initial
+                        self.viewState = .empty
+                        break
+                    }
+                   
+                    self.pagedKitchenwares.appendPage(
+                        kitchenwares,
+                        page: response.page,
+                        hasNextPage: response.hasNext,
+                        totalElements: response.totalElements)
                     self.viewState = .loaded
                 case .failure(let networkError):
-                    self.viewState = .error(networkError.userMessage)
+                    if page == 0 {
+                        self.pagedKitchenwares = .initial
+                        self.viewState = .error(networkError.userMessage)
+                    } else {
+                        self.alert = .error(message: networkError.userMessage)
+                        self.viewState = .loaded
+                    }
                 }
+                
+                completion()
             }
         }
     }
     
-    private func searchKitchenwares(keyword: String) {
-        kitchenwareService.search(name: keyword) { [weak self] result in
-            guard let self = self else { return }
+    func searchKitchenwares(keyword: String, page: Int = 0, completion: @escaping () -> Void = {}) {
+        KitchenwareService.shared.search(name: keyword, page: page, size: 10) { [weak self] result in
+            guard let self = self else { completion(); return }
+            if case .unauthorized = self.viewState { completion(); return }
             
             DispatchQueue.main.async {
                 switch result {
                 case .success(let response):
-                    if response.content.isEmpty {
+                    let content = response.content
+                    
+                    if page == 0 && content.isEmpty {
+                        self.pagedSearchedKitchenwares = .initial
                         self.searchState = .empty
-                        self.searchedKitchenwares = []
-                    } else {
-                        self.searchState = .searched
-                        self.searchedKitchenwares = response.content.map { return Kitchenware(from: $0) }
+                        break
                     }
+                    
+                    let searchedKitchenwares = content.map { return Kitchenware(from: $0) }
+                    self.pagedSearchedKitchenwares.appendPage(
+                        searchedKitchenwares,
+                        page: response.page,
+                        hasNextPage: response.hasNext,
+                        totalElements: response.totalElements)
+                    self.searchState = .searched
                 case .failure(let networkError):
-                    self.searchState = .error(message: networkError.userMessage)
+                    if page == 0 {
+                        self.pagedSearchedKitchenwares = .initial
+                        self.searchState = .error(networkError.userMessage)
+                    } else {
+                        self.alert = .error(message: networkError.userMessage)
+                        self.searchState = .searched
+                    }
                 }
+                completion()
             }
         }
     }
@@ -139,9 +196,9 @@ class KitchenwarePickerViewModel: ObservableObject, SelectableKitchenwareManager
         let trimmedKeyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
         // 검색어가 비어 있으면 검색 결과를 비우고 도구 목록을 불러옵니다.
         if trimmedKeyword.isEmpty {
-            searchedKitchenwares = []
-            // rootItems가 비어있을 경우에만 도구 목록을 다시 불러옵니다.
-            if kitchenwares.isEmpty {
+            pagedSearchedKitchenwares = .initial
+            // pagedIngredients가 비어있을 경우에만 도구 목록을 다시 불러옵니다.
+            if pagedKitchenwares.isEmpty {
                 loadKitchenwares()
             }
         } else {
@@ -215,7 +272,7 @@ class KitchenwarePickerViewModel: ObservableObject, SelectableKitchenwareManager
     /// 사용자 context 관련 프로퍼티의 값을 초기화합니다.
     private func clearAllContextData() {
         searchKeyword = ""
-        searchedKitchenwares = []
+        pagedSearchedKitchenwares = .initial
         selectedKitchenwares = []
         currentUser = nil
     }

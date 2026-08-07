@@ -10,8 +10,7 @@ import Foundation
 struct Recipe: Codable, Equatable, Hashable {
     let id: Int64
     let title: String
-    let description: String
-//    let url: String
+    let description: String?
     let imageUrl: String
     let cookingTime: Int?
     let prepTime: Int?

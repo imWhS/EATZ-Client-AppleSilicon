@@ -79,7 +79,7 @@ struct CookableRecipeListView: View {
     
     private var listHeader: some View {
         VStack(spacing: 0) {
-            Text("요리할만한 레시피\n총 \(viewModel.pagedRecipes.totalElements)개 찾았어요.")
+            Text("요리할만한 레시피를\n\(viewModel.pagedRecipes.totalElements)개 찾았어요.")
                 .font(.system(size: 26, weight: .bold))
                 .lineSpacing(6)
                 .frame(maxWidth: .infinity, alignment: .leading)

@@ -47,7 +47,7 @@ final class IngredientService {
         size: Int = 10,
         completion: @escaping (Result<IngredientListPageResponse, NetworkError>) -> Void)
     {
-        let request = SearchIngredientsRequest(keyword: name, pageableRequest: PageableRequest(page, size))
+        let request = SearchIngredientsRequest(keyword: name, page: page, size: size)
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)/search",
             method: .get,

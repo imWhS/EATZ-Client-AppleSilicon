@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		7B199FF02FDCF4E70008D9D8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7B199FEF2FDCF4E70008D9D8 /* Alamofire */; };
 		7B3B406F2DD9FE8C0020BA09 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 7B3B406E2DD9FE8C0020BA09 /* Kingfisher */; };
-		7B5EFB2E3016228D001B13FB /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7B5EFB2D3016228D001B13FB /* Release.xcconfig */; };
 		7B90F76E2E3F2E4F00C3C75E /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7B90F76D2E3F2E4F00C3C75E /* FSCalendar */; };
 		7BC1AEFB30247840008AEF99 /* MarkdownView in Frameworks */ = {isa = PBXBuildFile; productRef = 7BC1AEFA30247840008AEF99 /* MarkdownView */; };
 /* End PBXBuildFile section */
@@ -63,13 +62,21 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		7B7B863E30257AB80025141E /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				7B5EFB293016227B001B13FB /* Debug.xcconfig */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		7BA18CBB2DD5FFC40026A491 = {
 			isa = PBXGroup;
 			children = (
-				7B5EFB2D3016228D001B13FB /* Release.xcconfig */,
 				7BA18CC62DD5FFC40026A491 /* EATZ-Client-AppleSilicon */,
 				7B199FEE2FDCF3A30008D9D8 /* Frameworks */,
 				7BA18CC52DD5FFC40026A491 /* Products */,
+				7B7B863E30257AB80025141E /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -155,7 +162,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B5EFB2E3016228D001B13FB /* Release.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,7 +180,8 @@
 /* Begin XCBuildConfiguration section */
 		7BA18CCE2DD5FFC50026A491 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7B5EFB293016227B001B13FB /* Debug.xcconfig */;
+			baseConfigurationReferenceAnchor = 7BA18CC62DD5FFC40026A491 /* EATZ-Client-AppleSilicon */;
+			baseConfigurationReferenceRelativePath = Debug.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -298,7 +305,8 @@
 		};
 		7BA18CD12DD5FFC50026A491 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7B5EFB293016227B001B13FB /* Debug.xcconfig */;
+			baseConfigurationReferenceAnchor = 7BA18CC62DD5FFC40026A491 /* EATZ-Client-AppleSilicon */;
+			baseConfigurationReferenceRelativePath = Debug.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

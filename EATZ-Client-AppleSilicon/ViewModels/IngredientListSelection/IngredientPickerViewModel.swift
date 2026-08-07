@@ -190,7 +190,7 @@ class IngredientPickerViewModel: ObservableObject, SelectableIngredientManager {
                 case .failure(let networkError):
                     if page == 0 {
                         self.pagedSearchedIngredients = .initial
-                        self.searchState = .error(message: networkError.userMessage)
+                        self.searchState = .error(networkError.userMessage)
                     } else {
                         self.alert = .error(message: networkError.userMessage)
                         self.searchState = .searched

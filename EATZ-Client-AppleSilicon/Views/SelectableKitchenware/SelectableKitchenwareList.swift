@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct SelectableKitchenwareList<Manager: SelectableKitchenwareManager>: View {
-    let kitchenwares: [Kitchenware]
-    let searchedKitchenwares: [Kitchenware]
+    let pagedKitchenwares: Paged<Kitchenware>
+    let pagedSearchedKitchenwares: Paged<Kitchenware>
     
     @Binding var searchKeyword: String
     var searchState: SelectableKitchenwareSearchState
@@ -17,6 +17,9 @@ struct SelectableKitchenwareList<Manager: SelectableKitchenwareManager>: View {
     let isItemSelected: (Kitchenware) -> Bool
     let isItemDisabled: (Kitchenware) -> Bool
     let onToggleSelection: (Kitchenware) -> Void
+    
+    let onLoadMoreKitchenwares: () -> Void
+    let onLoadMoreSearchedKitchenwares: () -> Void
     
     @EnvironmentObject private var manager: Manager
     
@@ -54,7 +57,7 @@ struct SelectableKitchenwareList<Manager: SelectableKitchenwareManager>: View {
     
     private var searchedKitchenwareList: some View {
         ScrollView {
-            kitchenwareList(kitchenwares: searchedKitchenwares)
+            kitchenwareList(pagedKitchenwares: pagedSearchedKitchenwares, onLoadMore: onLoadMoreSearchedKitchenwares)
         }
     }
     
@@ -66,7 +69,7 @@ struct SelectableKitchenwareList<Manager: SelectableKitchenwareManager>: View {
                     .foregroundStyle(Color.gray35)
                     .padding(.leading, 20)
                     .padding(.top, 20)
-                kitchenwareList(kitchenwares: kitchenwares)
+                kitchenwareList(pagedKitchenwares: pagedKitchenwares, onLoadMore: onLoadMoreKitchenwares)
             }
         }
     }
@@ -93,15 +96,18 @@ struct SelectableKitchenwareList<Manager: SelectableKitchenwareManager>: View {
         }
     }
     
-    private func kitchenwareList(kitchenwares: [Kitchenware]) -> some View {
+    private func kitchenwareList(pagedKitchenwares: Paged<Kitchenware>, onLoadMore: @escaping () -> Void) -> some View {
         LazyVStack(spacing: 0) {
-            ForEach(kitchenwares) { kitchenware in
+            ForEach(pagedKitchenwares.items) { kitchenware in
                 SelectableKitchenwareItem<Manager>(
                     kitchenware,
                     isSelected: isItemSelected(kitchenware),
                     isDisabled: isItemDisabled(kitchenware),
                     onToggleSelection: { onToggleSelection(kitchenware) }
                 )
+            }
+            if !pagedKitchenwares.isEmpty {
+                ListPageTailView(hasNextPage: pagedKitchenwares.hasNextPage, onAppearAction: onLoadMore)
             }
         }
         .padding(.vertical, 16)

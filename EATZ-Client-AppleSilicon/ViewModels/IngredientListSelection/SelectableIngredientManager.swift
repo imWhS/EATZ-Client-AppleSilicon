@@ -64,6 +64,6 @@ enum SelectableIngredientViewState {
 enum SelectableIngredientSearchState {
     case searching
     case searched
-    case error(message: String)
+    case error(String)
     case empty
 }

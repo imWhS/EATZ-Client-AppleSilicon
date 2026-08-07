@@ -79,7 +79,7 @@ struct RecipeEditorDefaultInfoSection: View {
             VStack(spacing: 0) {
                 DynamicHeightTextView(
                     text: $draft.description,
-                    placeholder: "탭해서 레시피 설명 입력",
+                    placeholder: "탭해서 레시피 설명 입력 (선택)",
                     maxHeight: 240,
                     font: .systemFont(ofSize: 17),
                     padding: .init(top: 20, leading: 0, bottom: 20, trailing: 0),

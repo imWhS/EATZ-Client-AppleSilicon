@@ -386,7 +386,7 @@ enum AuthAlert: Identifiable {
         switch self {
         case .emailInvalid(let message):
             return Alert(
-                title: Text("이메일 주소 오류"),
+                title: Text("올바르지 않은 이메일 주소"),
                 message: Text(message),
                 dismissButton: .default(Text("확인"))
             )

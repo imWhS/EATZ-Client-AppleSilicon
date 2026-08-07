@@ -9,5 +9,6 @@ import Foundation
 
 struct KitchenwareSearch : Encodable {
     let name: String
-    let pageableRequest: PageableRequest
+    let page: Int
+    let size: Int
 }

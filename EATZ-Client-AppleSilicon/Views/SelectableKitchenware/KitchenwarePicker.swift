@@ -49,13 +49,15 @@ struct KitchenwarePicker: View {
         VStack(spacing: 0) {
             NavigationStack {
                 SelectableKitchenwareList<KitchenwarePickerViewModel>(
-                    kitchenwares: viewModel.kitchenwares,
-                    searchedKitchenwares: viewModel.searchedKitchenwares,
+                    pagedKitchenwares: viewModel.pagedKitchenwares,
+                    pagedSearchedKitchenwares: viewModel.pagedSearchedKitchenwares,
                     searchKeyword: $viewModel.searchKeyword,
                     searchState: viewModel.searchState,
                     isItemSelected: { item in viewModel.isSelected(item.id) },
                     isItemDisabled: { _ in false },
-                    onToggleSelection: viewModel.toggleSelection)
+                    onToggleSelection: viewModel.toggleSelection,
+                    onLoadMoreKitchenwares: viewModel.loadMoreKitchenwares,
+                    onLoadMoreSearchedKitchenwares: viewModel.loadMoreSearchedKitchenwares)
                 .navigationTitle("도구")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -64,7 +66,10 @@ struct KitchenwarePicker: View {
                 }
             }
             .environmentObject(viewModel)
-            SelectedKitchenwareBar(selection: viewModel.selectedKitchenwares, onToggleSelection: viewModel.toggleSelection, placeholder: "목록에서 레시피에 추가할 도구를 선택하거나,\n원하는 도구 이름으로 검색해서 레시피에 추가할 도구를 선택하세요.")
+            SelectedKitchenwareBar(
+                selection: viewModel.selectedKitchenwares,
+                onToggleSelection: viewModel.toggleSelection,
+                placeholder: "목록에서 레시피에 추가할 도구를 선택하거나,\n원하는 도구 이름으로 검색해서 레시피에 추가할 도구를 선택하세요.")
         }
     }
     

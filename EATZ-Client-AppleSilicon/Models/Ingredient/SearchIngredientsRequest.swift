@@ -9,5 +9,6 @@ import Foundation
 
 struct SearchIngredientsRequest : Encodable {
     let keyword: String
-    let pageableRequest: PageableRequest
+    let page: Int
+    let size: Int
 }

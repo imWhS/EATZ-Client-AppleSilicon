@@ -13,11 +13,11 @@ struct IngredientAdditionView: View {
     
     var body: some View {
         viewStateContent
-        .alert(item: $viewModel.alert) { $0.alert }
-        .onAppear {
-            viewModel.setDismissAction(dismiss.callAsFunction)
-            viewModel.prepareDataIfNeeded()
-        }
+            .task {
+                viewModel.setDismissAction(dismiss.callAsFunction)
+                viewModel.prepareDataIfNeeded()
+            }
+            .alert(item: $viewModel.alert) { $0.alert }
     }
     
     private var viewStateContent: some View {
@@ -45,16 +45,15 @@ struct IngredientAdditionView: View {
         VStack(spacing: 0) {
             NavigationStack {
                 SelectableIngredientList<IngredientAdditionViewModel>(
-                        pagedIngredients: viewModel.pagedIngredients,
-                        pagedSearchedIngredients: viewModel.pagedSearchedIngredients,
-                        searchKeyword: $viewModel.searchKeyword,
-                        searchState: viewModel.searchState,
-                        isItemSelected: { ingredient in viewModel.isSelected(ingredient.id) },
-                        isItemDisabled: { ingredient in ingredient.ownedByUser },
-                        onToggleSelection: viewModel.toggleSelection,
-                        onLoadMoreIngredients: viewModel.loadMoreIngredients,
-                        onLoadMoreSearchedIngredients: viewModel.loadMoreSearchedIngredients
-                )
+                    pagedIngredients: viewModel.pagedIngredients,
+                    pagedSearchedIngredients: viewModel.pagedSearchedIngredients,
+                    searchKeyword: $viewModel.searchKeyword,
+                    searchState: viewModel.searchState,
+                    isItemSelected: { ingredient in viewModel.isSelected(ingredient.id) },
+                    isItemDisabled: { ingredient in ingredient.ownedByUser },
+                    onToggleSelection: viewModel.toggleSelection,
+                    onLoadMoreIngredients: viewModel.loadMoreIngredients,
+                    onLoadMoreSearchedIngredients: viewModel.loadMoreSearchedIngredients)
                 .environmentObject(viewModel)
                 .navigationTitle("재료")
                 .navigationBarTitleDisplayMode(.inline)
@@ -67,28 +66,6 @@ struct IngredientAdditionView: View {
                 ingredients: viewModel.selectedIngredients,
                 onDeselectIngredient: viewModel.toggleSelection,
                 placeholder: "목록에서 보관함에 추가할 재료를 선택하거나,\n원하는 재료 이름으로 검색해서 보관함에 추가할 재료를 선택하세요.")
-        }
-    }
-    
-    private var searchSubtitleLabel: String {
-        if viewModel.searchKeyword.isEmpty {
-            return ""
-        } else {
-            return "'\(viewModel.searchKeyword)' 관련 재료"
-        }
-    }
-    
-    private var searchResultHeader: some View {
-        VStack(spacing: 0) {
-            VStack(spacing: 2) {
-                Text("재료 검색")
-                    .font(.system(size: 17, weight: .semibold))
-                Text(searchSubtitleLabel)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.gray35)
-            }
-            .padding(20)
-            HorizontalDivider()
         }
     }
     

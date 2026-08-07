@@ -13,11 +13,11 @@ struct KitchenwareAdditionView: View {
     
     var body: some View {
         viewStateContent
-            .alert(item: $viewModel.alert) { $0.alert }
-            .onAppear {
+            .task {
                 viewModel.setDismissAction(dismiss.callAsFunction)
                 viewModel.prepareDataIfNeeded()
             }
+            .alert(item: $viewModel.alert) { $0.alert }
     }
     
     private var viewStateContent: some View {
@@ -45,13 +45,15 @@ struct KitchenwareAdditionView: View {
         VStack(spacing: 0) {
             NavigationStack {
                 SelectableKitchenwareList<KitchenwareAdditionViewModel>(
-                    kitchenwares: viewModel.kitchenwares,
-                    searchedKitchenwares: viewModel.searchedKitchenwares,
+                    pagedKitchenwares: viewModel.pagedKitchenwares,
+                    pagedSearchedKitchenwares: viewModel.pagedSearchedKitchenwares,
                     searchKeyword: $viewModel.searchKeyword,
                     searchState: viewModel.searchState,
                     isItemSelected: { item in viewModel.isSelected(item.id) },
                     isItemDisabled: { item in item.ownedByUser },
-                    onToggleSelection: viewModel.toggleSelection)
+                    onToggleSelection: viewModel.toggleSelection,
+                    onLoadMoreKitchenwares: viewModel.loadMoreKitchenwares,
+                    onLoadMoreSearchedKitchenwares: viewModel.loadMoreSearchedKitchenwares)
                 .navigationTitle("도구")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -60,29 +62,10 @@ struct KitchenwareAdditionView: View {
                 }
             }
             .environmentObject(viewModel)
-            SelectedKitchenwareBar(selection: viewModel.selectedKitchenwares, onToggleSelection: viewModel.toggleSelection, placeholder: "목록에서 보관함에 추가할 도구를 선택하거나,\n원하는 도구 이름으로 검색해서 보관함에 추가할 도구를 선택하세요.")
-        }
-    }
-    
-    private var searchSubtitleLabel: String {
-        if viewModel.searchKeyword.isEmpty {
-            return ""
-        } else {
-            return "'\(viewModel.searchKeyword)' 관련 도구"
-        }
-    }
-    
-    private var searchResultHeader: some View {
-        VStack(spacing: 0) {
-            VStack(spacing: 2) {
-                Text("도구 검색")
-                    .font(.system(size: 17, weight: .semibold))
-                Text(searchSubtitleLabel)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.gray35)
-            }
-            .padding(20)
-            HorizontalDivider()
+            SelectedKitchenwareBar(
+                selection: viewModel.selectedKitchenwares,
+                onToggleSelection: viewModel.toggleSelection,
+                placeholder: "목록에서 보관함에 추가할 도구를 선택하거나,\n원하는 도구 이름으로 검색해서 보관함에 추가할 도구를 선택하세요.")
         }
     }
     

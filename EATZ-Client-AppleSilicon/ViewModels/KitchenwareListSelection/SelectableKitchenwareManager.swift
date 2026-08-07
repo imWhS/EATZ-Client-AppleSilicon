@@ -64,6 +64,6 @@ enum SelectableKitchenwareViewState {
 enum SelectableKitchenwareSearchState {
     case searching
     case searched
-    case error(message: String)
+    case error(String)
     case empty
 }

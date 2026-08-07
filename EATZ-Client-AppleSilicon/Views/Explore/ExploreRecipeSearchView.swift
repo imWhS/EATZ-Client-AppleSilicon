@@ -80,7 +80,16 @@ struct ExploreRecipeSearchView: View {
         ExploreFilterView(filters: filters, onAction: onFilter)
         
         switch viewModel.viewState {
-        case .idle: idleView
+        case .idle: Curtain(
+            title: "\(tag?.name ?? "모든") 레시피 목록에서 검색",
+            description: "원하는 레시피의 키워드를 입력하세요.",
+            header: {
+                Image("search-200")
+                    .resizable()
+                    .foregroundStyle(Color.gray15)
+                    .frame(width: 40, height: 40)
+            }
+            )
         case .initialLoading: LoadingCurtain(title: "레시피를 찾고 있어요...")
         case .loaded:
             ExploreRecipeGridList(
@@ -103,24 +112,6 @@ struct ExploreRecipeSearchView: View {
             )
         case .error(let message):
             ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
-        }
-    }
-    
-    @ViewBuilder
-    private var idleView: some View {
-        VStack(spacing: 0) {
-            Spacer()
-            VStack(spacing: 4) {
-                Text("\(tag?.name ?? "모든") 레시피 목록에서 검색")
-                    .font(.system(size: 17, weight: .semibold))
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(Color.gray35)
-                    .fixedSize(horizontal: false, vertical: true)
-                Text("검색어를 입력해보세요.")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.gray35)
-            }
-            Spacer()
         }
     }
 }

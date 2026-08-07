@@ -18,7 +18,6 @@ struct MyAccountViewOld: View {
             }
             .onChange(of: router.path) { _, path in
                 if path.isEmpty {
-                    print("test")
                     viewModel.prepareDataIfNeeded() }
             }
             .alert(item: $viewModel.alert) { $0.alert }

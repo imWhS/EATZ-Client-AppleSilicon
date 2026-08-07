@@ -38,7 +38,7 @@ final class KitchenwareService {
         size: Int = 10,
         completion: @escaping (Result<KitchenwareListPageResponse, NetworkError>) -> Void)
     {
-        let kitchenwareSearch = KitchenwareSearch(name: name, pageableRequest: PageableRequest(page, size))
+        let kitchenwareSearch = KitchenwareSearch(name: name, page: page, size: size)
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)/search",
             method: .get,
@@ -46,6 +46,4 @@ final class KitchenwareService {
             completion: completion
         )
     }
-    
-    
 }

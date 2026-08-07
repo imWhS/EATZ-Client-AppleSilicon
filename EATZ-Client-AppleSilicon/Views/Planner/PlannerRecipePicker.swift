@@ -102,7 +102,13 @@ struct PlannerRecipePicker: View {
         if viewModel.keyword.isEmpty {
             Curtain(
             title: "플래너에 추가할 레시피 검색",
-            description: "원하는 레시피의 키워드를 입력하세요.")
+            description: "원하는 레시피의 키워드를 입력하세요.",
+            header: {
+                Image("search-200")
+                    .resizable()
+                    .foregroundStyle(Color.gray15)
+                    .frame(width: 40, height: 40)
+            })
         } else {
             switch viewModel.searchState {
             case .searching: LoadingCurtain(title: "레시피를 찾고 있어요...")

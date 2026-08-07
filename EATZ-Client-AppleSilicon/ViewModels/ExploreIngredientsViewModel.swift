@@ -129,7 +129,7 @@ class ExploreIngredientsViewModel: ObservableObject {
 extension ExploreIngredientsViewModel {
     func loadMoreIngredients() {
         guard pagedIngredients.hasNextPage
-                || !pagedIngredients.isLoadingNextPage else { return }
+                && !pagedIngredients.isLoadingNextPage else { return }
         
         pagedIngredients.isLoadingNextPage = true
         loadIngredients(page: pagedIngredients.page + 1) {
@@ -138,9 +138,9 @@ extension ExploreIngredientsViewModel {
     }
     
     func loadMoreSearchedIngredients() {
-        guard pagedSearchedIngredients.hasNextPage
-                || !pagedSearchedIngredients.isLoadingNextPage
-                || !searchKeyword.isEmpty else { return }
+        guard pagedSearchedIngredients.hasNextPage,
+              !pagedSearchedIngredients.isLoadingNextPage,
+              !searchKeyword.isEmpty else { return }
         
         pagedSearchedIngredients.isLoadingNextPage = true
         searchIngredients(keyword: searchKeyword, page: pagedSearchedIngredients.page + 1) {

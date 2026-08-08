@@ -80,7 +80,7 @@ struct CookableRecipeListView: View {
     private var listHeader: some View {
         VStack(spacing: 0) {
             Text("요리할만한 레시피를\n\(viewModel.pagedRecipes.totalElements)개 찾았어요.")
-                .font(.system(size: 26, weight: .bold))
+                .font(.system(size: 30, weight: .bold))
                 .lineSpacing(6)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .fixedSize(horizontal: false, vertical: true)
@@ -88,7 +88,7 @@ struct CookableRecipeListView: View {
                 .padding(.vertical, 10)
             
             HStack(spacing: 0) {
-                CookableRecipeListToggleButton(
+                CookableRecipeListToggle(
                     isCookableOnly: $viewModel.searchCriteria.isCookableOnly,
                     isEnabled: authManager.isLoggedIn
                 )
@@ -127,24 +127,6 @@ struct CookableRecipeListView: View {
                 }
         }
         .frame(height: 0)
-    }
-}
-
-private struct CookableRecipeListToggleButton: View {
-    @Binding var isCookableOnly: Bool
-    var isEnabled: Bool
-    
-    var body: some View {
-        HStack(spacing: 8) {
-            Toggle(isOn: $isCookableOnly) {}
-                .tint(.accent)
-                .labelsHidden()
-            Text("바로 요리 가능")
-                .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(Color.black)
-        }
-        .disabled(!isEnabled)
-        .opacity(isEnabled ? 1 : 0.2)
     }
 }
 

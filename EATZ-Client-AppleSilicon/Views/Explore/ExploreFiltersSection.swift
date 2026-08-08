@@ -7,9 +7,14 @@
 
 import SwiftUI
 
-struct ExploreFilterView: View {
+struct ExploreFiltersSection: View {
     let filters: ExploreFilters
     var onAction: (ExploreSheet) -> Void
+    
+    init(_ filters: ExploreFilters, onAction: @escaping (ExploreSheet) -> Void) {
+        self.filters = filters
+        self.onAction = onAction
+    }
     
     private var totalTimeLabel: String {
         guard let totalMinutes = filters.totalTime else {
@@ -52,38 +57,5 @@ struct ExploreFilterView: View {
                 }
             }
             .padding(.horizontal, 20)
-    }
-}
-
-private struct ExploreFilterButton: View {
-    let label: String
-    let subtitle: String
-    let action: () -> Void
-    
-    init(_ label: String, _ subtitle: String, action: @escaping () -> Void) {
-        self.label = label
-        self.subtitle = subtitle
-        self.action = action
-    }
-    
-    var body: some View {
-        Button(action: action) {
-            VStack(alignment: .center, spacing: 4) {
-                HStack {
-                    Text(label)
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(Color.black)
-                    ArrowDownCircled24()
-                }
-                Text(subtitle)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.gray35)
-            }
-            .padding(10)
-            .frame(maxWidth: .infinity)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(CookableButtonHighlightStyle())
-        .padding(.top, 10)
     }
 }

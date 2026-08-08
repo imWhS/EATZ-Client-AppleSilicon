@@ -56,7 +56,7 @@ struct CookableView: View {
     private var header: some View {
         VStack {
             Text("지금, 요리할만한\n레시피를 찾아볼까요?")
-                .font(.system(size: 30, weight: .bold))
+                .font(.system(size: 34, weight: .bold))
                 .lineSpacing(8)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .fixedSize(horizontal: false, vertical: true)
@@ -90,107 +90,11 @@ struct CookableView: View {
                 .padding(.horizontal, 20)
                 HorizontalDivider()
                         .padding(.horizontal, 20)
-                    CookableFilterToggleButton(
+                    CookableFilterToggle(
                         isCookableOnly: $viewModel.searchCriteria.isCookableOnly,
                         isEnabled: viewModel.auth.isLoggedIn,
                         action: viewModel.toggleCookableOnly)
             }
-        }
-    }
-}
-
-private struct CookableButtonDescriptionsView: View {
-    let titleLabel: String
-    let subtitleLabel: String
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(titleLabel)
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(Color.black)
-            Text(subtitleLabel)
-                .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color.gray35)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
-
-private struct CookableFilterButton: View {
-    let titleLabel: String
-    let subtitleLabel: String
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            HStack(alignment: .center, spacing: 4) {
-                CookableButtonDescriptionsView(
-                    titleLabel: titleLabel,
-                    subtitleLabel: subtitleLabel)
-                Spacer()
-                ArrowDownCircled26()
-            }
-            .padding(20)
-            .frame(maxHeight: .infinity)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(CookableButtonHighlightStyle())
-    }
-}
-
-private struct CookableFilterToggleButton: View {
-    @Binding var isCookableOnly: Bool
-    let isEnabled: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        HStack {
-            if isEnabled {
-                Toggle(isOn: $isCookableOnly) {
-                    HStack(spacing: 6) {
-                        CookableButtonDescriptionsView(
-                            titleLabel: "바로 요리 가능",
-                            subtitleLabel: "보관함 속 재료, 도구만으로 지금 바로 요리할 수 있는 레시피만 찾아요.")
-                        Spacer()
-                    }
-                }
-                .tint(.accent)
-                .padding(20)
-                .disabled(!isEnabled)
-                .opacity(isEnabled ? 1 : 0.2)
-            } else {
-                HStack(spacing: 6) {
-                    CookableButtonDescriptionsView(
-                        titleLabel: "바로 요리 가능",
-                        subtitleLabel: "로그인 또는 가입하면, 지금 바로 요리할 수 있는 레시피만 찾을 수 있어요.")
-                    Button("이메일로 시작", action: action)
-                        .buttonStyle(CapsuleButtonMediumStyle(status: .authPrimary))
-                }
-                .padding(20)
-            }
-        }
-        .padding(.horizontal, 20)
-    }
-}
-
-private struct CookableSearchButton: View {
-    let isShowing: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        if isShowing {
-            VStack(spacing: 12) {
-                Button(action: action) {
-                    HStack(alignment: .center) {
-                        Image("today-search")
-                    }
-                }
-                .buttonStyle(TodaySearchButtonStyle())
-            }
-            .padding(20)
-            .padding(.bottom, 12)
-        } else {
-            EmptyView()
         }
     }
 }
@@ -201,9 +105,9 @@ private struct CookableKeywordFieldView: View {
     
     var body: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 3) {
                 TextField("키워드", text: $keyword)
-                    .font(.system(size: 20, weight: .semibold))
+                    .font(.system(size: 17, weight: .semibold))
                     .focused($isFocused)
                 
                 Text("레시피 제목, 내용")
@@ -229,17 +133,6 @@ private struct CookableKeywordFieldView: View {
         .padding(.horizontal, 20)
         .onTapGesture { isFocused = true }
         .padding(.top, 20)
-    }
-}
-
-struct CookableButtonHighlightStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .background(
-                Color.buttonSecondary.opacity(configuration.isPressed ? 1 : 0)
-            )
-            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
-            .cornerRadius(18)
     }
 }
 

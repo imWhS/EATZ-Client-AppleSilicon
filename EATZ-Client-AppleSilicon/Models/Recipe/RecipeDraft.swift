@@ -108,8 +108,14 @@ struct RecipeDraft: Equatable {
         imageUrl.trimmingCharacters(in: .whitespaces).isEmpty
     }
     
-    func hasInvalidTitle() -> Bool {
-        title.trimmingCharacters(in: .whitespaces).isEmpty
+    func isTitleEmpty() -> Bool {
+        let trimmedTitle = title.trimmingCharacters(in: .whitespaces)
+        return trimmedTitle.isEmpty
+    }
+    
+    func isTitleTooLong() -> Bool {
+        let trimmedTitle = title.trimmingCharacters(in: .whitespaces)
+        return 100 < trimmedTitle.count
     }
     
     func hasInvalidUrl() -> Bool {

@@ -69,7 +69,7 @@ struct ExploreRecipesView: View {
     
     @ViewBuilder
     private var stateView: some View {
-        ExploreFilterView(filters: filters, onAction: onFilter)
+        ExploreFiltersSection(filters, onAction: onFilter)
         
         switch viewModel.viewState {
         case .initialLoading: LoadingCurtain(title: "\(tag?.name ?? "모든") 레시피를 불러오고 있어요...")

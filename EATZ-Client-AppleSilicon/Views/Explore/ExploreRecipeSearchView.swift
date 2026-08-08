@@ -77,7 +77,7 @@ struct ExploreRecipeSearchView: View {
     
     @ViewBuilder
     private var stateView: some View {
-        ExploreFilterView(filters: filters, onAction: onFilter)
+        ExploreFiltersSection(filters, onAction: onFilter)
         
         switch viewModel.viewState {
         case .idle: Curtain(

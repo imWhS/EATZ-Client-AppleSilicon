@@ -16,7 +16,7 @@ struct TabHeaderView: View {
     var body: some View {
         HStack {
             Text(title)
-                .font(Font.system(size: 38, weight: .semibold))
+                .font(Font.system(size: 34, weight: .semibold))
                 .padding(.leading)
             Spacer()
             HStack(spacing: 8) {

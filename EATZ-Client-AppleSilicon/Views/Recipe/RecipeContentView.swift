@@ -98,7 +98,7 @@ struct RecipeContentView: View {
                 onAuth: authManager.requireAuthView,
                 onAddAllRequirements: viewModel.handleAddAllRequirementsToPantry,
                 onRequirementsAction: viewModel.handleRequirementsAction)
-        case .error(let message): ErrorCurtain(message, onRetry: { viewModel.load(for: recipe.id) })
+        case .error(let message): ErrorCurtain(message, onRetryTapped: { viewModel.load(for: recipe.id) })
         }
     }
     

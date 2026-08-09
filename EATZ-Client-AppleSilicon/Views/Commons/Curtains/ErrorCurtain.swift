@@ -9,16 +9,16 @@ import SwiftUI
 
 struct ErrorCurtain: View {
     let message: String?
-    let onRetry: (() -> Void)?
+    let onRetryTapped: (() -> Void)?
     
-    init(_ message: String, onRetry: (() -> Void)? = nil) {
+    init(_ message: String, onRetryTapped: (() -> Void)? = nil) {
         self.message = message
-        self.onRetry = onRetry
+        self.onRetryTapped = onRetryTapped
     }
     
-    init(onRetry: (() -> Void)? = nil) {
+    init(onRetryTapped: (() -> Void)? = nil) {
         self.message = nil
-        self.onRetry = onRetry
+        self.onRetryTapped = onRetryTapped
     }
     
     var body: some View {
@@ -42,8 +42,8 @@ struct ErrorCurtain: View {
                         }
                     }
                 }
-                if let onRetry = onRetry {
-                    Button("다시 시도", action: onRetry).buttonStyle(CapsuleButtonMediumStyle(status: .secondary))
+                if let onRetryTapped = onRetryTapped {
+                    Button("다시 시도", action: onRetryTapped).buttonStyle(CapsuleButtonMediumStyle(status: .secondary))
                 }
             }
             Spacer()

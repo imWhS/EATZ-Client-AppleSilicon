@@ -41,9 +41,9 @@ struct ThemePickerView: View {
                 ExploreThemes(
                     featuredThemesState: viewModel.featuredThemesState,
                     pagedAllThemes: viewModel.pagedThemes,
-                    onLoadMoreAllThemes: viewModel.loadMoreAllThemes,
-                    onSelect: { tagTheme in handleSelection(id: tagTheme.id) },
-                    onRetry: viewModel.resetAndLoadAll)
+                    loadMore: viewModel.loadMoreAllThemes,
+                    onItemTapped: { tagTheme in handleSelection(id: tagTheme.id) },
+                    onRetryTapped: viewModel.resetAndLoadAll)
             }
             .padding(.vertical, 20)
         }

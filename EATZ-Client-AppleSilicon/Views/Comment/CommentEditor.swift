@@ -72,7 +72,7 @@ struct CommentEditor: View {
     private var editor: some View {
         HStack(alignment: .bottom, spacing: 12) {
             HStack(alignment: .bottom) {
-                ProfileImageView(imageUrl: authManager.currentUser?.imageUrl, size: 32)
+                ProfileImageView(authManager.currentUser?.imageUrl, size: 32)
                 DynamicHeightTextView(
                     text: $viewModel.editingContent,
                     placeholder: "탭해서 댓글 내용 입력",

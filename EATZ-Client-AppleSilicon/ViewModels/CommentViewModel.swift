@@ -58,9 +58,9 @@ class CommentViewModel: ObservableObject {
     
     var currentUserImageUrl: String? { return currentUser?.imageUrl }
     
-    var shouldShowEditor: Bool {
+    var presentEditor: Bool {
         switch viewState {
-        case .loaded, .empty: return true
+        case .loaded: return true
         case .initialLoading, .error: return false
         }
     }
@@ -133,7 +133,7 @@ class CommentViewModel: ObservableObject {
             guard let self = self else { return }
             self.loadPagedComments(page: 0) {
                 completion()
-                self.viewState = self.pagedCommentsWithPermissions.isEmpty ? .empty : .loaded
+                self.viewState = .loaded
             }
         }
     }
@@ -194,32 +194,6 @@ extension CommentViewModel {
         else { resetEditor() }
     }
     
-    /// 댓글을 삭제하기 위한 사전 작업과 실제 삭제 요청을 처리합니다.
-    ///
-    /// 댓글을 삭제하기 전에 사용자 및 댓글 context 기반의 alert을 제공하기 위해 `Comment` 인스턴스가 필요합니다.
-    func handleDelete(for comment: Comment) {
-        authManager?.performWhenLoggedIn { [weak self] in
-            guard let self = self else { return }
-            self.alert = .confirmDelete(
-                type: comment.author.id == self.currentUser?.id ? .mine(comment: comment) : .other(comment: comment),
-                confirmAction: { [weak self] in
-                    self?.deleteComment(for: comment) } )
-        }
-    }
-    
-    func handleBlockUser(_ targetUser: UserEssential) {
-        blockTargetUser = targetUser
-    }
-    
-    func handleReportComment(for comment: Comment) {
-        reportResource = ReportResource(
-            id: comment.id,
-            authorId: comment.author.id,
-            authorUsername: comment.author.username,
-            type: .COMMENT,
-            content: comment.content)
-    }
-    
     func handleSubmitEdit() {
         if let recipeEssential = recipeEssential, !(recipeEssential.commentEnabled) {
             alert = .commentDisabled
@@ -237,6 +211,42 @@ extension CommentViewModel {
         
         if let id = editingCommentId { updateComment(for: id, content: trimmedContent) }
         else { registerComment(content: trimmedContent) }
+    }
+    
+    func handleAction(_ comment: Comment, _ action: CommentItemAction) {
+        switch action {
+        case .block: handleBlockUser(comment.author)
+        case .report: handleReport(for: comment)
+        case .update: startEditingComment(id: comment.id)
+        case .delete: handleDelete(for: comment)
+        case .hide: break
+        }
+    }
+    
+    /// 댓글을 삭제하기 위한 사전 작업과 실제 삭제 요청을 처리합니다.
+    ///
+    /// 댓글을 삭제하기 전에 사용자 및 댓글 context 기반의 alert을 제공하기 위해 `Comment` 인스턴스가 필요합니다.
+    private func handleDelete(for comment: Comment) {
+        authManager?.performWhenLoggedIn { [weak self] in
+            guard let self = self else { return }
+            self.alert = .confirmDelete(
+                type: comment.author.id == self.currentUser?.id ? .mine(comment: comment) : .other(comment: comment),
+                confirmAction: { [weak self] in
+                    self?.deleteComment(for: comment) } )
+        }
+    }
+    
+    private func handleBlockUser(_ targetUser: UserEssential) {
+        blockTargetUser = targetUser
+    }
+    
+    private func handleReport(for comment: Comment) {
+        reportResource = ReportResource(
+            id: comment.id,
+            authorId: comment.author.id,
+            authorUsername: comment.author.username,
+            type: .COMMENT,
+            content: comment.content)
     }
     
     /// 댓글 목록의 평가 별 제어 권한을 업데이트합니다.
@@ -473,7 +483,6 @@ enum CommentRegistrationState {
 enum CommentViewState {
     case initialLoading
     case loaded
-    case empty
     case error(message: String)
 }
 

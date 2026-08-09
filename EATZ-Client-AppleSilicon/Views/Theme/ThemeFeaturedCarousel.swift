@@ -1,5 +1,5 @@
 //
-//  ThemeFeaturedList.swift
+//  ThemeFeaturedCarousel.swift
 //  EATZ-Client-AppleSilicon
 //
 //  Created by 손원희 on 10/9/25.
@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct ThemeFeaturedList: View {
+struct ThemeFeaturedCarousel: View {
     let theme: Theme
-    let onAction: (TagTheme) -> Void
+    let onItemTapped: (TagTheme) -> Void
     
     private var cellWidth: CGFloat {
         ((UIScreen.main.bounds.width) - rowSpacing - (horizontalPadding * 2)) / 2
@@ -24,12 +24,12 @@ struct ThemeFeaturedList: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            tagNameText
+            themeNameText
             
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHGrid(rows: rows, spacing: rowSpacing) {
                     ForEach(theme.tags) { tag in
-                        ThemeFeaturedItem(theme: tag, width: cellWidth, onAction: { onAction(tag) })
+                        ThemeFeaturedItem(theme: tag, width: cellWidth, action: { onItemTapped(tag) })
                     }
                 }
                 .padding(.horizontal, horizontalPadding)
@@ -38,7 +38,7 @@ struct ThemeFeaturedList: View {
         .padding(.vertical, 10)
     }
     
-    private var tagNameText: some View {
+    private var themeNameText: some View {
         Text(theme.name)
             .font(.system(size: 14))
             .foregroundStyle(Color.gray60)
@@ -58,9 +58,9 @@ struct ThemeFeaturedList: View {
     let theme: Theme = Theme(id: 1, name: "국가 별", description: "", tags: tags)
     ScrollView {
         VStack(spacing: 0) {
-            ThemeFeaturedList(theme: theme, onAction: { _ in })
-            ThemeFeaturedList(theme: theme, onAction: { _ in })
-            ThemeFeaturedList(theme: theme, onAction: { _ in })
+            ThemeFeaturedCarousel(theme: theme, onItemTapped: { _ in })
+            ThemeFeaturedCarousel(theme: theme, onItemTapped: { _ in })
+            ThemeFeaturedCarousel(theme: theme, onItemTapped: { _ in })
         }
     }
 }

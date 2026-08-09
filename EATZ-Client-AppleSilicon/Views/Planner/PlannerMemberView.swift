@@ -21,7 +21,7 @@ struct PlannerMemberView: View {
                 switch viewModel.state {
                 case .loading: LoadingCurtain(title: "회원님의 플래너 정보를 불러오고 있어요...")
                 case .content: contentView
-                case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
+                case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
                 }
             }
             .safeAreaInset(edge: .top, spacing: 0) {

@@ -35,21 +35,16 @@ struct CookableRecipeListView: View {
             switch viewModel.viewState {
             case .initialLoading: LoadingCurtain(title: "요리할 수 있는 레시피 목록을 불러오고 있어요...").transition(.opacity)
             case .loaded: listContainer.transition(.opacity)
-            case .error(let message): ErrorCurtain(message, onRetry: viewModel.resetAndLoadAll).transition(.opacity)
+            case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.resetAndLoadAll).transition(.opacity)
             case .empty:
-                Curtain(
+                CommonEmptyStateView(
                     title: "요리할만한 레시피가 없어요.",
-                    description: "이전 화면으로 돌아가서, 키워드나 옵션을 바꾼 후 다시 시도해보세요.",
-                    header: {
-                        Image("info-200")
-                            .resizable()
-                            .foregroundStyle(Color.gray15)
-                            .frame(width: 40, height: 40)
-                    }
-                ).transition(.opacity)
+                    "이전 화면으로 돌아가서, 키워드나 옵션을 바꾼 후 다시 시도해보세요."
+                )
             }
         }
         .background(Color.backgroundPrimary)
+        .transition(.opacity)
         .animation(.easeInOut(duration: 0.3), value: viewModel.viewState)
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(viewModel.navigationTitleLabel)
@@ -66,9 +61,9 @@ struct CookableRecipeListView: View {
                         CookableRecipeItem(
                             recipe,
                             onTapItem: { id in router.push(.recipe(id: id)) },
-                            onAction: viewModel.handleRecipeAction)
+                            action: viewModel.handleRecipeAction)
                     }
-                    ListPageTailView(hasNextPage: viewModel.pagedRecipes.hasNextPage, onAppearAction: viewModel.loadMoreRecipes)
+                    ListPageTailView(hasNextPage: viewModel.pagedRecipes.hasNextPage, onAppear: viewModel.loadMoreRecipes)
                 }
                 .animation(.default, value: viewModel.pagedRecipes.items)
             }

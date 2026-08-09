@@ -11,6 +11,8 @@ struct ExploreIngredientsView: View {
     @StateObject private var viewModel = ExploreIngredientsViewModel()
     @Environment(\.dismiss) private var dismiss
     
+    private var navigationTitleLabel: String = "재료 둘러보기"
+    
     var body: some View {
         mainContent
             .environmentObject(viewModel)
@@ -28,19 +30,11 @@ struct ExploreIngredientsView: View {
                 case .loading: LoadingCurtain(title: "재료 목록을 불러오고 있어요...")
                 case .loaded: ExploreIngredientsList()
                 case .unauthorized: CommonUnauthorizedStateView()
-                case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
-                case .empty:
-                    Curtain(
-                        title: "보여드릴 재료가 없어요.",
-                        header: {
-                            Image("info-200")
-                                .resizable()
-                                .foregroundStyle(Color.gray15)
-                                .frame(width: 40, height: 40)
-                        }
-                    )
+                case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
+                case .empty: CommonEmptyStateView(title: "보여드릴 재료가 없어요.")
                 }
             }
+            .navigationTitle(navigationTitleLabel)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 titleToolbarItem
@@ -51,7 +45,7 @@ struct ExploreIngredientsView: View {
     
     private var titleToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            Text("재료 둘러보기")
+            Text(navigationTitleLabel)
                 .font(.headline)
                 .opacity(viewModel.showNavigationBarTitle ? 1 : 0)
         }

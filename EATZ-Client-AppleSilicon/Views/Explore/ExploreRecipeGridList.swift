@@ -12,7 +12,7 @@ struct ExploreRecipeGridList: View {
     
     let onTappedRecipe: (ExploreRecipe) -> Void
     let onTappedItemAction: (ExploreRecipe, ExploreRecipeItemAction) -> Void
-    let onLoadMore: () -> Void
+    let loadMore: () -> Void
     
     var selectableSortOptions: [ExploreRecipesSort]
     @Binding var sort: ExploreRecipesSort
@@ -42,14 +42,14 @@ struct ExploreRecipeGridList: View {
                         recipe,
                         cardWidth: cellWidth,
                         onTappedRecipe: onTappedRecipe,
-                        onAction: onTappedItemAction)
+                        action: onTappedItemAction)
                 }
             }
             .padding(.horizontal, horizontalPadding)
             .padding(.vertical, rowSpacing)
             .animation(.spring(response: 0.4, dampingFraction: 0.8), value: pagedRecipes.items)
             
-            ListPageTailView(hasNextPage: pagedRecipes.hasNextPage, onAppearAction: onLoadMore)
+            ListPageTailView(hasNextPage: pagedRecipes.hasNextPage, onAppear: loadMore)
         }
     }
     

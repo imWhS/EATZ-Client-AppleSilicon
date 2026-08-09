@@ -28,6 +28,12 @@ struct RecipeDetailRequirementsHeaderUncookable: View {
         }
     }
     
+    init(_ missingKitchenwareCount: Int, _ missingIngredientCount: Int, _ onAddAllRequirements: @escaping () -> Void) {
+        self.missingKitchenwareCount = missingKitchenwareCount
+        self.missingIngredientCount = missingIngredientCount
+        self.onAddAllRequirements = onAddAllRequirements
+    }
+    
     var body: some View {
         contentView
             .padding(.horizontal, 20)

@@ -96,22 +96,15 @@ struct ExploreRecipeSearchView: View {
                 pagedRecipes: viewModel.pagedRecipes,
                 onTappedRecipe: onTappedRecipe,
                 onTappedItemAction: viewModel.handleItem,
-                onLoadMore: viewModel.loadMoreRecipes,
+                loadMore: viewModel.loadMoreRecipes,
                 selectableSortOptions: selectableSortOptions,
                 sort: $sort)
         case .empty(let keyword):
-            Curtain(
+            CommonEmptyStateView(
                 title: "원하는 레시피가 없어요.",
-                description: "'\(keyword)' 관련 레시피를 하나도 찾지 못했어요.\n다른 검색어를 사용하거나, 필터 옵션을 변경해보세요.",
-                header: {
-                    Image("info-200")
-                        .resizable()
-                        .foregroundStyle(Color.gray15)
-                        .frame(width: 40, height: 40)
-                }
-            )
+                "'\(keyword)' 관련 레시피를 하나도 찾지 못했어요.\n다른 검색어를 사용하거나, 필터 옵션을 변경해보세요.")
         case .error(let message):
-            ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
+            ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
         }
     }
 }

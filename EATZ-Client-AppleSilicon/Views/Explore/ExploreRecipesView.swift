@@ -78,21 +78,12 @@ struct ExploreRecipesView: View {
                 pagedRecipes: viewModel.pagedRecipes,
                 onTappedRecipe: onTappedRecipe,
                 onTappedItemAction: viewModel.handleItem,
-                onLoadMore: viewModel.loadMoreRecipes,
+                loadMore: viewModel.loadMoreRecipes,
                 selectableSortOptions: selectableSortOptions,
                 sort: $sort)
         case .empty:
-            Curtain(
-                title: "보여드릴 레시피가 없어요.",
-                description: "카테고리나 필터 옵션을 변경해보세요.",
-                header: {
-                    Image("info-200")
-                        .resizable()
-                        .foregroundStyle(Color.gray15)
-                        .frame(width: 40, height: 40)
-                }
-            )
-        case .error(let message): ErrorCurtain(message, onRetry: viewModel.resetAndLoadAll)
+            CommonEmptyStateView(title: "보여드릴 레시피가 없어요.", "카테고리나 필터 옵션을 변경해보세요.")
+        case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.resetAndLoadAll)
         }
     }
 }

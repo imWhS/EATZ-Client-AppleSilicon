@@ -11,7 +11,7 @@ struct RecipeDetailRequirementsKitchenwareSection: View {
     let isLoggedIn: Bool
     let kitchenwares: [RecipeKitchenware]
     let missingKitchenwareCount: Int?
-    let onAction: (RecipeDetailRequirementsAction) -> Void
+    let action: (RecipeDetailRequirementsAction) -> Void
     
     private let screenWidth: CGFloat = UIScreen.main.bounds.width
     private let horizontalPadding: CGFloat = 20
@@ -19,6 +19,18 @@ struct RecipeDetailRequirementsKitchenwareSection: View {
     
     private var itemWidth: CGFloat {
         screenWidth - (horizontalPadding * 2) + (itemInnerHorizontalPadding * 2)
+    }
+    
+    init(
+        _ isLoggedIn: Bool,
+        _ kitchenwares: [RecipeKitchenware],
+        _ missingKitchenwareCount: Int?,
+        _ action: @escaping (RecipeDetailRequirementsAction) -> Void)
+    {
+        self.isLoggedIn = isLoggedIn
+        self.kitchenwares = kitchenwares
+        self.missingKitchenwareCount = missingKitchenwareCount
+        self.action = action
     }
     
     var body: some View {
@@ -48,11 +60,8 @@ struct RecipeDetailRequirementsKitchenwareSection: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 0) {
                 ForEach(kitchenwares) { kitchenware in
-                    RecipeDetailRequirementsKitchenwareItem(
-                        kitchenware: kitchenware,
-                        isLoggedIn: isLoggedIn,
-                        onAction: onAction)
-                    .frame(minWidth: itemWidth)
+                    RecipeDetailRequirementsKitchenwareItem(kitchenware, isLoggedIn, action)
+                        .frame(minWidth: itemWidth)
                 }
             }
             .padding(.horizontal, 16)

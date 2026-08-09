@@ -30,17 +30,8 @@ struct KitchenwarePicker: View {
             case .loading: LoadingCurtain(title: "도구 목록을 불러오고 있어요...")
             case .loaded: mainContent
             case .unauthorized: CommonUnauthorizedStateView()
-            case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
-            case .empty:
-                Curtain(
-                    title: "보여드릴 도구가 없어요.",
-                    header: {
-                        Image("info-200")
-                            .resizable()
-                            .foregroundStyle(Color.gray15)
-                            .frame(width: 40, height: 40)
-                    }
-                )
+            case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
+            case .empty: CommonEmptyStateView(title: "보여드릴 도구가 없어요.")
             }
         }
     }
@@ -56,8 +47,8 @@ struct KitchenwarePicker: View {
                     isItemSelected: { item in viewModel.isSelected(item.id) },
                     isItemDisabled: { _ in false },
                     onToggleSelection: viewModel.toggleSelection,
-                    onLoadMoreKitchenwares: viewModel.loadMoreKitchenwares,
-                    onLoadMoreSearchedKitchenwares: viewModel.loadMoreSearchedKitchenwares)
+                    loadMoreKitchenwares: viewModel.loadMoreKitchenwares,
+                    loadMoreSearchedKitchenwares: viewModel.loadMoreSearchedKitchenwares)
                 .navigationTitle("도구")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {

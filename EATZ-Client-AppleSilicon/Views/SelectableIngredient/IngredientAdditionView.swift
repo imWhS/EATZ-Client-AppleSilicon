@@ -27,16 +27,7 @@ struct IngredientAdditionView: View {
             case .loaded: mainContentView
             case .unauthorized: CommonUnauthorizedStateView()
             case .error(let message): ErrorCurtain(message)
-            case .empty:
-                Curtain(
-                    title: "보여드릴 재료가 없어요.",
-                    header: {
-                        Image("info-200")
-                            .resizable()
-                            .foregroundStyle(Color.gray15)
-                            .frame(width: 40, height: 40)
-                    }
-                )
+            case .empty: CommonEmptyStateView(title: "보여드릴 재료가 없어요.")
             }
         }
     }
@@ -52,8 +43,8 @@ struct IngredientAdditionView: View {
                     isItemSelected: { ingredient in viewModel.isSelected(ingredient.id) },
                     isItemDisabled: { ingredient in ingredient.ownedByUser },
                     onToggleSelection: viewModel.toggleSelection,
-                    onLoadMoreIngredients: viewModel.loadMoreIngredients,
-                    onLoadMoreSearchedIngredients: viewModel.loadMoreSearchedIngredients)
+                    loadMoreIngredients: viewModel.loadMoreIngredients,
+                    loadMoreSearchedIngredients: viewModel.loadMoreSearchedIngredients)
                 .environmentObject(viewModel)
                 .navigationTitle("재료")
                 .navigationBarTitleDisplayMode(.inline)

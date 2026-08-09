@@ -20,14 +20,14 @@ enum ChecklistIngredientItemAction {
 struct ChecklistIngredientItem: View {
     let ingredient: ChecklistIngredient
     let isLoading: Bool
-    let onAction: (Int64, ChecklistIngredientItemAction) -> Void
+    let action: (Int64, ChecklistIngredientItemAction) -> Void
     
     init(_ ingredient: ChecklistIngredient,
          isLoading: Bool,
-         onAction: @escaping (Int64, ChecklistIngredientItemAction) -> Void) {
+         action: @escaping (Int64, ChecklistIngredientItemAction) -> Void) {
         self.ingredient = ingredient
         self.isLoading = isLoading
-        self.onAction = onAction
+        self.action = action
     }
     
     var body: some View {
@@ -53,11 +53,11 @@ struct ChecklistIngredientItem: View {
                 ProgressView()
             } else {
                 if !ingredient.missing {
-                    actionButton(image: "add-circled-20", action: { onAction(ingredient.id, .addToPantry) }).opacity(0).disabled(true)
+                    actionButton(image: "add-circled-20", action: { action(ingredient.id, .addToPantry) }).opacity(0).disabled(true)
                     actionMenu
                 }
                 else {
-                    actionButton(image: "add-circled-22", action: { onAction(ingredient.id, .addToPantry) })
+                    actionButton(image: "add-circled-22", action: { action(ingredient.id, .addToPantry) })
                 }
             }
         }
@@ -67,21 +67,21 @@ struct ChecklistIngredientItem: View {
     private var actionMenu: some View {
         Menu {
             Button(role: .destructive) {
-                onAction(ingredient.id, .removeFromPantry)
+                action(ingredient.id, .removeFromPantry)
             } label: {
                 Label("보관함에서 제거", systemImage: "trash")
             }
             
             if ingredient.likedByUser {
                 Button {
-                    onAction(ingredient.id, .unlike)
+                    action(ingredient.id, .unlike)
                 } label: {
                     Label("재료 좋아요 취소", systemImage: "heart.slash")
                 }
                 
             } else {
                 Button {
-                    onAction(ingredient.id, .like)
+                    action(ingredient.id, .like)
                 } label: {
                     Label("재료 좋아요", systemImage: "heart")
                 }

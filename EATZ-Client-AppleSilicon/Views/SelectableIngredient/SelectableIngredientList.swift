@@ -20,8 +20,8 @@ struct SelectableIngredientList<Manager: SelectableIngredientManager>: View {
     let isItemDisabled: (Ingredient) -> Bool
     let onToggleSelection: (Ingredient) -> Void
     
-    let onLoadMoreIngredients: () -> Void
-    let onLoadMoreSearchedIngredients: () -> Void
+    let loadMoreIngredients: () -> Void
+    let loadMoreSearchedIngredients: () -> Void
     
     var body: some View {
         Group {
@@ -41,15 +41,9 @@ struct SelectableIngredientList<Manager: SelectableIngredientManager>: View {
             case .searched: searchedIngredientList
             case .error(let message): ErrorCurtain(message)
             case .empty:
-                Curtain(
+                CommonEmptyStateView(
                     title: "원하는 재료가 없어요.",
-                    description: "'\(searchKeyword)' 관련 재료를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요.",
-                    header: {
-                        Image("info-200")
-                            .resizable()
-                            .foregroundStyle(Color.gray15)
-                            .frame(width: 40, height: 40)
-                    }
+                    "'\(searchKeyword)' 관련 재료를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요."
                 )
             }
         }
@@ -59,7 +53,7 @@ struct SelectableIngredientList<Manager: SelectableIngredientManager>: View {
         ScrollView {
             ingredientList(
                 listState: pagedSearchedIngredients,
-                onLoadMore: onLoadMoreSearchedIngredients
+                loadMore: loadMoreSearchedIngredients
             )
         }
     }
@@ -74,7 +68,7 @@ struct SelectableIngredientList<Manager: SelectableIngredientManager>: View {
                     .padding(.top, 20)
                 ingredientList(
                     listState: pagedIngredients,
-                    onLoadMore: onLoadMoreIngredients
+                    loadMore: loadMoreIngredients
                 )
             }
         }
@@ -97,14 +91,14 @@ struct SelectableIngredientList<Manager: SelectableIngredientManager>: View {
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(Color.gray35)
             }
-            .padding(20)
+            .padding(10)
             HorizontalDivider()
         }
     }
     
     private func ingredientList(
         listState: Paged<Ingredient>,
-        onLoadMore: @escaping () -> Void
+        loadMore: @escaping () -> Void
     ) -> some View {
         LazyVStack(spacing: 0) {
             ForEach(listState.items) { ingredient in
@@ -117,7 +111,7 @@ struct SelectableIngredientList<Manager: SelectableIngredientManager>: View {
                 .environmentObject(manager)
             }
             if !listState.isEmpty {
-                ListPageTailView(hasNextPage: listState.hasNextPage, onAppearAction: onLoadMore)
+                ListPageTailView(hasNextPage: listState.hasNextPage, onAppear: loadMore)
             }
         }
         .padding(.vertical, 16)

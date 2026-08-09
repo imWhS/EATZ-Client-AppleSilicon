@@ -22,7 +22,7 @@ struct TagList: View {
                             onSelect(tag)
                         }
                     }
-                    ListPageTailView(hasNextPage: pagedTags.hasNextPage, onAppearAction: onLoadMore)
+                    ListPageTailView(hasNextPage: pagedTags.hasNextPage, onAppear: onLoadMore)
                 }
             }
         }

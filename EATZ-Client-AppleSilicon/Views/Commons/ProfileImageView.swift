@@ -12,6 +12,11 @@ struct ProfileImageView: View {
     let imageUrl: String?
     let size: CGFloat
     
+    init(_ imageUrl: String?, size: CGFloat) {
+        self.imageUrl = imageUrl
+        self.size = size
+    }
+    
     var body: some View {
         KFImage(URL(imageUrlString: imageUrl))
             .placeholder {
@@ -32,7 +37,7 @@ struct ProfileImageView: View {
 
 #Preview {
     VStack {
-        ProfileImageView(imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLiKmxv4M0fkn7aA-Sh4V1kA0LO_KgAQp9NHsaEQ6F918AGzmeT8qdhZc0lpM3jhy2u6c&usqp=CAU", size: 28)
-        ProfileImageView(imageUrl: "", size: 28)
+        ProfileImageView("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLiKmxv4M0fkn7aA-Sh4V1kA0LO_KgAQp9NHsaEQ6F918AGzmeT8qdhZc0lpM3jhy2u6c&usqp=CAU", size: 28)
+        ProfileImageView("", size: 28)
     }
 }

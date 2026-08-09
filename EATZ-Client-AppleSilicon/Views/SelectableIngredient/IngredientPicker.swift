@@ -30,17 +30,8 @@ struct IngredientPicker: View {
             case .loading: LoadingCurtain(title: "재료 목록을 불러오고 있어요...")
             case .loaded: mainContentView
             case .unauthorized: CommonUnauthorizedStateView()
-            case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
-            case .empty:
-                Curtain(
-                    title: "보여드릴 재료가 없어요.",
-                    header: {
-                        Image("info-200")
-                            .resizable()
-                            .foregroundStyle(Color.gray15)
-                            .frame(width: 40, height: 40)
-                    }
-                )
+            case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
+            case .empty: CommonEmptyStateView(title: "보여드릴 재료가 없어요.")
             }
         }
     }
@@ -56,8 +47,8 @@ struct IngredientPicker: View {
                         isItemSelected: { item in viewModel.isSelected(item.id) },
                         isItemDisabled: { _ in false },
                         onToggleSelection: viewModel.toggleSelection,
-                        onLoadMoreIngredients: viewModel.loadMoreIngredients,
-                        onLoadMoreSearchedIngredients: viewModel.loadMoreSearchedIngredients
+                        loadMoreIngredients: viewModel.loadMoreIngredients,
+                        loadMoreSearchedIngredients: viewModel.loadMoreSearchedIngredients
                 )
                 .navigationTitle("재료")
                 .navigationBarTitleDisplayMode(.inline)

@@ -42,7 +42,7 @@ struct Curtain<Header: View, Footer: View>: View {
                         Text(title)
                             .font(.system(size: 17, weight: .semibold))
                             .foregroundStyle(Color.gray35)
-                        if let description = description {
+                        if let description = description, !description.isEmpty {
                             Text(description)
                                 .font(.system(size: 12, weight: .medium))
                                 .multilineTextAlignment(.center)

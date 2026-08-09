@@ -9,21 +9,18 @@ import SwiftUI
 
 struct ThemeList: View {
     let themes: [TagTheme]
-    let onAction: (TagTheme) -> Void
+    let onItemTapped: (TagTheme) -> Void
     let hasNextPage: Bool
     let isLoadingNextPage: Bool
-    let onLoadNextPage: () -> Void
+    let loadNextPageAction: () -> Void
     
     var body: some View {
         LazyVStack(spacing: 0) {
             ForEach(themes) { theme in
-                ThemeItem(
-                    theme: theme,
-                    showDivider: theme.id != themes.last!.id,
-                    onAction: { onAction(theme) })
+                ThemeItem(theme, theme.id != themes.last!.id, { onItemTapped(theme) })
             }
             HorizontalDivider()
-            ListPageTailView(hasNextPage: hasNextPage, onAppearAction: onLoadNextPage)
+            ListPageTailView(hasNextPage: hasNextPage, onAppear: loadNextPageAction)
         }
         .background(Color.white)
         .cornerRadius(12)
@@ -42,7 +39,7 @@ struct ThemeList: View {
     
     ScrollView {
         VStack(spacing: 0) {
-            ThemeList(themes: tags, onAction: { _ in }, hasNextPage: true, isLoadingNextPage: true, onLoadNextPage: { } )
+            ThemeList(themes: tags, onItemTapped: { _ in }, hasNextPage: true, isLoadingNextPage: true, loadNextPageAction: { } )
         }
     }
     .background(Color.gray)

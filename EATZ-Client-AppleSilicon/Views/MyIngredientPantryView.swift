@@ -18,22 +18,16 @@ struct MyIngredientPantryView: View {
             case .loaded:
                 MyIngredientPantryList(
                     pagedIngredients: viewModel.pagedIngredients,
-                    onLoadMore: viewModel.loadMoreIngredients,
+                    loadMore: viewModel.loadMoreIngredients,
                     onClear: viewModel.handleClearPantry,
-                    onAction: viewModel.handleItemAction
+                    action: viewModel.handleItemAction
                 )
             case .empty:
-                Curtain(
+                CommonEmptyStateView(
                     title: "보관하고 있는 재료가 없어요.",
-                    description: "보관함에 아무 재료를 추가하지 않았어요.",
-                    header: {
-                        Image("info-200")
-                            .resizable()
-                            .foregroundStyle(Color.gray15)
-                            .frame(width: 40, height: 40)
-                    }
+                    "보관함에 아무 재료를 추가하지 않았어요."
                 )
-            case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
+            case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
             case .unauthorized: CommonUnauthorizedStateView()
             }
         }
@@ -68,9 +62,9 @@ struct MyIngredientPantryView: View {
 
 private struct MyIngredientPantryList: View {
     let pagedIngredients: Paged<Ingredient>
-    let onLoadMore: () -> Void
+    let loadMore: () -> Void
     let onClear: () -> Void
-    let onAction: (IngredientItemAction) -> Void
+    let action: (IngredientItemAction) -> Void
     
     private var ingredients: [Ingredient] { pagedIngredients.items }
     
@@ -111,9 +105,9 @@ private struct MyIngredientPantryList: View {
     private var listSection: some View {
         LazyVStack(spacing: 8) {
             ForEach(ingredients) { ingredient in
-                IngredientItem<EmptyView>(ingredient, onAction: onAction)
+                IngredientItem<EmptyView>(ingredient, action: action)
             }
-            ListPageTailView(hasNextPage: pagedIngredients.hasNextPage, onAppearAction: onLoadMore)
+            ListPageTailView(hasNextPage: pagedIngredients.hasNextPage, onAppear: loadMore)
         }
     }
 }

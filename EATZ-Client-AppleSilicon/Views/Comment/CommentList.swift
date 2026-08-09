@@ -8,32 +8,34 @@
 import SwiftUI
 
 struct CommentList: View {
-    @State private var timerTask: Task<Void, Never>?
-    
     let pagedCommentsWithPermissions: Paged<CommentWithPermissions>
     let onLoadNextPage: () -> Void
-    let onBlock: (UserEssential) -> Void
-    let onReport: (Comment) -> Void
-    let onUpdate: (Int64) -> Void
-    let onDelete: (Comment) -> Void
+    let action: (Comment, CommentItemAction) -> Void
+    
+    init(
+        _ pagedCommentsWithPermissions: Paged<CommentWithPermissions>,
+        _ onLoadNextPage: @escaping () -> Void,
+        _ action: @escaping (Comment, CommentItemAction) -> Void
+    ) {
+        self.pagedCommentsWithPermissions = pagedCommentsWithPermissions
+        self.onLoadNextPage = onLoadNextPage
+        self.action = action
+    }
+    
     
     var body: some View {
         LazyVStack(alignment: .center, spacing: 0) {
             ForEach(pagedCommentsWithPermissions.items) { pagedCommentWithPermissions in
                 CommentItem(
                     pagedCommentWithPermissions.comment,
-                    permissions: pagedCommentWithPermissions.permissions,
-                    onBlock: onBlock,
-                    onReport: onReport,
-                    onUpdate: onUpdate,
-                    onDelete: onDelete
-                )
+                    pagedCommentWithPermissions.permissions,
+                    action)
             }
             
             if !pagedCommentsWithPermissions.isEmpty {
                 ListPageTailView(
                     hasNextPage: pagedCommentsWithPermissions.hasNextPage,
-                    onAppearAction: onLoadNextPage)
+                    onAppear: onLoadNextPage)
                 .id(pagedCommentsWithPermissions.items.count)
             }
         }

@@ -11,10 +11,10 @@ import Kingfisher
 struct HorizontalRecipeCard: View {
     let imageUrl: String?
     let size: CGFloat
-    let onAction: () -> Void
+    let action: () -> Void
     
     var body: some View {
-        Button(action: onAction) {
+        Button(action: action) {
             KFImage(URL(imageUrlString: imageUrl))
                 .placeholder {
                     ZStack {

@@ -12,7 +12,7 @@ struct SignUpSetPasswordView: View {
     @FocusState private var isPasswordFocused: Bool
     @State private var isPasswordVisible: Bool = false
     
-    private var navigationTitle: String = "암호 설정"
+    private var navigationTitleLabel: String = "암호 설정"
     
     var body: some View {
         ScrollView {
@@ -33,7 +33,7 @@ struct SignUpSetPasswordView: View {
             }
         }
         .background(Color.backgroundPrimary)
-        .navigationTitle(navigationTitle)
+        .navigationTitle(navigationTitleLabel)
         .toolbar {
             titleToolbarItem
             doneToolbarItem
@@ -42,7 +42,7 @@ struct SignUpSetPasswordView: View {
     
     private var header: some View {
         VStack(spacing: 12) {
-            Text(navigationTitle)
+            Text(navigationTitleLabel)
                 .font(.system(size: 30, weight: .bold))
             Text(viewModel.email)
                 .font(.system(size: 12, weight: .medium))
@@ -99,7 +99,7 @@ struct SignUpSetPasswordView: View {
     
     private var titleToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            Text(navigationTitle)
+            Text(navigationTitleLabel)
                 .opacity(0)
         }
     }

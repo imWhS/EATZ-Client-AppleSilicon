@@ -21,7 +21,7 @@ struct MyAccountRecipeDisclosureCarousel: View {
                 if !recipes.isEmpty {
                     RecipeCardCarousel(
                         recipes: recipes,
-                        onAction: onRecipeTapped)
+                        action: onRecipeTapped)
                     .padding(.bottom, 10)
                 }
             }

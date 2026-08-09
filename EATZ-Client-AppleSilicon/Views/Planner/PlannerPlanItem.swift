@@ -10,16 +10,16 @@ import Kingfisher
 
 struct PlannerPlanItem: View {
     let plan: PlannerPlan
-    let onAction: (PlannerPlan, PlannerPlanItemAction) -> Void
+    let action: (PlannerPlan, PlannerPlanItemAction) -> Void
     
     @EnvironmentObject private var router: Router
     private let cardWidth: CGFloat = (UIScreen.main.bounds.width - 40 - 8) / 2
     
     init(
         _ plan: PlannerPlan,
-        onAction: @escaping (PlannerPlan, PlannerPlanItemAction) -> Void) {
+        _ action: @escaping (PlannerPlan, PlannerPlanItemAction) -> Void) {
         self.plan = plan
-        self.onAction = onAction
+        self.action = action
     }
     
     var body: some View {
@@ -65,7 +65,7 @@ struct PlannerPlanItem: View {
                     ratingCount: plan.ratingIndicatorSummary?.count,
                     foregroundStyle: .white)
                 Spacer()
-                actionMenu(perform: { action in self.onAction(plan, action) })
+                actionMenu(perform: { action in self.action(plan, action) })
             }
             .padding(12)
         }

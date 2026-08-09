@@ -19,8 +19,8 @@ struct LikedIngredientsView: View {
                 case .loading: LoadingCurtain(title: "좋아하는 재료 목록을 불러오고 있어요...")
                 case .loaded: LikedIngredientList(
                     pagedIngredients: viewModel.pagedIngredients,
-                    onAction: viewModel.handleItemAction,
-                    onLoadMore: viewModel.loadMoreLikedIngredients)
+                    action: viewModel.handleItemAction,
+                    loadMore: viewModel.loadMoreLikedIngredients)
                 case .empty:
                     Curtain(
                         title: "좋아하는 재료가 없어요.",
@@ -64,8 +64,8 @@ struct LikedIngredientsView: View {
 
 private struct LikedIngredientList: View {
     let pagedIngredients: Paged<Ingredient>
-    let onAction: (IngredientItemAction) -> Void
-    let onLoadMore: () -> Void
+    let action: (IngredientItemAction) -> Void
+    let loadMore: () -> Void
     
     private var totalElementsLabel: String {
         if pagedIngredients.totalElements > 0 { return "\(pagedIngredients.totalElements)개의 재료" }
@@ -84,10 +84,10 @@ private struct LikedIngredientList: View {
                     ForEach(pagedIngredients.items) { ingredient in
                         IngredientItem<EmptyView>(
                             ingredient,
-                            onAction: onAction
+                            action: action
                         )
                     }
-                    ListPageTailView(hasNextPage: pagedIngredients.hasNextPage, onAppearAction: onLoadMore)
+                    ListPageTailView(hasNextPage: pagedIngredients.hasNextPage, onAppear: loadMore)
                 }
             }
         }

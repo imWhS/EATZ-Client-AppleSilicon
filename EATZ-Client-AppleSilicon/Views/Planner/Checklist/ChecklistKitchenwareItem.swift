@@ -17,14 +17,14 @@ enum ChecklistKitchenwareItemAction {
 struct ChecklistKitchenwareItem: View {
     let kitchenware: ChecklistKitchenware
     let isLoading: Bool
-    let onAction: (Int64, ChecklistKitchenwareItemAction) -> Void
+    let action: (Int64, ChecklistKitchenwareItemAction) -> Void
     
     init(_ kitchenware: ChecklistKitchenware,
          isLoading: Bool,
-         onAction: @escaping (Int64, ChecklistKitchenwareItemAction) -> Void) {
+         action: @escaping (Int64, ChecklistKitchenwareItemAction) -> Void) {
         self.kitchenware = kitchenware
         self.isLoading = isLoading
-        self.onAction = onAction
+        self.action = action
     }
     
     var body: some View {
@@ -38,7 +38,7 @@ struct ChecklistKitchenwareItem: View {
             } else {
                 if !kitchenware.missing { actionMenu }
                 else {
-                    actionButton(image: "add-circled-20", action: { onAction(kitchenware.id, .addToPantry) })
+                    actionButton(image: "add-circled-20", action: { action(kitchenware.id, .addToPantry) })
                 }
             }
         }
@@ -63,7 +63,7 @@ struct ChecklistKitchenwareItem: View {
     private var actionMenu: some View {
         Menu {
             Button(role: .destructive) {
-                onAction(kitchenware.id, .removeFromPantry)
+                action(kitchenware.id, .removeFromPantry)
             } label: {
                 Label("보관함에서 제거", systemImage: "trash")
             }

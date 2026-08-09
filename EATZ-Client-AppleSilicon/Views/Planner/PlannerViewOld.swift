@@ -41,7 +41,7 @@ struct PlannerViewOld: View {
             case .loading: LoadingCurtain()
             case .loaded: mainContent
                     .environmentObject(viewModel)
-            case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
+            case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
             case .unauthorized: PlannerUnauthorizedView(onLogIn: viewModel.requireAuthView)
             }
         }

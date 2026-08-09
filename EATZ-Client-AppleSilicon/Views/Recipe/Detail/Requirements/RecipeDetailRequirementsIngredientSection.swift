@@ -11,7 +11,19 @@ struct RecipeDetailRequirementsIngredientSection: View {
     let isLoggedIn: Bool
     let ingredients: [RecipeIngredient]
     let missingIngredientCount: Int?
-    let onAction: (RecipeDetailRequirementsAction) -> Void
+    let action: (RecipeDetailRequirementsAction) -> Void
+    
+    init(
+        _ isLoggedIn: Bool,
+        _ ingredients: [RecipeIngredient],
+        _ missingIngredientCount: Int?,
+        _ action: @escaping (RecipeDetailRequirementsAction) -> Void)
+    {
+        self.isLoggedIn = isLoggedIn
+        self.ingredients = ingredients
+        self.missingIngredientCount = missingIngredientCount
+        self.action = action
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -40,10 +52,7 @@ struct RecipeDetailRequirementsIngredientSection: View {
     private var recipeRequirementsIngredientList: some View {
         VStack(alignment: .leading, spacing: 0) {
             ForEach(ingredients) { ingredient in
-                RecipeDetailRequirementsIngredientItem(
-                    isLoggedIn: isLoggedIn,
-                    ingredient: ingredient,
-                    onAction: onAction)
+                RecipeDetailRequirementsIngredientItem(isLoggedIn, ingredient, action)
             }
         }
         .padding(.vertical, 6)

@@ -37,7 +37,7 @@ struct BioEditor: View {
             case .error(let message):
                 ErrorCurtain(
                     "회원님의 소개를 불러오지 못했어요. \(message)",
-                    onRetry: viewModel.prepareDataIfNeeded)
+                    onRetryTapped: viewModel.prepareDataIfNeeded)
             case .unauthorized: CommonUnauthorizedStateView()
             }
         }

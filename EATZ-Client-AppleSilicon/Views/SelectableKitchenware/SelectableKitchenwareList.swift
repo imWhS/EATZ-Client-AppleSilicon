@@ -18,8 +18,8 @@ struct SelectableKitchenwareList<Manager: SelectableKitchenwareManager>: View {
     let isItemDisabled: (Kitchenware) -> Bool
     let onToggleSelection: (Kitchenware) -> Void
     
-    let onLoadMoreKitchenwares: () -> Void
-    let onLoadMoreSearchedKitchenwares: () -> Void
+    let loadMoreKitchenwares: () -> Void
+    let loadMoreSearchedKitchenwares: () -> Void
     
     @EnvironmentObject private var manager: Manager
     
@@ -41,15 +41,9 @@ struct SelectableKitchenwareList<Manager: SelectableKitchenwareManager>: View {
             case .searched: searchedKitchenwareList
             case .error(let message): ErrorCurtain(message)
             case .empty:
-                Curtain(
+                CommonEmptyStateView(
                     title: "원하는 도구가 없어요.",
-                    description: "'\(searchKeyword)' 관련 도구를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요.",
-                    header: {
-                        Image("info-200")
-                            .resizable()
-                            .foregroundStyle(Color.gray15)
-                            .frame(width: 40, height: 40)
-                    }
+                    "'\(searchKeyword)' 관련 도구를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요."
                 )
             }
         }
@@ -57,7 +51,7 @@ struct SelectableKitchenwareList<Manager: SelectableKitchenwareManager>: View {
     
     private var searchedKitchenwareList: some View {
         ScrollView {
-            kitchenwareList(pagedKitchenwares: pagedSearchedKitchenwares, onLoadMore: onLoadMoreSearchedKitchenwares)
+            kitchenwareList(pagedKitchenwares: pagedSearchedKitchenwares, loadMoreKitchenwares: loadMoreSearchedKitchenwares)
         }
     }
     
@@ -69,7 +63,7 @@ struct SelectableKitchenwareList<Manager: SelectableKitchenwareManager>: View {
                     .foregroundStyle(Color.gray35)
                     .padding(.leading, 20)
                     .padding(.top, 20)
-                kitchenwareList(pagedKitchenwares: pagedKitchenwares, onLoadMore: onLoadMoreKitchenwares)
+                kitchenwareList(pagedKitchenwares: pagedKitchenwares, loadMoreKitchenwares: loadMoreKitchenwares)
             }
         }
     }
@@ -96,7 +90,7 @@ struct SelectableKitchenwareList<Manager: SelectableKitchenwareManager>: View {
         }
     }
     
-    private func kitchenwareList(pagedKitchenwares: Paged<Kitchenware>, onLoadMore: @escaping () -> Void) -> some View {
+    private func kitchenwareList(pagedKitchenwares: Paged<Kitchenware>, loadMoreKitchenwares: @escaping () -> Void) -> some View {
         LazyVStack(spacing: 0) {
             ForEach(pagedKitchenwares.items) { kitchenware in
                 SelectableKitchenwareItem<Manager>(
@@ -107,7 +101,7 @@ struct SelectableKitchenwareList<Manager: SelectableKitchenwareManager>: View {
                 )
             }
             if !pagedKitchenwares.isEmpty {
-                ListPageTailView(hasNextPage: pagedKitchenwares.hasNextPage, onAppearAction: onLoadMore)
+                ListPageTailView(hasNextPage: pagedKitchenwares.hasNextPage, onAppear: loadMoreKitchenwares)
             }
         }
         .padding(.vertical, 16)

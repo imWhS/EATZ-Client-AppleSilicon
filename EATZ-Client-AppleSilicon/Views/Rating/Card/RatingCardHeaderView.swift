@@ -23,7 +23,7 @@ struct RatingCardHeaderView: View {
     var body: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 8) {
-                ProfileImageView(imageUrl: imageUrl, size: 32)
+                ProfileImageView(imageUrl, size: 32)
                 Text(username)
                     .font(.system(size: 12, weight: .semibold))
             }

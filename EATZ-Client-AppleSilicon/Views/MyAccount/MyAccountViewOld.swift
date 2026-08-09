@@ -41,7 +41,7 @@ struct MyAccountViewOld: View {
                 switch viewModel.viewState {
                 case .loading: LoadingCurtain(title: "회원님의 정보를 불러오고 있어요...")
                 case .loaded: loadedView
-                case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
+                case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
                 case .unauthorized: MyAccountUnauthorizedView(onLogIn: viewModel.requireAuthView)
                 }
             }
@@ -165,7 +165,7 @@ struct MyAccountUnauthorizedView: View {
                     Text("이메일로 시작").frame(maxWidth: .infinity)
                 }
                 .buttonStyle(CapsuleLargeButtonStyle(appearance: .primary))
-                Text("로그인 또는 가입 후 계속 진행할 수 있어요.")
+                Text("로그인 또는 가입하면 계속 진행할 수 있어요.")
                     .font(.system(size: 12, weight: .medium))
                     .multilineTextAlignment(.center)
                     .foregroundStyle(Color.gray35)

@@ -12,7 +12,7 @@ struct SignUpCreateUsernameView: View {
     @FocusState private var isUsernameFocused: Bool
     @State private var isPasswordVisible: Bool = false
     
-    private var navigationTitle: String = "사용자 이름 설정"
+    private var navigationTitleLabel: String = "사용자 이름 설정"
     
     var body: some View {
         ScrollView {
@@ -27,7 +27,7 @@ struct SignUpCreateUsernameView: View {
             }
         }
         .background(Color.backgroundPrimary)
-        .navigationTitle(navigationTitle)
+        .navigationTitle(navigationTitleLabel)
         .toolbar {
             titleToolbarItem
             doneToolbarItem
@@ -36,7 +36,7 @@ struct SignUpCreateUsernameView: View {
     
     private var header: some View {
         VStack(spacing: 12) {
-            Text(navigationTitle)
+            Text(navigationTitleLabel)
                 .font(.system(size: 30, weight: .bold))
             Text(viewModel.email)
                 .font(.system(size: 12, weight: .medium))
@@ -80,7 +80,7 @@ struct SignUpCreateUsernameView: View {
     
     private var titleToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            Text(navigationTitle)
+            Text(navigationTitleLabel)
                 .opacity(0)
         }
     }

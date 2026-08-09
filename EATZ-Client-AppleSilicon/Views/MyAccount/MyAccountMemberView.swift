@@ -29,7 +29,7 @@ struct MyAccountMemberView: View {
                 switch viewModel.state {
                 case .initialLoading: LoadingCurtain(title: "회원님의 계정 정보를 불러오고 있어요...")
                 case .content: contentView
-                case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
+                case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
                 }
             }
             .background(Color.backgroundPrimary)

@@ -11,6 +11,8 @@ struct ExploreKitchenwaresView: View {
     @StateObject private var viewModel = ExploreKitchenwaresViewModel()
     @Environment(\.dismiss) private var dismiss
     
+    private var navigationTitleLabel: String = "도구 둘러보기"
+    
     var body: some View {
         mainContent
             .alert(item: $viewModel.alert) { $0.alert }
@@ -31,26 +33,19 @@ struct ExploreKitchenwaresView: View {
                         pagedSearchedKitchenwares: viewModel.pagedSearchedKitchenwares,
                         searchKeyword: $viewModel.searchKeyword,
                         searchState: viewModel.searchState,
-                        onItemAction: viewModel.handleItemAction,
+                        itemAction: viewModel.handleItemAction,
                         showNavigationBarTitle: $viewModel.showNavigationBarTitle,
-                        onLoadMoreKitchenwares: viewModel.loadMoreKitchenwares,
-                        onLoadMoreSearchedKitchenwares: viewModel.loadMoreSearchedIngredients
+                        loadMoreKitchenwares: viewModel.loadMoreKitchenwares,
+                        loadMoreSearchedKitchenwares: viewModel.loadMoreSearchedIngredients
                     )
                     .environmentObject(viewModel)
                 case .unauthorized: CommonUnauthorizedStateView()
                 case .error(let message): ErrorCurtain(message)
                 case .empty:
-                    Curtain(
-                        title: "보여드릴 도구가 없어요.",
-                        header: {
-                            Image("info-200")
-                                .resizable()
-                                .foregroundStyle(Color.gray15)
-                                .frame(width: 40, height: 40)
-                        }
-                    )
+                    CommonEmptyStateView(title: "보여드릴 도구가 없어요.")
                 }
             }
+            .navigationTitle(navigationTitleLabel)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 titleToolbarItem
@@ -61,7 +56,7 @@ struct ExploreKitchenwaresView: View {
     
     private var titleToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            Text("도구 둘러보기")
+            Text(navigationTitleLabel)
                 .font(.headline)
                 .opacity(viewModel.showNavigationBarTitle ? 1 : 0)
         }

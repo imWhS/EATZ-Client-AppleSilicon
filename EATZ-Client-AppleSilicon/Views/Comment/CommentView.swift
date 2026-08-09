@@ -18,7 +18,9 @@ struct CommentView: View {
     
     var body: some View {
         Group {
-            if case .loaded = viewModel.viewState {
+            if case .loaded = viewModel.viewState,
+               !viewModel.pagedCommentsWithPermissions.isEmpty
+            {
                 ScrollView {
                     commentView
                 }
@@ -28,7 +30,7 @@ struct CommentView: View {
             }
         }
         .safeAreaInset(edge: .bottom) {
-            if viewModel.shouldShowEditor {
+            if viewModel.presentEditor {
                 CommentEditor(authManager: authManager, viewModel: viewModel)
             }
         }
@@ -58,30 +60,27 @@ struct CommentView: View {
             recipeEssentialWrapperView
             
             switch viewModel.viewState {
-            case .empty:
-                Curtain(
-                    title: "보여드릴 댓글이 없어요.",
-                    description: "아직 아무도 이 레시피에 댓글을 남기지 않았어요.",
-                    header: {
-                        Image("comment-40")
-                            .foregroundStyle(Color.gray15)
-                    })
-            case .initialLoading:
-                LoadingCurtain(title: "레시피에 달린 댓글 목록을 불러오고 있어요...")
-            case .loaded:
-                CommentList(
-                    pagedCommentsWithPermissions: viewModel.pagedCommentsWithPermissions,
-                    onLoadNextPage: viewModel.loadMoreComments,
-                    onBlock: viewModel.handleBlockUser,
-                    onReport: viewModel.handleReportComment,
-                    onUpdate: viewModel.startEditingComment,
-                    onDelete: viewModel.handleDelete
-                )
-            case .error(let message):
-                ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
+            case .initialLoading: LoadingCurtain(title: "레시피에 달린 댓글 목록을 불러오고 있어요...")
+            case .loaded: contentView
+            case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
             }
         }
-        
+    }
+    
+    @ViewBuilder
+    private var contentView: some View {
+        if viewModel.pagedCommentsWithPermissions.isEmpty {
+            CommonEmptyStateView(
+                title: "보여드릴 댓글이 없어요.",
+                "아직 아무도 이 레시피에 댓글을 남기지 않았어요.",
+                "comment-40"
+            )
+        } else {
+            CommentList(
+                viewModel.pagedCommentsWithPermissions,
+                viewModel.loadMoreComments,
+                viewModel.handleAction)
+        }
     }
     
     @ViewBuilder

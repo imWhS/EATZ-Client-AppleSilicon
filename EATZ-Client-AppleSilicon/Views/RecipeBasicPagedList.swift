@@ -50,7 +50,7 @@ struct RecipeBasicPagedList<EmptyViewContent: View, MenuContent: View>: View {
             case .loading: LoadingCurtain(title: "레시피 목록을 불러오고 있어요...")
             case .loaded: mainContent
             case .empty: emptyView()
-            case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
+            case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
             case .unauthorized: CommonUnauthorizedStateView()
             }
         }
@@ -61,7 +61,7 @@ struct RecipeBasicPagedList<EmptyViewContent: View, MenuContent: View>: View {
             RecipeBasicList(
                 recipes,
                 hasNextPage: viewModel.pagedRecipes.hasNextPage,
-                onLoadMore: viewModel.loadNextPage,
+                loadMore: viewModel.loadNextPage,
                 onRecipeTapped: { recipeId in router.push(.recipe(id: recipeId)) },
                 headerContent: listHeader,
                 menuContent: menuContent

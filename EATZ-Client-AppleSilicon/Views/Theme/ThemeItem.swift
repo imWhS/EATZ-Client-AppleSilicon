@@ -23,17 +23,17 @@ private struct PressedListItemStyle: ButtonStyle {
 struct ThemeItem: View {
     let theme: TagTheme
     let showDivider: Bool
-    let onAction: () -> Void
+    let action: () -> Void
     
-    init(theme: TagTheme, showDivider: Bool = true, onAction: @escaping () -> Void) {
+    init(_ theme: TagTheme, _ showDivider: Bool = true, _ action: @escaping () -> Void) {
         self.theme = theme
         self.showDivider = showDivider
-        self.onAction = onAction
+        self.action = action
     }
     
     var body: some View {
         VStack(spacing: 0) {
-            Button (action: onAction) {
+            Button (action: action) {
                 HStack(alignment: .center, spacing: 12) {
                     emojiView
                     themeNameText
@@ -71,18 +71,3 @@ struct ThemeItem: View {
             .padding(.vertical, 14)
     }
 }
-
-#Preview {
-    ThemeItem(
-        theme: TagTheme(
-            id: 0,
-            name: "한식",
-            keyword: "",
-            emoji: "🇰🇷",
-            description: "",
-            createdAt: .now,
-            updatedAt: .now),
-        onAction: { print("item tapped!") }
-    )
-}
-

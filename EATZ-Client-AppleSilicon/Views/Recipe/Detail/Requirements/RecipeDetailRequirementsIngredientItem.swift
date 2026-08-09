@@ -10,7 +10,17 @@ import SwiftUI
 struct RecipeDetailRequirementsIngredientItem: View {
     let isLoggedIn: Bool
     let ingredient: RecipeIngredient
-    let onAction: (RecipeDetailRequirementsAction) -> Void
+    let action: (RecipeDetailRequirementsAction) -> Void
+    
+    init(
+        _ isLoggedIn: Bool,
+        _ ingredient: RecipeIngredient,
+        _ action: @escaping (RecipeDetailRequirementsAction) -> Void)
+    {
+        self.isLoggedIn = isLoggedIn
+        self.ingredient = ingredient
+        self.action = action
+    }
     
     var body: some View {
         IngredientRow(ingredient,
@@ -55,10 +65,10 @@ struct RecipeDetailRequirementsIngredientItem: View {
     }
     
     private func handleToggleLike() -> Void {
-        onAction(.toggleLikeIngredient(id: ingredient.id))
+        action(.toggleLikeIngredient(id: ingredient.id))
     }
     
     private func handleTogglePantry() -> Void {
-        onAction(.toggleIngredientAddition(id: ingredient.id))
+        action(.toggleIngredientAddition(id: ingredient.id))
     }
 }

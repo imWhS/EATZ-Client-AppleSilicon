@@ -77,34 +77,45 @@ struct ExploreRecipeSearchView: View {
     
     @ViewBuilder
     private var stateView: some View {
-        ExploreFiltersSection(filters, onAction: onFilter)
-        
-        switch viewModel.viewState {
-        case .idle: Curtain(
-            title: "\(tag?.name ?? "모든") 레시피 목록에서 검색",
-            description: "원하는 레시피의 키워드를 입력하세요.",
-            header: {
-                Image("search-200")
-                    .resizable()
-                    .foregroundStyle(Color.gray15)
-                    .frame(width: 40, height: 40)
+        VStack(spacing: 0) {
+            ExploreFiltersSection(filters, onAction: onFilter)
+            
+            switch viewModel.viewState {
+            case .idle:
+                Curtain(
+                    title: "\(tag?.name ?? "모든") 레시피 목록에서 검색",
+                    description: "원하는 레시피의 키워드를 입력하세요.",
+                    header: {
+                        Image("search-200")
+                            .resizable()
+                            .foregroundStyle(Color.gray15)
+                            .frame(width: 40, height: 40)
+                    }
+                )
+                .transition(.opacity)
+            case .initialLoading:
+                LoadingCurtain(title: "레시피를 찾고 있어요...")
+                    .transition(.opacity)
+            case .loaded:
+                ExploreRecipeGridList(
+                    pagedRecipes: viewModel.pagedRecipes,
+                    onTappedRecipe: onTappedRecipe,
+                    onTappedItemAction: viewModel.handleItem,
+                    loadMore: viewModel.loadMoreRecipes,
+                    selectableSortOptions: selectableSortOptions,
+                    sort: $sort
+                )
+                .transition(.opacity)
+            case .empty(let keyword):
+                CommonEmptyStateView(
+                    title: "원하는 레시피가 없어요.",
+                    "'\(keyword)' 관련 레시피를 하나도 찾지 못했어요.\n다른 검색어를 사용하거나, 필터 옵션을 변경해보세요.")
+                .transition(.opacity)
+            case .error(let message):
+                ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
+                    .transition(.opacity)
             }
-            )
-        case .initialLoading: LoadingCurtain(title: "레시피를 찾고 있어요...")
-        case .loaded:
-            ExploreRecipeGridList(
-                pagedRecipes: viewModel.pagedRecipes,
-                onTappedRecipe: onTappedRecipe,
-                onTappedItemAction: viewModel.handleItem,
-                loadMore: viewModel.loadMoreRecipes,
-                selectableSortOptions: selectableSortOptions,
-                sort: $sort)
-        case .empty(let keyword):
-            CommonEmptyStateView(
-                title: "원하는 레시피가 없어요.",
-                "'\(keyword)' 관련 레시피를 하나도 찾지 못했어요.\n다른 검색어를 사용하거나, 필터 옵션을 변경해보세요.")
-        case .error(let message):
-            ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
         }
+        .animation(.easeInOut(duration: 0.3), value: viewModel.viewState)
     }
 }

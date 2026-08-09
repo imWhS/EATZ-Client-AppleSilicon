@@ -42,12 +42,14 @@ struct ExploreRecipeGridList: View {
                         recipe,
                         cardWidth: cellWidth,
                         onTappedRecipe: onTappedRecipe,
-                        action: onTappedItemAction)
+                        action: onTappedItemAction
+                    )
+                    .transition(.scale(scale: 0.8).combined(with: .opacity))
                 }
             }
+            .animation(.spring(response: 0.4, dampingFraction: 0.8), value: pagedRecipes.items)
             .padding(.horizontal, horizontalPadding)
             .padding(.vertical, rowSpacing)
-            .animation(.spring(response: 0.4, dampingFraction: 0.8), value: pagedRecipes.items)
             
             ListPageTailView(hasNextPage: pagedRecipes.hasNextPage, onAppear: loadMore)
         }

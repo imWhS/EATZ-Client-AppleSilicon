@@ -28,7 +28,7 @@ struct DestinationView: View {
         case .checklist(let startDate, let endDate):
             ChecklistView(dateRange: (startDate, endDate))
         case .cookable(let searchCriteria):
-            CookableRecipeListView(searchCriteria: searchCriteria)
+            CookableRecipeList(searchCriteria: searchCriteria)
         case .myRecipes:
             MyRecipesView()
         case .savedRecipes:

@@ -42,7 +42,7 @@ struct ManagementProfileView: View {
                 switch viewModel.viewState {
                 case .initialLoading: LoadingCurtain(title: "회원님의 프로필 정보를 불러오고 있어요...")
                 case .content: contentView
-                case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
+                case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
                 case .unauthorized: CommonUnauthorizedStateView()
                 }
             }
@@ -121,7 +121,7 @@ struct ManagementProfileView: View {
                 "등록한 사진이 없다면, 기본 프로필 사진이 보여져요."
             ]
         ) {
-            ProfileImageView(imageUrl: viewModel.imageUrl, size: 140)
+            ProfileImageView(viewModel.imageUrl, size: 140)
         } actions: {
             HStack {
                 Spacer()
@@ -208,8 +208,7 @@ private struct ManagementProfileSection<Content: View, Actions: View>: View {
                     if let guides = guides {
                         GuideView(guides: guides)
                     }
-                    actions
-                        .padding(.horizontal, 20)
+                    actions.padding(.horizontal, 20)
                 }
             }
             

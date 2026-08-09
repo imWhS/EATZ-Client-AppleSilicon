@@ -47,7 +47,7 @@ struct PlannerRecipePicker: View {
             switch viewModel.viewState {
             case .idle: mainContent
             case .unauthorized: CommonUnauthorizedStateView()
-            case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
+            case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
             }
         }
     }
@@ -79,11 +79,12 @@ struct PlannerRecipePicker: View {
     private var savedRecipeListSection: some View {
         switch viewModel.savedRecipesState {
         case .loading: LoadingCurtain(title: "저장한 레시피 목록을 불러오고 있어요...")
-        case .loaded: PlannerRecipePickerRecipeList(
-            headerTitle: "최근에 저장한 레시피",
-            pagedRecipes: viewModel.pagedSavedRecipes,
-            onRecipeTapped: viewModel.addToPlanner,
-            onLoadMore: viewModel.loadMoreSavedRecipes)
+        case .loaded:
+            PlannerRecipePickerRecipeList(
+                headerTitle: "최근에 저장한 레시피",
+                pagedRecipes: viewModel.pagedSavedRecipes,
+                onRecipeTapped: viewModel.addToPlanner,
+                loadMore: viewModel.loadMoreSavedRecipes)
         case .empty:
             Curtain(
             title: "저장한 레시피가 없어요.",
@@ -116,17 +117,11 @@ struct PlannerRecipePicker: View {
                 headerTitle: "'\(viewModel.keyword)' 관련 레시피",
                 pagedRecipes: viewModel.pagedSearchedRecipes,
                 onRecipeTapped: viewModel.addToPlanner,
-                onLoadMore: viewModel.loadMoreSearchedRecipes)
+                loadMore: viewModel.loadMoreSearchedRecipes)
             case .empty:
-                Curtain(
+                CommonEmptyStateView(
                     title: "원하는 레시피가 없어요.",
-                    description: "'\(viewModel.keyword)' 관련 레시피를 하나도 찾지 못했어요.\n다른 키워드로 다시 검색해보세요.",
-                    header: {
-                        Image("info-200")
-                            .resizable()
-                            .foregroundStyle(Color.gray15)
-                            .frame(width: 40, height: 40)
-                    }
+                    "'\(viewModel.keyword)' 관련 레시피를 하나도 찾지 못했어요.\n다른 키워드로 다시 검색해보세요."
                 )
             case .error(let message): ErrorCurtain(message)
             }
@@ -144,7 +139,7 @@ private struct PlannerRecipePickerRecipeList: View {
     let headerTitle: String
     let pagedRecipes: Paged<RecipeBasic>
     let onRecipeTapped: (Int64) -> Void
-    let onLoadMore: () -> Void
+    let loadMore: () -> Void
     
     private var recipes: [RecipeBasic] { pagedRecipes.items }
     
@@ -153,7 +148,7 @@ private struct PlannerRecipePickerRecipeList: View {
             RecipeBasicList(
                 recipes,
                 hasNextPage: pagedRecipes.hasNextPage,
-                onLoadMore: onLoadMore,
+                loadMore: loadMore,
                 onRecipeTapped: { recipeId in onRecipeTapped(recipeId) },
                 headerContent: listHeader
             )

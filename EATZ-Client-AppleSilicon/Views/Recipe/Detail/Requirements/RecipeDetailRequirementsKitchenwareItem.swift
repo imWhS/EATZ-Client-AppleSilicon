@@ -11,7 +11,17 @@ import Kingfisher
 struct RecipeDetailRequirementsKitchenwareItem: View {
     let kitchenware: RecipeKitchenware
     let isLoggedIn: Bool
-    let onAction: (RecipeDetailRequirementsAction) -> Void
+    let action: (RecipeDetailRequirementsAction) -> Void
+    
+    init(
+        _ kitchenware: RecipeKitchenware,
+        _ isLoggedIn: Bool,
+        _ action: @escaping (RecipeDetailRequirementsAction) -> Void)
+    {
+        self.kitchenware = kitchenware
+        self.isLoggedIn = isLoggedIn
+        self.action = action
+    }
     
     var body: some View {
         KitchenwareRow(kitchenware, style: .outlined, isEnabled: isLoggedIn, icon, trailing: trailing)
@@ -50,6 +60,6 @@ struct RecipeDetailRequirementsKitchenwareItem: View {
     }
     
     private func handleTogglePantry() -> Void {
-        onAction(.toggleKitchenwareAddition(id: kitchenware.id))
+        action(.toggleKitchenwareAddition(id: kitchenware.id))
     }
 }

@@ -34,7 +34,7 @@ struct UserBlocklistMemberView: View {
         Group {
             switch viewModel.state {
             case .initialLoading: LoadingCurtain(title: "회원님이 차단하신 사용자 목록을 불러오고 있어요...")
-            case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
+            case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
             case .content(let pagedBlocklist): getContentView(pagedBlocklist)
             }
         }
@@ -101,7 +101,7 @@ struct UserBlocklistMemberView: View {
                     
                     ListPageTailView(
                         hasNextPage: pagedBlocklist.hasNextPage,
-                        onAppearAction: viewModel.loadMoreBlocklist
+                        onAppear: viewModel.loadMoreBlocklist
                     )
                 }
             }
@@ -132,7 +132,7 @@ private struct BlockedUserRow: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack(alignment: .center, spacing: imageLabelSpacing) {
-                ProfileImageView(imageUrl: user.imageUrl, size: profileImageSize)
+                ProfileImageView(user.imageUrl, size: profileImageSize)
                 
                 HStack(alignment: .center) {
                     Text(user.username)

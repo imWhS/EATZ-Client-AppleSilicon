@@ -9,11 +9,11 @@ import SwiftUI
 
 struct ExploreFiltersSection: View {
     let filters: ExploreFilters
-    var onAction: (ExploreSheet) -> Void
+    var action: (ExploreSheet) -> Void
     
     init(_ filters: ExploreFilters, onAction: @escaping (ExploreSheet) -> Void) {
         self.filters = filters
-        self.onAction = onAction
+        self.action = onAction
     }
     
     private var totalTimeLabel: String {
@@ -48,12 +48,12 @@ struct ExploreFiltersSection: View {
     var body: some View {
         HStack(alignment: .center) {
                 ExploreFilterButton(totalTimeLabel, "최대 소요 시간") {
-                    onAction(.totalTimePicker)
+                    action(.totalTimePicker)
                 }
                 VerticalDivider(padding: 0)
                     .frame(maxHeight: 38)
                 ExploreFilterButton(servingsLabel, "1회 제공량") {
-                    onAction(.servingsPicker)
+                    action(.servingsPicker)
                 }
             }
             .padding(.horizontal, 20)

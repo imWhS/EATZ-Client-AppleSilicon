@@ -15,7 +15,7 @@ struct ExploreRecipeItem: View {
     let recipe: ExploreRecipe
     let cardWidth: CGFloat
     let onTappedRecipe: (ExploreRecipe) -> Void
-    let onAction: (ExploreRecipe, ExploreRecipeItemAction) -> Void
+    let action: (ExploreRecipe, ExploreRecipeItemAction) -> Void
     
     @State private var timerTask: Task<Void, Never>?
     
@@ -23,11 +23,11 @@ struct ExploreRecipeItem: View {
         _ recipe: ExploreRecipe,
         cardWidth: CGFloat,
         onTappedRecipe: @escaping (ExploreRecipe) -> Void,
-        onAction: @escaping (ExploreRecipe, ExploreRecipeItemAction) -> Void) {
+        action: @escaping (ExploreRecipe, ExploreRecipeItemAction) -> Void) {
         self.recipe = recipe
         self.cardWidth = cardWidth
         self.onTappedRecipe = onTappedRecipe
-        self.onAction = onAction
+        self.action = action
     }
     
     var body: some View {
@@ -38,15 +38,15 @@ struct ExploreRecipeItem: View {
                         id: recipe.id,
                         isSaved: recipe.savedByUser,
                         imageUrlString: recipe.imageUrl,
-                        width: cardWidth, onSaveTapped: { id in onAction(recipe, .save)}
+                        width: cardWidth, onSaveTapped: { id in action(recipe, .save)}
                     )
-                    ExploreItemDetailView(recipe: recipe, onAction: onAction)
+                    ExploreItemDetailView(recipe: recipe, action: action)
                 }
                 .clipped()
                 .cornerRadius(16)
             }
             .buttonStyle(ListItemButtonStyle())
-            ExploreListItemBottomView(recipe: recipe, isCommentEnabled: recipe.commentEnabled, onAction: onAction)
+            ExploreListItemBottomView(recipe: recipe, isCommentEnabled: recipe.commentEnabled, action: action)
         }
         .frame(width: cardWidth)
         .transition(.opacity.combined(with: .scale(scale: 0.95)))
@@ -55,7 +55,7 @@ struct ExploreRecipeItem: View {
 
 private struct ExploreItemDetailView: View {
     let recipe: ExploreRecipe
-    let onAction: (ExploreRecipe, ExploreRecipeItemAction) -> Void
+    let action: (ExploreRecipe, ExploreRecipeItemAction) -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -88,12 +88,12 @@ private struct ExploreItemDetailView: View {
     private var actionMenu: some View {
         Menu {
             Button {
-                onAction(recipe, .addToPlanner)
+                action(recipe, .addToPlanner)
             } label: {
                 Label("플래너에 추가", systemImage: "plus.circle")
             }
             Button {
-                onAction(recipe, .report)
+                action(recipe, .report)
             } label: {
                 Label("신고", systemImage: "exclamationmark.bubble")
             }
@@ -108,7 +108,7 @@ private struct ExploreItemDetailView: View {
 private struct ExploreListItemBottomView: View {
     let recipe: ExploreRecipe
     let isCommentEnabled: Bool
-    let onAction: (ExploreRecipe, ExploreRecipeItemAction) -> Void
+    let action: (ExploreRecipe, ExploreRecipeItemAction) -> Void
 
     private var isInitialCommentDisabled: Bool {
         recipe.commentCount == 0 && !isCommentEnabled
@@ -129,12 +129,12 @@ private struct ExploreListItemBottomView: View {
             return bottomCountButton(
                 imageName: "like-filled-18",
                 count: recipe.likedCount,
-                action: { onAction(recipe, .like) })
+                action: { action(recipe, .like) })
         } else {
             return bottomCountButton(
                 imageName: "like-stroked-18",
                 count: recipe.likedCount,
-                action: { onAction(recipe, .like) }
+                action: { action(recipe, .like) }
             )
         }
     }
@@ -144,7 +144,7 @@ private struct ExploreListItemBottomView: View {
             imageName: "comment-18",
             count: recipe.commentCount,
             isDisabled: isInitialCommentDisabled,
-            action: isInitialCommentDisabled ? {} : { onAction(recipe, .comment) })
+            action: isInitialCommentDisabled ? {} : { action(recipe, .comment) })
     }
     
     private func bottomCountButton(imageName: String, count: Int, isDisabled: Bool = false, action: @escaping () -> Void) -> some View {

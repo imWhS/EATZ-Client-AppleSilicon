@@ -19,22 +19,16 @@ struct MyKitchenwarePantryView: View {
             case .loaded:
                 MyKitchenwarePantryList(
                     pagedKitchenwares: viewModel.pagedKitchenwares,
-                    onLoadMore: viewModel.loadMoreKitchenwares,
+                    loadMore: viewModel.loadMoreKitchenwares,
                     onClear: viewModel.handleClearPantry,
-                    onAction: viewModel.handleItemAction
+                    action: viewModel.handleItemAction
                 )
             case .empty:
-                Curtain(
+                CommonEmptyStateView(
                     title: "보관하고 있는 도구가 없어요.",
-                    description: "보관함에 아무 도구를 추가하지 않았어요.",
-                    header: {
-                        Image("info-200")
-                            .resizable()
-                            .foregroundStyle(Color.gray15)
-                            .frame(width: 40, height: 40)
-                    }
+                    "보관함에 아무 도구를 추가하지 않았어요."
                 )
-            case .error(let message): ErrorCurtain(message, onRetry: viewModel.prepareDataIfNeeded)
+            case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
             case .unauthorized: CommonUnauthorizedStateView()
             }
         }
@@ -69,9 +63,9 @@ struct MyKitchenwarePantryView: View {
 
 private struct MyKitchenwarePantryList: View {
     let pagedKitchenwares: Paged<Kitchenware>
-    let onLoadMore: () -> Void
+    let loadMore: () -> Void
     let onClear: () -> Void
-    let onAction: (KitchenwareItemAction) -> Void
+    let action: (KitchenwareItemAction) -> Void
     
     private var kitchenwares: [Kitchenware] { pagedKitchenwares.items }
     
@@ -112,9 +106,9 @@ private struct MyKitchenwarePantryList: View {
     private var listSection: some View {
         LazyVStack(spacing: 8) {
             ForEach(kitchenwares) { kitchenware in
-                KitchenwareItem(kitchenware, onAction: onAction)
+                KitchenwareItem(kitchenware, action)
             }
-            ListPageTailView(hasNextPage: pagedKitchenwares.hasNextPage, onAppearAction: onLoadMore)
+            ListPageTailView(hasNextPage: pagedKitchenwares.hasNextPage, onAppear: loadMore)
         }
     }
 }

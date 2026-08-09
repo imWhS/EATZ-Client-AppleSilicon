@@ -10,11 +10,10 @@ import SwiftUI
 struct ThemeFeaturedItem: View {
     let theme: TagTheme
     let width: CGFloat
-//    let height: CGFloat
-    let onAction: () -> Void
+    let action: () -> Void
     
     var body: some View {
-        Button (action: onAction) {
+        Button (action: action) {
             VStack(alignment: .leading, spacing: 4) {
                 if let emoji = theme.emoji, !emoji.isEmpty {
                     Text(emoji)
@@ -49,7 +48,6 @@ struct ThemeFeaturedItem: View {
             createdAt: .now,
             updatedAt: .now),
         width: 120,
-//        height: 74,
-        onAction: {print("item tapped!")}
+        action: {print("item tapped!")}
     )
 }

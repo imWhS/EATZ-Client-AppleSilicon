@@ -40,17 +40,17 @@ struct RecipeRequirementContentView: View {
                     headerSection
                     if !kitchenwares.isEmpty {
                         RecipeDetailRequirementsKitchenwareSection(
-                            isLoggedIn: isMember,
-                            kitchenwares: kitchenwares,
-                            missingKitchenwareCount: missingKitchenwareCount,
-                            onAction: onRequirementsAction)
+                            isMember,
+                            kitchenwares,
+                            missingKitchenwareCount,
+                            onRequirementsAction)
                     }
                     if !ingredients.isEmpty {
                         RecipeDetailRequirementsIngredientSection(
-                            isLoggedIn: isMember,
-                            ingredients: ingredients,
-                            missingIngredientCount: missingIngredientCount,
-                            onAction: onRequirementsAction)
+                            isMember,
+                            ingredients,
+                            missingIngredientCount,
+                            onRequirementsAction)
                     }
                     
                     if kitchenwares.isEmpty && ingredients.isEmpty {
@@ -83,12 +83,12 @@ struct RecipeRequirementContentView: View {
     private var recipeRequirementsContentHeader: some View {
         switch cookability {
         case .cookable:
-            RecipeDetailRequirementsHeaderCookable(onShowRecipeTapped: onShowRecipeTapped)
+            RecipeDetailRequirementsHeaderCookable(onShowRecipeTapped)
         case .uncookable(let missingIngredientCount, let missingKitchenwareCount):
             RecipeDetailRequirementsHeaderUncookable(
-                missingKitchenwareCount: missingKitchenwareCount,
-                missingIngredientCount: missingIngredientCount,
-                onAddAllRequirements: onAddAllRequirements
+                missingKitchenwareCount,
+                missingIngredientCount,
+                onAddAllRequirements
             )
         }
     }

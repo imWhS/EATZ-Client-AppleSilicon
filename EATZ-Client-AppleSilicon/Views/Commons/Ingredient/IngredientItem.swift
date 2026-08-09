@@ -18,16 +18,16 @@ struct IngredientItem<Destination: View>: View {
     let ingredient: Ingredient
     let isLinkable: Bool
     let linkDestination: Destination?
-    let onAction: (IngredientItemAction) -> Void
+    let action: (IngredientItemAction) -> Void
     
     init(_ ingredient: Ingredient,
          isLinkable: Bool = false,
          linkDestination: Destination? = nil,
-         onAction: @escaping (IngredientItemAction) -> Void) {
+         action: @escaping (IngredientItemAction) -> Void) {
         self.ingredient = ingredient
         self.isLinkable = isLinkable
         self.linkDestination = linkDestination
-        self.onAction = onAction
+        self.action = action
     }
     
     var body: some View {
@@ -61,10 +61,10 @@ struct IngredientItem<Destination: View>: View {
     }
     
     private func handleToggleLike() -> Void {
-        ingredient.likedByUser ? onAction(.unlike(id: ingredient.id)) : onAction(.like(id: ingredient.id))
+        ingredient.likedByUser ? action(.unlike(id: ingredient.id)) : action(.like(id: ingredient.id))
     }
     
     private func handleTogglePantry() -> Void {
-        ingredient.ownedByUser ? onAction(.removeFromPantry(id: ingredient.id)) : onAction(.addToPantry(id: ingredient.id))
+        ingredient.ownedByUser ? action(.removeFromPantry(id: ingredient.id)) : action(.addToPantry(id: ingredient.id))
     }
 }

@@ -66,9 +66,9 @@ struct TagAdditionView: View {
             ExploreThemes(
                 featuredThemesState: viewModel.featuredThemesState,
                 pagedAllThemes: viewModel.pagedThemes,
-                onLoadMoreAllThemes: viewModel.loadMoreAllThemes,
-                onSelect: { tagTheme in viewModel.confirmSelection(.existing(tagTheme.name)) },
-                onRetry: viewModel.prepareDataIfNeeded)
+                loadMore: viewModel.loadMoreAllThemes,
+                onItemTapped: { tagTheme in viewModel.confirmSelection(.existing(tagTheme.name)) },
+                onRetryTapped: viewModel.prepareDataIfNeeded)
         }
         .scrollDismissesKeyboard(.interactively)
     }
@@ -85,15 +85,9 @@ struct TagAdditionView: View {
                 onLoadMore: viewModel.loadMoreSearchedTags
             )
         case .searchedEmpty(let keyword):
-            Curtain(
+            CommonEmptyStateView(
                 title: "원하는 태그가 없어요.",
-                description: "'\(keyword)' 관련 재료를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요.",
-                header: {
-                    Image("info-200")
-                        .resizable()
-                        .foregroundStyle(Color.gray15)
-                        .frame(width: 40, height: 40)
-                }
+                "'\(keyword)' 관련 재료를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요."
             )
         case .error(let message): ErrorCurtain(message)
         }

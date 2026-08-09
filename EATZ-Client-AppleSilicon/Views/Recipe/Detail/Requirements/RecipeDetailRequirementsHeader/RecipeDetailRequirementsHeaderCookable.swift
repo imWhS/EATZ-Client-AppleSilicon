@@ -10,6 +10,10 @@ import SwiftUI
 struct RecipeDetailRequirementsHeaderCookable: View {
     let onShowRecipeTapped: () -> Void
     
+    init(_ onShowRecipeTapped: @escaping () -> Void) {
+        self.onShowRecipeTapped = onShowRecipeTapped
+    }
+    
     var body: some View {
         contentView
         .padding(.horizontal, 20)

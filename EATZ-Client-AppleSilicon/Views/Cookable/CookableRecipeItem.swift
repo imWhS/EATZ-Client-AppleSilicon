@@ -15,7 +15,7 @@ enum CookableRecipeItemAction {
 struct CookableRecipeItem: View {
     let recipe: CookableRecipe
     let onTappedRecipe: (Int64) -> Void
-    let onAction: (CookableRecipe, CookableRecipeItemAction) -> Void
+    let action: (CookableRecipe, CookableRecipeItemAction) -> Void
     
     private let screenWidth: CGFloat = UIScreen.main.bounds.width
     private let horizontalPadding: CGFloat = 20
@@ -24,11 +24,11 @@ struct CookableRecipeItem: View {
     
     init(_ recipe: CookableRecipe,
          onTapItem: @escaping (Int64) -> Void,
-         onAction: @escaping (CookableRecipe, CookableRecipeItemAction) -> Void,
+         action: @escaping (CookableRecipe, CookableRecipeItemAction) -> Void,
          isPressed: Bool = false) {
         self.recipe = recipe
         self.onTappedRecipe = onTapItem
-        self.onAction = onAction
+        self.action = action
         self.isPressed = isPressed
     }
     
@@ -45,7 +45,7 @@ struct CookableRecipeItem: View {
                         isSaved: recipe.savedByUser,
                         imageUrlString: recipe.imageUrl,
                         width: width,
-                        onSaveTapped: { id in onAction(recipe, .save) }
+                        onSaveTapped: { id in action(recipe, .save) }
                     )
                     detailView
                 }
@@ -127,12 +127,12 @@ struct CookableRecipeItem: View {
     private var actionMenu: some View {
         Menu {
             Button {
-                onAction(recipe, .addToPlanner)
+                action(recipe, .addToPlanner)
             } label: {
                 Label("플래너에 추가", systemImage: "plus.circle")
             }
             Button {
-                onAction(recipe, .report)
+                action(recipe, .report)
             } label: {
                 Label("신고", systemImage: "exclamationmark.bubble")
             }

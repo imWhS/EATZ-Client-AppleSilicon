@@ -30,7 +30,7 @@ struct RatingViewN: View {
             case .content(let recipeEssential, let pagedRatings):
                 RatingContentView(authManager, viewModel, recipeEssential, pagedRatings, recipeId)
             case .error(let message):
-                ErrorCurtain(message, onRetry: { viewModel.load(for: recipeId, currentUser) })
+                ErrorCurtain(message, onRetryTapped: { viewModel.load(for: recipeId, currentUser) })
             }
         }
     }

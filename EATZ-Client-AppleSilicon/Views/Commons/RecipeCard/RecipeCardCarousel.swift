@@ -10,7 +10,7 @@ import Kingfisher
 
 struct RecipeCardCarousel: View {
     let recipes: [RecipeBasic]
-    let onAction: (Int64) -> Void
+    let action: (Int64) -> Void
 
     private let itemWidth: CGFloat = UIScreen.main.bounds.width
     private let horizontalPadding: CGFloat = 20
@@ -24,7 +24,7 @@ struct RecipeCardCarousel: View {
         ScrollView(.horizontal) {
             LazyHStack(spacing: itemSpacing) {
                 ForEach(recipes) { recipe in
-                    HorizontalRecipeCard(imageUrl: recipe.imageUrl ?? "", size: itemSize) { onAction(recipe.id) }
+                    HorizontalRecipeCard(imageUrl: recipe.imageUrl ?? "", size: itemSize) { action(recipe.id) }
                 }
             }
             .padding(.horizontal, horizontalPadding)

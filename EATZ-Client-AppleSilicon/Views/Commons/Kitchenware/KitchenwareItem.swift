@@ -15,12 +15,12 @@ enum KitchenwareItemAction {
 
 struct KitchenwareItem: View {
     let kitchenware: Kitchenware
-    let onAction: (KitchenwareItemAction) -> Void
+    let action: (KitchenwareItemAction) -> Void
     
     init(_ kitchenware: Kitchenware,
-         onAction: @escaping (KitchenwareItemAction) -> Void) {
+         _ action: @escaping (KitchenwareItemAction) -> Void) {
         self.kitchenware = kitchenware
-        self.onAction = onAction
+        self.action = action
     }
 
     var body: some View {
@@ -50,6 +50,6 @@ struct KitchenwareItem: View {
     }
     
     private func handleTogglePantry() -> Void {
-        kitchenware.ownedByUser ? onAction(.removeFromPantry(id: kitchenware.id)) : onAction(.addToPantry(id: kitchenware.id))
+        kitchenware.ownedByUser ? action(.removeFromPantry(id: kitchenware.id)) : action(.addToPantry(id: kitchenware.id))
     }
 }

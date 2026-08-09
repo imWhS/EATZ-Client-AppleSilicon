@@ -155,7 +155,7 @@ struct RecipeDetailInfoDescriptionView: View {
     
     private var authorSection: some View {
         HStack(spacing: 10) {
-            ProfileImageView(imageUrl: authorImageUrl, size: 40)
+            ProfileImageView(authorImageUrl, size: 40)
             VStack(alignment: .leading, spacing: 4) {
                 Text("작성자")
                     .font(.system(size: 12, weight: .medium))
@@ -183,7 +183,7 @@ struct RecipeDetailInfoAuthorViewN: View {
                 Group {
                     HStack(spacing: 20) {
                         HStack(spacing: 10) {
-                            ProfileImageView(imageUrl: recipe.author.imageUrl, size: 40)
+                            ProfileImageView(recipe.author.imageUrl, size: 40)
                             authorProfileLabeledValueView(
                                 username: recipe.author.username,
                                 createdAt: recipe.createdAt)
@@ -323,7 +323,7 @@ struct RecipeDetailInfoReactionView: View {
                             Spacer()
                             Text("아직 평가한 사람이 없어요.\n첫 평가를 등록해보세요.")
                                 .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(Color.gray20)
+                                .foregroundStyle(Color.gray35)
                         }
                     }
                 }
@@ -348,7 +348,7 @@ struct RecipeDetailInfoReactionView: View {
                             Spacer()
                             Text(commentGuideLabel)
                                 .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(Color.gray20)
+                                .foregroundStyle(Color.gray35)
                         }
                     }
                 }

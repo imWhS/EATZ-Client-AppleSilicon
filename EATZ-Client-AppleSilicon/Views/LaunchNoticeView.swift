@@ -21,7 +21,7 @@ struct LaunchNoticeView: View {
             VStack(spacing: 0) {
                 ScrollView {
                     MarkdownView(markdownContent)
-                        .padding(.vertical, 0)
+                        .padding(.vertical, 20)
                         .padding(.horizontal, 20)
                 }
                 VStack(spacing: 20) {

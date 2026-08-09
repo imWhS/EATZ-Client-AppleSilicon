@@ -27,16 +27,7 @@ struct KitchenwareAdditionView: View {
             case .loaded: mainContent
             case .unauthorized: CommonUnauthorizedStateView()
             case .error(let message): ErrorCurtain(message)
-            case .empty:
-                Curtain(
-                    title: "보여드릴 도구가 없어요.",
-                    header: {
-                        Image("info-200")
-                            .resizable()
-                            .foregroundStyle(Color.gray15)
-                            .frame(width: 40, height: 40)
-                    }
-                )
+            case .empty: CommonEmptyStateView(title: "보여드릴 도구가 없어요.")
             }
         }
     }
@@ -52,8 +43,8 @@ struct KitchenwareAdditionView: View {
                     isItemSelected: { item in viewModel.isSelected(item.id) },
                     isItemDisabled: { item in item.ownedByUser },
                     onToggleSelection: viewModel.toggleSelection,
-                    onLoadMoreKitchenwares: viewModel.loadMoreKitchenwares,
-                    onLoadMoreSearchedKitchenwares: viewModel.loadMoreSearchedKitchenwares)
+                    loadMoreKitchenwares: viewModel.loadMoreKitchenwares,
+                    loadMoreSearchedKitchenwares: viewModel.loadMoreSearchedKitchenwares)
                 .navigationTitle("도구")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {

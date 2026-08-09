@@ -62,7 +62,7 @@ struct MyAccountHeader: View {
     
     private var leftSideProfileImageView: some View {
         HStack {
-            ProfileImageView(imageUrl: imageUrl, size: 80)
+            ProfileImageView(imageUrl, size: 80)
         }
         .padding(.leading, 20)
     }

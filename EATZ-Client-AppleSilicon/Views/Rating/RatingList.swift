@@ -11,7 +11,7 @@ struct RatingList: View {
     @State private var timerTask: Task<Void, Never>?
     
     let pagedRatings: Paged<RatingWithPermissions>
-    let onLoadMore: () -> Void
+    let loadMore: () -> Void
     let onDelete: (RatingDeleteActionType) -> Void
     let onBlock: (UserEssential) -> Void
     let onReport: (Rating) -> Void
@@ -32,7 +32,7 @@ struct RatingList: View {
             }
             
             if !pagedRatings.isEmpty {
-                ListPageTailView(hasNextPage: pagedRatings.hasNextPage, onAppearAction: onLoadMore)
+                ListPageTailView(hasNextPage: pagedRatings.hasNextPage, onAppear: loadMore)
                     .id(pagedRatings.items.count)
             }
         }

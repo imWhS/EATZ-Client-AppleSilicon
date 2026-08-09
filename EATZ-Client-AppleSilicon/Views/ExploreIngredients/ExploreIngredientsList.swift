@@ -32,17 +32,9 @@ struct ExploreIngredientsList: View {
             case .searching: LoadingCurtain(title: "재료를 찾고 있어요...")
             case .searched: searchResultView
             case .error(let message): ErrorCurtain(message)
-            case .empty:
-                Curtain(
-                    title: "원하는 재료가 없어요.",
-                    description: "'\(viewModel.searchKeyword)' 관련 재료를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요.",
-                    header: {
-                        Image("info-200")
-                            .resizable()
-                            .foregroundStyle(Color.gray15)
-                            .frame(width: 40, height: 40)
-                    }
-                )
+            case .empty: CommonEmptyStateView(
+                title: "원하는 재료가 없어요.",
+                "'\(viewModel.searchKeyword)' 관련 재료를 하나도 찾지 못했어요.\n다른 검색어를 사용해보세요.")
             }
         }
     }
@@ -64,26 +56,14 @@ struct ExploreIngredientsList: View {
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(Color.gray35)
             }
-            .padding(20)
+            .padding(10)
             HorizontalDivider()
         }
     }
     
     private var searchResultView: some View {
         ScrollView {
-            LazyVStack(spacing: 8) {
-                ForEach(pagedSearchedIngredients.items) { ingredient in
-                    IngredientItem(
-                        ingredient,
-                        isLinkable: true,
-                        linkDestination: ExploreIngredientsChildList(parentId: ingredient.id, parentName: ingredient.name),
-                        onAction: viewModel.handleItemAction)
-                }
-                if !pagedSearchedIngredients.isEmpty {
-                    ListPageTailView(hasNextPage: pagedSearchedIngredients.hasNextPage, onAppearAction: viewModel.loadMoreSearchedIngredients)
-                }
-            }
-            .padding(.vertical, 20)
+            getIngredientList(pagedSearchedIngredients, viewModel.loadMoreSearchedIngredients)
         }
     }
     
@@ -99,9 +79,9 @@ struct ExploreIngredientsList: View {
                     }
             }
             .frame(height: 0)
-            VStack(spacing: 20) {
+            VStack(spacing: 10) {
                 normalStateHeader
-                ingredientList
+                getIngredientList(pagedIngredients, viewModel.loadMoreIngredients)
             }
         }
         .coordinateSpace(name: "scroll")
@@ -119,18 +99,25 @@ struct ExploreIngredientsList: View {
         .padding(20)
     }
     
-    private var ingredientList: some View {
+    @ViewBuilder
+    private func getIngredientList(
+        _ pagedIngredients: Paged<Ingredient>,
+        _ loadMoreIngredients: @escaping () -> Void
+    ) -> some View {
         LazyVStack(spacing: 8) {
             ForEach(pagedIngredients.items) { ingredient in
-                IngredientItem(ingredient,
-                               isLinkable: true,
-                               linkDestination: ExploreIngredientsChildList(
-                                parentId: ingredient.id, parentName: ingredient.name),
-                               onAction: viewModel.handleItemAction)
+                IngredientItem(
+                    ingredient,
+                    isLinkable: true,
+                    linkDestination: ExploreIngredientsChildList(
+                        parentId: ingredient.id,
+                        parentName: ingredient.name),
+                    action: viewModel.handleItemAction)
             }
             if !pagedIngredients.isEmpty {
-                ListPageTailView(hasNextPage: pagedIngredients.hasNextPage, onAppearAction: viewModel.loadMoreIngredients)
+                ListPageTailView(hasNextPage: pagedIngredients.hasNextPage, onAppear: loadMoreIngredients)
             }
         }
+        .padding(.vertical, 6)
     }
 }

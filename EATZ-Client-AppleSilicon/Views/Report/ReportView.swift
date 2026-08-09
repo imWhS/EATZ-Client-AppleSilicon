@@ -31,7 +31,7 @@ struct ReportView: View {
                         }
                     }
                     .background(Color.backgroundPrimary)
-                case .error(let message): ErrorCurtain(message, onRetry: { viewModel.load(authManager) })
+                case .error(let message): ErrorCurtain(message, onRetryTapped: { viewModel.load(authManager) })
                 case .unauthorized: CommonUnauthorizedStateView()
                 }
             }

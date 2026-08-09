@@ -32,7 +32,7 @@ struct RatingEditor: View {
                 switch viewModel.state {
                 case .initialLoading: LoadingCurtain(title: "평가를 편집하기 위해 준비하고 있어요...")
                 case .content: contentView
-                case .error(let message): ErrorCurtain(message, onRetry: { viewModel.load(authManager) })
+                case .error(let message): ErrorCurtain(message, onRetryTapped: { viewModel.load(authManager) })
                 case .unauthorized: CommonUnauthorizedStateView()
                 }
             }

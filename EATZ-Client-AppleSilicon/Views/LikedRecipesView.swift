@@ -65,13 +65,10 @@ struct LikedRecipesView: View {
     }
     
     private func emptyView() -> some View {
-        Curtain(
+        CommonEmptyStateView(
             title: "좋아하는 레시피가 없어요.",
-            description: "둘러보기, 레시피 화면 등에서 '좋아요'한 레시피가 여기에 나타나요.",
-            header: {
-                Image("like-40")
-                    .foregroundStyle(Color.gray15)
-            }
+            "둘러보기, 레시피 화면 등에서 '좋아요'한 레시피가 여기에 나타나요.",
+            "like-40"
         )
     }
     

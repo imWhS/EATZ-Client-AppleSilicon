@@ -38,7 +38,7 @@ struct RatingContentView: View {
                         userContextView
                         RatingList(
                             pagedRatings: pagedRatings,
-                            onLoadMore: { viewModel.loadMoreRatings(currentUser: authManager.currentUser, recipeId: recipeId) },
+                            loadMore: { viewModel.loadMoreRatings(currentUser: authManager.currentUser, recipeId: recipeId) },
                             onDelete: { type in viewModel.handleDelete(type, recipeId) },
                             onBlock: viewModel.handleBlockUser,
                             onReport: viewModel.handleReportRating,
@@ -72,7 +72,13 @@ struct RatingContentView: View {
             RecipeEssentialView(recipeEssential)
             RatingEmptyView(
                 isLoggedIn: authManager.isLoggedIn,
-                onRegister: { viewModel.presentEditor(for: recipeId, mode: .create) })
+                onRegisterTapped: handleRegisterTapped)
+        }
+    }
+    
+    private func handleRegisterTapped(isLoggedIn: Bool) {
+        authManager.performWhenLoggedIn {
+            viewModel.presentEditor(for: recipeId, mode: .create)
         }
     }
 }

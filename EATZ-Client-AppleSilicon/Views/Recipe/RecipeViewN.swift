@@ -27,7 +27,7 @@ struct RecipeViewN: View {
             switch viewModel.state {
             case .initialLoading: LoadingCurtain(title: "레시피를 불러오고 있어요...")
             case .content(let recipe): RecipeContentView(viewModel, authManager, router, recipe)
-            case .error(let message): ErrorCurtain(message, onRetry: { viewModel.load(for: recipeId) })
+            case .error(let message): ErrorCurtain(message, onRetryTapped: { viewModel.load(for: recipeId) })
             }
         }
     }

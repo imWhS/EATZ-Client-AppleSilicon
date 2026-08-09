@@ -59,7 +59,7 @@ struct RatingGuestView: View {
                 Text("이메일로 로그인 또는 가입해보세요.")
                     .font(.system(size: 17, weight: .semibold))
                     .multilineTextAlignment(.center)
-                Text("로그인 또는 가입 후, 이 레시피를 평가할 수 있어요.")
+                Text("로그인 또는 가입하면 이 레시피를 평가할 수 있어요.")
                     .font(.system(size: 14))
                     .multilineTextAlignment(.center)
                     .foregroundStyle(Color.init(hex: "93A197"))

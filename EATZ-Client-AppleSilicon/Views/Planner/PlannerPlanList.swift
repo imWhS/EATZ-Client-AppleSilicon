@@ -13,7 +13,7 @@ struct PlannerPlanList: View {
     let date: Date
     let plans: [PlannerPlan]?
     let onAddPlan: (Date) -> Void
-    let onPlanAction: (PlannerPlan, PlannerPlanItemAction) -> Void
+    let action: (PlannerPlan, PlannerPlanItemAction) -> Void
     
     init(_ date: Date,
          plans: [PlannerPlan]?,
@@ -22,7 +22,7 @@ struct PlannerPlanList: View {
         self.date = date
         self.plans = plans
         self.onAddPlan = onAddPlan
-        self.onPlanAction = onPlanAction
+        self.action = onPlanAction
     }
     
     private let horizontalCommonPadding: CGFloat = 20
@@ -64,7 +64,7 @@ struct PlannerPlanList: View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 8) {
                 ForEach(plans) { plan in
-                    PlannerPlanItem(plan, onAction: onPlanAction)
+                    PlannerPlanItem(plan, action)
                         .transition(.opacity)
                 }
                 PlannerPlanListGuideView(subtitle: detailLabel, height: contentViewHeight)

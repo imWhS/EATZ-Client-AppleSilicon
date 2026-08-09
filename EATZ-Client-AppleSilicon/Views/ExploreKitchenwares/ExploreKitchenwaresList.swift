@@ -13,10 +13,10 @@ struct ExploreKitchenwaresList: View {
     @Binding var searchKeyword: String
     
     var searchState: ExploreKitchenwareListSearchState
-    let onItemAction: (KitchenwareItemAction) -> Void
+    let itemAction: (KitchenwareItemAction) -> Void
     @Binding var showNavigationBarTitle: Bool
-    let onLoadMoreKitchenwares: () -> Void
-    let onLoadMoreSearchedKitchenwares: () -> Void
+    let loadMoreKitchenwares: () -> Void
+    let loadMoreSearchedKitchenwares: () -> Void
     
     var body: some View {
         Group {
@@ -67,22 +67,14 @@ struct ExploreKitchenwaresList: View {
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(Color.gray35)
             }
-            .padding(20)
+            .padding(10)
             HorizontalDivider()
         }
     }
     
     private var searchResultView: some View {
         ScrollView {
-            LazyVStack(spacing: 8) {
-                ForEach(pagedSearchedKitchenwares.items) { kitchenware in
-                    KitchenwareItem(kitchenware, onAction: onItemAction)
-                }
-                if !pagedSearchedKitchenwares.isEmpty {
-                    ListPageTailView(hasNextPage: pagedSearchedKitchenwares.hasNextPage, onAppearAction: onLoadMoreSearchedKitchenwares)
-                }
-            }
-            .padding(.vertical, 20)
+            getKitchenwareList(pagedSearchedKitchenwares, loadMoreSearchedKitchenwares)
         }
     }
     
@@ -98,9 +90,9 @@ struct ExploreKitchenwaresList: View {
                     }
             }
             .frame(height: 0)
-            VStack(spacing: 20) {
+            VStack(spacing: 10) {
                 normalStateHeader
-                kitchenwareList
+                getKitchenwareList(pagedKitchenwares, loadMoreKitchenwares)
             }
         }
         .coordinateSpace(name: "scroll")
@@ -121,11 +113,27 @@ struct ExploreKitchenwaresList: View {
     private var kitchenwareList: some View {
         LazyVStack(spacing: 8) {
             ForEach(pagedKitchenwares.items) { kitchenware in
-                KitchenwareItem(kitchenware, onAction: onItemAction)
+                KitchenwareItem(kitchenware, itemAction)
             }
             if !pagedKitchenwares.isEmpty {
-                ListPageTailView(hasNextPage: pagedKitchenwares.hasNextPage, onAppearAction: onLoadMoreKitchenwares)
+                ListPageTailView(hasNextPage: pagedKitchenwares.hasNextPage, onAppear: loadMoreKitchenwares)
             }
         }
+    }
+    
+    @ViewBuilder
+    private func getKitchenwareList(
+        _ pagedKitchenwares: Paged<Kitchenware>,
+        _ loadMoreKitchenwares: @escaping () -> Void
+    ) -> some View {
+        LazyVStack(spacing: 8) {
+            ForEach(pagedKitchenwares.items) { kitchenware in
+                KitchenwareItem(kitchenware, itemAction)
+            }
+            if !pagedKitchenwares.isEmpty {
+                ListPageTailView(hasNextPage: pagedKitchenwares.hasNextPage, onAppear: loadMoreKitchenwares)
+            }
+        }
+        .padding(.vertical, 6)
     }
 }

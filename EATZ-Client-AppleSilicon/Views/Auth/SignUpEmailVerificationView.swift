@@ -11,7 +11,7 @@ struct SignUpEmailVerificationView: View {
     @EnvironmentObject private var viewModel: AuthViewModel
     @FocusState private var isValidationCodeFocused: Bool
     
-    private var navigationTitle: String = "이메일 인증"
+    private var navigationTitleLabel: String = "이메일 인증"
     
     var body: some View {
         VStack(spacing: 0) {
@@ -35,7 +35,7 @@ struct SignUpEmailVerificationView: View {
             resendSection
         }
         .background(Color.backgroundPrimary)
-        .navigationTitle(navigationTitle)
+        .navigationTitle(navigationTitleLabel)
         .toolbar {
             titleToolbarItem
         }
@@ -49,7 +49,7 @@ struct SignUpEmailVerificationView: View {
     
     private var header: some View {
         VStack(spacing: 12) {
-            Text(navigationTitle)
+            Text(navigationTitleLabel)
                 .font(.system(size: 30, weight: .bold))
             VStack(spacing: 8) {
                 Group {
@@ -139,7 +139,7 @@ struct SignUpEmailVerificationView: View {
     
     private var titleToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            Text(navigationTitle)
+            Text(navigationTitleLabel)
                 .opacity(0)
         }
     }

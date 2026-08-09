@@ -10,7 +10,7 @@ import SwiftUI
 struct RecipeBasicList<HeaderContent: View, MenuContent: View>: View {
     let recipes: [RecipeBasic]
     let hasNextPage: Bool
-    let onLoadMore: () -> Void
+    let loadMore: () -> Void
     let onRecipeTapped: (Int64) -> Void
     
     @ViewBuilder let headerContent: (() -> HeaderContent)?
@@ -18,13 +18,13 @@ struct RecipeBasicList<HeaderContent: View, MenuContent: View>: View {
     
     init(_ recipes: [RecipeBasic],
          hasNextPage: Bool,
-         onLoadMore: @escaping () -> Void,
+         loadMore: @escaping () -> Void,
          onRecipeTapped: @escaping (Int64) -> Void,
          @ViewBuilder headerContent: @escaping () -> HeaderContent,
          @ViewBuilder menuContent: @escaping (RecipeBasic) -> MenuContent) {
         self.recipes = recipes
         self.hasNextPage = hasNextPage
-        self.onLoadMore = onLoadMore
+        self.loadMore = loadMore
         self.onRecipeTapped = onRecipeTapped
         self.headerContent = headerContent
         self.menuContent = menuContent
@@ -42,7 +42,7 @@ struct RecipeBasicList<HeaderContent: View, MenuContent: View>: View {
                 }
                 
                 if !recipes.isEmpty {
-                    ListPageTailView(hasNextPage: hasNextPage, onAppearAction: onLoadMore).id(recipes.count)
+                    ListPageTailView(hasNextPage: hasNextPage, onAppear: loadMore).id(recipes.count)
                 }
             }
         }
@@ -52,12 +52,12 @@ struct RecipeBasicList<HeaderContent: View, MenuContent: View>: View {
 extension RecipeBasicList where MenuContent == EmptyView {
     init(_ recipes: [RecipeBasic],
          hasNextPage: Bool,
-         onLoadMore: @escaping () -> Void,
+         loadMore: @escaping () -> Void,
          onRecipeTapped: @escaping (Int64) -> Void,
          @ViewBuilder headerContent: @escaping () -> HeaderContent) {
         self.recipes = recipes
         self.hasNextPage = hasNextPage
-        self.onLoadMore = onLoadMore
+        self.loadMore = loadMore
         self.onRecipeTapped = onRecipeTapped
         self.headerContent = headerContent
         self.menuContent = nil
@@ -67,12 +67,12 @@ extension RecipeBasicList where MenuContent == EmptyView {
 extension RecipeBasicList where HeaderContent == EmptyView {
     init(_ recipes: [RecipeBasic],
          hasNextPage: Bool,
-         onLoadMore: @escaping () -> Void,
+         loadMore: @escaping () -> Void,
          onRecipeTapped: @escaping (Int64) -> Void,
          @ViewBuilder menuContent: @escaping (RecipeBasic) -> MenuContent) {
         self.recipes = recipes
         self.hasNextPage = hasNextPage
-        self.onLoadMore = onLoadMore
+        self.loadMore = loadMore
         self.onRecipeTapped = onRecipeTapped
         self.headerContent = nil
         self.menuContent = menuContent
@@ -82,11 +82,11 @@ extension RecipeBasicList where HeaderContent == EmptyView {
 extension RecipeBasicList where HeaderContent == EmptyView, MenuContent == EmptyView {
     init(_ recipes: [RecipeBasic],
          hasNextPage: Bool,
-         onLoadMore: @escaping () -> Void,
+         loadMore: @escaping () -> Void,
          onRecipeTapped: @escaping (Int64) -> Void) {
         self.recipes = recipes
         self.hasNextPage = hasNextPage
-        self.onLoadMore = onLoadMore
+        self.loadMore = loadMore
         self.onRecipeTapped = onRecipeTapped
         self.headerContent = nil
         self.menuContent = nil

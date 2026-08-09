@@ -12,13 +12,13 @@ struct ChecklistPlanItem: View {
     @EnvironmentObject private var router: Router
     
     let plan: ChecklistPlan
-    let onAction: (ChecklistPlan, ChecklistPlanItemAction) -> Void
+    let action: (ChecklistPlan, ChecklistPlanItemAction) -> Void
     
     private let cardWidth: CGFloat = 134
     
-    init(_ plan: ChecklistPlan, onAction: @escaping (ChecklistPlan, ChecklistPlanItemAction) -> Void) {
+    init(_ plan: ChecklistPlan, action: @escaping (ChecklistPlan, ChecklistPlanItemAction) -> Void) {
         self.plan = plan
-        self.onAction = onAction
+        self.action = action
     }
     
     var body: some View {
@@ -77,13 +77,13 @@ struct ChecklistPlanItem: View {
         Menu {
             if plan.likedRecipeByUser {
                 Button {
-                    onAction(plan, .unlike)
+                    action(plan, .unlike)
                 } label: {
                     Label("레시피 좋아요 취소", systemImage: "heart.slash")
                 }
             } else {
                 Button {
-                    onAction(plan, .like)
+                    action(plan, .like)
                 } label: {
                     Label("레시피 좋아요", systemImage: "heart")
                 }
@@ -91,20 +91,20 @@ struct ChecklistPlanItem: View {
             
             if plan.savedRecipeByUser {
                 Button {
-                    onAction(plan, .unsave)
+                    action(plan, .unsave)
                 } label: {
                     Label("레시피 저장 취소", systemImage: "bookmark.slash")
                 }
             } else {
                 Button {
-                    onAction(plan, .save)
+                    action(plan, .save)
                 } label: {
                     Label("레시피 저장", systemImage: "bookmark")
                 }
             }
             
             Button(role: .destructive) {
-                onAction(plan, .report)
+                action(plan, .report)
             } label: {
                 Label("레시피 신고", systemImage: "exclamationmark.bubble")
             }

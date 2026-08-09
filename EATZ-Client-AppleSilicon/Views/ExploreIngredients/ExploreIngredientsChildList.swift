@@ -14,6 +14,7 @@ struct ExploreIngredientsChildList: View {
     @Environment(\.dismiss) private var dismiss
     
     @State private var isLoading = false
+    @State private var isLoaded = false
     
     init(parentId: Int64, parentName: String) {
         self.parentId = parentId
@@ -23,7 +24,10 @@ struct ExploreIngredientsChildList: View {
     var body: some View {
         mainContent
         .navigationTitle(parentName)
-        .onAppear {
+        .task {
+            if case .loaded = viewModel.childListState[parentId] {
+                return
+            }
             viewModel.loadChildIngredients(for: parentId)
         }
         .alert(item: $viewModel.alert) { $0.alert }
@@ -39,16 +43,7 @@ struct ExploreIngredientsChildList: View {
             case .loaded: listView
             case .error(let message): ErrorCurtain(message)
             case .unauthorized: CommonUnauthorizedStateView()
-            default:
-                Curtain(
-                    title: "\(parentName)의 하위 재료가 하나도 없어요.",
-                    header: {
-                        Image("info-200")
-                            .resizable()
-                            .foregroundStyle(Color.gray15)
-                            .frame(width: 40, height: 40)
-                    }
-                )
+            default: CommonEmptyStateView(title: "\(parentName)의 하위 재료가 하나도 없어요.")
             }
         }
     }
@@ -61,7 +56,7 @@ struct ExploreIngredientsChildList: View {
                         childIngredient,
                         isLinkable: true,
                         linkDestination: ExploreIngredientsChildList(parentId: parentId, parentName: parentName),
-                        onAction: viewModel.handleItemAction)
+                        action: viewModel.handleItemAction)
                 }
             }
         }

@@ -9,37 +9,50 @@ import SwiftUI
 
 struct RatingEmptyView: View {
     var isLoggedIn: Bool
-    var onRegister: () -> Void
+    var onRegisterTapped: (Bool) -> Void
     
     var body: some View {
         VStack {
-            Spacer()
+            CommonEmptyStateView(
+                title: "보여드릴 평가가 없어요.",
+                "아직 아무도 이 레시피에 평가를 등록하지 않았어요.",
+                "rating-star-40"
+            )
+            if isLoggedIn {
+                userActionSection
+            } else {
+                guestActionSection
+            }
+        }
+    }
+    
+    private var userActionSection: some View {
+        Button(action: { onRegisterTapped(isLoggedIn) }) {
+            Text("새 평가").frame(maxWidth: .infinity)
+        }
+        .buttonStyle(CapsuleLargeButtonStyle(appearance: .primary))
+        .padding(20)
+    }
+    
+    private var guestActionSection: some View {
+        VStack(spacing: 0) {
+            HorizontalDivider()
             VStack(spacing: 12) {
-                Image("rating-star-40")
-                    .foregroundStyle(Color.gray15)
-                VStack(spacing: 4) {
-                    Text("보여드릴 평가가 없어요.")
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(Color.gray35)
-                    Text("아직 아무도 이 레시피에 평가를 등록하지 않았어요.")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(Color.gray35)
+                Image("handshake")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 48)
+                    .foregroundStyle(Color.init(hex: "D1E7D7"))
+                Button(action: { onRegisterTapped(isLoggedIn) }) {
+                    Text("이메일로 시작").frame(maxWidth: .infinity)
                 }
+                .buttonStyle(CapsuleLargeButtonStyle(appearance: .authPrimary))
+                Text("로그인 또는 가입하면 평가를 등록할 수 있어요.")
+                    .font(.system(size: 12, weight: .medium))
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(Color.init(hex: "93A197"))
             }
-            Spacer()
-            
-            Button(action: onRegister) {
-                Text(isLoggedIn ? "새 평가" : "로그인 후 평가").frame(maxWidth: .infinity)
-            }
-            .buttonStyle(CapsuleLargeButtonStyle(appearance: .primary))
             .padding(20)
         }
-        
-    }
-}
-
-#Preview {
-    RatingEmptyView(isLoggedIn: true) {
-        print("새 평가")
     }
 }

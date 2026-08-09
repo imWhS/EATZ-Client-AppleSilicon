@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ListPageTailView: View {
     let hasNextPage: Bool?
-    var onAppearAction: () -> Void = {}
-    var onDisappearAction: () -> Void = {}
+    var onAppear: () -> Void = {}
+    var onDisappear: () -> Void = {}
     
     var body: some View {
         VStack(alignment: .center) {
@@ -25,8 +25,8 @@ struct ListPageTailView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 20)
-        .task { onAppearAction() }
-        .onDisappear { onDisappearAction() }
+        .task { onAppear() }
+        .onDisappear { onDisappear() }
     }
     
     private func labelView(text: String) -> some View {

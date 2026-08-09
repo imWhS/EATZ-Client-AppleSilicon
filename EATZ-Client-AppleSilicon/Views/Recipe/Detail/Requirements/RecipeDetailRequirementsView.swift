@@ -36,8 +36,8 @@ struct RecipeDetailRequirementsView: View {
                 onShowRecipeTapped: {},
                 onAuth: authManager.requireAuthView,
                 onAddAllRequirements: { },
-                onAction: viewModel.handleAction)
-        case .error(let error): ErrorCurtain(error, onRetry: viewModel.resetAndLoadAll)
+                action: viewModel.handleAction)
+        case .error(let error): ErrorCurtain(error, onRetryTapped: viewModel.resetAndLoadAll)
         }
     }
 }
@@ -50,7 +50,7 @@ struct RecipeDetailRequirementsContentView: View {
     let onShowRecipeTapped: () -> Void
     let onAuth: () -> Void
     let onAddAllRequirements: () -> Void
-    let onAction: (RecipeDetailRequirementsAction) -> Void
+    let action: (RecipeDetailRequirementsAction) -> Void
     
     var missingKitchenwareCount: Int? {
         switch cookability {
@@ -74,18 +74,10 @@ struct RecipeDetailRequirementsContentView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     headerSection
                     if !kitchenwares.isEmpty {
-                        RecipeDetailRequirementsKitchenwareSection(
-                            isLoggedIn: isLoggedIn,
-                            kitchenwares: kitchenwares,
-                            missingKitchenwareCount: missingKitchenwareCount,
-                            onAction: onAction)
+                        RecipeDetailRequirementsKitchenwareSection(isLoggedIn, kitchenwares, missingKitchenwareCount, action)
                     }
                     if !ingredients.isEmpty {
-                        RecipeDetailRequirementsIngredientSection(
-                            isLoggedIn: isLoggedIn,
-                            ingredients: ingredients,
-                            missingIngredientCount: missingIngredientCount,
-                            onAction: onAction)
+                        RecipeDetailRequirementsIngredientSection(isLoggedIn, ingredients, missingIngredientCount, action)
                     }
                 }
             }
@@ -94,8 +86,7 @@ struct RecipeDetailRequirementsContentView: View {
     }
     
     private var titleSection: some View {
-        RecipeDetailTitle("준비물")
-            .padding(.vertical, 10)
+        RecipeDetailTitle("준비물").padding(.vertical, 10)
     }
     
     private var headerSection: some View {
@@ -112,12 +103,12 @@ struct RecipeDetailRequirementsContentView: View {
         Group {
             switch cookability {
             case .cookable:
-                RecipeDetailRequirementsHeaderCookable(onShowRecipeTapped: onShowRecipeTapped)
+                RecipeDetailRequirementsHeaderCookable(onShowRecipeTapped)
             case .uncookable(let missingIngredientCount, let missingKitchenwareCount):
                 RecipeDetailRequirementsHeaderUncookable(
-                    missingKitchenwareCount: missingKitchenwareCount,
-                    missingIngredientCount: missingIngredientCount,
-                    onAddAllRequirements: onAddAllRequirements
+                    missingKitchenwareCount,
+                    missingIngredientCount,
+                    onAddAllRequirements
                 )
             }
         }

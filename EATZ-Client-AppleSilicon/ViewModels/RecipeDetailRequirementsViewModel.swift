@@ -109,7 +109,7 @@ class RecipeDetailRequirementsViewModel: ObservableObject {
         }
     }
     
-    func handleAction(action: RecipeDetailRequirementsAction) {
+    func handleAction(_ action: RecipeDetailRequirementsAction) {
         switch action {
         case .toggleKitchenwareAddition(let id): toggleKitchenwareAddition(of: id)
         case .toggleIngredientAddition(let id): toggleIngredientAddition(of: id)

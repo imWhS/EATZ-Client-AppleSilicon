@@ -1,5 +1,5 @@
 //
-//  CookableRecipeListView.swift
+//  CookableRecipeList.swift
 //  EATZ-Client-AppleSilicon
 //
 //  Created by 손원희 on 10/4/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CookableRecipeListView: View {
+struct CookableRecipeList: View {
     @EnvironmentObject var authManager: AuthManager
     @EnvironmentObject private var router: Router
     
@@ -126,7 +126,7 @@ struct CookableRecipeListView: View {
 }
 
 #Preview {
-    CookableRecipeListView(
+    CookableRecipeList(
         searchCriteria: CookableSearchCriteria(keyword: "테스트", maxTotalTime: 10, servings: 1, isCookableOnly: true)
     )
 }

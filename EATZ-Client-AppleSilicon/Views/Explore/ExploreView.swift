@@ -80,7 +80,7 @@ struct ExploreView: View {
                     filters: $viewModel.commonFilters,
                     sort: $viewModel.commonSort,
                     selectableSortOptions: viewModel.selectableSortOptions,
-                    onFilter: { Sheet in viewModel.sheet = Sheet },
+                    onFilter: { sheet in viewModel.sheet = sheet },
                     onTappedRecipe: viewModel.navigateToRecipe
                 )
             } else {
@@ -94,6 +94,8 @@ struct ExploreView: View {
                 )
             }
         }
+        .transition(.opacity)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.isSearchMode)
         .safeAreaInset(edge: .top, spacing: 0) {
             ExploreSearchBar(
                 keyword: $viewModel.keyword,

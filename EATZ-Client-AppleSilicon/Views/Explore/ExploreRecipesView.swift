@@ -69,21 +69,31 @@ struct ExploreRecipesView: View {
     
     @ViewBuilder
     private var stateView: some View {
-        ExploreFiltersSection(filters, onAction: onFilter)
-        
-        switch viewModel.viewState {
-        case .initialLoading: LoadingCurtain(title: "\(tag?.name ?? "모든") 레시피를 불러오고 있어요...")
-        case .loaded:
-            ExploreRecipeGridList(
-                pagedRecipes: viewModel.pagedRecipes,
-                onTappedRecipe: onTappedRecipe,
-                onTappedItemAction: viewModel.handleItem,
-                loadMore: viewModel.loadMoreRecipes,
-                selectableSortOptions: selectableSortOptions,
-                sort: $sort)
-        case .empty:
-            CommonEmptyStateView(title: "보여드릴 레시피가 없어요.", "카테고리나 필터 옵션을 변경해보세요.")
-        case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.resetAndLoadAll)
+        VStack(spacing: 0) {
+            ExploreFiltersSection(filters, onAction: onFilter)
+            
+            switch viewModel.viewState {
+            case .initialLoading:
+                LoadingCurtain(title: "\(tag?.name ?? "모든") 레시피를 불러오고 있어요...")
+                    .transition(.opacity)
+            case .loaded:
+                ExploreRecipeGridList(
+                    pagedRecipes: viewModel.pagedRecipes,
+                    onTappedRecipe: onTappedRecipe,
+                    onTappedItemAction: viewModel.handleItem,
+                    loadMore: viewModel.loadMoreRecipes,
+                    selectableSortOptions: selectableSortOptions,
+                    sort: $sort
+                )
+                .transition(.opacity)
+            case .empty:
+                CommonEmptyStateView(title: "보여드릴 레시피가 없어요.", "카테고리나 필터 옵션을 변경해보세요.")
+                .transition(.opacity)
+            case .error(let message):
+                ErrorCurtain(message, onRetryTapped: viewModel.resetAndLoadAll)
+                .transition(.opacity)
+            }
         }
+        .animation(.easeInOut(duration: 0.3), value: viewModel.viewState)
     }
 }

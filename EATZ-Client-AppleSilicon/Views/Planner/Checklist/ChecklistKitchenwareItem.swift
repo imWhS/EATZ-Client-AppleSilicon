@@ -16,31 +16,24 @@ enum ChecklistKitchenwareItemAction {
 
 struct ChecklistKitchenwareItem: View {
     let kitchenware: ChecklistKitchenware
+    let disabled: Bool
     let isLoading: Bool
     let action: (Int64, ChecklistKitchenwareItemAction) -> Void
     
     init(_ kitchenware: ChecklistKitchenware,
+         disabled: Bool,
          isLoading: Bool,
          action: @escaping (Int64, ChecklistKitchenwareItemAction) -> Void) {
         self.kitchenware = kitchenware
+        self.disabled = disabled
         self.isLoading = isLoading
         self.action = action
     }
     
     var body: some View {
         HStack {
-            imageView
-            Image(kitchenware.missing ? "recipe-ingredients-cookable-needed" : "recipe-ingredients-cookable-added")
-            Text(kitchenware.name)
-                .font(.system(size: 17, weight: .medium))
-            if isLoading {
-                ProgressView()
-            } else {
-                if !kitchenware.missing { actionMenu }
-                else {
-                    actionButton(image: "add-circled-20", action: { action(kitchenware.id, .addToPantry) })
-                }
-            }
+            leadingSection
+            trailingSection
         }
     }
     
@@ -58,6 +51,34 @@ struct ChecklistKitchenwareItem: View {
             )
             .contentShape(Circle())
             .padding(.vertical, 0.5)
+    }
+    
+    @ViewBuilder
+    private var leadingSection: some View {
+        HStack {
+            imageView
+            Image(kitchenware.missing ? "recipe-ingredients-cookable-needed" : "recipe-ingredients-cookable-added")
+            Text(kitchenware.name)
+                .font(.system(size: 17, weight: .medium))
+        }
+    }
+    
+    @ViewBuilder
+    private var trailingSection: some View {
+        HStack {
+            if isLoading {
+                ProgressView()
+            } else {
+                Group {
+                    if !kitchenware.missing { actionMenu }
+                    else {
+                        actionButton(image: "add-circled-20", action: { action(kitchenware.id, .addToPantry) })
+                    }
+                }
+                .opacity(disabled ? 0.5 : 1)
+                .disabled(disabled)
+            }
+        }
     }
     
     private var actionMenu: some View {

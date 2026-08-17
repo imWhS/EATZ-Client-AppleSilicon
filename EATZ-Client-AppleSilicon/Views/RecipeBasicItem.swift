@@ -57,6 +57,7 @@ struct RecipeBasicItem<MenuContent: View>: View {
             .resizable()
             .aspectRatio(contentMode: .fill)
             .frame(width: 96, height: 96)
+            .contentShape(Rectangle())
             .clipped()
     }
     

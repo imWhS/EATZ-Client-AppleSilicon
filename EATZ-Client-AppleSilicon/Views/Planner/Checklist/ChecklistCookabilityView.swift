@@ -9,19 +9,30 @@ import SwiftUI
 
 struct ChecklistCookabilityView: View {
     let cookability: ChecklistCookability
+    let isUpdatingPantry: Bool
+    let pendingKitchenwareIds: Set<Int64>
+    let pendingIngredientIds: Set<Int64>
     let missingKitchenwareCount: Int
     let missingIngredientCount: Int
     let planItemAction: (ChecklistPlan, ChecklistPlanItemAction) -> Void
     let kitchenwareItemAction: (Int64, ChecklistKitchenwareItemAction) -> Void
     let ingredientItemAction: (Int64, ChecklistIngredientItemAction) -> Void
     
-    init(cookability: ChecklistCookability,
+    init(
+        cookability: ChecklistCookability,
+        _ isUpdatingPantry: Bool,
          _ missingKitchenwareCount: Int,
          _ missingIngredientCount: Int,
+         _ pendingKitchenwareIds: Set<Int64>,
+         _ pendingIngredientIds: Set<Int64>,
          _ planItemAction: @escaping (ChecklistPlan, ChecklistPlanItemAction) -> Void,
          _ kitchenwareItemAction: @escaping (Int64, ChecklistKitchenwareItemAction) -> Void,
-         _ ingredientItemAction: @escaping (Int64, ChecklistIngredientItemAction) -> Void) {
+         _ ingredientItemAction: @escaping (Int64, ChecklistIngredientItemAction) -> Void)
+    {
         self.cookability = cookability
+        self.isUpdatingPantry = isUpdatingPantry
+        self.pendingKitchenwareIds = pendingKitchenwareIds
+        self.pendingIngredientIds = pendingIngredientIds
         self.missingKitchenwareCount = missingKitchenwareCount
         self.missingIngredientCount = missingIngredientCount
         self.planItemAction = planItemAction
@@ -29,11 +40,19 @@ struct ChecklistCookabilityView: View {
         self.ingredientItemAction = ingredientItemAction
     }
     
-    init(cookability: ChecklistCookability,
+    init(
+        cookability: ChecklistCookability,
+        _ isUpdatingPantry: Bool,
+        _ pendingKitchenwareIds: Set<Int64>,
+        _ pendingIngredientIds: Set<Int64>,
          _ planItemAction: @escaping (ChecklistPlan, ChecklistPlanItemAction) -> Void,
          _ kitchenwareItemAction: @escaping (Int64, ChecklistKitchenwareItemAction) -> Void,
-         _ ingredientItemAction: @escaping (Int64, ChecklistIngredientItemAction) -> Void) {
+         _ ingredientItemAction: @escaping (Int64, ChecklistIngredientItemAction) -> Void)
+    {
         self.cookability = cookability
+        self.isUpdatingPantry = isUpdatingPantry
+        self.pendingKitchenwareIds = pendingKitchenwareIds
+        self.pendingIngredientIds = pendingIngredientIds
         self.missingKitchenwareCount = 0
         self.missingIngredientCount = 0
         self.planItemAction = planItemAction
@@ -54,10 +73,8 @@ struct ChecklistCookabilityView: View {
     var body: some View {
         VStack(spacing: 0) {
             planList
-            
             if !sortedKitchenwares.isEmpty && !sortedIngredients.isEmpty {
-                HorizontalDivider()
-                VStack(spacing: 0) {
+                VStack(spacing: 10) {
                     if !sortedKitchenwares.isEmpty {
                         kitchenwareList
                     }
@@ -66,7 +83,6 @@ struct ChecklistCookabilityView: View {
                         ingredientList
                     }
                 }
-                .padding(.vertical, 10)
             }
         }
     }
@@ -86,60 +102,80 @@ struct ChecklistCookabilityView: View {
     }
     
     private var kitchenwareList: some View {
-        VStack(spacing: 20) {
-            HStack(spacing: 20) {
-                VerticalLabeledValueView(
-                    label: "총 도구 수",
-                    value: "\(sortedKitchenwares.count)개")
-                if 0 < missingKitchenwareCount {
+        VStack(spacing: 10) {
+            HorizontalDivider()
+            VStack(spacing: 20) {
+                HStack(spacing: 20) {
                     VerticalLabeledValueView(
-                        label: "필요한 도구 수",
-                        value: "\(missingKitchenwareCount)개",
-                        style: .secondary)
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 20)
-            ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(alignment: .center, spacing: 0) {
-                    ForEach(sortedKitchenwares) { kitchenware in
-                        ChecklistKitchenwareItem(kitchenware, isLoading: false, action: kitchenwareItemAction)
-                            .padding(.horizontal, 10)
+                        label: "총 도구 수",
+                        value: "\(sortedKitchenwares.count)개")
+                    if 0 < missingKitchenwareCount {
+                        VerticalLabeledValueView(
+                            label: "필요한 도구 수",
+                            value: "\(missingKitchenwareCount)개",
+                            style: .secondary)
                     }
                 }
-                .padding(.horizontal, 10)
-                .animation(.default, value: sortedKitchenwares)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 20)
+                ScrollView(.horizontal, showsIndicators: false) {
+                    LazyHStack(alignment: .center, spacing: 0) {
+                        ForEach(Array(sortedKitchenwares.enumerated()), id: \.element) { index, kitchenware in
+                            ChecklistKitchenwareItem(
+                                kitchenware,
+                                disabled: isUpdatingPantry,
+                                isLoading: pendingKitchenwareIds.contains(kitchenware.id),
+                                action: kitchenwareItemAction)
+                            .padding(.horizontal, 10)
+                        }
+                    }
+                    .padding(.horizontal, 10)
+                    .animation(.default, value: sortedKitchenwares)
+                }
             }
+            .padding(.vertical, 10)
         }
-        .padding(.vertical, 10)
     }
     
     private var ingredientList: some View {
-        VStack(spacing: 20) {
-            HStack(spacing: 20) {
-                VerticalLabeledValueView(
-                    label: "총 재료 수",
-                    value: "\(sortedIngredients.count)개")
-                
-                if 0 < missingIngredientCount {
+        VStack(spacing: 10) {
+            HorizontalDivider()
+            VStack(spacing: 20) {
+                HStack(spacing: 20) {
                     VerticalLabeledValueView(
-                        label: "필요한 재료 수",
-                        value: "\(missingIngredientCount)개",
-                        style: .secondary)
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 20)
-            ScrollView(.vertical, showsIndicators: false) {
-                LazyVStack(alignment: .center, spacing: 12) {
-                    ForEach(sortedIngredients) { ingredient in
-                        ChecklistIngredientItem(ingredient, isLoading: false, action: ingredientItemAction)
+                        label: "총 재료 수",
+                        value: "\(sortedIngredients.count)개")
+                    
+                    if 0 < missingIngredientCount {
+                        VerticalLabeledValueView(
+                            label: "필요한 재료 수",
+                            value: "\(missingIngredientCount)개",
+                            style: .secondary)
+                        .transition(.opacity.combined(with: .scale(scale: 0.95)))
                     }
                 }
-                .animation(.default, value: sortedIngredients)
+                .transition(.opacity.combined(with: .scale(scale: 0.95)))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 20)
+                .animation(.snappy, value: missingIngredientCount > 0)
+                
+                ScrollView(.vertical, showsIndicators: false) {
+                    LazyVStack(alignment: .center, spacing: 10) {
+                        ForEach(Array(sortedIngredients.enumerated()), id: \.element) { index, ingredient in
+                            let isLast = index == (sortedIngredients.count - 1)
+                            ChecklistIngredientItem(
+                                ingredient,
+                                disabled: isUpdatingPantry,
+                                isLoading: pendingIngredientIds.contains(ingredient.id),
+                                showDivider: !isLast,
+                                action: ingredientItemAction)
+                        }
+                    }
+                    .animation(.default, value: sortedIngredients)
+                }
             }
+            .padding(.vertical, 10)
         }
-        .padding(.vertical, 10)
     }
     
     private func headerView(_ text: String) -> some View {

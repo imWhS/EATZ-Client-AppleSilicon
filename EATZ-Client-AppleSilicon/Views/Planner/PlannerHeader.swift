@@ -48,7 +48,7 @@ struct PlannerHeader: View {
         return LinearGradient(
             gradient: Gradient(stops: [
                 .init(color: gradientColor, location: 0.0),
-                .init(color: gradientColor, location: 0.5),
+                .init(color: gradientColor, location: 0.25),
                 .init(color: gradientColor.opacity(0), location: 1.0)
             ]),
             startPoint: .top,
@@ -63,12 +63,12 @@ struct PlannerHeader: View {
             }
             .buttonStyle(PlannerHeaderDateViewButtonStyle())
             
-            HStack {
+            HStack(spacing: 4) {
                 Text("달력 보기")
                     .font(.system(size: 12, weight:. bold))
                 Image("arrow-down-5.6")
             }
-            .foregroundStyle(Color.init(hex: "B6B6B6"))
+            .foregroundStyle(Color.accentColor)
         }
     }
     

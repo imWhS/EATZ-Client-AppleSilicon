@@ -1,5 +1,5 @@
 //
-//  HorizontalRecipeCard.swift
+//  RecipeCard.swift
 //  EATZ-Client-AppleSilicon
 //
 //  Created by 손원희 on 7/6/26.
@@ -8,7 +8,7 @@
 import SwiftUI
 import Kingfisher
 
-struct HorizontalRecipeCard: View {
+struct RecipeCard: View {
     let imageUrl: String?
     let size: CGFloat
     let action: () -> Void
@@ -27,6 +27,8 @@ struct HorizontalRecipeCard: View {
                 .frame(width: size, height: size)
                 .background(Color.white)
                 .cornerRadius(12)
+                .contentShape(Rectangle())
+                .clipped()
         }
         .buttonStyle(ListItemButtonStyle())
     }

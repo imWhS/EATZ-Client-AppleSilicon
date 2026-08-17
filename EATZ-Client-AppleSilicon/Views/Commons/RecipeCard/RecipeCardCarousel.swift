@@ -24,7 +24,7 @@ struct RecipeCardCarousel: View {
         ScrollView(.horizontal) {
             LazyHStack(spacing: itemSpacing) {
                 ForEach(recipes) { recipe in
-                    HorizontalRecipeCard(imageUrl: recipe.imageUrl ?? "", size: itemSize) { action(recipe.id) }
+                    RecipeCard(imageUrl: recipe.imageUrl ?? "", size: itemSize) { action(recipe.id) }
                 }
             }
             .padding(.horizontal, horizontalPadding)

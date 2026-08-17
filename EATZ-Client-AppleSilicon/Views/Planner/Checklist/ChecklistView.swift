@@ -11,10 +11,10 @@ struct ChecklistView: View {
     @StateObject private var viewModel: ChecklistViewModel
     @EnvironmentObject private var router: Router
     
-    private let titleLabel: String = "체크리스트"
+    private let navigationTitleLabel: String = "체크리스트"
     
     init(dateRange: (startDate: Date, endDate: Date)) {
-        _viewModel = StateObject(wrappedValue: ChecklistViewModel(dateRange: dateRange))
+        _viewModel = StateObject(wrappedValue: ChecklistViewModel(dateRange))
     }
     
     var body: some View {
@@ -38,7 +38,7 @@ struct ChecklistView: View {
                 if let checklist = viewModel.checklist {
                     ChecklistContentView(
                         viewModel,
-                        titleLabel,
+                        navigationTitleLabel,
                         checklist,
                         viewModel.dateRange,
                         viewModel.handleAddAllRequirementsToPantry)
@@ -56,7 +56,7 @@ struct ChecklistView: View {
             }
         }
         .background(Color.backgroundPrimary)
-        .navigationTitle(titleLabel)
+        .navigationTitle(navigationTitleLabel)
         .toolbar {
             titleToolbarItem
         }
@@ -64,7 +64,7 @@ struct ChecklistView: View {
     
     private var titleToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            Text(titleLabel)
+            Text(navigationTitleLabel)
                 .font(.headline)
                 .opacity(viewModel.showNavigationBarTitle ? 1 : 0)
         }
@@ -106,6 +106,9 @@ private struct ChecklistContentView: View {
             if !checklist.uncookable.plans.isEmpty {
                 ChecklistUncookableSection(
                     uncookable: checklist.uncookable,
+                    isUpdatingPantry: viewModel.isUpdatingPantry,
+                    pendingKitchenwareIds: viewModel.pendingKitchenwareIds,
+                    pendingIngredientIds: viewModel.pendingIngredientIds,
                     missingIngredientCount: checklist.missingIngredientCount,
                     missingKitchenwareCount: checklist.missingKitchenwareCount,
                     onAddAllRequirements: onAddAllRequirements,
@@ -117,6 +120,9 @@ private struct ChecklistContentView: View {
             if !checklist.cookable.plans.isEmpty {
                 ChecklistCookableSection(
                     cookable: checklist.cookable,
+                    isUpdatingPantry: viewModel.isUpdatingPantry,
+                    pendingKitchenwareIds: viewModel.pendingKitchenwareIds,
+                    pendingIngredientIds: viewModel.pendingIngredientIds,
                     onAddAllRequirements: onAddAllRequirements,
                     onPlanItemAction: viewModel.handlePlanItemAction,
                     onKitchenwareItemAction: viewModel.handleKitchenwareItemAction,

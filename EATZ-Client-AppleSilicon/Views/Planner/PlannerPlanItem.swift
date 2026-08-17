@@ -13,7 +13,7 @@ struct PlannerPlanItem: View {
     let action: (PlannerPlan, PlannerPlanItemAction) -> Void
     
     @EnvironmentObject private var router: Router
-    private let cardWidth: CGFloat = (UIScreen.main.bounds.width - 40 - 8) / 2
+    private let size: CGFloat = (UIScreen.main.bounds.width - 40 - 8) / 2
     
     init(
         _ plan: PlannerPlan,
@@ -30,7 +30,7 @@ struct PlannerPlanItem: View {
                 imageView
                 bottomView
             }
-            .frame(width: cardWidth)
+            .frame(width: size)
             .background(.white)
             .cornerRadius(16)
         }
@@ -45,7 +45,8 @@ struct PlannerPlanItem: View {
             }
             .resizable()
             .aspectRatio(contentMode: .fill)
-            .frame(width: cardWidth, height: cardWidth)
+            .frame(width: size, height: size)
+            .contentShape(Rectangle())
             .clipped()
     }
     
@@ -56,7 +57,7 @@ struct PlannerPlanItem: View {
                 startPoint: .top,
                 endPoint: .bottom
             )
-            .frame(height: cardWidth / 2)
+            .frame(height: size / 2)
             HStack(alignment: .center, spacing: 4) {
                 RecipeItemEssentialInfoView(
                     cookingTime: plan.recipeCookingTime,
@@ -76,13 +77,13 @@ struct PlannerPlanItem: View {
             Button(role: .destructive) {
                 action(.removeFromPlanner)
             } label: {
-                Label("이 날짜에서 제거", systemImage: "minus.circle")
+                Label("이 날짜에서 제거", systemImage: "minus")
             }
             
             Button {
                 action(.addToPlanner)
             } label: {
-                Label("다른 날짜에도 추가", systemImage: "plus.circle")
+                Label("다른 날짜에도 추가", systemImage: "plus")
             }
             
             Divider()

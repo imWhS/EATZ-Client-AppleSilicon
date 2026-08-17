@@ -129,7 +129,7 @@ struct CookableRecipeItem: View {
             Button {
                 action(recipe, .addToPlanner)
             } label: {
-                Label("플래너에 추가", systemImage: "plus.circle")
+                Label("플래너에 추가", systemImage: "plus")
             }
             Button {
                 action(recipe, .report)

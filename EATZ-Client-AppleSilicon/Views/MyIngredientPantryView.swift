@@ -100,6 +100,8 @@ private struct MyIngredientPantryList: View {
             .font(.system(size: 14, weight: .medium))
             .foregroundStyle(Color.gray35)
             .padding(.leading, 20)
+            .contentTransition(.numericText())
+            .animation(.snappy, value: pagedIngredients.items.count)
     }
     
     private var listSection: some View {

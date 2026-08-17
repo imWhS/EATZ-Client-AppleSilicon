@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ChecklistCookableSection: View {
     let cookable: ChecklistCookability
+    let isUpdatingPantry: Bool
+    let pendingKitchenwareIds: Set<Int64>
+    let pendingIngredientIds: Set<Int64>
     let onAddAllRequirements: () -> Void
     let onPlanItemAction: (ChecklistPlan, ChecklistPlanItemAction) -> Void
     let onKitchenwareItemAction: (Int64, ChecklistKitchenwareItemAction) -> Void
@@ -18,7 +21,13 @@ struct ChecklistCookableSection: View {
         VStack(spacing: 0) {
             header
             ChecklistCookabilityView(
-                cookability: cookable, onPlanItemAction, onKitchenwareItemAction, onIngredientItemAction)
+                cookability: cookable,
+                isUpdatingPantry,
+                pendingKitchenwareIds,
+                pendingIngredientIds,
+                onPlanItemAction,
+                onKitchenwareItemAction,
+                onIngredientItemAction)
         }
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 28))
@@ -33,7 +42,7 @@ struct ChecklistCookableSection: View {
                 Group {
                     Text("지금 바로 요리할 수 있는\n\(cookable.plans.count)개의 플랜")
                         .font(.system(size: 17, weight: .semibold))
-                    Text("요리하기 위해 필요한 모든 도구와 재료가\n보관함에 추가되어 있어요.")
+                    Text("요리하기 위해 필요한 도구와 재료가\n모두 보관함에 있어요.")
                         .font(.system(size: 17, weight: .medium))
                         .foregroundStyle(Color.gray35)
                 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 enum BasicMenuRowType {
     case navigation
+    case externalLink
     case action
     case destructiveAction
     case info(trailing: String)
@@ -16,6 +17,7 @@ enum BasicMenuRowType {
     var labelForegroundColor: Color {
         switch self {
         case .navigation: return .black
+        case .externalLink: return .accentColor
         case .action: return .accentColor
         case .destructiveAction: return .red
         case .info: return .black
@@ -26,6 +28,7 @@ enum BasicMenuRowType {
     var trailingIcon: some View {
         switch self {
         case .navigation: Image("arrow-right-14").foregroundStyle(Color.accentColor)
+        case .externalLink: Image("external-link-14").foregroundStyle(Color.accentColor)
         case .info(let trailing):
             Text(trailing)
                 .font(.system(size: 17, weight: .medium))

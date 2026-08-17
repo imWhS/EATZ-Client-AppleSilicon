@@ -8,50 +8,71 @@
 import SwiftUI
 import Kingfisher
 
-enum ChecklistIngredientItemAction {
-    case addToPantry
-    case removeFromPantry
-    case like
-    case unlike
-    case addNote
-    case setExpiryDate
-}
-
 struct ChecklistIngredientItem: View {
     let ingredient: ChecklistIngredient
+    let disabled: Bool
     let isLoading: Bool
+    let showDivider: Bool
     let action: (Int64, ChecklistIngredientItemAction) -> Void
     
-    init(_ ingredient: ChecklistIngredient,
-         isLoading: Bool,
-         action: @escaping (Int64, ChecklistIngredientItemAction) -> Void) {
-        self.ingredient = ingredient
-        self.isLoading = isLoading
-        self.action = action
+    private let verticalSpacing: CGFloat = 10.0
+    
+    init(
+        _ ingredient: ChecklistIngredient,
+        disabled: Bool,
+        isLoading: Bool,
+        showDivider: Bool = true,
+        action: @escaping (Int64, ChecklistIngredientItemAction) -> Void) {
+            self.ingredient = ingredient
+            self.disabled = disabled
+            self.isLoading = isLoading
+            self.showDivider = showDivider
+            self.action = action
     }
     
     var body: some View {
-        HStack {
+        HStack(alignment: .top) {
             Image(ingredient.missing ? "recipe-ingredients-cookable-needed" : "recipe-ingredients-cookable-added")
+                .padding(.vertical, 6.5)
             
-            HStack(spacing: 4) {
-                Group {
-                    if ingredient.parentCoupled,
-                       let coupledParentName = ingredient.coupledParentName,
-                       coupledParentName.isEmpty == false {
-                        Text(coupledParentName)
-                            .font(.system(size: 17, weight: .medium))
-                            .foregroundStyle(Color.gray60)
-                    }
-                    Text(ingredient.name)
-                        .font(.system(size: 17, weight: .medium))
-                    Spacer()
+            VStack(spacing: verticalSpacing) {
+                HStack {
+                    leadingSection
+                    trailingSection
+                }
+                
+                if showDivider {
+                    HorizontalDivider(padding: 0)
                 }
             }
-            
-            if isLoading {
-                ProgressView()
-            } else {
+        }
+        .padding(.horizontal, 20)
+    }
+    
+    @ViewBuilder
+    private var leadingSection: some View {
+        HStack(spacing: 4) {
+            Group {
+                if ingredient.parentCoupled,
+                   let coupledParentName = ingredient.coupledParentName,
+                   coupledParentName.isEmpty == false {
+                    Text(coupledParentName)
+                        .font(.system(size: 17, weight: .medium))
+                        .foregroundStyle(Color.gray60)
+                }
+                Text(ingredient.name)
+                    .font(.system(size: 17, weight: .medium))
+                Spacer()
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var trailingSection: some View {
+        if isLoading {
+            ProgressView()
+        } else {
+            Group {
                 if !ingredient.missing {
                     actionButton(image: "add-circled-20", action: { action(ingredient.id, .addToPantry) }).opacity(0).disabled(true)
                     actionMenu
@@ -60,8 +81,9 @@ struct ChecklistIngredientItem: View {
                     actionButton(image: "add-circled-22", action: { action(ingredient.id, .addToPantry) })
                 }
             }
+            .opacity(disabled ? 0.5 : 1)
+            .disabled(disabled)
         }
-        .padding(.horizontal, 20)
     }
     
     private var actionMenu: some View {
@@ -96,3 +118,13 @@ struct ChecklistIngredientItem: View {
         Button(action: action) { Image(image).padding(4) }
     }
 }
+
+enum ChecklistIngredientItemAction {
+    case addToPantry
+    case removeFromPantry
+    case like
+    case unlike
+    case addNote
+    case setExpiryDate
+}
+

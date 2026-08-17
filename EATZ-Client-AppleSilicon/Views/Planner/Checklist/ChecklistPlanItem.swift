@@ -70,6 +70,7 @@ struct ChecklistPlanItem: View {
             .resizable()
             .aspectRatio(contentMode: .fill)
             .frame(width: cardWidth, height: cardWidth)
+            .contentShape(Rectangle())
             .clipped()
     }
     

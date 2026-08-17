@@ -70,6 +70,8 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
             icon
             Text(kitchenware.name)
                 .font(.system(size: 17, weight: .medium))
+                .lineLimit(2)
+                .truncationMode(.tail)
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }

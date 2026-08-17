@@ -31,7 +31,7 @@ struct ExploreThemeDismissButton: View {
         .fixedSize() // 크기가 변할 때 내부 텍스트가 잘리지 않도록 고정합니다.
         .frame(width: isSearchMode ? nil : 0, alignment: .trailing)
         .opacity(isSearchMode ? 1 : 0)
-        .clipped() // 너비가 0일 때 뷰가 영역을 차지하지 않도록 잘라냅니다.
+        .clipped()
         .allowsHitTesting(isSearchMode) // 보일 때만 탭할 수 있도록 처리합니다.
     }
 }

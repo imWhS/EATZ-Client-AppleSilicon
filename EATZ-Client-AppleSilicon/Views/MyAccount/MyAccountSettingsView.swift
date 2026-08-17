@@ -41,12 +41,12 @@ struct MyAccountSettingsView: View {
                     }
                     
                     SettingsSectionCard(title: "사용자 지원") {
-                        BasicMenuRow("새로운 소식", .action) {
+                        BasicMenuRow("새로운 소식", .externalLink) {
                             if let url = EatzLinks.newsAndUpdatesURL {
                                 openURL(url)
                             }
                         }
-                        BasicMenuRow("개발자에게 편지 쓰기", false, .action, EatzLinks.developerEmailString) {
+                        BasicMenuRow("개발자에게 편지 쓰기", false, .externalLink, EatzLinks.developerEmailString) {
                             if let url = SupportEmailUtli.createEmailURL() {
                                 openURL(url)
                             }
@@ -54,12 +54,12 @@ struct MyAccountSettingsView: View {
                     }
                     
                     SettingsSectionCard(title: "정보") {
-                        BasicMenuRow("이용 약관 및 정책", .action) {
+                        BasicMenuRow("이용 약관 및 정책", .externalLink) {
                             if let url = EatzLinks.termsOfServiceURL {
                                 openURL(url)
                             }
                         }
-                        BasicMenuRow("개인 정보 처리 방침", .action) {
+                        BasicMenuRow("개인 정보 처리 방침", .externalLink) {
                             if let url = EatzLinks.privacyPolicyURL {
                                 openURL(url)
                             }

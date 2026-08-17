@@ -42,7 +42,7 @@ struct RecipeDetailInteractionBar: View {
             }
             VerticalDivider(padding: 10)
             VerticalAlignedIconTitleButton(
-                image: "add-circled-20",
+                image: "add-to-planner-20",
                 title: "플래너에 추가") {
                 onAddToPlannerTapped()
             }

@@ -101,6 +101,8 @@ private struct MyKitchenwarePantryList: View {
             .font(.system(size: 14, weight: .medium))
             .foregroundStyle(Color.gray35)
             .padding(.leading, 20)
+            .contentTransition(.numericText())
+            .animation(.snappy, value: pagedKitchenwares.items.count)
     }
     
     private var listSection: some View {

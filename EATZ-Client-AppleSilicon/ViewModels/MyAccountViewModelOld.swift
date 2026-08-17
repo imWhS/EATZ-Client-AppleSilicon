@@ -347,7 +347,7 @@ extension MyAccountViewModelOld {
                     self.myKitchenwares = kitchenwares
                     completion?(nil)
                 case .failure(let networkError):
-                    let message = networkError.isServiceUnavailable ? networkError.userMessage : "보관함에 추가한 도구 목록을 불러오지 못했어요. \(networkError.userMessage)"
+                    let message = networkError.isServiceUnavailable ? networkError.userMessage : "보관함 속의 도구 목록을 불러오지 못했어요. \(networkError.userMessage)"
                     completion?((networkError, message))
                 }
             }
@@ -364,7 +364,7 @@ extension MyAccountViewModelOld {
                     self.myIngredients = response.content
                     completion?(nil)
                 case .failure(let networkError):
-                    let message = networkError.isServiceUnavailable ? networkError.userMessage : "보관함에 추가한 재료 목록을 불러오지 못했어요. \(networkError.userMessage)"
+                    let message = networkError.isServiceUnavailable ? networkError.userMessage : "보관함 속의 재료 목록을 불러오지 못했어요. \(networkError.userMessage)"
                     completion?((networkError, message))
                 }
             }

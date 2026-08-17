@@ -80,6 +80,8 @@ private struct LikedIngredientList: View {
                     .foregroundStyle(Color.gray35)
                     .padding(.leading, 20)
                     .padding(.vertical, 20)
+                    .contentTransition(.numericText())
+                    .animation(.snappy, value: pagedIngredients.totalElements)
                 LazyVStack(spacing: 8) {
                     ForEach(pagedIngredients.items) { ingredient in
                         IngredientItem<EmptyView>(

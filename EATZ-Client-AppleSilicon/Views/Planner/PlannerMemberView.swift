@@ -60,9 +60,9 @@ struct PlannerMemberView: View {
     private var contentView: some View {
         ScrollView {
             VStack(spacing: 0) {
-                PlannerChecklistBanner(
+                PlannerChecklistBannerTypeB(
                     planCount: viewModel.planCountInDateRange,
-                    onPresentChecklist: {
+                    onPresentChecklistTapped: {
                         router.push(.checklist(
                             startDate: viewModel.dateRange.startDate,
                             endDate: viewModel.dateRange.endDate
@@ -82,7 +82,7 @@ struct PlannerMemberView: View {
                 PlannerPlanList(
                     displayedDate,
                     plans: viewModel.plansByDate[displayedDate.formattedStandard],
-                    onAddPlan: { date in viewModel.sheet = .plannerRecipePicker(date: date) },
+                    onAddPlanTapped: { date in viewModel.sheet = .plannerRecipePicker(date: date) },
                     onPlanAction: viewModel.handlePlanItemAction)
             }
         }

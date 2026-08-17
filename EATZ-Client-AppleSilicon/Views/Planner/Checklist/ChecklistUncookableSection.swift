@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ChecklistUncookableSection: View {
     let uncookable: ChecklistCookability
+    let isUpdatingPantry: Bool
+    let pendingKitchenwareIds: Set<Int64>
+    let pendingIngredientIds: Set<Int64>
     let missingIngredientCount: Int
     let missingKitchenwareCount: Int
     let onAddAllRequirements: () -> Void
@@ -37,8 +40,11 @@ struct ChecklistUncookableSection: View {
             header
             ChecklistCookabilityView(
                 cookability: uncookable,
+                isUpdatingPantry,
                 missingKitchenwareCount,
                 missingIngredientCount,
+                pendingKitchenwareIds,
+                pendingIngredientIds,
                 onPlanItemAction,
                 onKitchenwareItemAction,
                 onIngredientItemAction)
@@ -56,7 +62,7 @@ struct ChecklistUncookableSection: View {
                         // 레시피를 요리하기 위해 필요한(사용자가 보관함에 추가하지 않은) 재료와 도구 모두 사용자 보관함에 일괄 추가합니다.
                         onAddAllRequirements()
                     }) {
-                        HStack(spacing: 6) {
+                        HStack(spacing: 10) {
                             Image("add-circled-22").foregroundStyle(Color.white)
                             Text("모두 보관함에 추가")
                         }
@@ -82,7 +88,7 @@ struct ChecklistUncookableSection: View {
                 Group {
                     Text("지금 요리할 수 없는\n\(uncookable.plans.count)개의 플랜")
                         .font(.system(size: 17, weight: .semibold))
-                    Text("해당 날짜에 추가한 레시피를 요리하려면\n\(missingKitchenwareLabel)\(missingIngredientLabel)가 더 필요해요.")
+                    Text("모든 레시피를 요리하려면\n\(missingKitchenwareLabel)\(missingIngredientLabel)를 더 준비해야 돼요.")
                         .font(.system(size: 17, weight: .medium))
                         .foregroundStyle(Color.gray35)
                 }

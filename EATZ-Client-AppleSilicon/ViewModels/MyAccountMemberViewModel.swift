@@ -200,7 +200,7 @@ extension MyAccountMemberViewModel {
                     self.myKitchenwares = kitchenwares
                     completion?(nil)
                 case .failure(let networkError):
-                    let message = networkError.isServiceUnavailable ? networkError.userMessage : "보관함에 추가한 도구 목록을 불러오지 못했어요. \(networkError.userMessage)"
+                    let message = networkError.isServiceUnavailable ? networkError.userMessage : "보관함 속의 도구 목록을 불러오지 못했어요. \(networkError.userMessage)"
                     completion?((networkError, message))
                 }
             }
@@ -217,23 +217,7 @@ extension MyAccountMemberViewModel {
                     self.myIngredients = response.content
                     completion?(nil)
                 case .failure(let networkError):
-                    let message = networkError.isServiceUnavailable ? networkError.userMessage : "보관함에 추가한 재료 목록을 불러오지 못했어요. \(networkError.userMessage)"
-                    completion?((networkError, message))
-                }
-            }
-        }
-    }
-    
-    private func loadIngredientCount(completion: (((NetworkError, String)?) -> Void)? = nil) {
-        UserPantryService.shared.getIngredientCount { [weak self] result in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let response):
-                    self.myIngredientCount = response.count
-                    completion?(nil)
-                case .failure(let networkError):
-                    let message = networkError.isServiceUnavailable ? networkError.userMessage : "보관함 속 재료 수를 불러오지 못했어요. \(networkError.userMessage)"
+                    let message = networkError.isServiceUnavailable ? networkError.userMessage : "보관함 속의 재료 목록을 불러오지 못했어요. \(networkError.userMessage)"
                     completion?((networkError, message))
                 }
             }

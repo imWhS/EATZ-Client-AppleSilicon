@@ -61,7 +61,7 @@ struct RecipeDetailRequirementsKitchenwareSection: View {
             HStack(spacing: 0) {
                 ForEach(kitchenwares) { kitchenware in
                     RecipeDetailRequirementsKitchenwareItem(kitchenware, isLoggedIn, action)
-                        .frame(minWidth: itemWidth)
+                        .frame(minWidth: itemWidth, maxWidth: itemWidth)
                 }
             }
             .padding(.horizontal, 16)

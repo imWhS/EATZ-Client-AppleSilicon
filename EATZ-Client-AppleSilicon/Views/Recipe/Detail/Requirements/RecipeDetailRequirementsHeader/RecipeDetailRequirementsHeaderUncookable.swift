@@ -47,11 +47,14 @@ struct RecipeDetailRequirementsHeaderUncookable: View {
                 VStack(spacing: 4) {
                     Text("바로 요리할 수 없는 레시피")
                         .font(.system(size: 17, weight: .semibold))
-                    Text("\(missingKitchenwareLabel)\(missingIngredientLabel)가 부족해요. 이미 필요한 도구와 재료를 모두 보유하고 있다면, 보관함에 추가해두세요.")
+                    Text("\(missingKitchenwareLabel)\(missingIngredientLabel)가 부족해요. 이미 필요한 도구와 재료를 모두 준비했다면, 보관함에 추가해두세요.")
                         .font(.system(size: 17))
                         .foregroundStyle(Color.gray50)
                         .multilineTextAlignment(.center)
                         .fixedSize(horizontal: false, vertical: true)
+                        .contentTransition(.numericText())
+                        .animation(.snappy, value: missingKitchenwareCount)
+                        .animation(.snappy, value: missingIngredientCount)
                 }
                 addAllToPantryButton
             }

@@ -12,16 +12,16 @@ struct PlannerPlanList: View {
     
     let date: Date
     let plans: [PlannerPlan]?
-    let onAddPlan: (Date) -> Void
+    let onAddPlanTapped: (Date) -> Void
     let action: (PlannerPlan, PlannerPlanItemAction) -> Void
     
     init(_ date: Date,
          plans: [PlannerPlan]?,
-         onAddPlan: @escaping (Date) -> Void,
+         onAddPlanTapped: @escaping (Date) -> Void,
          onPlanAction: @escaping (PlannerPlan, PlannerPlanItemAction) -> Void) {
         self.date = date
         self.plans = plans
-        self.onAddPlan = onAddPlan
+        self.onAddPlanTapped = onAddPlanTapped
         self.action = onPlanAction
     }
     
@@ -56,7 +56,7 @@ struct PlannerPlanList: View {
     var body: some View {
         VStack(spacing: 0) {
             mainContentView
-            PlannerPlanListFooterView(date: date, itemCount: plans?.count, onAddPlan: onAddPlan)
+            PlannerPlanListFooterView(date: date, planCount: plans?.count, onAddPlanTapped: onAddPlanTapped)
         }
     }
     
@@ -106,11 +106,11 @@ private struct PlannerPlanListGuideView: View {
 
 private struct PlannerPlanListFooterView: View {
     let date: Date
-    let itemCount: Int?
-    let onAddPlan: (Date) -> Void
+    let planCount: Int?
+    let onAddPlanTapped: (Date) -> Void
     
-    private var itemCountLabel: String {
-        if let itemCount = self.itemCount {
+    private var planCountLabel: String {
+        if let itemCount = self.planCount {
             return "\(itemCount)개의 플랜"
         } else {
             return ""
@@ -148,17 +148,19 @@ private struct PlannerPlanListFooterView: View {
                 Text(EatzDateTimeFormatters.monthDayWithUnit.string(from: date))
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(Color.black)
-                Text(itemCountLabel)
+                Text(planCountLabel)
             }
             .font(.system(size: 12, weight: .medium))
             .foregroundStyle(Color.gray35)
+            .contentTransition(.numericText())
+            .animation(.snappy, value: planCountLabel)
             
             Spacer()
         }
     }
     
     private var addPlanButton: some View {
-        Button(action: { onAddPlan(self.date) }) {
+        Button(action: { onAddPlanTapped(self.date) }) {
             Image("add-12")
         }
         .buttonStyle(CapsuleButtonMediumStyle(status: .secondary, isIconOnly: true))

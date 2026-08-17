@@ -78,7 +78,7 @@ struct PlannerViewOld: View {
                 PlannerPlanList(
                     date,
                     plans: viewModel.plansByDate[date.formattedStandard],
-                    onAddPlan: { date in viewModel.sheet = .plannerRecipePicker(date: date) },
+                    onAddPlanTapped: { date in viewModel.sheet = .plannerRecipePicker(date: date) },
                     onPlanAction: viewModel.handlePlanItemAction)
             }
         }

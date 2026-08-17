@@ -40,6 +40,8 @@ struct VerticalLabeledValueView: View {
                     .font(style.font)
                     .foregroundStyle(.black)
             }
+            .contentTransition(.numericText())
+            .animation(.snappy, value: value)
         }
     }
 }

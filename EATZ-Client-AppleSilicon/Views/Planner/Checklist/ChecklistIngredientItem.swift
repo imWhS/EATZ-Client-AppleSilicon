@@ -13,7 +13,7 @@ struct ChecklistIngredientItem: View {
     let disabled: Bool
     let isLoading: Bool
     let showDivider: Bool
-    let action: (Int64, ChecklistIngredientItemAction) -> Void
+    let action: (Int64, ChecklistIngredientAction) -> Void
     
     private let verticalSpacing: CGFloat = 10.0
     
@@ -22,7 +22,7 @@ struct ChecklistIngredientItem: View {
         disabled: Bool,
         isLoading: Bool,
         showDivider: Bool = true,
-        action: @escaping (Int64, ChecklistIngredientItemAction) -> Void) {
+        action: @escaping (Int64, ChecklistIngredientAction) -> Void) {
             self.ingredient = ingredient
             self.disabled = disabled
             self.isLoading = isLoading
@@ -71,6 +71,7 @@ struct ChecklistIngredientItem: View {
     private var trailingSection: some View {
         if isLoading {
             ProgressView()
+                .padding(4.75)
         } else {
             Group {
                 if !ingredient.missing {
@@ -119,7 +120,7 @@ struct ChecklistIngredientItem: View {
     }
 }
 
-enum ChecklistIngredientItemAction {
+enum ChecklistIngredientAction {
     case addToPantry
     case removeFromPantry
     case like

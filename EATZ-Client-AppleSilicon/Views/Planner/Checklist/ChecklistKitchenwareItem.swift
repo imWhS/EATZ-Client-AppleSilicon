@@ -8,7 +8,7 @@
 import SwiftUI
 import Kingfisher
 
-enum ChecklistKitchenwareItemAction {
+enum ChecklistKitchenwareAction {
     case addToPantry
     case removeFromPantry
     case addNote
@@ -18,12 +18,12 @@ struct ChecklistKitchenwareItem: View {
     let kitchenware: ChecklistKitchenware
     let disabled: Bool
     let isLoading: Bool
-    let action: (Int64, ChecklistKitchenwareItemAction) -> Void
+    let action: (Int64, ChecklistKitchenwareAction) -> Void
     
     init(_ kitchenware: ChecklistKitchenware,
          disabled: Bool,
          isLoading: Bool,
-         action: @escaping (Int64, ChecklistKitchenwareItemAction) -> Void) {
+         action: @escaping (Int64, ChecklistKitchenwareAction) -> Void) {
         self.kitchenware = kitchenware
         self.disabled = disabled
         self.isLoading = isLoading

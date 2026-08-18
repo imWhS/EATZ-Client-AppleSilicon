@@ -14,8 +14,8 @@ struct ChecklistCookableSection: View {
     let pendingIngredientIds: Set<Int64>
     let onAddAllRequirements: () -> Void
     let onPlanItemAction: (ChecklistPlan, ChecklistPlanItemAction) -> Void
-    let onKitchenwareItemAction: (Int64, ChecklistKitchenwareItemAction) -> Void
-    let onIngredientItemAction: (Int64, ChecklistIngredientItemAction) -> Void
+    let onKitchenwareItemAction: (Int64, ChecklistKitchenwareAction) -> Void
+    let onIngredientItemAction: (Int64, ChecklistIngredientAction) -> Void
     
     var body: some View {
         VStack(spacing: 0) {

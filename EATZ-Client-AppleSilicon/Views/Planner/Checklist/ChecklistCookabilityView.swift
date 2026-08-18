@@ -15,8 +15,8 @@ struct ChecklistCookabilityView: View {
     let missingKitchenwareCount: Int
     let missingIngredientCount: Int
     let planItemAction: (ChecklistPlan, ChecklistPlanItemAction) -> Void
-    let kitchenwareItemAction: (Int64, ChecklistKitchenwareItemAction) -> Void
-    let ingredientItemAction: (Int64, ChecklistIngredientItemAction) -> Void
+    let kitchenwareItemAction: (Int64, ChecklistKitchenwareAction) -> Void
+    let ingredientItemAction: (Int64, ChecklistIngredientAction) -> Void
     
     init(
         cookability: ChecklistCookability,
@@ -26,8 +26,8 @@ struct ChecklistCookabilityView: View {
          _ pendingKitchenwareIds: Set<Int64>,
          _ pendingIngredientIds: Set<Int64>,
          _ planItemAction: @escaping (ChecklistPlan, ChecklistPlanItemAction) -> Void,
-         _ kitchenwareItemAction: @escaping (Int64, ChecklistKitchenwareItemAction) -> Void,
-         _ ingredientItemAction: @escaping (Int64, ChecklistIngredientItemAction) -> Void)
+         _ kitchenwareItemAction: @escaping (Int64, ChecklistKitchenwareAction) -> Void,
+         _ ingredientItemAction: @escaping (Int64, ChecklistIngredientAction) -> Void)
     {
         self.cookability = cookability
         self.isUpdatingPantry = isUpdatingPantry
@@ -46,8 +46,8 @@ struct ChecklistCookabilityView: View {
         _ pendingKitchenwareIds: Set<Int64>,
         _ pendingIngredientIds: Set<Int64>,
          _ planItemAction: @escaping (ChecklistPlan, ChecklistPlanItemAction) -> Void,
-         _ kitchenwareItemAction: @escaping (Int64, ChecklistKitchenwareItemAction) -> Void,
-         _ ingredientItemAction: @escaping (Int64, ChecklistIngredientItemAction) -> Void)
+         _ kitchenwareItemAction: @escaping (Int64, ChecklistKitchenwareAction) -> Void,
+         _ ingredientItemAction: @escaping (Int64, ChecklistIngredientAction) -> Void)
     {
         self.cookability = cookability
         self.isUpdatingPantry = isUpdatingPantry

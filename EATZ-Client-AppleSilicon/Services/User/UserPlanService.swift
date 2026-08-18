@@ -54,8 +54,8 @@ final class UserPlanService {
     }
     
     func fetchPlans(
-        startDate: Date,
-        endDate: Date,
+        _ startDate: Date,
+        _ endDate: Date,
         completion: @escaping (Result<[PlannerPlan], NetworkError>) -> Void)
     {
         let request = FetchPlansRequest(startDate: startDate, endDate: endDate)
@@ -67,8 +67,8 @@ final class UserPlanService {
     }
     
     func fetchChecklist(
-        startDate: Date,
-        endDate: Date,
+        _ startDate: Date,
+        _ endDate: Date,
         completion: @escaping (Result<Checklist, NetworkError>) -> Void
     ) {
         let request = FetchChecklistRequest(startDate: startDate, endDate: endDate)

@@ -253,7 +253,7 @@ extension PlannerViewModelOld {
     
     /// 주요 데이터를 초기화하고, 및 서버 데이터 불러오기를 처리합니다.
     private func loadPlans(completion: (() -> Void)? = nil) {
-        userPlanService.fetchPlans(startDate: dateRange.startDate, endDate: dateRange.endDate) { [weak self] result in
+        userPlanService.fetchPlans(dateRange.startDate, dateRange.endDate) { [weak self] result in
             guard let self = self else { completion?(); return }
             
             // 서버로부터 데이터를 응답 받은 시점에 전역 게스트 상태인 경우, 데이터 불러오기 처리를 하지 않습니다.

@@ -16,8 +16,8 @@ struct ChecklistUncookableSection: View {
     let missingKitchenwareCount: Int
     let onAddAllRequirements: () -> Void
     let onPlanItemAction: (ChecklistPlan, ChecklistPlanItemAction) -> Void
-    let onKitchenwareItemAction: (Int64, ChecklistKitchenwareItemAction) -> Void
-    let onIngredientItemAction: (Int64, ChecklistIngredientItemAction) -> Void
+    let onKitchenwareItemAction: (Int64, ChecklistKitchenwareAction) -> Void
+    let onIngredientItemAction: (Int64, ChecklistIngredientAction) -> Void
     
     private var missingKitchenwareLabel: String {
         if missingKitchenwareCount == 0 { return "" }

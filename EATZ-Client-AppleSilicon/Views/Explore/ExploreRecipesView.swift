@@ -73,8 +73,7 @@ struct ExploreRecipesView: View {
                         onTappedItemAction: viewModel.handleItem,
                         loadMore: viewModel.loadMoreRecipes,
                         selectableSortOptions: selectableSortOptions,
-                        sort: $sort
-                    )
+                        sort: $sort)
                     .transition(.opacity)
                 }
             case .empty:
@@ -87,7 +86,7 @@ struct ExploreRecipesView: View {
                 .transition(.opacity)
             }
         }
-        .background(Color.backgroundPrimary)
+        .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
         .animation(.easeInOut(duration: 0.3), value: viewModel.viewState)
     }
     

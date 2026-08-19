@@ -66,7 +66,7 @@ struct PlannerRecipePicker: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .background(Color.backgroundPrimary)
+            .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
             
             if viewModel.registrationState == .submitting {
                 LoadingCurtain(title: "레시피를 플래너에 추가하고 있어요...")

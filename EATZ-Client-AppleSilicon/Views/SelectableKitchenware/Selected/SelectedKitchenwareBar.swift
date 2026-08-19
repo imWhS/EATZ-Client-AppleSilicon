@@ -36,7 +36,7 @@ struct SelectedKitchenwareBar: View {
                     .transition(.opacity.animation(.easeInOut(duration: 0.2)))
             }
         }
-        .background(Color.backgroundPrimary)
+        .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
     }
     
     private var emptyStateView: some View {

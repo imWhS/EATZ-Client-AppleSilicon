@@ -36,7 +36,7 @@ struct RatingEditor: View {
                 case .unauthorized: CommonUnauthorizedStateView()
                 }
             }
-            .background(Color.backgroundPrimary)
+            .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
             .navigationTitle(viewModel.navigationTitleLabel)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

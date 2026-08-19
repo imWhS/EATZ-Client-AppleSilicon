@@ -24,12 +24,12 @@ struct DeleteAccountMemberView: View {
             case .authenticated(let user): contentView.id(user.id)
             }
         }
-            .background(Color.backgroundPrimary)
-            .navigationTitle("계정 삭제")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                titleToolbarItem
-            }
+        .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
+        .navigationTitle("계정 삭제")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            titleToolbarItem
+        }
     }
     
     @ViewBuilder

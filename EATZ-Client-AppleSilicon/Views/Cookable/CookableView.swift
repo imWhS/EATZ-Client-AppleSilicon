@@ -42,7 +42,7 @@ struct CookableView: View {
                 })
             }
             .animation(.easeInOut(duration: 0.3), value: isSearchFieldFocused)
-            .background(Color.backgroundPrimary)
+            .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
             .contentShape(Rectangle())
             .onTapGesture { isSearchFieldFocused = false }
             .navigationTitle(MainTabItems.cookable.title)

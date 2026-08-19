@@ -17,6 +17,8 @@ struct DynamicHeightTextView: View {
     let submitsOnReturn: Bool
 
     @State private var height: CGFloat = 0
+    @State private var isEditing: Bool = false
+    
     @Environment(\.isFocused) private var isFocused: Bool
     @FocusState private var internalFocus: Bool
     private var externalFocus: FocusState<Bool>.Binding?
@@ -24,7 +26,6 @@ struct DynamicHeightTextView: View {
     private var autocapitalizationType: UITextAutocapitalizationType
     private var returnKeyType: UIReturnKeyType
     
-    // 폰트 설정을 DynamicHeightTextView에서 관리하도록 변경
     private let font: UIFont
     private let padding: EdgeInsets
     private let cornerRadius: CGFloat
@@ -72,6 +73,7 @@ struct DynamicHeightTextView: View {
         _UITextView(
             text: $text,
             height: $height,
+            isFocused: $isEditing,
             placeholder: placeholder,
             font: self.font,
             keyboardType: keyboardType,
@@ -88,7 +90,7 @@ struct DynamicHeightTextView: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: cornerRadius)
-                .stroke(isFocused ? strokeHighlighted : stroke, lineWidth: 1)
+                .stroke(isEditing ? strokeHighlighted : stroke, lineWidth: 1)
         )
     }
 }
@@ -96,13 +98,13 @@ struct DynamicHeightTextView: View {
 // MARK: - _UITextView (UIViewRepresentable)
 
 private class CustomUITextView: UITextView {
-    // 높이가 변경될 때마다 호출될 클로저
+    // 높이가 변경될 때마다 호출될 클로저입니다.
     var onContentHeightChange: ((CGFloat) -> Void)?
 
-    // 뷰의 내부 콘텐츠 크기가 변경될 때마다 이 프로퍼티를 오버라이드하여 높이 변경을 감지
+    // 이 프로퍼티를 오버라이드함으로써, 뷰의 내부 콘텐츠 크기가 변경될 때마다 높이 변경을 감지합니다.
     override var contentSize: CGSize {
         didSet {
-            // 소수점 차이로 인한 무한 업데이트 방지를 위해 이전 값과 비교
+            // 소수점 차이로 인한 의도하지 않은 업데이트 방지를 위해 이전 값과 비교합니다.
             if oldValue.height != contentSize.height {
                 onContentHeightChange?(contentSize.height)
             }
@@ -113,6 +115,7 @@ private class CustomUITextView: UITextView {
 private struct _UITextView: UIViewRepresentable {
     @Binding var text: String
     @Binding var height: CGFloat
+    @Binding var isFocused: Bool
     
     let placeholder: String
     var placeholderColor: UIColor = UIColor.init(hex: "9E9E9E")
@@ -140,7 +143,7 @@ private struct _UITextView: UIViewRepresentable {
         
         textView.onContentHeightChange = { newHeight in
             DispatchQueue.main.async {
-                // 소수점 차이로 인한 무한 업데이트 방지
+                // 소수점 차이로 인한 업데이트를 방지하기 위해 이전 값과 비교합니다.
                 if abs(self.height - newHeight) > 1 {
                     self.height = newHeight
                 }
@@ -177,7 +180,7 @@ private struct _UITextView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UITextView, context: Context) {
-        // 폰트가 변경되었을 경우를 대비해 업데이트
+        // 폰트가 변경되었을 경우를 대비합니다.
         if uiView.font != self.font {
             uiView.font = self.font
         }
@@ -198,14 +201,13 @@ private struct _UITextView: UIViewRepresentable {
     private func recalculateHeight(view: UITextView) {
         let newSize = view.sizeThatFits(CGSize(width: view.frame.width, height: .greatestFiniteMagnitude))
         DispatchQueue.main.async {
-            // 소수점 차이로 인한 무한 업데이트 방지를 위해 height 비교
+            // 소수점 차이로 인한 의도하지 않은 업데이트 방지를 위해 height를 비교합니다.
             if abs(self.height - newSize.height) > 1 {
                 self.height = newSize.height
             }
         }
     }
     
-    // Coordinator는 이전과 동일 (수정 필요 없음)
     class Coordinator: NSObject, UITextViewDelegate {
         var parent: _UITextView
         var placeholderLabel: UILabel?
@@ -218,7 +220,7 @@ private struct _UITextView: UIViewRepresentable {
         func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
             if self.parent.submitsOnReturn && text == "\n" {
                 self.parent.onSubmit?()
-                return false // 줄바꿈 방지
+                return false // 줄 바꿈을 방지합니다.
             }
             return true
         }
@@ -227,6 +229,18 @@ private struct _UITextView: UIViewRepresentable {
             parent.text = textView.text
             placeholderLabel?.isHidden = !textView.text.isEmpty
             parent.recalculateHeight(view: textView)
+        }
+        
+        func textViewDidBeginEditing(_ textView: UITextView) {
+            DispatchQueue.main.async {
+                self.parent.isFocused = true
+            }
+        }
+                
+        func textViewDidEndEditing(_ textView: UITextView) {
+            DispatchQueue.main.async {
+                self.parent.isFocused = false
+            }
         }
     }
 }

@@ -41,7 +41,7 @@ struct BioEditor: View {
             case .unauthorized: CommonUnauthorizedStateView()
             }
         }
-        .background(Color.backgroundPrimary)
+        .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
     }
     
     private var dismissToolbarItem: some ToolbarContent {

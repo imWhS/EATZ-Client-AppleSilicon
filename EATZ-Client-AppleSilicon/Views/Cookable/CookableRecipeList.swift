@@ -58,7 +58,7 @@ struct CookableRecipeList: View {
             case .empty: emptyStateView
             }
         }
-        .background(Color.backgroundPrimary)
+        .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
         .transition(.opacity)
         .animation(.easeInOut(duration: 0.3), value: viewModel.viewState)
         .navigationBarTitleDisplayMode(.inline)

@@ -58,7 +58,7 @@ struct TagAdditionView: View {
             case .searchable: searchingContainer
             }
         }
-        .background(Color.backgroundPrimary)
+        .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
     }
     
     private var exploringContainer: some View {

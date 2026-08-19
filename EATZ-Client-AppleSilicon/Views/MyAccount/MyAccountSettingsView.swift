@@ -164,7 +164,6 @@ struct SettingsSectionCard<Content: View>: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            // 섹션 타이틀 (있는 경우에만 표시)
             if let title = title {
                 Text(title)
                     .font(.system(size: 14, weight: .medium))
@@ -172,7 +171,6 @@ struct SettingsSectionCard<Content: View>: View {
                     .padding(.horizontal, 20)
             }
             
-            // 내용물을 담는 둥근 흰색 카드
             VStack(spacing: 0) {
                 content
             }

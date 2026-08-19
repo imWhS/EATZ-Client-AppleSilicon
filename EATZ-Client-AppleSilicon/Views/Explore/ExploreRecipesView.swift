@@ -107,8 +107,7 @@ struct ExploreRecipesView: View {
                     onTappedItemAction: viewModel.handleItem,
                     loadMore: viewModel.loadMoreRecipes,
                     selectableSortOptions: selectableSortOptions,
-                    sort: $sort
-                )
+                    sort: $sort)
                 .transition(.opacity)
             case .empty:
                 CommonEmptyStateView(title: "보여드릴 레시피가 없어요.", "카테고리나 필터 옵션을 변경해보세요.")

@@ -33,6 +33,7 @@ struct ErrorCurtain: View {
                     VStack(spacing: 4) {
                         Text("문제가 발생했어요.")
                             .font(.system(size: 17, weight: .semibold))
+                            .multilineTextAlignment(.center)
                             .foregroundStyle(Color.gray35)
                         if let message = message {
                             Text(message)

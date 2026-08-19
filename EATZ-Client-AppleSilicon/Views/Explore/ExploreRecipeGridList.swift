@@ -47,7 +47,7 @@ struct ExploreRecipeGridList: View {
                     .transition(.scale(scale: 0.8).combined(with: .opacity))
                 }
             }
-            .animation(.spring(response: 0.4, dampingFraction: 0.8), value: pagedRecipes.items)
+            .animation(.easeInOut(duration: 0.2), value: pagedRecipes.items)
             .padding(.horizontal, horizontalPadding)
             .padding(.vertical, rowSpacing)
             

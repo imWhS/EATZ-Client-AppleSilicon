@@ -1,16 +1,11 @@
 //
-//  SortTypePicker.swift
+//  SortPicker.swift
 //  EATZ-Client-AppleSilicon
 //
 //  Created by 손원희 on 10/17/25.
 //
 
 import SwiftUI
-
-protocol Sortable: Identifiable, Hashable {
-    /// 뷰를 통해 보여질 문자열입니다.
-    var displayName: String { get }
-}
 
 struct SortPicker<Sort: Sortable>: View {
     @Binding var sort: Sort
@@ -37,4 +32,9 @@ struct SortPicker<Sort: Sortable>: View {
         }
         .padding(.trailing, 12)
     }
+}
+
+protocol Sortable: Identifiable, Hashable {
+    /// 뷰를 통해 보여질 문자열입니다.
+    var displayName: String { get }
 }

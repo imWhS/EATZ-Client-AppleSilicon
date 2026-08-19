@@ -186,7 +186,7 @@ final class RecipeService {
     
     func fetchCookableList(
         searchCriteria: CookableSearchCriteria,
-        sort: CookableRecipeSort,
+        sort: CookableRecipesSort,
         size: Int,
         page: Int,
         completion: @escaping (Result<TodayCookableListResponse, NetworkError>) -> Void)

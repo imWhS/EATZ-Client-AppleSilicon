@@ -15,18 +15,19 @@ struct PlannerView: View {
     @State private var alert: PlannerAlert?
     
     var body: some View {
-        Group {
+        ZStack {
             switch authManager.state {
-            case .unknown: LoadingCurtain(title: "인증 상태를 확인하고 있어요...")
-            case .unauthorized: PlannerGuestView(authManager)
+            case .unknown: LoadingCurtain(title: "인증 상태를 확인하고 있어요...").transition(.opacity)
+            case .unauthorized: PlannerGuestView(authManager).transition(.opacity)
             case .authenticated(let user):
                 // 현재 멤버의 ID가 변경되면 기존 PlannerMemberView 인스턴스를 재렌더링하지 않고 소멸시킴으로써
                 // 새 멤버의 데이터로 PlannerMemberView 인스턴스를 생성합니다.
-                PlannerMemberView(authManager).id(user.id)
+                PlannerMemberView(authManager).id(user.id).transition(.opacity)
             }
         }
         .background(Color.backgroundPrimary)
         .onChange(of: authManager.state, isSessionExpired)
+        .animation(.easeInOut(duration: 0.3), value: authManager.state)
         .alert(
             alert?.title ?? "",
             isPresented: Binding.init(isPresenting: $alert),

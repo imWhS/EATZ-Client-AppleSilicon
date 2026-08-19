@@ -17,11 +17,11 @@ struct PlannerMemberView: View {
     
     var body: some View {
         NavigationStack(path: $router.path) {
-            Group {
+            ZStack {
                 switch viewModel.state {
-                case .loading: LoadingCurtain(title: "회원님의 플래너 정보를 불러오고 있어요...")
-                case .content: contentView
-                case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
+                case .loading: LoadingCurtain(title: "회원님의 플래너 정보를 불러오고 있어요...").transition(.opacity)
+                case .content: contentView.transition(.opacity)
+                case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded).transition(.opacity)
                 }
             }
             .safeAreaInset(edge: .top, spacing: 0) {
@@ -29,6 +29,7 @@ struct PlannerMemberView: View {
                     dateRange: viewModel.dateRange,
                     onShowCalendar: { viewModel.sheet = .calendar })
             }
+            .animation(.easeInOut(duration: 0.3), value: viewModel.state)
             .toolbar(.hidden, for: .navigationBar)
             .navigationTitle(MainTabItems.planner.title)
             .navigationBarTitleDisplayMode(.inline)

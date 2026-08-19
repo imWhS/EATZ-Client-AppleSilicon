@@ -31,7 +31,9 @@ struct SquareHighlightButtonStyle: ButtonStyle {
                 .scaleEffect(isDisabled ? 1.0 : (configuration.isPressed ? 0.965 : 1.0))
                 .opacity(isDisabled ? 1 : (configuration.isPressed ? 0.5 : 1.0))
                 .animation(
-                    isDisabled ? nil : (configuration.isPressed ? .easeInOut(duration: 0.1) : .easeInOut(duration: 0.25)),
+                    configuration.isPressed
+                        ? .interactiveSpring(response: 0.15, dampingFraction: 1.0)
+                        : .spring(response: 0.35, dampingFraction: 0.6),
                     value: configuration.isPressed
                 )
                 .disabled(isDisabled)

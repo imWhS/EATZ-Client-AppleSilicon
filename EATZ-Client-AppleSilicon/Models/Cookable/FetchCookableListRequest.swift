@@ -13,7 +13,7 @@ struct FetchCookableListRequest : Encodable {
     let servings: Int?
     let isCookableOnly: Bool
     
-    let sort: CookableRecipeSort
+    let sort: CookableRecipesSort
     
     let page: Int
     let size: Int

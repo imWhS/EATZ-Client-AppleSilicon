@@ -1,5 +1,5 @@
 //
-//  CookableRecipeSort.swift
+//  CookableRecipesSort.swift
 //  EATZ-Client-AppleSilicon
 //
 //  Created by 손원희 on 10/11/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum CookableRecipeSort: String, Codable, CaseIterable, Equatable, Sortable {
+enum CookableRecipesSort: String, Codable, CaseIterable, Equatable, Sortable {
     case FEWEST_MISSING_REQUIREMENTS
     case TRENDING
     case LATEST

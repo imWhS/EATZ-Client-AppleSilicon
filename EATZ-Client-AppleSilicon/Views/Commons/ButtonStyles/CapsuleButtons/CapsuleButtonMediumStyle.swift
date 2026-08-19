@@ -57,10 +57,12 @@ struct CapsuleButtonMediumStyle: ButtonStyle {
             .foregroundStyle(foregroundColor)
             .background(backgroundColor)
             .cornerRadius(16)
-            .scaleEffect(status != .disabled && configuration.isPressed ? 0.965 : 1.0)
+            .scaleEffect(status != .disabled && configuration.isPressed ? 0.95 : 1.0)
             .opacity(status != .disabled && configuration.isPressed ? 0.5 : 1.0)
             .animation(
-                configuration.isPressed ? .easeInOut(duration: 0.1) : .easeInOut(duration: 0.25),
+                configuration.isPressed
+                    ? .interactiveSpring(response: 0.15, dampingFraction: 1.0)
+                    : .spring(response: 0.35, dampingFraction: 0.6),
                 value: configuration.isPressed
             )
             .opacity(status == .disabled ? 0.5 : 1)

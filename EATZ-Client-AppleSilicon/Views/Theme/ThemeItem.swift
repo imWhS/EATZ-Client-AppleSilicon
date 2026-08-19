@@ -16,7 +16,12 @@ private struct PressedListItemStyle: ButtonStyle {
             .background(configuration.isPressed ? pressedColor : defaultColor)
             .cornerRadius(12)
             .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
-            .animation(configuration.isPressed ? .easeIn(duration: 0.1) : .easeOut(duration: 0.3), value: configuration.isPressed)
+            .animation(
+                configuration.isPressed
+                    ? .interactiveSpring(response: 0.15, dampingFraction: 1.0)
+                    : .spring(response: 0.35, dampingFraction: 0.6),
+                value: configuration.isPressed
+            )
     }
 }
 

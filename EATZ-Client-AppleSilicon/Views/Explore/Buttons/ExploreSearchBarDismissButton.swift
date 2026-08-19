@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ExploreThemeDismissButton: View {
+struct ExploreSearchBarDismissButton: View {
     @FocusState.Binding var isFocused: Bool
     @Binding var keyword: String
     @Binding var isSearchMode: Bool

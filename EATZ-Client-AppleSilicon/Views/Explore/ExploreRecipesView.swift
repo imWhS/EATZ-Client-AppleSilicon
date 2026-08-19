@@ -60,11 +60,35 @@ struct ExploreRecipesView: View {
     private var rootView: some View {
         VStack(spacing: 0) {
             switch viewModel.viewState {
-            case .loaded: ScrollView { stateView }
-            default: stateView
+            case .initialLoading:
+                ExploreFiltersSection(filters, onAction: onFilter)
+                LoadingCurtain(title: "\(tag?.name ?? "모든") 레시피를 불러오고 있어요...")
+                    .transition(.opacity)
+            case .loaded:
+                ScrollView {
+                    ExploreFiltersSection(filters, onAction: onFilter)
+                    ExploreRecipeGridList(
+                        pagedRecipes: viewModel.pagedRecipes,
+                        onTappedRecipe: onTappedRecipe,
+                        onTappedItemAction: viewModel.handleItem,
+                        loadMore: viewModel.loadMoreRecipes,
+                        selectableSortOptions: selectableSortOptions,
+                        sort: $sort
+                    )
+                    .transition(.opacity)
+                }
+            case .empty:
+                ExploreFiltersSection(filters, onAction: onFilter)
+                CommonEmptyStateView(title: "보여드릴 레시피가 없어요.", "카테고리나 필터 옵션을 변경해보세요.")
+                .transition(.opacity)
+            case .error(let message):
+                ExploreFiltersSection(filters, onAction: onFilter)
+                ErrorCurtain(message, onRetryTapped: viewModel.resetAndLoadAll)
+                .transition(.opacity)
             }
         }
         .background(Color.backgroundPrimary)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.viewState)
     }
     
     @ViewBuilder

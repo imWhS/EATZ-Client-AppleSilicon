@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct RootTabView: View {
-    @State private var selection: MainTabItems = .explore
+    @AppStorage("LastSelectedTab") private var selection: MainTabItems = .explore
+    
     @State private var previousSelection: MainTabItems = .explore
     
     @StateObject private var todayRouter = Router()
@@ -35,6 +36,5 @@ struct RootTabView: View {
                 .tag(MainTabItems.myAccount)
                 .environmentObject(myAccountRouter)
         }
-        .onChange(of: selection) { _, selection in self.selection = selection }
     }
 }

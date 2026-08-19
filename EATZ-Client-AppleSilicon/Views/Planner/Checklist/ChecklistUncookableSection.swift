@@ -36,6 +36,11 @@ struct ChecklistUncookableSection: View {
     }
     
     var body: some View {
+        contentView
+            .padding(.horizontal, 20)
+    }
+    
+    private var contentView: some View {
         VStack(spacing: 0) {
             header
             ChecklistCookabilityView(
@@ -77,7 +82,6 @@ struct ChecklistUncookableSection: View {
         }
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 28))
-        .padding(.horizontal, 20)
     }
     
     private var header: some View {

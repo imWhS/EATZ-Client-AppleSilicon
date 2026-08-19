@@ -25,14 +25,15 @@ struct MyAccountMemberView: View {
     
     var body: some View {
         NavigationStack(path: $router.path) {
-            Group {
+            ZStack {
                 switch viewModel.state {
-                case .initialLoading: LoadingCurtain(title: "회원님의 계정 정보를 불러오고 있어요...")
-                case .content: contentView
-                case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
+                case .initialLoading: LoadingCurtain(title: "회원님의 계정 정보를 불러오고 있어요...").transition(.opacity)
+                case .content: contentView.transition(.opacity)
+                case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded).transition(.opacity)
                 }
             }
             .background(Color.backgroundPrimary)
+            .animation(.easeInOut(duration: 0.3), value: viewModel.state)
             .toolbar(.hidden, for: .navigationBar)
             .navigationTitle(MainTabItems.myAccount.title)
             .navigationBarTitleDisplayMode(.inline)

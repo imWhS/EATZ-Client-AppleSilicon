@@ -119,12 +119,10 @@ private struct EssentialRecipeSearchBarField: View {
     }
     
     private var clearSearchFieldButton: some View {
-        Button(action: onClear) {
-            Image("remove-14")
-        }
-        .padding(.vertical, 6)
-        .padding(.leading, 6)
-        .padding(.trailing, 12)
+        Remove14Button(action: onClear)
+            .padding(.vertical, 6)
+            .padding(.leading, 6)
+            .padding(.trailing, 12)
     }
 }
 

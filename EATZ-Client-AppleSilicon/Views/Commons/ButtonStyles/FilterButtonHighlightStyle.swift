@@ -13,7 +13,12 @@ struct FilterButtonHighlightStyle: ButtonStyle {
             .background(
                 Color.buttonSecondary.opacity(configuration.isPressed ? 1 : 0)
             )
-            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
             .cornerRadius(18)
+            .animation(
+                configuration.isPressed
+                    ? .interactiveSpring(response: 0.15, dampingFraction: 1.0)
+                    : .spring(response: 0.35, dampingFraction: 0.6),
+                value: configuration.isPressed
+            )
     }
 }

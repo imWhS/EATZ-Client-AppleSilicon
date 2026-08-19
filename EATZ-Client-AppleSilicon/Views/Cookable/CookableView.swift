@@ -70,7 +70,7 @@ struct CookableView: View {
     
     private var filterSection: some View {
         VStack(spacing: 8) {
-            CookableKeywordFieldView(keyword: $viewModel.searchCriteria.keyword, isFocused: $isSearchFieldFocused)
+            CookableKeywordFieldBar(keyword: $viewModel.searchCriteria.keyword, isFocused: $isSearchFieldFocused)
             
             VStack(spacing: 0) {
                 HStack(spacing: 0) {
@@ -96,43 +96,6 @@ struct CookableView: View {
                         action: viewModel.toggleCookableOnly)
             }
         }
-    }
-}
-
-private struct CookableKeywordFieldView: View {
-    @Binding var keyword: String
-    @FocusState.Binding var isFocused: Bool
-    
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 3) {
-                TextField("키워드", text: $keyword)
-                    .font(.system(size: 17, weight: .semibold))
-                    .focused($isFocused)
-                
-                Text("레시피 제목, 내용")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.init(hex: "C5C5C7"))
-            }
-            Spacer()
-            if (isFocused && !keyword.isEmpty) {
-                Button(action: {
-                    keyword = ""
-                }) {
-                    Image("remove-14")
-                }
-                .padding(.vertical, 6)
-                .padding(.leading, 6)
-            }
-        }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 20)
-        .background(Color.white)
-        .cornerRadius(18)
-        .shadow(color: Color.black.opacity(0.1), radius: 16, x: 0, y: 4)
-        .padding(.horizontal, 20)
-        .onTapGesture { isFocused = true }
-        .padding(.top, 20)
     }
 }
 

@@ -12,6 +12,11 @@ struct PlainButtonStyle: ButtonStyle {
         configuration.label
             .foregroundStyle(Color.accentColor)
             .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-            .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
+            .animation(
+                configuration.isPressed
+                    ? .interactiveSpring(response: 0.15, dampingFraction: 1.0)
+                    : .spring(response: 0.35, dampingFraction: 0.6),
+                value: configuration.isPressed
+            )
     }
 }

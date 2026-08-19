@@ -17,7 +17,7 @@ class CookableRecipeListViewModel: ObservableObject {
     @Published var reportResource: ReportResource?
     
     @Published var pagedRecipes: Paged<CookableRecipe> = .initial
-    @Published var sort: CookableRecipeSort
+    @Published var sort: CookableRecipesSort
     @Published var searchCriteria: CookableSearchCriteria
     
     @Published var showNavigationBarTitle = false
@@ -49,8 +49,8 @@ class CookableRecipeListViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private var recipesRequestId: UUID?
     
-    var selectableSortOptions: [CookableRecipeSort] {
-        let sorts = CookableRecipeSort.allCases
+    var selectableSortOptions: [CookableRecipesSort] {
+        let sorts = CookableRecipesSort.allCases
         return auth.isLoggedIn ? sorts : sorts.filter( { $0 != .FEWEST_MISSING_REQUIREMENTS } )
     }
     

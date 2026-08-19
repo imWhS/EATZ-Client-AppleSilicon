@@ -65,14 +65,58 @@ struct ExploreRecipeSearchView: View {
     private var rootView: some View {
         VStack(spacing: 0) {
             switch viewModel.viewState {
+            case .idle:
+                ExploreFiltersSection(filters, onAction: onFilter)
+                Curtain(
+                    title: "\(tag?.name ?? "모든") 레시피 목록에서 검색",
+                    description: "원하는 레시피의 키워드를 입력하세요.",
+                    header: {
+                        Image("search-200")
+                            .resizable()
+                            .foregroundStyle(Color.gray15)
+                            .frame(width: 40, height: 40)
+                    }
+                )
+                .transition(.opacity)
+            case .initialLoading:
+                ExploreFiltersSection(filters, onAction: onFilter)
+                LoadingCurtain(title: "레시피를 찾고 있어요...")
+                    .transition(.opacity)
             case .loaded:
                 ScrollView {
-                    stateView
+                    ExploreFiltersSection(filters, onAction: onFilter)
+                    ExploreRecipeGridList(
+                        pagedRecipes: viewModel.pagedRecipes,
+                        onTappedRecipe: onTappedRecipe,
+                        onTappedItemAction: viewModel.handleItem,
+                        loadMore: viewModel.loadMoreRecipes,
+                        selectableSortOptions: selectableSortOptions,
+                        sort: $sort
+                    )
+                    .transition(.opacity)
                 }
-            default: stateView
+            case .empty(let keyword):
+                ExploreFiltersSection(filters, onAction: onFilter)
+                CommonEmptyStateView(
+                    title: "원하는 레시피가 없어요.",
+                    "'\(keyword)' 관련 레시피를 하나도 찾지 못했어요.\n다른 검색어를 사용하거나, 필터 옵션을 변경해보세요.")
+                .transition(.opacity)
+            case .error(let message):
+                ExploreFiltersSection(filters, onAction: onFilter)
+                ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
+                    .transition(.opacity)
             }
+            
+//            switch viewModel.viewState {
+//            case .loaded:
+//                ScrollView {
+//                    stateView
+//                }
+//            default: stateView
+//            }
         }
         .background(Color.backgroundPrimary)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.viewState)
     }
     
     @ViewBuilder

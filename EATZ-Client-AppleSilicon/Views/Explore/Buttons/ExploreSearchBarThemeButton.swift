@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ExploreThemeButton: View {
+struct ExploreSearchBarThemeButton: View {
     @FocusState.Binding var isFocused: Bool
     @Binding var isSearchMode: Bool
     let theme: ExploreTagItem?

@@ -362,8 +362,8 @@ extension ChecklistViewModel {
                 switch result {
                 case .success:
                     self.loadChecklist {
-//                        self.pendingIngredientIds.remove(id)
-//                        self.isUpdatingPantry = false
+                        self.pendingIngredientIds.remove(id)
+                        self.isUpdatingPantry = false
                     }
                 case .failure(let networkError):
                     self.alert = .itemUpdateFailed(message: networkError.userMessage)

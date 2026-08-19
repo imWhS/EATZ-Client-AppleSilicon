@@ -72,7 +72,7 @@ struct ChecklistKitchenwareItem: View {
                 Group {
                     if !kitchenware.missing { actionMenu }
                     else {
-                        actionButton(image: "add-circled-20", action: { action(kitchenware.id, .addToPantry) })
+                        actionButton(image: "add-circled-22", action: { action(kitchenware.id, .addToPantry) })
                     }
                 }
                 .opacity(disabled ? 0.5 : 1)

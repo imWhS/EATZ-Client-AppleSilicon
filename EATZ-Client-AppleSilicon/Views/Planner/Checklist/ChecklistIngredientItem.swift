@@ -16,6 +16,7 @@ struct ChecklistIngredientItem: View {
     let action: (Int64, ChecklistIngredientAction) -> Void
     
     private let verticalSpacing: CGFloat = 10.0
+    private let commonHeight: CGFloat = 26.0
     
     init(
         _ ingredient: ChecklistIngredient,
@@ -33,7 +34,7 @@ struct ChecklistIngredientItem: View {
     var body: some View {
         HStack(alignment: .top) {
             Image(ingredient.missing ? "recipe-ingredients-cookable-needed" : "recipe-ingredients-cookable-added")
-                .padding(.vertical, 6.5)
+                .frame(height: commonHeight)
             
             VStack(spacing: verticalSpacing) {
                 HStack {
@@ -64,27 +65,31 @@ struct ChecklistIngredientItem: View {
                     .font(.system(size: 17, weight: .medium))
                 Spacer()
             }
+            .frame(minHeight: commonHeight, maxHeight: commonHeight)
         }
     }
     
     @ViewBuilder
     private var trailingSection: some View {
-        if isLoading {
-            ProgressView()
-                .padding(4.75)
-        } else {
-            Group {
-                if !ingredient.missing {
-                    actionButton(image: "add-circled-20", action: { action(ingredient.id, .addToPantry) }).opacity(0).disabled(true)
-                    actionMenu
+        Group {
+            if isLoading {
+                ProgressView()
+                    .padding(4.75)
+            } else {
+                Group {
+                    if !ingredient.missing {
+                        actionButton(image: "add-circled-22", action: { action(ingredient.id, .addToPantry) }).opacity(0).disabled(true)
+                        actionMenu
+                    }
+                    else {
+                        actionButton(image: "add-circled-22", action: { action(ingredient.id, .addToPantry) })
+                    }
                 }
-                else {
-                    actionButton(image: "add-circled-22", action: { action(ingredient.id, .addToPantry) })
-                }
+                .opacity(disabled ? 0.25 : 1)
+                .disabled(disabled)
             }
-            .opacity(disabled ? 0.5 : 1)
-            .disabled(disabled)
         }
+        .frame(width: commonHeight, height: commonHeight)
     }
     
     private var actionMenu: some View {

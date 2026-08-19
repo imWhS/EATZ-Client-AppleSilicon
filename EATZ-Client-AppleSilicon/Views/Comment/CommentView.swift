@@ -34,7 +34,7 @@ struct CommentView: View {
                 CommentEditor(authManager: authManager, viewModel: viewModel)
             }
         }
-        .background(Color.backgroundPrimary)
+        .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
         .toolbarBackground(.hidden, for: .tabBar)
         .navigationTitle(viewModel.navigationTitleLabel)
         .navigationBarTitleDisplayMode(.inline)

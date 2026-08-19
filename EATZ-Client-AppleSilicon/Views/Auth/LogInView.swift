@@ -43,7 +43,7 @@ struct LogInView: View {
             }
             resetPasswordSection
         }
-        .background(Color.backgroundPrimary)
+        .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
     }
     
     private var header: some View {

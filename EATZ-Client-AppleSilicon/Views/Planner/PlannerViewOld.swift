@@ -58,7 +58,7 @@ struct PlannerViewOld: View {
     private var mainContent: some View {
         ScrollView {
             VStack(spacing: 0) {
-                PlannerChecklistBanner(
+                PlannerChecklistBannerTypeA(
                     planCount: viewModel.planCountInDateRange,
                     onPresentChecklist: {
                         router.push(.checklist(

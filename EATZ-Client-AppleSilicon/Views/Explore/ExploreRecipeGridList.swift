@@ -53,6 +53,7 @@ struct ExploreRecipeGridList: View {
             
             ListPageTailView(hasNextPage: pagedRecipes.hasNextPage, onAppear: loadMore)
         }
+        .padding(.bottom, 20)
     }
     
     private var header: some View {

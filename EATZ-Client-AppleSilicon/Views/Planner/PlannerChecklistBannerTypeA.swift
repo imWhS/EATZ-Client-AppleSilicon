@@ -1,5 +1,5 @@
 //
-//  PlannerChecklistBanner.swift
+//  PlannerChecklistBannerTypeA.swift
 //  EATZ-Client-AppleSilicon
 //
 //  Created by 손원희 on 6/5/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PlannerChecklistBanner: View {
+struct PlannerChecklistBannerTypeA: View {
     let planCount: Int?
     let onPresentChecklist: () -> Void
     

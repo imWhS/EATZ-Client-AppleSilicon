@@ -110,7 +110,7 @@ struct AuthView: View {
                 }
             }
             .padding(.vertical, 20)
-            .background(Color.backgroundPrimary)
+            .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
         }
     }
     

@@ -94,7 +94,6 @@ struct PlannerDatePicker: View {
                 }
             }
             .sheet(isPresented: $isSheetPresented) {
-                // isSheetPresented가 true가 되면 이 뷰가 시트로 나타나요.
                 PlannerDatePicker(for: 1) {
                     
                 }

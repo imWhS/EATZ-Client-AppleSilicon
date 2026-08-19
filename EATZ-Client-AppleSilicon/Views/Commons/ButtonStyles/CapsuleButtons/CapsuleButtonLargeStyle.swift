@@ -8,10 +8,10 @@
 import SwiftUI
 
 enum CapsuleLargeButtonAppearance {
-    case primary // 글씨 흰색, 배경 accent
-    case authPrimary // 글씨 흰색, 배경 auth
-    case secondary // 글씨 accent, 배경 연한 회색
-    case authSecondary // 글씨 auth, 배경 연한 회색
+    case primary
+    case authPrimary
+    case secondary
+    case authSecondary
     case disabled
 }
 

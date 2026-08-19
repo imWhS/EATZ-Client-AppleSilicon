@@ -91,8 +91,7 @@ struct ExploreRecipeSearchView: View {
                         onTappedItemAction: viewModel.handleItem,
                         loadMore: viewModel.loadMoreRecipes,
                         selectableSortOptions: selectableSortOptions,
-                        sort: $sort
-                    )
+                        sort: $sort)
                     .transition(.opacity)
                 }
             case .empty(let keyword):
@@ -106,16 +105,8 @@ struct ExploreRecipeSearchView: View {
                 ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
                     .transition(.opacity)
             }
-            
-//            switch viewModel.viewState {
-//            case .loaded:
-//                ScrollView {
-//                    stateView
-//                }
-//            default: stateView
-//            }
         }
-        .background(Color.backgroundPrimary)
+        .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
         .animation(.easeInOut(duration: 0.3), value: viewModel.viewState)
     }
     
@@ -147,8 +138,7 @@ struct ExploreRecipeSearchView: View {
                     onTappedItemAction: viewModel.handleItem,
                     loadMore: viewModel.loadMoreRecipes,
                     selectableSortOptions: selectableSortOptions,
-                    sort: $sort
-                )
+                    sort: $sort)
                 .transition(.opacity)
             case .empty(let keyword):
                 CommonEmptyStateView(

@@ -110,7 +110,7 @@ class CalendarCell: FSCalendarCell {
         }
         
         if dateIsToday {
-            // 3순위: 오늘 날짜 (선택되지 않음)
+            // 3순위: 오늘 날짜 (선택되지 않은 날짜)
             todayLayer.isHidden = false
             titleLabel.textColor = .accent
         } else if isPlaceholder {

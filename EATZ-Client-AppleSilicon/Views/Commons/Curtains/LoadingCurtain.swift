@@ -27,6 +27,7 @@ struct LoadingCurtain: View {
                         .fixedSize(horizontal: false, vertical: true)
                     Text("잠시만 기다려주세요...")
                         .font(.system(size: 12, weight: .medium))
+                        .multilineTextAlignment(.center)
                         .foregroundStyle(Color.gray35)
                 }
             }

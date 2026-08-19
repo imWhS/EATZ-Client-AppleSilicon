@@ -21,6 +21,6 @@ struct CookableRecipeListToggle: View {
                 .foregroundStyle(Color.black)
         }
         .disabled(!isEnabled)
-        .opacity(isEnabled ? 1 : 0.2)
+        .opacity(isEnabled ? 1 : 0.25)
     }
 }

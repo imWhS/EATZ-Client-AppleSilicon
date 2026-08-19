@@ -14,7 +14,7 @@ struct GuideView: View {
         VStack(alignment: .leading, spacing: 4) {
             Group {
                 ForEach(guides, id: \.self) { guide in
-                    HStack(alignment: .top) {
+                    HStack(alignment: .top, spacing: 4) {
                         Image("info-14")
                         Text(guide)
                     }

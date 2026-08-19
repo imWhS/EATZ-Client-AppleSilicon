@@ -41,6 +41,7 @@ struct Curtain<Header: View, Footer: View>: View {
                     VStack(spacing: 4) {
                         Text(title)
                             .font(.system(size: 17, weight: .semibold))
+                            .multilineTextAlignment(.center)
                             .foregroundStyle(Color.gray35)
                         if let description = description, !description.isEmpty {
                             Text(description)

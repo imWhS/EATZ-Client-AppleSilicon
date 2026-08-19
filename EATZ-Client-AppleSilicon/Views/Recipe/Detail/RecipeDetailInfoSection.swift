@@ -138,7 +138,13 @@ struct RecipeDetailInfoDescriptionView: View {
                     Group {
                         if let creatorName = creatorName {
                             if let urlString = creatorUrl, let url = URL(string: urlString) {
-                                Link(creatorName, destination: url)
+                                Link(destination: url) {
+                                    HStack(spacing: 6) {
+                                        Text(creatorName)
+                                        Image("external-link-14-light")
+                                    }
+                                }
+                                .foregroundStyle(Color.accentColor)
                             } else {
                                 Text(creatorName)
                             }

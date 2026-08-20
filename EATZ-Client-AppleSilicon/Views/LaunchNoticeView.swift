@@ -76,29 +76,26 @@ struct LaunchNoticeView: View {
     }
     
     private var contentView: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 32) {
             Group {
-                VStack(spacing: 40) {
-                    Text(title)
-                        .font(.system(size: 30, weight: .bold))
-                        .foregroundStyle(.black)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .background(
-                            GeometryReader { proxy in
-                                Color.clear
-                                    .onChange(of: proxy.frame(in: .named("scroll")).maxY) { _, maxY in
-                                        let isShowing = maxY < 0
-                                        if showNavigationBarTitle != isShowing {
-                                            withAnimation(.easeInOut(duration: 0.2)) {
-                                                showNavigationBarTitle = isShowing
-                                            }
+                Text(title)
+                    .font(.system(size: 30, weight: .bold))
+                    .foregroundStyle(.black)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .background(
+                        GeometryReader { proxy in
+                            Color.clear
+                                .onChange(of: proxy.frame(in: .named("scroll")).maxY) { _, maxY in
+                                    let isShowing = maxY < 0
+                                    if showNavigationBarTitle != isShowing {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            showNavigationBarTitle = isShowing
                                         }
                                     }
-                            }.frame(height: 0)
-                        )
-                    HorizontalDivider(padding: 0)
-                }
+                                }
+                        }.frame(height: 0)
+                    )
                 MarkdownView(markdownContent)
             }
             .padding(.horizontal, 20)

@@ -110,7 +110,7 @@ struct ChecklistPlanItem: View {
                 Label("레시피 신고", systemImage: "exclamationmark.bubble")
             }
         } label: {
-            ArrowDownCircled24()
+            ArrowCircledDown24()
                 .padding(4)
                 .contentShape(Rectangle())
         }

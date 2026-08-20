@@ -33,7 +33,7 @@ struct CookableRecipeList: View {
     }
     
     init(searchCriteria: CookableSearchCriteria) {
-        _viewModel = StateObject(wrappedValue: CookableRecipeListViewModel(searchCriteria: searchCriteria))
+        self._viewModel = StateObject(wrappedValue: CookableRecipeListViewModel(searchCriteria: searchCriteria))
     }
     
     var body: some View {

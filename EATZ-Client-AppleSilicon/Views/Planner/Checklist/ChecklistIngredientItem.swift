@@ -10,7 +10,7 @@ import Kingfisher
 
 struct ChecklistIngredientItem: View {
     let ingredient: ChecklistIngredient
-    let disabled: Bool
+    let isDisabled: Bool
     let isLoading: Bool
     let showDivider: Bool
     let action: (Int64, ChecklistIngredientAction) -> Void
@@ -20,12 +20,12 @@ struct ChecklistIngredientItem: View {
     
     init(
         _ ingredient: ChecklistIngredient,
-        disabled: Bool,
+        isDisabled: Bool,
         isLoading: Bool,
         showDivider: Bool = true,
         action: @escaping (Int64, ChecklistIngredientAction) -> Void) {
             self.ingredient = ingredient
-            self.disabled = disabled
+            self.isDisabled = isDisabled
             self.isLoading = isLoading
             self.showDivider = showDivider
             self.action = action
@@ -85,8 +85,8 @@ struct ChecklistIngredientItem: View {
                         actionButton(image: "add-circled-22", action: { action(ingredient.id, .addToPantry) })
                     }
                 }
-                .opacity(disabled ? 0.25 : 1)
-                .disabled(disabled)
+                .opacity(isDisabled ? 0.25 : 1)
+                .disabled(isDisabled)
             }
         }
         .frame(width: commonHeight, height: commonHeight)

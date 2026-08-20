@@ -13,7 +13,7 @@ struct CommentView: View {
     @StateObject var viewModel: CommentViewModel
     
     init(recipeId: Int64) {
-        _viewModel = StateObject(wrappedValue: CommentViewModel(for: recipeId))
+        self._viewModel = StateObject(wrappedValue: CommentViewModel(for: recipeId))
     }
     
     var body: some View {

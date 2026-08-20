@@ -14,7 +14,7 @@ struct ChecklistView: View {
     private let navigationTitleLabel: String = "체크리스트"
     
     init(dateRange: (startDate: Date, endDate: Date)) {
-        _viewModel = StateObject(wrappedValue: ChecklistViewModel(dateRange))
+        self._viewModel = StateObject(wrappedValue: ChecklistViewModel(dateRange))
     }
     
     var body: some View {

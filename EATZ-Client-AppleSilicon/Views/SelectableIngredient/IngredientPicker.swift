@@ -12,7 +12,7 @@ struct IngredientPicker: View {
     @Environment(\.dismiss) private var dismiss
     
     init(initialSelection: Binding<[IngredientEssential]>) {
-        _viewModel = StateObject(wrappedValue: IngredientPickerViewModel(initialSelection: initialSelection))
+        self._viewModel = StateObject(wrappedValue: IngredientPickerViewModel(initialSelection: initialSelection))
     }
     
     var body: some View {

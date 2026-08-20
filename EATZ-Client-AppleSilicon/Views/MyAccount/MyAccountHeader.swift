@@ -79,7 +79,7 @@ struct MyAccountHeader: View {
                         .foregroundStyle(Color.gray35)
                 }
                 Spacer()
-                ArrowDownCircled24()
+                ArrowCircledDown24()
             }
             .padding(12)
         }

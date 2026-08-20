@@ -17,7 +17,7 @@ struct CookableFilterButton: View {
             HStack(alignment: .center, spacing: 4) {
                 VerticalDescriptionLabels(titleLabel, subtitleLabel)
                 Spacer()
-                ArrowDownCircled24()
+                ArrowCircledDown24()
             }
             .padding(20)
             .frame(maxHeight: .infinity)

@@ -1,5 +1,5 @@
 //
-//  ArrowDownCircled24.swift
+//  ArrowCircledDown26.swift
 //  EATZ-Client-AppleSilicon
 //
 //  Created by 손원희 on 10/2/25.
@@ -7,19 +7,14 @@
 
 import SwiftUI
 
-struct ArrowDownCircled24: View {
+struct ArrowCircledDown26: View {
     var body: some View {
         VStack {
-            Image("arrow-down-7")
+            Image("arrow-down-8")
                 .foregroundStyle(Color.accentColor)
-                .offset(y: 1)
         }
-        .frame(width: 22, height: 22)
+        .frame(width: 26, height: 26)
         .background(Color.buttonSecondary)
-        .cornerRadius(11)
+        .cornerRadius(13)
     }
-}
-
-#Preview {
-    ArrowDownCircled24()
 }

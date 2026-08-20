@@ -89,7 +89,7 @@ struct ChecklistKitchenwareItem: View {
                 Label("보관함에서 제거", systemImage: "trash")
             }
         } label: {
-            ArrowDownCircled24()
+            ArrowCircledDown24()
         }
     }
     

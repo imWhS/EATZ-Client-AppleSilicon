@@ -115,7 +115,7 @@ struct ChecklistIngredientItem: View {
                 }
             }
         } label: {
-            ArrowDownCircled24()
+            ArrowCircledDown24()
                 .padding(4)
         }
     }

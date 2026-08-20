@@ -98,7 +98,7 @@ private struct ExploreItemDetailView: View {
                 Label("신고", systemImage: "exclamationmark.bubble")
             }
         } label: {
-            ArrowDownCircled24()
+            ArrowCircledDown24()
                 .padding(4)
                 .contentShape(Rectangle())
         }

@@ -76,7 +76,7 @@ struct LaunchNoticeView: View {
     }
     
     private var contentView: some View {
-        VStack(spacing: 32) {
+        VStack(spacing: 12) {
             Group {
                 Text(title)
                     .font(.system(size: 30, weight: .bold))
@@ -97,6 +97,7 @@ struct LaunchNoticeView: View {
                         }.frame(height: 0)
                     )
                 MarkdownView(markdownContent)
+                    .padding(.vertical, 20)
             }
             .padding(.horizontal, 20)
         }

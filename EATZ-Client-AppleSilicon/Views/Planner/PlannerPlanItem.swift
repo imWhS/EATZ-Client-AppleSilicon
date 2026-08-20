@@ -1,5 +1,5 @@
 //
-//  PlanItemView.swift
+//  PlannerPlanItem.swift
 //  EATZ-Client-AppleSilicon
 //
 //  Created by 손원희 on 8/3/25.
@@ -121,7 +121,7 @@ struct PlannerPlanItem: View {
                 Label("레시피 신고", systemImage: "exclamationmark.bubble")
             }
         } label: {
-            ArrowDownCircled24()
+            ArrowCircledDown24()
                 .padding(.horizontal, 8)
                 .contentShape(Rectangle())
         }

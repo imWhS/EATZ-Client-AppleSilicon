@@ -88,7 +88,7 @@ struct RecipeBasicItem<MenuContent: View>: View {
                 Menu {
                     menuContent(recipe)
                 } label: {
-                    ArrowDownCircled24()
+                    ArrowCircledDown24()
                         .padding(.horizontal, 8)
                         .contentShape(Rectangle())
                 }

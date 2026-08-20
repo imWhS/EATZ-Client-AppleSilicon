@@ -16,16 +16,25 @@ struct LogInPasswordField: View {
     
     var body: some View {
         ZStack {
-            FloatingTitleTextField(title: "암호", placeholder: nil, isInvalid: false, text: $password, isFocused: $isFocused)
-                .padding(.horizontal, 20)
-                .opacity(isPasswordVisible ? 1 : 0)
-                .disabled(!isPasswordVisible)
-                .onSubmit(onLogIn)
-            FloatingTitleSecureField(title: "암호", placeholder: nil, text: $password, isFocused: $isFocused)
-                .padding(.horizontal, 20)
-                .opacity(isPasswordVisible ? 0 : 1)
-                .disabled(isPasswordVisible)
-                .onSubmit(onLogIn)
+            FloatingLabeledTextField(
+                floatingLabel: "암호",
+                placeholder: nil,
+                isInvalid: false,
+                text: $password,
+                isFocused: $isFocused)
+            .padding(.horizontal, 20)
+            .opacity(isPasswordVisible ? 1 : 0)
+            .disabled(!isPasswordVisible)
+            .onSubmit(onLogIn)
+            FloatingLabeledSecureField(
+                floatingLabel: "암호",
+                placeholder: nil,
+                text: $password,
+                isFocused: $isFocused)
+            .padding(.horizontal, 20)
+            .opacity(isPasswordVisible ? 0 : 1)
+            .disabled(isPasswordVisible)
+            .onSubmit(onLogIn)
         }
     }
 }

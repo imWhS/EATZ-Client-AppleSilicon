@@ -94,8 +94,8 @@ struct AuthView: View {
                     ProgressView()
                         .frame(maxWidth: .infinity, alignment: .center)
                 } else {
-                    FloatingTitleTextField(
-                        title: "이메일 주소",
+                    FloatingLabeledTextField(
+                        floatingLabel: "이메일 주소",
                         placeholder: nil,
                         isInvalid: false,
                         text: $viewModel.email,

@@ -48,15 +48,27 @@ struct RecipeCreatorInfoEditor: View {
                     VStack(spacing: 8) {
                         Group {
                             // 출처 이름 입력 필드
-                            FloatingTitleTextField(title: "이름", placeholder: "", isInvalid: false, text: $localSourceName, isFocused: $isSourceNameFieldFocused, onSubmit: {
+                            FloatingLabeledTextField(
+                                floatingLabel: "이름",
+                                placeholder: "",
+                                isInvalid: false,
+                                text: $localSourceName,
+                                isFocused: $isSourceNameFieldFocused,
+                                onSubmit: {
                                 isSourceUrlFieldFocused = true
                             })
                             
                             // 출처 URL 주소 입력 필드
-                            FloatingTitleTextField(title: "URL 주소", placeholder: "", isInvalid: false, text: $localSourceUrl, isFocused: $isSourceUrlFieldFocused, keyboardType: .URL, submitLabel: .done, onSubmit: {
-                                if isFormValid {
-                                    saveAndDismiss()
-                                }
+                            FloatingLabeledTextField(
+                                floatingLabel: "URL 주소",
+                                placeholder: "",
+                                isInvalid: false,
+                                text: $localSourceUrl,
+                                isFocused: $isSourceUrlFieldFocused,
+                                keyboardType: .URL,
+                                submitLabel: .done,
+                                onSubmit: {
+                                if isFormValid { saveAndDismiss() }
                             })
                         }
                         .padding(.horizontal, 20)

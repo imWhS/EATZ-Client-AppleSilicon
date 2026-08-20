@@ -62,8 +62,8 @@ struct SignUpCreateUsernameView: View {
     }
     
     private var usernameFieldView: some View {
-        FloatingTitleTextField(
-            title: "사용자 이름",
+        FloatingLabeledTextField(
+            floatingLabel: "사용자 이름",
             placeholder: nil,
             isInvalid: false,
             text: $viewModel.username,

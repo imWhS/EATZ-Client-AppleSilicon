@@ -74,15 +74,25 @@ struct SignUpSetPasswordView: View {
         
         var body: some View {
             ZStack {
-                FloatingTitleTextField(title: "암호", placeholder: nil, isInvalid: false, text: $password, isFocused: $isFocused, onSubmit: onSubmit)
-                    .padding(.horizontal, 20)
-                    .opacity(isPasswordVisible ? 1 : 0)
-                    .disabled(!isPasswordVisible)
-                    .tint(Color.auth)
-                FloatingTitleSecureField(title: "암호", placeholder: nil, text: $password, isFocused: $isFocused, onSubmit: onSubmit)
-                    .padding(.horizontal, 20)
-                    .opacity(isPasswordVisible ? 0 : 1)
-                    .disabled(isPasswordVisible)
+                FloatingLabeledTextField(
+                    floatingLabel: "암호",
+                    placeholder: nil,
+                    isInvalid: false,
+                    text: $password,
+                    isFocused: $isFocused,
+                    onSubmit: onSubmit)
+                .padding(.horizontal, 20)
+                .opacity(isPasswordVisible ? 1 : 0)
+                .disabled(!isPasswordVisible)
+                FloatingLabeledSecureField(
+                    floatingLabel: "암호",
+                    placeholder: nil,
+                    text: $password,
+                    isFocused: $isFocused,
+                    onSubmit: onSubmit)
+                .padding(.horizontal, 20)
+                .opacity(isPasswordVisible ? 0 : 1)
+                .disabled(isPasswordVisible)
             }
         }
     }

@@ -50,7 +50,7 @@ struct RecipeEditorDefaultInfoSection: View {
                     onSubmit: {
                         focusedField = .url
                     },
-                    submitsOnReturn: true
+                    submitOnReturn: true
                 )
                 .focused($focusedField, equals: .title)
                 HorizontalDivider(padding: 0)
@@ -70,7 +70,7 @@ struct RecipeEditorDefaultInfoSection: View {
                     onSubmit: {
                         focusedField = .description
                     },
-                    submitsOnReturn: true
+                    submitOnReturn: true
                 )
                 .focused($focusedField, equals: .url)
                 HorizontalDivider(padding: 0)

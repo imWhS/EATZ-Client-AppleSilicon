@@ -13,7 +13,7 @@ struct RecipeView: View {
     @StateObject private var viewModel: RecipeViewModel
     
     init(recipeId: Int64) {
-        _viewModel = StateObject(wrappedValue: RecipeViewModel(recipeId: recipeId))
+        self._viewModel = StateObject(wrappedValue: RecipeViewModel(recipeId: recipeId))
     }
     
     var body: some View {

@@ -12,7 +12,7 @@ struct KitchenwarePicker: View {
     @Environment(\.dismiss) private var dismiss
     
     init(initialSelection: Binding<[KitchenwareEssential]>) {
-        _viewModel = StateObject(wrappedValue: KitchenwarePickerViewModel(initialSelection: initialSelection))
+        self._viewModel = StateObject(wrappedValue: KitchenwarePickerViewModel(initialSelection: initialSelection))
     }
     
     var body: some View {

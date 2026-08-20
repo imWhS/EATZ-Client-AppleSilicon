@@ -25,7 +25,7 @@ struct ExploreFilterButton: View {
                     Text(label)
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(Color.black)
-                    ArrowDownCircled24()
+                    ArrowCircledDown24()
                 }
                 Text(subtitle)
                     .font(.system(size: 12, weight: .medium))

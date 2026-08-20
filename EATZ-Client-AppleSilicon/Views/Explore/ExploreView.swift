@@ -73,6 +73,17 @@ struct ExploreView: View {
     
     private var mainContent: some View {
         ZStack {
+            ExploreRecipesView(
+                tag: $viewModel.commonTag,
+                filters: $viewModel.commonFilters,
+                sort: $viewModel.commonSort,
+                selectableSortOptions: viewModel.selectableSortOptions,
+                onFilter: { Sheet in viewModel.sheet = Sheet },
+                onTappedRecipe: viewModel.navigateToRecipe
+            )
+            .opacity(viewModel.isSearchMode ? 0 : 1)
+            .allowsHitTesting(!viewModel.isSearchMode)
+            
             if viewModel.isSearchMode {
                 ExploreRecipeSearchView(
                     searchCriteriaPublisher: viewModel.searchCriteriaPublisher,
@@ -81,15 +92,6 @@ struct ExploreView: View {
                     sort: $viewModel.commonSort,
                     selectableSortOptions: viewModel.selectableSortOptions,
                     onFilter: { sheet in viewModel.sheet = sheet },
-                    onTappedRecipe: viewModel.navigateToRecipe
-                )
-            } else {
-                ExploreRecipesView(
-                    tag: $viewModel.commonTag,
-                    filters: $viewModel.commonFilters,
-                    sort: $viewModel.commonSort,
-                    selectableSortOptions: viewModel.selectableSortOptions,
-                    onFilter: { Sheet in viewModel.sheet = Sheet },
                     onTappedRecipe: viewModel.navigateToRecipe
                 )
             }

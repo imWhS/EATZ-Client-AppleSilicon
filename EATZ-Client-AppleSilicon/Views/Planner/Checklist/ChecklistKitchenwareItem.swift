@@ -16,16 +16,16 @@ enum ChecklistKitchenwareAction {
 
 struct ChecklistKitchenwareItem: View {
     let kitchenware: ChecklistKitchenware
-    let disabled: Bool
+    let isDisabled: Bool
     let isLoading: Bool
     let action: (Int64, ChecklistKitchenwareAction) -> Void
     
     init(_ kitchenware: ChecklistKitchenware,
-         disabled: Bool,
+         isDisabled: Bool,
          isLoading: Bool,
          action: @escaping (Int64, ChecklistKitchenwareAction) -> Void) {
         self.kitchenware = kitchenware
-        self.disabled = disabled
+        self.isDisabled = isDisabled
         self.isLoading = isLoading
         self.action = action
     }
@@ -75,8 +75,8 @@ struct ChecklistKitchenwareItem: View {
                         actionButton(image: "add-circled-22", action: { action(kitchenware.id, .addToPantry) })
                     }
                 }
-                .opacity(disabled ? 0.5 : 1)
-                .disabled(disabled)
+                .opacity(isDisabled ? 0.5 : 1)
+                .disabled(isDisabled)
             }
         }
     }
@@ -89,7 +89,7 @@ struct ChecklistKitchenwareItem: View {
                 Label("보관함에서 제거", systemImage: "trash")
             }
         } label: {
-            ArrowDownCircled24()
+            ArrowCircledDown24()
         }
     }
     

@@ -12,7 +12,7 @@ struct RecipeDetailRequirementsView: View {
     @ObservedObject private var viewModel: RecipeDetailRequirementsViewModel
     
     init(viewModel: RecipeDetailRequirementsViewModel) {
-        _viewModel = ObservedObject(wrappedValue: viewModel)
+        self._viewModel = ObservedObject(wrappedValue: viewModel)
     }
     
     var body: some View {

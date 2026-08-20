@@ -1,5 +1,5 @@
 //
-//  FloatingTitleTextFieldTest.swift
+//  FloatingLabeledTextField.swift
 //  Eatz-AppleSilicon
 //
 //  Created by 손원희 on 4/7/25.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct FloatingTitleTextField: View {
-    let title: String?
+struct FloatingLabeledTextField: View {
+    let floatingLabel: String?
     let placeholder: String?
     let isInvalid: Bool
     @Binding var text: String
@@ -20,7 +20,7 @@ struct FloatingTitleTextField: View {
     var submitLabel: SubmitLabel = .return
     var onSubmit: (() -> Void)? = nil
     
-    private var titleColor: Color {
+    private var labelColor: Color {
         if isInvalid {
             return .orange
         } else if isFocused {
@@ -43,11 +43,11 @@ struct FloatingTitleTextField: View {
     var body: some View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading, spacing: 4) {
-                if let title = title {
+                if let title = floatingLabel {
                     Text(title)
                         .id("title")
                         .font(Font.system(size: 12, weight: .semibold))
-                        .foregroundStyle(titleColor)
+                        .foregroundStyle(labelColor)
                         .drawingGroup()
                 }
                 TextField(placeholder ?? "", text: $text)

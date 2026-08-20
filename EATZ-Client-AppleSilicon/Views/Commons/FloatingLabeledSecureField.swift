@@ -1,5 +1,5 @@
 //
-//  FloatingTitleSecureField.swift
+//  FloatingLabeledSecureField.swift
 //  Eatz-AppleSilicon
 //
 //  Created by 손원희 on 4/7/25.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct FloatingTitleSecureField: View {
-    let title: String
+struct FloatingLabeledSecureField: View {
+    let floatingLabel: String
     let placeholder: String?
     @Binding var text: String
     @FocusState.Binding var isFocused: Bool
@@ -17,7 +17,7 @@ struct FloatingTitleSecureField: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title)
+            Text(floatingLabel)
                 .font(Font.system(size: 12, weight: .semibold))
                 .foregroundStyle(isFocused ? Color.accentColor : Color.gray25)
                 .alignmentGuide(.firstTextBaseline) { _ in 0 }
@@ -50,8 +50,8 @@ struct FloatingTitleSecureField: View {
         
         var body: some View {
             VStack {
-                FloatingTitleSecureField(
-                    title: "이메일을 입력하세요.",
+                FloatingLabeledSecureField(
+                    floatingLabel: "이메일을 입력하세요.",
                     placeholder: "이메일 주소",
                     text: $text,
                     isFocused: $isFocused,

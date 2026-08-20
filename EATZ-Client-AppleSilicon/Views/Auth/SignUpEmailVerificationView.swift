@@ -121,8 +121,8 @@ struct SignUpEmailVerificationView: View {
     }
     
     private var validationCodeFieldView: some View {
-        FloatingTitleTextField(
-            title: "인증 코드",
+        FloatingLabeledTextField(
+            floatingLabel: "인증 코드",
             placeholder: nil,
             isInvalid: false,
             text: $viewModel.validationCode,

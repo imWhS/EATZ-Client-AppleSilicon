@@ -122,11 +122,11 @@
 				};
 			};
 			buildConfigurationList = 7BA18CBF2DD5FFC40026A491 /* Build configuration list for PBXProject "EATZ-Client-AppleSilicon" */;
-			developmentRegion = en;
+			developmentRegion = ko;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				ko,
 			);
 			mainGroup = 7BA18CBB2DD5FFC40026A491;
 			minimizedProjectReferenceProxies = 1;

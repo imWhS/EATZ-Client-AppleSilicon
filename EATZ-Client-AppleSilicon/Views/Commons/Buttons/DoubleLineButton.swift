@@ -52,7 +52,7 @@ struct DoubleLineButton: View {
                         Circle()
                             .foregroundStyle(Color.buttonSecondary)
                         
-                        ArrowRightCircled20()
+                        ArrowCircledRight20()
                     }
                     .frame(width: 18, height: 18)
                 }

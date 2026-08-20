@@ -182,7 +182,7 @@ enum ReportAlert {
     @ViewBuilder
     var message: some View {
         switch self {
-        case .confirmReport: Text("신고를 제출할까요? 신고한 내용은 수정 또는, 취소가 불가능해요.")
+        case .confirmReport: Text("신고를 제출할까요? 신고한 내용은 수정 또는 취소가 불가능해요.")
         case .submitted: Text("제출해주신 신고를 접수했어요.")
         case .error(let message): Text(message)
         case .userChanged: Text("기존과 다른 사용자로 로그인됐어요. 신고 편집을 종료할게요.")

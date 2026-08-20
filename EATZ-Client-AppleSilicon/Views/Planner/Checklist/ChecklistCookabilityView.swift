@@ -123,7 +123,7 @@ struct ChecklistCookabilityView: View {
                         ForEach(Array(sortedKitchenwares.enumerated()), id: \.element) { index, kitchenware in
                             ChecklistKitchenwareItem(
                                 kitchenware,
-                                disabled: isUpdatingPantry,
+                                isDisabled: isUpdatingPantry,
                                 isLoading: pendingKitchenwareIds.contains(kitchenware.id),
                                 action: kitchenwareItemAction)
                             .padding(.horizontal, 10)
@@ -165,7 +165,7 @@ struct ChecklistCookabilityView: View {
                             let isLast = index == (sortedIngredients.count - 1)
                             ChecklistIngredientItem(
                                 ingredient,
-                                disabled: isUpdatingPantry,
+                                isDisabled: isUpdatingPantry,
                                 isLoading: pendingIngredientIds.contains(ingredient.id),
                                 showDivider: !isLast,
                                 action: ingredientItemAction)

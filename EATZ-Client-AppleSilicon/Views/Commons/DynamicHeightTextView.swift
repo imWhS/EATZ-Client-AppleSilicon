@@ -14,7 +14,7 @@ struct DynamicHeightTextView: View {
     let maxHeight: CGFloat
     
     var onSubmit: (() -> Void)? = nil
-    let submitsOnReturn: Bool
+    let submitOnReturn: Bool
 
     @State private var height: CGFloat = 0
     @State private var isEditing: Bool = false
@@ -41,7 +41,7 @@ struct DynamicHeightTextView: View {
         font: UIFont = .systemFont(ofSize: 17, weight: .regular),
         padding: EdgeInsets = .init(top: 16, leading: 16, bottom: 16, trailing: 16),
         cornerRadius: CGFloat = 12,
-        stroke: Color = Color(uiColor: .systemGray5),
+        stroke: Color = Color.gray8,
         strokeHighlighted: Color = Color.accentColor,
         backgroundColor: Color = .white,
         isFocused: FocusState<Bool>.Binding? = nil,
@@ -49,7 +49,7 @@ struct DynamicHeightTextView: View {
         autocapitalizationType: UITextAutocapitalizationType = .sentences,
         returnKeyType: UIReturnKeyType = .default,
         onSubmit: (() -> Void)? = nil,
-        submitsOnReturn: Bool = false
+        submitOnReturn: Bool = false
     ) {
         self._text = text
         self.placeholder = text.wrappedValue.isEmpty ? placeholder : ""
@@ -66,7 +66,7 @@ struct DynamicHeightTextView: View {
         self.autocapitalizationType = autocapitalizationType
         self.returnKeyType = returnKeyType
         self.onSubmit = onSubmit
-        self.submitsOnReturn = submitsOnReturn
+        self.submitOnReturn = submitOnReturn
     }
 
     var body: some View {
@@ -75,12 +75,12 @@ struct DynamicHeightTextView: View {
             height: $height,
             isFocused: $isEditing,
             placeholder: placeholder,
-            font: self.font,
+            font: font,
             keyboardType: keyboardType,
-            autocapitalizationType: self.autocapitalizationType,
-            returnKeyType: self.returnKeyType,
-            onSubmit: self.onSubmit,
-            submitsOnReturn: self.submitsOnReturn
+            autocapitalizationType: autocapitalizationType,
+            returnKeyType: returnKeyType,
+            onSubmit: onSubmit,
+            submitOnReturn: submitOnReturn
         )
         .frame(height: min(max(height, minHeight), maxHeight))
         .padding(padding)
@@ -118,19 +118,19 @@ private struct _UITextView: UIViewRepresentable {
     @Binding var isFocused: Bool
     
     let placeholder: String
-    var placeholderColor: UIColor = UIColor.init(hex: "9E9E9E")
+    var placeholderColor: UIColor = UIColor(Color.gray25)
     let font: UIFont
     var isPlaceholderHidden: Bool = true
     var keyboardType: UIKeyboardType = .default
     let autocapitalizationType: UITextAutocapitalizationType
     let returnKeyType: UIReturnKeyType
     let onSubmit: (() -> Void)?
-    let submitsOnReturn: Bool
+    let submitOnReturn: Bool
 
     func makeUIView(context: Context) -> UITextView {
         let textView = CustomUITextView()
         textView.delegate = context.coordinator
-        textView.font = self.font
+        textView.font = font
         textView.backgroundColor = .clear
         textView.setContentHuggingPriority(.defaultHigh, for: .vertical)
         textView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
@@ -138,8 +138,8 @@ private struct _UITextView: UIViewRepresentable {
         textView.textContainer.lineFragmentPadding = 0
         textView.keyboardType = keyboardType
         textView.autocapitalizationType = autocapitalizationType
-        textView.returnKeyType = self.returnKeyType
-        context.coordinator.onSubmit = self.onSubmit
+        textView.returnKeyType = returnKeyType
+        context.coordinator.onSubmit = onSubmit
         
         textView.onContentHeightChange = { newHeight in
             DispatchQueue.main.async {
@@ -181,15 +181,15 @@ private struct _UITextView: UIViewRepresentable {
 
     func updateUIView(_ uiView: UITextView, context: Context) {
         // 폰트가 변경되었을 경우를 대비합니다.
-        if uiView.font != self.font {
-            uiView.font = self.font
+        if uiView.font != font {
+            uiView.font = font
         }
         
-        if uiView.text != self.text {
-            uiView.text = self.text
+        if uiView.text != text {
+            uiView.text = text
         }
         
-        context.coordinator.placeholderLabel?.isHidden = !self.text.isEmpty
+        context.coordinator.placeholderLabel?.isHidden = !text.isEmpty
         
         recalculateHeight(view: uiView)
     }
@@ -202,8 +202,8 @@ private struct _UITextView: UIViewRepresentable {
         let newSize = view.sizeThatFits(CGSize(width: view.frame.width, height: .greatestFiniteMagnitude))
         DispatchQueue.main.async {
             // 소수점 차이로 인한 의도하지 않은 업데이트 방지를 위해 height를 비교합니다.
-            if abs(self.height - newSize.height) > 1 {
-                self.height = newSize.height
+            if abs(height - newSize.height) > 1 {
+                height = newSize.height
             }
         }
     }
@@ -218,8 +218,8 @@ private struct _UITextView: UIViewRepresentable {
         }
         
         func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-            if self.parent.submitsOnReturn && text == "\n" {
-                self.parent.onSubmit?()
+            if parent.submitOnReturn && text == "\n" {
+                parent.onSubmit?()
                 return false // 줄 바꿈을 방지합니다.
             }
             return true

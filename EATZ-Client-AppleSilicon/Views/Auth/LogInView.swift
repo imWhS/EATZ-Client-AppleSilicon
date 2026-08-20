@@ -22,7 +22,6 @@ struct LogInView: View {
                 else {
                    Button("완료", action: viewModel.logIn)
                         .fontWeight(.semibold)
-                        .tint(Color.auth)
                         .buttonStyle(.borderedProminent)
                         .disabled(!viewModel.isPasswordValid)
                }

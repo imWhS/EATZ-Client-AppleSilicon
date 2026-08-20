@@ -16,7 +16,7 @@ struct AuthResetPasswordView: View {
     let onComplete: () -> Void
     
     init(token: String, onComplete: @escaping () -> Void, onDismiss: @escaping () -> Void) {
-        _viewModel = StateObject(wrappedValue: ResetPasswordViewModel(emailToken: token))
+        self._viewModel = StateObject(wrappedValue: ResetPasswordViewModel(emailToken: token))
         self.onComplete = onComplete
         self.onDismiss = onDismiss
     }
@@ -89,11 +89,11 @@ private struct ResetPasswordSetupView: View {
     
     private var passwordFields: some View {
         ZStack {
-            FloatingTitleTextField(title: "새 암호", placeholder: nil, isInvalid: false, text: $password, isFocused: $isFocused)
+            FloatingLabeledTextField(floatingLabel: "새 암호", placeholder: nil, isInvalid: false, text: $password, isFocused: $isFocused)
                 .padding(.horizontal, 20)
                 .opacity(isPasswordVisible ? 1 : 0)
                 .disabled(!isPasswordVisible)
-            FloatingTitleSecureField(title: "새 암호", placeholder: nil, text: $password, isFocused: $isFocused)
+            FloatingLabeledSecureField(floatingLabel: "새 암호", placeholder: nil, text: $password, isFocused: $isFocused)
                 .padding(.horizontal, 20)
                 .opacity(isPasswordVisible ? 0 : 1)
                 .disabled(isPasswordVisible)

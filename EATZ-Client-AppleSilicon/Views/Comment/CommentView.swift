@@ -13,7 +13,7 @@ struct CommentView: View {
     @StateObject var viewModel: CommentViewModel
     
     init(recipeId: Int64) {
-        _viewModel = StateObject(wrappedValue: CommentViewModel(for: recipeId))
+        self._viewModel = StateObject(wrappedValue: CommentViewModel(for: recipeId))
     }
     
     var body: some View {
@@ -146,8 +146,8 @@ enum CommentAlert {
             let authorLabel = type.isMine ? "회원" : "\(username)"
             Text("\(authorLabel)님의 댓글을 삭제할까요? 삭제된 댓글은 복구할 수 없어요.")
         case .deletionSuccess(let isMine): Text("\(isMine ? "회원님의 " : "")댓글을 삭제했어요.")
-        case .confirmDiscardChanges(_): Text("작성 또는, 변경하고 있던 내용을 버리시겠어요?")
-        case .confirmChangeUpdatingComment(_): Text("작성 또는, 변경하고 있던 내용을 버리고 다른 댓글을 편집할까요?")
+        case .confirmDiscardChanges(_): Text("작성 또는 변경하고 있던 내용을 버리시겠어요?")
+        case .confirmChangeUpdatingComment(_): Text("작성 또는 변경하고 있던 내용을 버리고 다른 댓글을 편집할까요?")
         case .error(_, let message): Text(message);
         }
     }

@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct SelectableIngredientChildList<Manager: SelectableIngredientManager>: View {
-    let parentId: Int64
-    let parentName: String
-    
     @StateObject private var viewModel: SelectableIngredientChildListViewModel
     @EnvironmentObject private var manager: Manager
     @Environment(\.dismiss) private var dismiss
     
+    let parentId: Int64
+    let parentName: String
+    
     init(parentId: Int64, parentName: String) {
         self.parentId = parentId
         self.parentName = parentName
-        _viewModel = StateObject(wrappedValue: SelectableIngredientChildListViewModel(parentId: parentId))
+        self._viewModel = StateObject(wrappedValue: SelectableIngredientChildListViewModel(parentId: parentId))
     }
     
     var body: some View {

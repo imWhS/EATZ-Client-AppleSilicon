@@ -9,6 +9,12 @@ import SwiftUI
 
 struct GuideView: View {
     let guides: [String]
+    let horizontalPadding: CGFloat
+    
+    init(guides: [String], horizontalPadding: CGFloat = 20) {
+        self.guides = guides
+        self.horizontalPadding = horizontalPadding
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -17,16 +23,15 @@ struct GuideView: View {
                     HStack(alignment: .top, spacing: 4) {
                         Image("info-14")
                         Text(guide)
+                            .font(Font.system(size: 12, weight: .medium))
+                            .multilineTextAlignment(.leading)
+                            .lineLimit(nil)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
             }
-            .font(Font.system(size: 12, weight: .medium))
-            .multilineTextAlignment(.leading)
-            .frame(maxWidth: .infinity, alignment: .leading)
             .foregroundStyle(Color.gray35)
-            .lineLimit(nil)
-            .padding(.horizontal, 20)
-            .fixedSize(horizontal: false, vertical: true)
+            .padding(.horizontal, horizontalPadding)
         }
     }
 }

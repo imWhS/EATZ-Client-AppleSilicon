@@ -1,5 +1,5 @@
 //
-//  RecipeEditorDefaultInfoImageSection.swift
+//  RecipeEditorDefaultInfoImageView.swift
 //  EATZ-Client-AppleSilicon
 //
 //  Created by 손원희 on 7/6/26.
@@ -8,7 +8,7 @@
 import SwiftUI
 import PhotosUI
 
-struct RecipeEditorDefaultInfoImageSection: View {
+struct RecipeEditorDefaultInfoImageView: View {
     @Binding var imageUrl: String
     @Binding var localImage: UIImage?
     @Binding var isProcessing: Bool
@@ -42,14 +42,16 @@ struct RecipeEditorDefaultInfoImageSection: View {
     
     @ViewBuilder
     private var imageSection: some View {
-        if isProcessing {
-            processingView
-        } else if let localImage = localImage {
-            RecipeEditorImageView(localImage)
-        } else if !imageUrl.isEmpty {
-            RecipeEditorImageView(imageUrl)
-        } else {
-            placeholderView
+        Group {
+            if isProcessing {
+                processingView
+            } else if let localImage = localImage {
+                RecipeEditorImageView(localImage)
+            } else if !imageUrl.isEmpty {
+                RecipeEditorImageView(imageUrl)
+            } else {
+                placeholderView
+            }
         }
     }
     
@@ -75,19 +77,31 @@ struct RecipeEditorDefaultInfoImageSection: View {
         RecipeEditorImageSectionContainer {
             ProgressView("대표 사진을 처리하고 있어요...")
                 .foregroundStyle(Color.gray20)
+                .padding(20)
         }
     }
     
     private var placeholderView: some View {
         RecipeEditorImageSectionContainer {
-            VStack(spacing: 8) {
+            VStack(alignment: .center, spacing: 0) {
                 Group {
-                    Image("image")
-                    Text("보관함 또는 앨범에서 레시피의 대표 사진을 선택하세요.")
-                        .font(.system(size: 17, weight: .medium))
-                        .multilineTextAlignment(.center)
+                    VStack(alignment: .center, spacing: 8) {
+                        Image("image")
+                            .foregroundStyle(Color.black)
+                        Text("보관함 또는 앨범에서 레시피의 대표 사진을 선택하세요.")
+                            .font(.system(size: 17, weight: .medium))
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(Color.black)
+                    }
+                    .padding(.vertical, 20)
+                    HorizontalDivider()
+                    GuideView(
+                        guides: [
+                            "EATZ에서 모든 레시피의 대표 사진은 정방형으로 표시돼요.",
+                            "가로 또는 세로가 더 긴 사진은 가운데를 기준으로 잘려요."])
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.vertical, 20)
                 }
-                .foregroundStyle(Color.gray20)
             }
         }
     }

@@ -62,7 +62,7 @@ class RecipeEditorViewModel: ObservableObject {
     
     /// 뷰에 유효한 대표 사진이 존재하는지 여부를 나타냅니다.
     /// - 기존 업로드된 대표 사진 URL이 남아있거나, 사용자가 새로 고른 로컬 대표 사진 이미지가 있으면 `true`를 반환합니다.
-    private var isImageValid: Bool {
+    var isImageValid: Bool {
         !currentDraft.hasInvalidImageUrl() || localImage != nil
     }
     
@@ -190,8 +190,8 @@ class RecipeEditorViewModel: ObservableObject {
     
     /// 전역 게스트 상태가 됐을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextAsGuest() {
-        self.state = .unauthorized
-        self.clearAllContextData()
+        state = .unauthorized
+        clearAllContextData()
         alert = .sessionExpired(dismissAction: {
             self.routingAction = .dismiss
         })
@@ -199,8 +199,8 @@ class RecipeEditorViewModel: ObservableObject {
     
     /// 이전과 다른 사용자로 변경했을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextForNewUser() {
-        self.state = .unauthorized
-        self.clearAllContextData()
+        state = .unauthorized
+        clearAllContextData()
         alert = .userChanged(dismissAction: {
             self.routingAction = .dismiss
         })

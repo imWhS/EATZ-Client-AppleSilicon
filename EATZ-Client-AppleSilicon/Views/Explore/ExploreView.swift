@@ -45,7 +45,7 @@ struct ExploreView: View {
     private func buildSheet(for type: ExploreSheet) -> some View {
         switch type {
         case .tagsPicker:
-            ThemePickerView(onComplete: { tagId in
+            ThemePicker(onComplete: { tagId in
                 if let id = tagId {
                     viewModel.commonTag = ExploreTagItem(id: id, name: nil)
                     viewModel.loadTag(id: id)

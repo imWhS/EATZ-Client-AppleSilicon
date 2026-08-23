@@ -35,7 +35,7 @@ struct UserBlockShowLearnMoreView: View {
     
     private var titleToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            VStack {
+            VStack(spacing: 8) {
                 Text(titleLabel)
                     .font(.system(size: 17, weight: .semibold))
                 Text(subtitleLabel)
@@ -62,7 +62,7 @@ struct UserBlockShowLearnMoreView: View {
                 .font(.system(size: 40))
                 .padding(6)
                 .foregroundColor(.init(hex: "DC381F"))
-                .background(Color.black.opacity(0.075))
+                .background(Color.gray2)
                 .clipShape(Circle())
             VStack(spacing: 8) {
                 Text(titleLabel)
@@ -100,7 +100,7 @@ struct UserBlockShowLearnMoreView: View {
                 )
                 createInfoRow(
                     icon: "gearshape",
-                    text: "<내 계정 → 환경 설정 → 차단한 사용자 관리>에서 언제든지 차단한 사용자 목록을 확인하고, 특정 사용자를 차단 해제할 수 있어요."
+                    text: "<내 계정 → 설정 및 정보 → 차단 사용자 관리>에서 차단한 사용자 목록을 확인하고, 특정 사용자를 차단 해제할 수 있어요."
                 )
             }
         }
@@ -125,10 +125,12 @@ struct UserBlockShowLearnMoreView: View {
                     .foregroundStyle(Color.black.opacity(0.075))
                     .frame(width: 40, height: 40)
                 Image(systemName: icon)
+                    .resizable()
+                    .scaledToFit()
                     .symbolVariant(.fill)
                     .font(.system(size: 20))
                     .foregroundColor(.secondary)
-                    .frame(width: 20, alignment: .center)
+                    .frame(width: 22, alignment: .center)
             }
             VStack(alignment: .leading, spacing: 20) {
                 Text(text)

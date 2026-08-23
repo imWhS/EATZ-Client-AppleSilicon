@@ -70,7 +70,7 @@ struct PlannerDatePicker: View {
     }
     
     private var header: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 8) {
             Text("언제 요리할 계획인가요?")
                 .font(.system(size: 30, weight: .bold))
             Text("레시피를 플래너에 추가할 날짜를 탭하세요. 레시피가 해당 날짜의 플랜으로 추가돼요.")

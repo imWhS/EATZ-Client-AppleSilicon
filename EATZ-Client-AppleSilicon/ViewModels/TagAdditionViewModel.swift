@@ -18,7 +18,7 @@ class TagAdditionViewModel: ObservableObject {
     @Published var viewState: TagPickerMainViewState = .explorable
     
     @Published var searchState: TagPickerSearchState = .searching
-    @Published var featuredThemesState: TagThemesFeaturedState = .loading
+    @Published var featuredThemesState: FeaturedThemesState = .loading
     
     /// 화면에 표시할 alert
     /// - 아무 alert도 표시하지 않는 경우 `nil`이 됩니다.

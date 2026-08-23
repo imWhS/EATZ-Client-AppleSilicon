@@ -62,7 +62,7 @@ class RecipeEditorViewModel: ObservableObject {
     
     /// 뷰에 유효한 대표 사진이 존재하는지 여부를 나타냅니다.
     /// - 기존 업로드된 대표 사진 URL이 남아있거나, 사용자가 새로 고른 로컬 대표 사진 이미지가 있으면 `true`를 반환합니다.
-    private var isImageValid: Bool {
+    var isImageValid: Bool {
         !currentDraft.hasInvalidImageUrl() || localImage != nil
     }
     
@@ -190,8 +190,8 @@ class RecipeEditorViewModel: ObservableObject {
     
     /// 전역 게스트 상태가 됐을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextAsGuest() {
-        self.state = .unauthorized
-        self.clearAllContextData()
+        state = .unauthorized
+        clearAllContextData()
         alert = .sessionExpired(dismissAction: {
             self.routingAction = .dismiss
         })
@@ -199,8 +199,8 @@ class RecipeEditorViewModel: ObservableObject {
     
     /// 이전과 다른 사용자로 변경했을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextForNewUser() {
-        self.state = .unauthorized
-        self.clearAllContextData()
+        state = .unauthorized
+        clearAllContextData()
         alert = .userChanged(dismissAction: {
             self.routingAction = .dismiss
         })
@@ -227,6 +227,7 @@ extension RecipeEditorViewModel {
                 DispatchQueue.main.async {
                     self.pendingUploadJpegData = jpegData
                     self.localImage = UIImage(data: jpegData)
+                    self.selectedPhotoItem = nil
                 }
             } catch {
                 self.alert = .error(message: "사진을 정상적으로 불러오지 못했어요.")
@@ -273,6 +274,7 @@ extension RecipeEditorViewModel {
         isProcessingImage = true
         recipeService.uploadImage(imageData: data, completion: { [weak self] result in
             guard let self = self else { return }
+            
             DispatchQueue.main.async {
                 self.isProcessingImage = false
                 switch result {
@@ -318,6 +320,7 @@ extension RecipeEditorViewModel {
         if let jpegData = pendingUploadJpegData {
             recipeService.uploadImage(imageData: jpegData) { [weak self] result in
                 guard let self = self else { return }
+                
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let response):
@@ -345,6 +348,7 @@ extension RecipeEditorViewModel {
         
         recipeService.deleteImage(imageUrlToDelete) { [weak self] result in
             guard let self = self else { return }
+            
             DispatchQueue.main.async {
                 if case .failure = result {
                     print("[RecipeEditorViewModel.deleteExistingImage] 기존 대표 사진을 삭제하지 못했어요 | 이미지 URL: \(imageUrlToDelete)")
@@ -360,6 +364,7 @@ extension RecipeEditorViewModel {
         let completionHandler: (Result<Any, NetworkError>) -> Void = { [weak self] result in
             DispatchQueue.main.async {
                 guard let self = self else { return }
+                
                 self.submissionState = .idle
                 switch result {
                 case .success:

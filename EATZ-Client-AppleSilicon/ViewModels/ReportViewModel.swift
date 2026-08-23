@@ -83,8 +83,8 @@ class ReportViewModel: ObservableObject {
     
     /// 전역 게스트 상태가 됐을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextAsGuest() {
-        self.state = .unauthorized
-        self.clearAllContextData()
+        state = .unauthorized
+        clearAllContextData()
         alert = .sessionExpired {
             self.routingAction = .dismiss
         }
@@ -92,8 +92,8 @@ class ReportViewModel: ObservableObject {
     
     /// 이전과 다른 사용자로 변경했을 때, 화면에서 보여지기 위해 필요한 작업을 처리합니다.
     private func handleContextForNewUser() {
-        self.state = .unauthorized
-        self.clearAllContextData()
+        state = .unauthorized
+        clearAllContextData()
         alert = .userChanged {
             self.routingAction = .dismiss
         }

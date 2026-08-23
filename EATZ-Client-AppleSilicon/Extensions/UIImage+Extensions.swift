@@ -12,7 +12,7 @@ extension UIImage {
     func resized(maxDimension: CGFloat) -> UIImage? {
         let width = self.size.width
         let height = self.size.height
-        let aspectRatio = width / height // 4/2, 2/4, 1/1
+        let aspectRatio = width / height
         
         var size: CGSize
         

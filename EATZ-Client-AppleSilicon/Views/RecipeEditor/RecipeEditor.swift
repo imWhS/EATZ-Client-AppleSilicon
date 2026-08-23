@@ -71,14 +71,6 @@ struct RecipeEditor: View {
     private var contentView: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                Text("isSubmittable: \(viewModel.isSubmittable)")
-                Text("\(viewModel.isImageValid)")
-                Text("\(!viewModel.currentDraft.isTitleEmpty())")
-                Text("\(!viewModel.currentDraft.isTitleTooLong())")
-                Text("\(!viewModel.currentDraft.hasInvalidUrl())")
-                Text("\(!viewModel.currentDraft.hasInvalidDescription())")
-                Text("\(!viewModel.currentDraft.hasInvalidCookingTime())")
-                Text("\(!viewModel.currentDraft.hasInvalidServings())")
                 RecipeEditorDefaultInfoSection(
                     draft: $viewModel.currentDraft,
                     localImage: $viewModel.localImage,

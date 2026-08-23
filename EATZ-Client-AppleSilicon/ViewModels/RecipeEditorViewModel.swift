@@ -227,6 +227,7 @@ extension RecipeEditorViewModel {
                 DispatchQueue.main.async {
                     self.pendingUploadJpegData = jpegData
                     self.localImage = UIImage(data: jpegData)
+                    self.selectedPhotoItem = nil
                 }
             } catch {
                 self.alert = .error(message: "사진을 정상적으로 불러오지 못했어요.")
@@ -273,6 +274,7 @@ extension RecipeEditorViewModel {
         isProcessingImage = true
         recipeService.uploadImage(imageData: data, completion: { [weak self] result in
             guard let self = self else { return }
+            
             DispatchQueue.main.async {
                 self.isProcessingImage = false
                 switch result {
@@ -318,6 +320,7 @@ extension RecipeEditorViewModel {
         if let jpegData = pendingUploadJpegData {
             recipeService.uploadImage(imageData: jpegData) { [weak self] result in
                 guard let self = self else { return }
+                
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let response):
@@ -345,6 +348,7 @@ extension RecipeEditorViewModel {
         
         recipeService.deleteImage(imageUrlToDelete) { [weak self] result in
             guard let self = self else { return }
+            
             DispatchQueue.main.async {
                 if case .failure = result {
                     print("[RecipeEditorViewModel.deleteExistingImage] 기존 대표 사진을 삭제하지 못했어요 | 이미지 URL: \(imageUrlToDelete)")
@@ -360,6 +364,7 @@ extension RecipeEditorViewModel {
         let completionHandler: (Result<Any, NetworkError>) -> Void = { [weak self] result in
             DispatchQueue.main.async {
                 guard let self = self else { return }
+                
                 self.submissionState = .idle
                 switch result {
                 case .success:

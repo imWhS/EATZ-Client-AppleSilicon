@@ -17,13 +17,7 @@ struct RecipeEditorDefaultInfoSection: View {
     
     let onDeletePhotoTapped: () -> Void
     
-    private enum FocusableField: Hashable {
-        case title
-        case url
-        case description
-    }
-    
-    @FocusState private var focusedField: FocusableField?
+    @FocusState private var focusedField: RecipeEditorDefaultInfoFocusableField?
     
     var body: some View {
         VStack(spacing: 0) {
@@ -36,60 +30,104 @@ struct RecipeEditorDefaultInfoSection: View {
     
     private var essentialEditView: some View {
         VStack(spacing: 0) {
-            RecipeEditorDefaultInfoImageSection(imageUrl: $draft.imageUrl, $localImage, $isProcessingImage, $selectedPhotoItem, onDeletePhotoTapped)
-            VStack(spacing: 0) {
-                DynamicHeightTextView(
-                    text: $draft.title,
-                    placeholder: "탭해서 레시피 제목 입력",
-                    maxHeight: 240,
-                    font: .systemFont(ofSize: 28),
-                    padding: .init(top: 20, leading: 0, bottom: 20, trailing: 0),
-                    cornerRadius: 0,
-                    stroke: .clear,
-                    returnKeyType: .next,
-                    onSubmit: {
-                        focusedField = .url
-                    },
-                    submitOnReturn: true
-                )
-                .focused($focusedField, equals: .title)
-                HorizontalDivider(padding: 0)
-            }
-            .padding(.horizontal, 20)
-            VStack(spacing: 0) {
-                DynamicHeightTextView(
-                    text: $draft.url,
-                    placeholder: "탭해서 레시피 URL 주소 입력",
-                    font: .systemFont(ofSize: 17),
-                    padding: .init(top: 20, leading: 0, bottom: 20, trailing: 0),
-                    cornerRadius: 0,
-                    stroke: .clear,
-                    keyboardType: .URL,
-                    autocapitalizationType: .none,
-                    returnKeyType: .next,
-                    onSubmit: {
-                        focusedField = .description
-                    },
-                    submitOnReturn: true
-                )
-                .focused($focusedField, equals: .url)
-                HorizontalDivider(padding: 0)
-            }
-            .padding(.horizontal, 20)
-            VStack(spacing: 0) {
-                DynamicHeightTextView(
-                    text: $draft.description,
-                    placeholder: "탭해서 레시피 설명 입력",
-                    maxHeight: 240,
-                    font: .systemFont(ofSize: 17),
-                    padding: .init(top: 20, leading: 0, bottom: 20, trailing: 0),
-                    cornerRadius: 0,
-                    stroke: .clear
-                )
-                .focused($focusedField, equals: .description)
-                HorizontalDivider(padding: 0)
-            }
-            .padding(.horizontal, 20)
+            RecipeEditorDefaultInfoImageView(
+                imageUrl: $draft.imageUrl,
+                $localImage,
+                $isProcessingImage,
+                $selectedPhotoItem,
+                onDeletePhotoTapped)
+            RecipeEditorDefaultInfoTextView(
+                $draft.title,
+                placeholder: "탭해서 레시피 제목 입력",
+                fontSize: 28,
+                maxHeight: 240,
+                onSubmit: { focusedField = .url },
+                submitOnReturn: true,
+                field: .title,
+                focusedField: $focusedField)
+            RecipeEditorDefaultInfoTextView(
+                $draft.url,
+                placeholder: "탭해서 레시피 URL 주소 입력",
+                maxHeight: 120,
+                keyboardType: .URL,
+                onSubmit: { focusedField = .description },
+                submitOnReturn: true,
+                field: .url,
+                focusedField: $focusedField)
+            RecipeEditorDefaultInfoTextView(
+                $draft.description,
+                placeholder: "탭해서 레시피 설명 입력",
+                maxHeight: 480,
+                onSubmit: { focusedField = .description },
+                submitOnReturn: false,
+                field: .description,
+                focusedField: $focusedField)
         }
     }
+}
+
+struct RecipeEditorDefaultInfoTextView: View {
+    @Binding var text: String
+    let placeholder: String
+    let fontSize: CGFloat
+    let maxHeight: CGFloat
+    let keyboardType: UIKeyboardType
+    let onSubmit: () -> Void
+    let returnKeyType: UIReturnKeyType
+    let submitOnReturn: Bool
+    
+    let field: RecipeEditorDefaultInfoFocusableField
+    @FocusState.Binding var focusedField: RecipeEditorDefaultInfoFocusableField?
+    
+    init(
+        _ text: Binding<String>,
+        placeholder: String,
+        fontSize: CGFloat = 17,
+        maxHeight: CGFloat,
+        keyboardType: UIKeyboardType = .default,
+        onSubmit: @escaping () -> Void,
+        returnKeyType: UIReturnKeyType = .next,
+        submitOnReturn: Bool,
+        field: RecipeEditorDefaultInfoFocusableField,
+        focusedField: FocusState<RecipeEditorDefaultInfoFocusableField?>.Binding)
+    {
+        self._text = text
+        self.placeholder = placeholder
+        self.fontSize = fontSize
+        self.maxHeight = maxHeight
+        self.keyboardType = keyboardType
+        self.onSubmit = onSubmit
+        self.returnKeyType = returnKeyType
+        self.submitOnReturn = submitOnReturn
+        self.field = field
+        self._focusedField = focusedField
+    }
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            DynamicHeightTextView(
+                text: $text,
+                placeholder: placeholder,
+                maxHeight: maxHeight,
+                font: .systemFont(ofSize: fontSize),
+                padding: .init(top: 20, leading: 0, bottom: 20, trailing: 0),
+                cornerRadius: 0,
+                stroke: .clear,
+                strokeHighlighted: .clear,
+                keyboardType: keyboardType,
+                returnKeyType: returnKeyType,
+                onSubmit: onSubmit,
+                submitOnReturn: submitOnReturn
+            )
+            .focused($focusedField, equals: field)
+            HorizontalDivider(padding: 0)
+        }
+        .padding(.horizontal, 20)
+    }
+}
+
+enum RecipeEditorDefaultInfoFocusableField: Hashable {
+    case title
+    case url
+    case description
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TagItem: View {
     let name: String
-    let onAdd: () -> Void
+    let onAddTapped: () -> Void
     
     var body: some View {
         VStack(spacing: 0) {
@@ -18,13 +18,13 @@ struct TagItem: View {
                     .font(.system(size: 17, weight: .medium))
                     .foregroundStyle(.black)
                 Spacer()
-                Button("추가", action: onAdd).buttonStyle(CapsuleButtonMediumStyle(status: .secondary))
+                Button("추가", action: onAddTapped).buttonStyle(CapsuleButtonMediumStyle(status: .secondary))
             }
             .padding(.vertical, 12)
-            
-            Divider()
+            .padding(.horizontal, 20)
+
+            HorizontalDivider()
         }
-        .padding(.horizontal, 20)
         .contentShape(Rectangle())
     }
 }

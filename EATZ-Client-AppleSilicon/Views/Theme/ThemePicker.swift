@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ThemePickerView: View {
+struct ThemePicker: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject var viewModel = ThemePickerViewModel()
     
@@ -20,9 +20,11 @@ struct ThemePickerView: View {
     
     private var mainContent: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                themesSection
+            themesSection
+            .safeAreaInset(edge: .bottom) {
                 bottomSection
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 20)
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -37,15 +39,16 @@ struct ThemePickerView: View {
         ScrollView {
             VStack(spacing: 0) {
                 scrollTrackingGeometryReader
-                themesSectionHeader
-                ExploreThemes(
-                    featuredThemesState: viewModel.featuredThemesState,
-                    pagedAllThemes: viewModel.pagedThemes,
-                    loadMore: viewModel.loadMoreAllThemes,
-                    onItemTapped: { tagTheme in handleSelection(id: tagTheme.id) },
-                    onRetryTapped: viewModel.resetAndLoadAll)
+                VStack(spacing: 10) {
+                    themesSectionHeader
+                    ExploreFeaturedThemes(
+                        featuredThemesState: viewModel.featuredThemesState,
+                        pagedAllThemes: viewModel.pagedThemes,
+                        loadMore: viewModel.loadMoreAllThemes,
+                        onThemeTapped: { tagTheme in handleSelection(id: tagTheme.id) },
+                        onRetryTapped: viewModel.resetAndLoadAll)
+                }
             }
-            .padding(.vertical, 20)
         }
         .background(Color.backgroundPrimary)
         .coordinateSpace(name: "scroll")
@@ -76,6 +79,13 @@ struct ThemePickerView: View {
                 .foregroundStyle(Color.gray35)
         }
         .padding(.vertical, 20)
+        .background(.white)
+        .cornerRadius(26)
+        .shadow(
+            color: .black.opacity(0.125),
+            radius: 12,
+            y: 6
+        )
     }
     
     private var dismissToolbarItem: some ToolbarContent {

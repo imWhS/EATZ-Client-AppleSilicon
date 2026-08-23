@@ -8,7 +8,7 @@
 import SwiftUI
 
 class ThemePickerViewModel: ObservableObject {
-    @Published var featuredThemesState: TagThemesFeaturedState = .loading
+    @Published var featuredThemesState: FeaturedThemesState = .loading
     @Published var pagedThemes: Paged<TagTheme> = .initial
     
     @Published var showNavigationBarTitle = false

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TagList: View {
     let pagedTags: Paged<Tag>
-    let onSelect: (Tag) -> Void
+    let onAddTapped: (Tag) -> Void
     let onLoadMore: () -> Void
     
     var body: some View {
@@ -19,7 +19,7 @@ struct TagList: View {
                 LazyVStack(spacing: 0) {
                     ForEach(pagedTags.items) { tag in
                         TagItem(name: tag.name) {
-                            onSelect(tag)
+                            onAddTapped(tag)
                         }
                     }
                     ListPageTailView(hasNextPage: pagedTags.hasNextPage, onAppear: onLoadMore)

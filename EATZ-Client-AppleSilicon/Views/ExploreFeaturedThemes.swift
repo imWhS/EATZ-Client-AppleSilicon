@@ -7,32 +7,32 @@
 
 import SwiftUI
 
-enum TagThemesFeaturedState {
+enum FeaturedThemesState {
     case loading
     case loaded(themes: [Theme])
     case error(message: String)
 }
 
-struct ExploreThemes: View {
-    let featuredThemesState: TagThemesFeaturedState
+struct ExploreFeaturedThemes: View {
+    let featuredThemesState: FeaturedThemesState
     let pagedAllThemes: Paged<TagTheme>
     let loadMore: () -> Void
-    let onItemTapped: (TagTheme) -> Void
+    let onThemeTapped: (TagTheme) -> Void
     let onRetryTapped: () -> Void
     
     var body: some View {
         VStack(spacing: 0) {
             ThemeFeaturedSection(
                 state: featuredThemesState,
-                onItemTapped: onItemTapped,
+                onThemeTapped: onThemeTapped,
                 onRetryTapped: onRetryTapped)
+            HorizontalDivider()
             ThemeAllSection(
                 pagedThemes: pagedAllThemes,
-                onSelect: onItemTapped,
+                onThemeTapped: onThemeTapped,
                 loadNextPageAction: loadMore,
                 onRetryTapped: onRetryTapped)
         }
-        .padding(.vertical, 10)
     }
 }
 
@@ -50,48 +50,52 @@ struct ThemeSectionHeader: View {
 
 struct ThemeAllSection: View {
     let pagedThemes: Paged<TagTheme>
-    let onSelect: (TagTheme) -> Void
+    let onThemeTapped: (TagTheme) -> Void
     let loadNextPageAction: () -> Void
     let onRetryTapped: () -> Void
     
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 0) {
             if pagedThemes.totalElements == 0 {
                 EmptyView()
             } else {
                 ThemeSectionHeader(title: "모든 테마")
                 
-                if !(pagedThemes.isEmpty) {
-                    ThemeList(
-                        themes: pagedThemes.items,
-                        onItemTapped: onSelect,
-                        hasNextPage: pagedThemes.hasNextPage,
-                        isLoadingNextPage: pagedThemes.isLoadingNextPage,
-                        loadNextPageAction: loadNextPageAction)
-                } else if let errorMessage = pagedThemes.errorMessage {
-                    ErrorCurtain(errorMessage, onRetryTapped: onRetryTapped)
-                } else if pagedThemes.isLoadingNextPage {
-                    LoadingCurtain(title: "모든 테마를 불러오고 있어요...")
-                } else {
-                    CommonEmptyStateView(title: "보여드릴 테마가 없어요.")
-                    Curtain(
-                        title: "보여드릴 테마가 없어요.",
-                        header: {
-                            Image("info-200")
-                                .resizable()
-                                .foregroundStyle(Color.gray15)
-                                .frame(width: 40, height: 40)
-                        }
-                    )
+                Group {
+                    if !(pagedThemes.isEmpty) {
+                        ThemeList(
+                            themes: pagedThemes.items,
+                            onItemTapped: onThemeTapped,
+                            hasNextPage: pagedThemes.hasNextPage,
+                            isLoadingNextPage: pagedThemes.isLoadingNextPage,
+                            loadNextPageAction: loadNextPageAction)
+                    } else if let errorMessage = pagedThemes.errorMessage {
+                        ErrorCurtain(errorMessage, onRetryTapped: onRetryTapped)
+                    } else if pagedThemes.isLoadingNextPage {
+                        LoadingCurtain(title: "모든 테마를 불러오고 있어요...")
+                    } else {
+                        CommonEmptyStateView(title: "보여드릴 테마가 없어요.")
+                        Curtain(
+                            title: "보여드릴 테마가 없어요.",
+                            header: {
+                                Image("info-200")
+                                    .resizable()
+                                    .foregroundStyle(Color.gray15)
+                                    .frame(width: 40, height: 40)
+                            }
+                        )
+                    }
                 }
+                .padding(.vertical, 10)
             }
         }
+        .padding(.vertical, 10)
     }
 }
 
 struct ThemeFeaturedSection: View {
-    let state: TagThemesFeaturedState
-    let onItemTapped: (TagTheme) -> Void
+    let state: FeaturedThemesState
+    let onThemeTapped: (TagTheme) -> Void
     let onRetryTapped: () -> Void
     
     var body: some View {
@@ -108,9 +112,10 @@ struct ThemeFeaturedSection: View {
             VStack(spacing: 0) {
                 ThemeSectionHeader(title: "카테고리")
                 ForEach(themes) { theme in
-                    ThemeFeaturedCarousel(theme: theme, onItemTapped: onItemTapped)
+                    ThemeFeaturedCarousel(theme: theme, onItemTapped: onThemeTapped)
                 }
             }
+            .padding(.vertical, 10)
         } else { EmptyView() }
     }
 }

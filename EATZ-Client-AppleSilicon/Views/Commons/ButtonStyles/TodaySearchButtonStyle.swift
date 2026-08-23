@@ -8,13 +8,15 @@
 import SwiftUI
 
 struct TodaySearchButtonStyle: ButtonStyle {
+    private let diameter: CGFloat = 68
+    
     func makeBody(configuration: Configuration) -> some View {
         return configuration.label
             .font(Font.system(size: 17, weight: .semibold))
             .foregroundStyle(.white)
-            .frame(width: 68, height: 68)
+            .frame(width: diameter, height: diameter)
             .background(Color.accentColor)
-            .cornerRadius(37)
+            .cornerRadius(diameter / 2)
             .scaleEffect(configuration.isPressed ? 0.965 : 1.0)
             .opacity(configuration.isPressed ? 0.5 : 1.0)
             .animation(

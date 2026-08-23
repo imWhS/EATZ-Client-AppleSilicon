@@ -35,7 +35,7 @@ struct TagAdditionView: View {
     
     private var headerTextFieldSection: some View {
         VStack(spacing: 0) {
-            Divider()
+            HorizontalDivider(padding: 0)
             HStack {
                 TextField("탭해서 태그 입력", text: $viewModel.searchKeyword)
                     .font(.system(size: 17, weight: .medium))
@@ -47,6 +47,7 @@ struct TagAdditionView: View {
                 .buttonStyle(CapsuleButtonMediumStyle(status: .primary))
             }
             .padding(20)
+            HorizontalDivider(padding: 0)
         }
     }
     
@@ -63,11 +64,11 @@ struct TagAdditionView: View {
     
     private var exploringContainer: some View {
         ScrollView {
-            ExploreThemes(
+            ExploreFeaturedThemes(
                 featuredThemesState: viewModel.featuredThemesState,
                 pagedAllThemes: viewModel.pagedThemes,
                 loadMore: viewModel.loadMoreAllThemes,
-                onItemTapped: { tagTheme in viewModel.confirmSelection(.existing(tagTheme.name)) },
+                onThemeTapped: { tagTheme in viewModel.confirmSelection(.existing(tagTheme.name)) },
                 onRetryTapped: viewModel.prepareDataIfNeeded)
         }
         .scrollDismissesKeyboard(.interactively)
@@ -81,7 +82,7 @@ struct TagAdditionView: View {
         case .searched(let pagedSearchedTags):
             TagList(
                 pagedTags: pagedSearchedTags,
-                onSelect: { viewModel.confirmSelection(.existing($0.name)) },
+                onAddTapped: { viewModel.confirmSelection(.existing($0.name)) },
                 onLoadMore: viewModel.loadMoreSearchedTags
             )
         case .searchedEmpty(let keyword):

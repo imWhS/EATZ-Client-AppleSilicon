@@ -150,22 +150,6 @@ private struct ChecklistContentView: View {
         }
     }
     
-    private var dateRangeView: some View {
-        Group {
-            if Calendar.current.isDate(dateRange.startDate, inSameDayAs: dateRange.endDate) {
-                Text(EatzDateTimeFormatters.monthDayWithUnit.string(from: dateRange.startDate))
-            } else {
-                HStack(spacing: 4) {
-                    Text(EatzDateTimeFormatters.monthDayWithUnit.string(from: dateRange.startDate))
-                    Image("planner-calendar-arrow")
-                    Text(EatzDateTimeFormatters.monthDayWithUnit.string(from: dateRange.endDate))
-                }
-            }
-        }
-        .font(.system(size: 17, weight: .semibold))
-        .foregroundStyle(Color.black)
-    }
-    
     private var scrollTracker: some View {
         GeometryReader { proxy in
             let offset = proxy.frame(in: .named("scroll")).minY

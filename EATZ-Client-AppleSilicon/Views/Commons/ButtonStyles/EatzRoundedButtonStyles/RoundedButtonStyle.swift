@@ -1,5 +1,5 @@
 //
-//  RoundedLargeButtonStyle.swift
+//  RoundedButtonStyle.swift
 //  Eatz-AppleSilicon
 //
 //  Created by 손원희 on 4/6/25.

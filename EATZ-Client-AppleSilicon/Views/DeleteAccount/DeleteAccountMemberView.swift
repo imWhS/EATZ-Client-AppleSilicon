@@ -71,7 +71,7 @@ struct DeleteAccountMemberView: View {
                 Button(action: {
                     router.push(.deleteAccountDetail)
                 }) {
-                    HStack(spacing: 6) {
+                    HStack(spacing: 4) {
                         Text("계속")
                         Image("arrow-right-14")
                     }

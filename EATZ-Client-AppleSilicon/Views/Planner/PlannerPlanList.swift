@@ -38,10 +38,15 @@ struct PlannerPlanList: View {
     }
     
     private var mainContentView: some View {
-        Group {
-            if let plans = plans, !plans.isEmpty { planListView(plans) }
-            else { emptyContentView }
+        ZStack {
+            if let plans = plans, !plans.isEmpty {
+                planListView(plans).transition(.opacity)
+            }
+            else {
+                emptyContentView.transition(.opacity)
+            }
         }
+        .animation(.easeInOut(duration: 0.3), value: plans?.isEmpty)
     }
     
     private var emptyContentView: some View {
@@ -56,7 +61,7 @@ struct PlannerPlanList: View {
     var body: some View {
         VStack(spacing: 0) {
             mainContentView
-            PlannerPlanListFooterView(date: date, planCount: plans?.count, onAddPlanTapped: onAddPlanTapped)
+            PlannerPlanListFooter(date: date, planCount: plans?.count, onAddPlanTapped: onAddPlanTapped)
         }
     }
     
@@ -104,7 +109,7 @@ private struct PlannerPlanListGuideView: View {
     }
 }
 
-private struct PlannerPlanListFooterView: View {
+private struct PlannerPlanListFooter: View {
     let date: Date
     let planCount: Int?
     let onAddPlanTapped: (Date) -> Void
@@ -120,43 +125,45 @@ private struct PlannerPlanListFooterView: View {
     var body: some View {
         HStack(alignment: .center) {
             VStack(alignment: .leading, spacing: 4) {
-                topSectionView
-                bottomSectionView
+                topSection
+                bottomSection
             }
             addPlanButton
         }
         .padding(.horizontal, 20)
     }
     
-    private var topSectionView: some View {
+    private var topSection: some View {
         HStack(alignment: .bottom, spacing: 8) {
-            Text(EatzDateTimeFormatters.weekday.string(from: date))
-                .font(.system(size: 17, weight: .semibold))
-            
-            if Calendar.current.isDateInToday(date) {
-                Text("오늘")
-                    .font(.system(size: 17, weight: .medium))
-                    .foregroundStyle(Color.gray35)
+            Group {
+                Text(EatzDateTimeFormatters.weekday.string(from: date))
+                    .font(.system(size: 17, weight: .semibold))
+                
+                if Calendar.current.isDateInToday(date) {
+                    Text("오늘")
+                        .font(.system(size: 17, weight: .medium))
+                        .foregroundStyle(Color.gray35)
+                }
+                Spacer()
             }
-            Spacer()
+            .animation(.easeInOut, value: planCountLabel)
         }
     }
     
-    private var bottomSectionView: some View {
+    private var bottomSection: some View {
         HStack(alignment: .center) {
             Group {
                 Text(EatzDateTimeFormatters.monthDayWithUnit.string(from: date))
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(Color.black)
-                Text(planCountLabel)
+                Text(planCountLabel).contentTransition(.numericText())
             }
             .font(.system(size: 12, weight: .medium))
             .foregroundStyle(Color.gray35)
-            .contentTransition(.numericText())
-            .animation(.snappy, value: planCountLabel)
             
             Spacer()
         }
+        .animation(.snappy, value: planCountLabel)
     }
     
     private var addPlanButton: some View {

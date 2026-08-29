@@ -136,7 +136,7 @@ struct ManagementProfileView: View {
                         Text(viewModel.imageUrl != nil ? "변경" : "설정")
                             
                     }
-                    .buttonStyle(RoundedButtonStyle(.danger, .medium))
+                    .buttonStyle(RoundedButtonStyle(.secondary, .medium))
             }
         }
     }

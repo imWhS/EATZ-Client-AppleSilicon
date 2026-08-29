@@ -11,6 +11,9 @@ struct PlannerMemberView: View {
     @EnvironmentObject private var router: Router
     @StateObject private var viewModel: PlannerMemberViewModel
     
+    @State private var isOverPlanListOffsetYLimit: Bool = false
+    @State private var checklistFloatingBarHeight: CGFloat = 0
+    
     init(_ authManager: AuthManager) {
         self._viewModel = StateObject(wrappedValue: PlannerMemberViewModel(authManager))
     }
@@ -29,7 +32,26 @@ struct PlannerMemberView: View {
                     dateRange: viewModel.dateRange,
                     onShowCalendar: { viewModel.sheet = .calendar })
             }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                PlannerChecklistFloatingBar(
+                    planCount: viewModel.planCountInDateRange,
+                    onPresentChecklistTapped: {
+                        router.push(.checklist(
+                            startDate: viewModel.dateRange.startDate,
+                            endDate: viewModel.dateRange.endDate
+                        ))},
+                    isCompactMode: isOverPlanListOffsetYLimit
+                )
+                .opacity(viewModel.state == .content ? 1 : 0)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .onGeometryChange(for: CGFloat.self) { proxy in
+                    proxy.size.height
+                } action: { height in
+                    self.checklistFloatingBarHeight = height
+                }
+            }
             .animation(.easeInOut(duration: 0.3), value: viewModel.state)
+            .animation(.easeInOut(duration: 0.3), value: viewModel.planCountInDateRange)
             .toolbar(.hidden, for: .navigationBar)
             .navigationTitle(MainTabItems.planner.title)
             .navigationBarTitleDisplayMode(.inline)
@@ -60,21 +82,36 @@ struct PlannerMemberView: View {
     
     private var contentView: some View {
         ScrollView {
-            VStack(spacing: 0) {
-                PlannerChecklistBannerTypeB(
-                    planCount: viewModel.planCountInDateRange,
-                    onPresentChecklistTapped: {
-                        router.push(.checklist(
-                            startDate: viewModel.dateRange.startDate,
-                            endDate: viewModel.dateRange.endDate
-                        ))
-                    })
-                planListSection
+            // 해당 날짜/기간에 추가된 플랜이 하나도 없는 경우
+            if viewModel.planCountInDateRange == 0 {
+                plansEmptyStateHeader
+                    .padding(.horizontal, 20)
             }
-            .animation(.easeInOut(duration: 0.2), value: viewModel.planCountInDateRange)
+            planListSection
         }
         .background(Color.backgroundPrimary)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.planCountInDateRange)
+        .coordinateSpace(name: "scroll")
         .refreshable { await viewModel.refresh() }
+    }
+    
+    private var plansEmptyStateHeader: some View {
+        VStack(spacing: 20) {
+            Image("add-to-planner-40")
+                .foregroundStyle(Color.gray15)
+            VStack(spacing: 8) {
+                Text("레시피를 플래너에 추가해보세요.")
+                    .font(Font.system(size: 17, weight: .semibold))
+                Text("원하는 날짜 또는 기간에 요리할 수 있는 레시피를 분류하고, 모든 레시피를 요리하기 위해 준비해야 할 재료와 도구를 정리해서 체크리스트로 만들어드려요.")
+                    .font(.system(size: 17, weight: .medium))
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(Color.gray50)
+            }
+        }
+        .padding(32)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 28))
+        .transition(.scale(scale: 0.95, anchor: .top).combined(with: .opacity))
     }
     
     private var planListSection: some View {
@@ -88,6 +125,21 @@ struct PlannerMemberView: View {
             }
         }
         .padding(.bottom, 20)
+        .background(
+            GeometryReader { proxy in
+                Color.clear
+                    .onChange(of: proxy.frame(in: .named("scroll")).minY) { _, minY in
+                        guard self.checklistFloatingBarHeight > 0 else { return }
+                                            
+                        let offsetYLimit = -(self.checklistFloatingBarHeight / 2)
+                        let isOverOffsetYLimit = minY < offsetYLimit
+                        
+                        if self.isOverPlanListOffsetYLimit != isOverOffsetYLimit {
+                            self.isOverPlanListOffsetYLimit = isOverOffsetYLimit
+                        }
+                    }
+            }
+        )
     }
     
     @ViewBuilder
@@ -106,6 +158,13 @@ struct PlannerMemberView: View {
         if case .authenticated = oldState, case .unauthorized = newState {
             viewModel.alert = .sessionExpired
         }
+    }
+}
+
+struct ScrollOffsetKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
     }
 }
 

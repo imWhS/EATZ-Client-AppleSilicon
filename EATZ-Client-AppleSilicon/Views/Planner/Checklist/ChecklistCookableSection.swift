@@ -36,7 +36,7 @@ struct ChecklistCookableSection: View {
         }
         .padding(.bottom, 8)
         .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 28))
+        .clipShape(RoundedRectangle(cornerRadius: 32))
     }
     
     private var header: some View {

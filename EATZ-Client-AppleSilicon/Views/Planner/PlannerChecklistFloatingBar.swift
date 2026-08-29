@@ -65,10 +65,8 @@ struct PlannerChecklistFloatingBar: View {
     
     private var checklistButton: some View {
         Button(action: onPresentChecklistTapped) {
-            HStack {
+            HStack(spacing: 4) {
                 Text("체크리스트")
-                    .font(.system(size: 17, weight: .semibold))
-                    .fontWeight(.semibold)
                 Image("arrow-right-14")
             }
             .frame(maxWidth: isCompactMode ? nil : .infinity)

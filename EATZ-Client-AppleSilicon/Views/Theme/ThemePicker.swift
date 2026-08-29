@@ -22,7 +22,7 @@ struct ThemePicker: View {
         NavigationStack {
             themesSection
             .safeAreaInset(edge: .bottom) {
-                bottomSection
+                floatingBar
                     .padding(.horizontal, 20)
                     .padding(.bottom, 20)
             }
@@ -65,7 +65,7 @@ struct ThemePicker: View {
         .padding(.vertical, 20)
     }
     
-    private var bottomSection: some View {
+    private var floatingBar: some View {
         VStack(spacing: 8) {
             Button(action: {
                 handleSelection(id: nil)
@@ -73,12 +73,12 @@ struct ThemePicker: View {
                 Text("설정 안 함").frame(maxWidth: .infinity)
             }
             .buttonStyle(RoundedButtonStyle(.secondary, .large))
-            .padding(.horizontal, 20)
+            .padding(.horizontal, 16)
             Text("모든 레시피를 둘러봅니다.")
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(Color.gray35)
         }
-        .padding(.vertical, 20)
+        .padding(.vertical, 16)
         .background(.white)
         .cornerRadius(26)
         .shadow(

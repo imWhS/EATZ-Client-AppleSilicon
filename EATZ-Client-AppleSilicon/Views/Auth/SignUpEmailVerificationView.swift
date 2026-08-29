@@ -20,7 +20,7 @@ struct SignUpEmailVerificationView: View {
                     header
                     if viewModel.isAlreadyVerified {
                         Button(action: viewModel.verifyValidationCode) {
-                            HStack(spacing: 6) {
+                            HStack(spacing: 4) {
                                 Text("다음")
                                 Image("arrow-right-14")
                             }

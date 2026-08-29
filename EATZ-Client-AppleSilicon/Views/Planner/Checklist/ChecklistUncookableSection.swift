@@ -63,12 +63,9 @@ struct ChecklistUncookableSection: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.horizontal, 20)
                         .padding(.bottom, 10)
-                    Button(action: {
-                        // 레시피를 요리하기 위해 필요한(사용자가 보관함에 추가하지 않은) 재료와 도구 모두 사용자 보관함에 일괄 추가합니다.
-                        onAddAllRequirements()
-                    }) {
-                        HStack(spacing: 6) {
-                            Image("add-circled-22").foregroundStyle(Color.white)
+                    Button(action: onAddAllRequirements) {
+                        HStack(spacing: 4) {
+                            Image("add-circled-22")
                             Text("모두 보관함에 추가")
                         }
                         .frame(maxWidth: .infinity)
@@ -81,7 +78,7 @@ struct ChecklistUncookableSection: View {
             .padding(.bottom, 10)
         }
         .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 28))
+        .clipShape(RoundedRectangle(cornerRadius: 32))
     }
     
     private var header: some View {

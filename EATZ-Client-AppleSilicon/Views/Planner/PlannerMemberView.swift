@@ -108,7 +108,7 @@ struct PlannerMemberView: View {
                     .foregroundStyle(Color.gray50)
             }
         }
-        .padding(40)
+        .padding(32)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 28))
         .transition(.scale(scale: 0.95, anchor: .top).combined(with: .opacity))

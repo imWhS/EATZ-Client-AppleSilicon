@@ -106,7 +106,7 @@ private struct ResetPasswordSetupView: View {
             if !isSubmitable { ProgressView() }
             else {
                 Button(action: onSubmit) {
-                    HStack(spacing: 6) {
+                    HStack(spacing: 4) {
                         Text("완료")
                         Image("arrow-right-14")
                     }

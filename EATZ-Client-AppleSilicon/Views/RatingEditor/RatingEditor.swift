@@ -160,7 +160,7 @@ enum RatingEditorAlert: Identifiable {
         switch self {
         case .hasUnsavedChanges(let confirmAction):
             Button("취소", role: .cancel) {}
-            Button("확인", role: .destructive, action: confirmAction)
+            Button("종료", role: .destructive, action: confirmAction)
         case .scoreNotSelected(let confirmAction): Button("확인", action: confirmAction)
         case .userChanged(let dismissAction): Button("확인", action: dismissAction)
         case .sessionExpired(let dismissAction): Button("확인", action: dismissAction)
@@ -171,7 +171,7 @@ enum RatingEditorAlert: Identifiable {
     @ViewBuilder
     var message: some View {
         switch self {
-        case .hasUnsavedChanges: Text("이 화면에서 나가면, 변경된 내용이 버려집니다.")
+        case .hasUnsavedChanges: Text("변경된 내용이 버려집니다. 편집을 종료할까요?")
         case .scoreNotSelected: Text("평가의 점수를 선택해주세요. 평가의 점수는 필수 항목이에요.")
         case .userChanged: Text("기존과 다른 사용자로 로그인됐어요. 평가 편집을 종료할게요.")
         case .sessionExpired: Text("로그아웃 상태로 전환됐어요. 평가 편집을 종료할게요.")

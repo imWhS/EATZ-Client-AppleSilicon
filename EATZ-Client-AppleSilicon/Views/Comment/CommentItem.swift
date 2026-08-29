@@ -28,57 +28,68 @@ struct CommentItem: View {
             HStack(alignment: .top, spacing: 12) {
                 ProfileImageView(comment.author.imageUrl, size: 32)
                 VStack(spacing: 8) {
-                    VStack(spacing: 8) {
-                        HStack(spacing: 8) {
-                            Text(comment.author.username)
-                                .font(.system(size: 12, weight: .semibold))
-                            Spacer()
-                            Text(comment.createdAt.formattedRelative)
-                                .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(.gray)
-                        }
-                        Text(comment.content)
-                            .font(.system(size: 17, weight: .medium))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    .padding(.leading, 0)
-                    .padding(.trailing, 20)
-                    
-                    if !permissions.isEmpty {
-                        HStack(spacing: 8) {
-                            Spacer()
-                            if permissions.contains(.block) {
-                                Button("작성자 차단", action: { action(comment, .block) })
-                                    .buttonStyle(SmallBorderlessButtonStyle())
-                            }
-                            if permissions.contains(.report) {
-                                Button("신고", action: { action(comment, .report) })
-                                    .buttonStyle(SmallBorderlessButtonStyle())
-                            }
-                            if permissions.contains(.update) {
-                                Button("수정", action: { action(comment, .update) })
-                                    .buttonStyle(SmallBorderlessButtonStyle())
-                            }
-                            if permissions.contains(.delete) {
-                                Button("삭제", action: { action(comment, .delete) })
-                                    .buttonStyle(SmallBorderlessButtonStyle(status: .danger))
-                            }
-//                                if permissions.contains(.hide) {
-//                                    Button("숨김", action: { print("숨기기") })
-//                                }
-                        }
-                        .padding(.horizontal, 12)
-                    }
-                    
-                    HorizontalDivider(padding: 0)
-                        .padding(.trailing, 20)
-                        .padding(.top, !permissions.isEmpty ? 4 : 12)
+                    contentSection
+                    interactionSection
+                    divider
                 }
             }
             .padding(.leading, 20)
         }
         .padding(.top, 20)
+    }
+    
+    private var contentSection: some View {
+        VStack(spacing: 8) {
+            HStack(spacing: 8) {
+                Text(comment.author.username)
+                    .font(.system(size: 12, weight: .semibold))
+                Spacer()
+                Text(comment.createdAt.formattedRelative)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(.gray)
+            }
+            Text(comment.content)
+                .font(.system(size: 17, weight: .medium))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.leading, 0)
+        .padding(.trailing, 20)
+    }
+    
+    @ViewBuilder
+    private var interactionSection: some View {
+        if !permissions.isEmpty {
+            HStack(spacing: 8) {
+                Spacer()
+                if permissions.contains(.block) {
+                    Button("작성자 차단", action: { action(comment, .block) })
+                        .buttonStyle(SmallBorderlessButtonStyle())
+                }
+                if permissions.contains(.report) {
+                    Button("신고", action: { action(comment, .report) })
+                        .buttonStyle(SmallBorderlessButtonStyle())
+                }
+                if permissions.contains(.update) {
+                    Button("수정", action: { action(comment, .update) })
+                        .buttonStyle(SmallBorderlessButtonStyle())
+                }
+                if permissions.contains(.delete) {
+                    Button("삭제", action: { action(comment, .delete) })
+                        .buttonStyle(SmallBorderlessButtonStyle(status: .danger))
+                }
+//                                if permissions.contains(.hide) {
+//                                    Button("숨김", action: { print("숨기기") })
+//                                }
+            }
+            .padding(.horizontal, 12)
+        }
+    }
+    
+    private var divider: some View {
+        HorizontalDivider(padding: 0)
+            .padding(.trailing, 20)
+            .padding(.top, !permissions.isEmpty ? 4 : 12)
     }
 }
 

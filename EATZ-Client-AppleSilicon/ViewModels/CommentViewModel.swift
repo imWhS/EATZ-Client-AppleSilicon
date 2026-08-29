@@ -474,7 +474,7 @@ enum CommentDeleteActionType: Equatable, Identifiable {
     }
 }
 
-enum CommentRegistrationState {
+enum CommentRegistrationState: Equatable {
     case idle
     case registering
     case error(message: String)

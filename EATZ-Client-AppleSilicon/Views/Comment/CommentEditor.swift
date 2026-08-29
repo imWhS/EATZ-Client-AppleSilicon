@@ -18,41 +18,52 @@ struct CommentEditor: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            HorizontalDivider(padding: 0)
-            if let recipeEssential = viewModel.recipeEssential,
-               recipeEssential.commentEnabled {
-                if authManager.currentUser != nil {
-                    switch viewModel.registrationState {
-                    case .idle: commentEditorView
-                    case .registering: ProgressView()
-                    case .error(let message): Text(message)
-                    }
-                } else {
-                    commentLogInView
-                }
-            } else {
-                commentUnavailableView
+        contentView
+            .padding(.horizontal, 20)
+            .padding(.bottom, 20)
+            .onChange(of: viewModel.isEditorFocused) { _, isEditorFocused in
+                self.isCommentFieldFocusedInternal = isEditorFocused
             }
-        }
-        .background(Color.white)
+            .onChange(of: isCommentFieldFocusedInternal) { _, isCommentFieldFocusedInternal in
+                self.viewModel.isEditorFocused = isCommentFieldFocusedInternal
+            }
     }
     
-    var commentEditorView: some View {
+    private var contentView: some View {
+        VStack(spacing: 0) {
+            if let recipeEssential = viewModel.recipeEssential,
+               recipeEssential.commentEnabled {
+                Group {
+                    if authManager.currentUser != nil {
+                        switch viewModel.registrationState {
+                        case .idle: fieldView
+                        case .registering: ProgressView()
+                        case .error(let message): Text(message)
+                        }
+                    } else {
+                        commentLogInView
+                    }
+                }
+                .frame(maxWidth: .infinity)
+            }
+        }
+        .padding(.vertical, 16)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 32))
+        .shadow(
+            color: .black.opacity(0.1),
+            radius: 8,
+            y: 4
+        )
+        .animation(.snappy(duration: 0.25), value: viewModel.isEditing)
+        .animation(.snappy(duration: 0.25), value: viewModel.registrationState)
+    }
+    
+    private var fieldView: some View {
         VStack(spacing: 0) {
             if viewModel.isEditing { header }
             editor
         }
-        .padding(.top, viewModel.isEditing ? 12 : 20)
-        .padding(.bottom, 20)
-        .background(Color.white)
-        .onChange(of: viewModel.isEditorFocused) { _, isEditorFocused in
-            self.isCommentFieldFocusedInternal = isEditorFocused
-        }
-        .onChange(of: isCommentFieldFocusedInternal) { _, isCommentFieldFocusedInternal in
-            self.viewModel.isEditorFocused = isCommentFieldFocusedInternal
-        }
-        .animation(.easeInOut, value: viewModel.isEditing)
     }
     
     private var header: some View {
@@ -63,11 +74,11 @@ struct CommentEditor: View {
             Spacer()
             Button("취소", action: viewModel.cancelEditingComment)
                 .fontWeight(.semibold)
-                .buttonStyle(SmallBorderlessButtonStyle(status: viewModel.hasCommentUnsavedChanges ? .danger : .normal))
+                .buttonStyle(CapsuleButtonStyle(status: viewModel.hasCommentUnsavedChanges ? .danger : .secondary))
         }
-        .padding(.leading, 20)
-        .padding(.trailing, 12)
+        .padding(.horizontal, 16)
         .padding(.bottom, 12)
+        .transition(.move(edge: .bottom).combined(with: .opacity))
     }
     
     private var editor: some View {
@@ -86,9 +97,9 @@ struct CommentEditor: View {
                 )
             }
             Button("게시", action: viewModel.handleSubmitEdit)
-                .buttonStyle(RoundedButtonStyle(.primary, .medium))
+                .buttonStyle(CapsuleButtonStyle(status: .primary))
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 16)
     }
     
     private var commentLogInView: some View {
@@ -108,17 +119,6 @@ struct CommentEditor: View {
             }
         }
         .padding(.vertical, 20)
-    }
-    
-    private var commentUnavailableView: some View {
-        VStack(spacing: 12) {
-            Text("댓글 기능이 해제된 레시피예요. 댓글 기능을 사용하도록 설정했을 때 달린 댓글만 볼 수 있어요.")
-                .font(.system(size: 12, weight: .medium))
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .foregroundStyle(Color.gray20)
-        }
-        .padding(20)
     }
     
     private var signWithEmailButton: some View {

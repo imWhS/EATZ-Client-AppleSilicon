@@ -31,7 +31,7 @@ struct RecipeEditorOtherOptionsSection: View {
                 title: creatorSummaryLabel,
                 description: "제 3자에 의해 만들어진 레시피라면, 창작자에 대한 정보를 알려주세요.",
                 onAction: onShowCreatorInfoEditor)
-            toggleRow(title: "댓글", description: "다른 사람이 레시피에 댓글을 추가할 수 있는 기능을 켜고 끄세요.", isOn: $draft.isCommentEnabled)
+            toggleRow(title: "댓글", description: "다른 사람이 레시피에 댓글을 추가할 수 있는 기능을 설정하거나 해제하세요.", isOn: $draft.isCommentEnabled)
         }
     }
     

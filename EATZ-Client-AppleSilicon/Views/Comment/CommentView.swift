@@ -12,6 +12,11 @@ struct CommentView: View {
     @EnvironmentObject private var authManager: AuthManager
     @StateObject var viewModel: CommentViewModel
     
+    private var commentEnabled: Bool {
+        guard let recipeEssential = viewModel.recipeEssential else { return false }
+        return recipeEssential.commentEnabled
+    }
+    
     init(recipeId: Int64) {
         self._viewModel = StateObject(wrappedValue: CommentViewModel(for: recipeId))
     }
@@ -19,7 +24,8 @@ struct CommentView: View {
     var body: some View {
         contentView
             .safeAreaInset(edge: .bottom) {
-                if viewModel.presentEditor {
+                if viewModel.presentEditor,
+                   commentEnabled {
                     CommentEditor(authManager, viewModel)
                 }
             }
@@ -71,6 +77,13 @@ struct CommentView: View {
         }
     }
     
+    private var commentDisabledGuideView: some View {
+        VStack(spacing: 0) {
+            GuideView(guides: ["댓글 기능이 해제된 레시피예요. 레시피의 작성자가 댓글 기능을 설정했을 때 달린 댓글만 볼 수 있어요."])
+            HorizontalDivider()
+        }
+    }
+    
     @ViewBuilder
     private var loadedView: some View {
         if viewModel.pagedCommentsWithPermissions.isEmpty {
@@ -80,10 +93,13 @@ struct CommentView: View {
                 "comment-40"
             )
         } else {
-            CommentList(
-                viewModel.pagedCommentsWithPermissions,
-                viewModel.loadMoreComments,
-                viewModel.handleAction)
+            VStack(spacing: 0) {
+                if !commentEnabled { commentDisabledGuideView }
+                CommentList(
+                    viewModel.pagedCommentsWithPermissions,
+                    viewModel.loadMoreComments,
+                    viewModel.handleAction)
+            }
         }
     }
     
@@ -144,7 +160,7 @@ enum CommentAlert {
     @ViewBuilder
     var message: some View {
         switch self {
-        case .commentDisabled: Text("댓글 기능이 해제된 레시피예요. 레시피의 작성자가 댓글 기능을 다시 사용하도록 설정해야 댓글을 달거나 수정할 수 있어요.")
+        case .commentDisabled: Text("댓글 기능이 해제된 레시피예요. 레시피의 작성자가 댓글 기능을 설정해야 댓글을 달거나 수정할 수 있어요.")
         case .confirmDelete(let type, _):
             let username = type.comment.author.username
             let authorLabel = type.isMine ? "회원" : "\(username)"

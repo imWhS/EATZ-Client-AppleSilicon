@@ -106,7 +106,7 @@ struct CommentView: View {
     @ViewBuilder
     private var recipeEssentialWrapperView: some View {
         if let recipeEssential = viewModel.recipeEssential {
-            RecipeEssentialView(recipeEssential, style: .white)
+            RecipeEssentialView(recipeEssential, .white)
         } else {
             EmptyView()
         }

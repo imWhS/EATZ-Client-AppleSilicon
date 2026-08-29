@@ -17,24 +17,12 @@ struct CommentView: View {
     }
     
     var body: some View {
-        Group {
-            if case .loaded = viewModel.viewState,
-               !viewModel.pagedCommentsWithPermissions.isEmpty
-            {
-                ScrollView {
-                    commentView
+        contentView
+            .safeAreaInset(edge: .bottom) {
+                if viewModel.presentEditor {
+                    CommentEditor(authManager, viewModel)
                 }
-                .refreshable { await viewModel.refresh() }
-            } else {
-                commentView
             }
-        }
-        .safeAreaInset(edge: .bottom) {
-            if viewModel.presentEditor {
-                CommentEditor(authManager: authManager, viewModel: viewModel)
-            }
-        }
-        .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
         .toolbarBackground(.hidden, for: .tabBar)
         .navigationTitle(viewModel.navigationTitleLabel)
         .navigationBarTitleDisplayMode(.inline)
@@ -54,6 +42,22 @@ struct CommentView: View {
         .getReportContext(resource: $viewModel.reportResource)
     }
     
+    private var contentView: some View {
+        ZStack {
+            if case .loaded = viewModel.viewState,
+               !viewModel.pagedCommentsWithPermissions.isEmpty
+            {
+                ScrollView {
+                    commentView
+                }
+                .refreshable { await viewModel.refresh() }
+            } else {
+                commentView
+            }
+        }
+        .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
+    }
+    
     @ViewBuilder
     private var commentView: some View {
         VStack(spacing: 0) {
@@ -61,14 +65,14 @@ struct CommentView: View {
             
             switch viewModel.viewState {
             case .initialLoading: LoadingCurtain(title: "레시피에 달린 댓글 목록을 불러오고 있어요...")
-            case .loaded: contentView
+            case .loaded: loadedView
             case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
             }
         }
     }
     
     @ViewBuilder
-    private var contentView: some View {
+    private var loadedView: some View {
         if viewModel.pagedCommentsWithPermissions.isEmpty {
             CommonEmptyStateView(
                 title: "보여드릴 댓글이 없어요.",

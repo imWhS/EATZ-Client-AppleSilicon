@@ -71,6 +71,13 @@ class CommentViewModel: ObservableObject {
         }
     }
     
+    var hasCommentUnsavedChanges: Bool {
+        // 댓글 수정 상태인 경우
+        if initialContent != nil { return initialContent != editingContent }
+        // 새 댓글 등록 상태인 경우
+        else { return !editingContent.isEmpty }
+    }
+    
     // MARK: - 비공개 프로퍼티 (Private Properties)
     
     /// 현재 보고 있는 레시피의 ID
@@ -85,13 +92,6 @@ class CommentViewModel: ObservableObject {
     
     /// 한 번에 불러올 댓글 수
     private let pagingSizeForCommentList = 2
-    
-    private var hasCommentUnsavedChanges: Bool {
-        // 댓글 수정 상태인 경우
-        if initialContent != nil { return initialContent != editingContent }
-        // 새 댓글 등록 상태인 경우
-        else { return !editingContent.isEmpty }
-    }
     
     private var isLoadingState: Bool {
         if case .initialLoading = viewState { return true }

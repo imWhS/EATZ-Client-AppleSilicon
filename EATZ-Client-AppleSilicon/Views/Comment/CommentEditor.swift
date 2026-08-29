@@ -12,7 +12,7 @@ struct CommentEditor: View {
     @ObservedObject private var viewModel: CommentViewModel
     @FocusState private var isCommentFieldFocusedInternal: Bool
     
-    init(authManager: AuthManager, viewModel: CommentViewModel) {
+    init(_ authManager: AuthManager, _ viewModel: CommentViewModel) {
         self.authManager = authManager
         self.viewModel = viewModel
     }
@@ -39,11 +39,10 @@ struct CommentEditor: View {
     }
     
     var commentEditorView: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 0) {
             if viewModel.isEditing { header }
             editor
         }
-        .padding(.horizontal, 20)
         .padding(.top, viewModel.isEditing ? 12 : 20)
         .padding(.bottom, 20)
         .background(Color.white)
@@ -51,9 +50,8 @@ struct CommentEditor: View {
             self.isCommentFieldFocusedInternal = isEditorFocused
         }
         .onChange(of: isCommentFieldFocusedInternal) { _, isCommentFieldFocusedInternal in
-            viewModel.isEditorFocused = isCommentFieldFocusedInternal
+            self.viewModel.isEditorFocused = isCommentFieldFocusedInternal
         }
-        .animation(.easeInOut, value: viewModel.editingContent)
         .animation(.easeInOut, value: viewModel.isEditing)
     }
     
@@ -65,8 +63,11 @@ struct CommentEditor: View {
             Spacer()
             Button("취소", action: viewModel.cancelEditingComment)
                 .fontWeight(.semibold)
-                .buttonStyle(SmallBorderlessButtonStyle())
+                .buttonStyle(SmallBorderlessButtonStyle(status: viewModel.hasCommentUnsavedChanges ? .danger : .normal))
         }
+        .padding(.leading, 20)
+        .padding(.trailing, 12)
+        .padding(.bottom, 12)
     }
     
     private var editor: some View {
@@ -87,6 +88,7 @@ struct CommentEditor: View {
             Button("게시", action: viewModel.handleSubmitEdit)
                 .buttonStyle(RoundedButtonStyle(.primary, .medium))
         }
+        .padding(.horizontal, 20)
     }
     
     private var commentLogInView: some View {

@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum SmallBorderlessButtonStatus {
-    case normal, disabled
+    case normal, danger, disabled
 }
 
 struct SmallBorderlessButtonStyle: ButtonStyle {
@@ -23,6 +23,7 @@ struct SmallBorderlessButtonStyle: ButtonStyle {
         
         switch status {
         case .normal: foregroundColor = Color.accentColor
+        case .danger: foregroundColor = Color.red
         case .disabled: foregroundColor = Color.gray15
         }
         

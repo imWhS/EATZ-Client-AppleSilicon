@@ -85,7 +85,7 @@ struct BasicMenuRow: View {
                 }
                 .padding(10)
             }
-            .buttonStyle(SquareHighlightButtonStyle(cornerRadius: 12))
+            .buttonStyle(SquareHighlightButtonStyle(cornerRadius: 14))
             .disabled(isDisabled)
             .padding(.horizontal, 10)
             .padding(.bottom, 10)

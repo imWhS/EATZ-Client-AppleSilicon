@@ -54,11 +54,11 @@ struct DeleteAccountMemberView: View {
                 
                 VStack(spacing: 20) {
                     VStack(alignment: .leading, spacing: 20) {
-                        warningRow("계정을 삭제하면, EATZ의 회원에서 탈퇴하게 돼요.")
-                        warningRow("삭제된 계정은 복구할 수 없어요.")
-                        warningRow("삭제된 계정에 사용한 이메일 주소는 삭제 시점에서부터 30일 동안 EATZ 계정을 만들 때 사용할 수 없어요. 30일 동안 탈퇴한 이메일 주소를 이용한 가입이 제한돼요.")
-                        warningRow("레시피, 댓글, 평가 등의 콘텐츠를 포함한 모든 활동은 유지돼요.")
-                        warningRow("관련 법령 준수 및 부정 가입 방지를 위해 계정 정보가 일정 기간 보관된 후 파기될 수 있어요.")
+                        createWarningRow("계정을 삭제하면, EATZ의 회원에서 탈퇴하게 돼요.")
+                        createWarningRow("삭제된 계정은 복구할 수 없어요.")
+                        createWarningRow("삭제된 계정에 사용한 이메일 주소는 삭제 시점에서부터 30일 동안 EATZ 계정을 만들 때 사용할 수 없어요. 30일 동안 탈퇴한 이메일 주소를 이용한 가입이 제한돼요.")
+                        createWarningRow("레시피, 댓글, 평가 등의 콘텐츠를 포함한 모든 활동은 유지돼요.")
+                        createWarningRow("관련 법령 준수 및 부정 가입 방지를 위해 계정 정보가 일정 기간 보관된 후 파기될 수 있어요.")
                     }
                     HorizontalDivider(padding: 20)
                     Text("계속 진행하면, 위 내용을 이해한 후 계정을 삭제하는 것으로 간주합니다.")
@@ -71,15 +71,13 @@ struct DeleteAccountMemberView: View {
                 Button(action: {
                     router.push(.deleteAccountDetail)
                 }) {
-                    HStack {
+                    HStack(spacing: 6) {
                         Text("계속")
-                            .font(.system(size: 17, weight: .semibold))
-                            .fontWeight(.semibold)
                         Image("arrow-right-14")
                     }
                     .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(CapsuleLargeButtonStyle(appearance: .secondary))
+                .buttonStyle(RoundedButtonStyle(.danger, .large))
                 .padding(.horizontal, 20)
             }
             .padding(.vertical, 20)
@@ -94,7 +92,7 @@ struct DeleteAccountMemberView: View {
         }
     }
     
-    private func warningRow(_ text: String) -> some View {
+    private func createWarningRow(_ text: String) -> some View {
         VStack(spacing: 20) {
             HorizontalDivider()
             Text(text)

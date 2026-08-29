@@ -20,12 +20,12 @@ struct SignUpEmailVerificationView: View {
                     header
                     if viewModel.isAlreadyVerified {
                         Button(action: viewModel.verifyValidationCode) {
-                            HStack {
+                            HStack(spacing: 6) {
                                 Text("다음")
                                 Image("arrow-right-14")
                             }
                         }
-                        .buttonStyle(CapsuleLargeButtonStyle(appearance: .authPrimary))
+                        .buttonStyle(RoundedButtonStyle(.authPrimary, .large))
                     } else {
                         validationCodeFieldView
                     }
@@ -80,7 +80,7 @@ struct SignUpEmailVerificationView: View {
                             Button(action: viewModel.resendValidationCode) {
                                 Text("인증 코드 새로 받기")
                             }
-                            .buttonStyle(CapsuleButtonMediumStyle(status: .authSecondary))
+                            .buttonStyle(RoundedButtonStyle(.authSecondary, .large))
                             Text("인증 코드가 만료됐거나, 편지를 못 받으셨거나, 지우셨다면 새 인증 코드를 받아보세요. 오늘 \(remainingAttempts)번 더 받을 수 있어요.")
                         } else {
                             ProgressView()

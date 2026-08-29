@@ -44,6 +44,6 @@ struct RecipeDetailRequirementsHeaderCookable: View {
     
     private var showRecipeButton: some View {
         Button("레시피 보기", action: onShowRecipeTapped)
-            .buttonStyle(CapsuleButtonMediumStyle(status: .primary))
+            .buttonStyle(RoundedButtonStyle(.primary, .medium))
     }
 }

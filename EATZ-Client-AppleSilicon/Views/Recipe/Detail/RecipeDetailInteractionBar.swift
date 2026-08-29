@@ -28,7 +28,7 @@ struct RecipeDetailInteractionBar: View {
         Button(action: onShowRecipeTapped) {
             Text("레시피 보기").frame(maxWidth: .infinity)
         }
-        .buttonStyle(CapsuleLargeButtonStyle(appearance: .primary))
+        .buttonStyle(RoundedButtonStyle(.primary, .large))
         .padding(.horizontal, 20)
         .padding(.top, 10)
     }

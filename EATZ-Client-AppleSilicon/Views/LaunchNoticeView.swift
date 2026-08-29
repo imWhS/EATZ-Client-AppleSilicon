@@ -34,13 +34,13 @@ struct LaunchNoticeView: View {
                                 SystemManager.shared.markNoticeAsViewed(id: id, doNotShowAgain: true)
                             }) {
                              Text("다시 보지 않기").frame(maxWidth: .infinity)
-                            }.buttonStyle(CapsuleLargeButtonStyle(appearance: .secondary))
+                            }.buttonStyle(RoundedButtonStyle(.secondary, .large))
                         }
                         Button(action: {
                             SystemManager.shared.markNoticeAsViewed(id: id, doNotShowAgain: false)
                         }) {
                          Text("확인").frame(maxWidth: .infinity)
-                        }.buttonStyle(CapsuleLargeButtonStyle(appearance: .secondary))
+                        }.buttonStyle(RoundedButtonStyle(.secondary, .large))
                     }
                     .padding(.horizontal, 20)
                 }

@@ -44,7 +44,7 @@ struct TagAdditionView: View {
                 Button("추가", action: {
                     viewModel.confirmSelection(.new(viewModel.searchKeyword))
                 })
-                .buttonStyle(CapsuleButtonMediumStyle(status: .primary))
+                .buttonStyle(RoundedButtonStyle(.primary, .medium))
             }
             .padding(20)
             HorizontalDivider(padding: 0)

@@ -24,7 +24,7 @@ struct RecipeEditorAddActionButton: View {
             .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .overlay(
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: 14)
                     .stroke(Color.black.opacity(0.075), lineWidth: 1)
             )
             .contentShape(Rectangle())

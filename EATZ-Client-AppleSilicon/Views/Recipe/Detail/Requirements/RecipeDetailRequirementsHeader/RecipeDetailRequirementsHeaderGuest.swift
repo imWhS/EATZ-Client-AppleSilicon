@@ -53,6 +53,6 @@ struct RecipeDetailRequirementsHeaderGuest: View {
     
     private var signWithEmailButton: some View {
         Button("이메일로 시작", action: onAuth)
-            .buttonStyle(CapsuleButtonMediumStyle(status: .authPrimary))
+            .buttonStyle(RoundedButtonStyle(.authPrimary, .medium))
     }
 }

@@ -66,7 +66,7 @@ struct FloatingLabeledTextField: View {
             .background(Color.white)
             .cornerRadius(12)
             .overlay(
-                RoundedRectangle(cornerRadius: 12)
+                RoundedRectangle(cornerRadius: 14)
                     .stroke(borderColor, lineWidth: 1)
             )
             .onTapGesture {

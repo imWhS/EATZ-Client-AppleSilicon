@@ -140,13 +140,12 @@ private struct BlockedUserRow: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     Button("차단 해제", action: onUnblockTapped)
-                        .buttonStyle(CapsuleButtonMediumStyle(status: .secondary))
+                        .buttonStyle(RoundedButtonStyle(.secondary, .medium))
                 }
             }
             .padding(.vertical, verticalPadding)
             .padding(.horizontal, horizontalPadding)
             
-            // 이미지 오른쪽 끝선에 맞춘 디바이더
             HorizontalDivider(padding: 0)
                 .padding(.leading, horizontalPadding + profileImageSize + imageLabelSpacing)
                 .padding(.trailing, horizontalPadding)

@@ -23,7 +23,7 @@ struct ThemeList: View {
             ListPageTailView(hasNextPage: hasNextPage, onAppear: loadNextPageAction)
         }
         .background(Color.white)
-        .cornerRadius(12)
+        .cornerRadius(14)
         .padding(.horizontal, 20)
     }
 }

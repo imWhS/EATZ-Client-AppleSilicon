@@ -1,18 +1,18 @@
 //
-//  CapsuleButtonMediumStyle.swift
-//  Eatz-AppleSilicon
+//  CapsuleButtonStyle.swift
+//  EATZ-Client-AppleSilicon
 //
-//  Created by 손원희 on 4/6/25.
+//  Created by 손원희 on 8/29/26.
 //
 
 import SwiftUI
 
-enum CapsuleButtonMediumStatus {
+enum CapsuleButtonStatus {
     case primary, authPrimary, secondary, authSecondary, danger, disabled
 }
 
-struct CapsuleButtonMediumStyle: ButtonStyle {
-    var status: CapsuleButtonMediumStatus
+struct CapsuleButtonStyle: ButtonStyle {
+    var status: CapsuleButtonStatus
     var isIconOnly: Bool = false
     
     func makeBody(configuration: Configuration) -> some View {

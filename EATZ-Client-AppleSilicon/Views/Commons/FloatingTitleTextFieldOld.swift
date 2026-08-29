@@ -39,13 +39,12 @@ struct FloatingTitleTextFieldOld: View {
                 .onSubmit(onSubmit ?? ({}))
                 .foregroundStyle(isFocused ? Color.accentColor : Color.gray25)
         }
-//        .frame(height: 68)
         .padding(.horizontal, 16)
         .padding(.vertical, 16)
         .background(Color.white)
-        .cornerRadius(12)
+        .cornerRadius(14)
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 14)
                 .stroke(isFocused ? Color.accentColor : .gray8, lineWidth: 1)
         )
         .onTapGesture {

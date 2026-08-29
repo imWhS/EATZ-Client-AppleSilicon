@@ -39,7 +39,7 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
         }
         .frame(minHeight: 48)
         .background(style.background)
-        .cornerRadius(14)
+        .cornerRadius(20)
         .overlay(
             RoundedRectangle(cornerRadius: 14)
                 .stroke(style.borderColor, lineWidth: 1)

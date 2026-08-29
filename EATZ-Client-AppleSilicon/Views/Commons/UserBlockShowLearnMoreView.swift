@@ -108,15 +108,6 @@ struct UserBlockShowLearnMoreView: View {
         .padding(.vertical, 20)
     }
     
-    private func actionButton(title: String, type: CapsuleLargeButtonAppearance, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Text(title)
-                .frame(maxWidth: .infinity)
-        }
-        .buttonStyle(CapsuleLargeButtonStyle(appearance: type))
-        .padding(.horizontal, 20)
-    }
-    
     @ViewBuilder
     private func createInfoRow(icon: String, text: String) -> some View {
         HStack(alignment: .top, spacing: 18) {

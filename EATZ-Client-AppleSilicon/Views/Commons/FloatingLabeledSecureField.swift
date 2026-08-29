@@ -32,9 +32,9 @@ struct FloatingLabeledSecureField: View {
         .frame(height: 68)
         .padding(.horizontal, 16)
         .background(Color.white)
-        .cornerRadius(12)
+        .cornerRadius(14)
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 14)
                 .stroke(isFocused ? Color.accentColor : Color.gray8, lineWidth: 1)
         )
         .onTapGesture {

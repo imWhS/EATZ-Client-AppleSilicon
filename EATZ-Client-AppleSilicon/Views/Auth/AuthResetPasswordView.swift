@@ -106,13 +106,13 @@ private struct ResetPasswordSetupView: View {
             if !isSubmitable { ProgressView() }
             else {
                 Button(action: onSubmit) {
-                    HStack {
-                        Text("완료").font(.system(size: 17, weight: .semibold))
+                    HStack(spacing: 6) {
+                        Text("완료")
                         Image("arrow-right-14")
                     }
                     .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(CapsuleLargeButtonStyle(appearance: .primary))
+                .buttonStyle(RoundedButtonStyle(.primary, .large))
             }
         }
         .padding(20)

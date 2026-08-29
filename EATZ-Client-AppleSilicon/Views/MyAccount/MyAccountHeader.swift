@@ -95,7 +95,7 @@ struct MyAccountHeader: View {
                 Text("새 레시피")
                     .frame(maxWidth: .infinity)
             }
-            .buttonStyle(CapsuleLargeButtonStyle(appearance: member == nil ? .disabled : .primary))
+            .buttonStyle(RoundedButtonStyle(member == nil ? .disabled : .primary, .large))
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 10)

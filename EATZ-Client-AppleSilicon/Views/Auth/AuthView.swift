@@ -153,15 +153,14 @@ struct AuthView: View {
     
     private func authActionButton(title: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            HStack {
+            HStack(spacing: 6) {
                 Text(title)
-                    .font(.system(size: 17, weight: .semibold))
                     .fontWeight(.semibold)
                 Image("arrow-right-14")
             }
             .frame(maxWidth: .infinity)
         }
-        .buttonStyle(CapsuleLargeButtonStyle(appearance: .authPrimary))
+        .buttonStyle(RoundedButtonStyle(.authPrimary, .large))
         .padding(.horizontal, 20)
     }
 }

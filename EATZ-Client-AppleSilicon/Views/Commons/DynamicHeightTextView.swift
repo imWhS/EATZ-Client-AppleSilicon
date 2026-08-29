@@ -40,7 +40,7 @@ struct DynamicHeightTextView: View {
         maxHeight: CGFloat = 120,
         font: UIFont = .systemFont(ofSize: 17, weight: .regular),
         padding: EdgeInsets = .init(top: 16, leading: 16, bottom: 16, trailing: 16),
-        cornerRadius: CGFloat = 12,
+        cornerRadius: CGFloat = 14,
         stroke: Color = Color.gray8,
         strokeHighlighted: Color = Color.accentColor,
         backgroundColor: Color = .white,

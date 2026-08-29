@@ -93,22 +93,18 @@ struct CookableRecipeList: View {
                     if authManager.isLoggedIn && viewModel.searchCriteria.isCookableOnly == true {
                         Button(action: { viewModel.searchCriteria.isCookableOnly = false }) {
                             Text("'바로 요리 가능' 해제")
-                                .font(.system(size: 17, weight: .semibold))
-                                .fontWeight(.semibold)
                                 .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(CapsuleLargeButtonStyle(appearance: .secondary))
+                        .buttonStyle(RoundedButtonStyle(.secondary, .large))
                     }
                     Button(action: { router.popToRoot() }) {
                         HStack {
                             Image("arrow-left-14")
                             Text("이전 화면으로 이동")
-                                .font(.system(size: 17, weight: .semibold))
-                                .fontWeight(.semibold)
                         }
                         .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(CapsuleLargeButtonStyle(appearance: .secondary))
+                    .buttonStyle(RoundedButtonStyle(.secondary, .large))
                 }
                 .transition(.opacity)
             }

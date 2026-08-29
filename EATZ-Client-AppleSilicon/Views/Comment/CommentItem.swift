@@ -48,24 +48,25 @@ struct CommentItem: View {
                     if !permissions.isEmpty {
                         HStack(spacing: 8) {
                             Spacer()
-                            Group {
-                                if permissions.contains(.block) {
-                                    Button("작성자 차단", action: { action(comment, .block) })
-                                }
-                                if permissions.contains(.report) {
-                                    Button("신고", action: { action(comment, .report) })
-                                }
-                                if permissions.contains(.update) {
-                                    Button("수정", action: { action(comment, .update) })
-                                }
-                                if permissions.contains(.delete) {
-                                    Button("삭제", action: { action(comment, .delete) })
-                                }
+                            if permissions.contains(.block) {
+                                Button("작성자 차단", action: { action(comment, .block) })
+                                    .buttonStyle(SmallBorderlessButtonStyle())
+                            }
+                            if permissions.contains(.report) {
+                                Button("신고", action: { action(comment, .report) })
+                                    .buttonStyle(SmallBorderlessButtonStyle())
+                            }
+                            if permissions.contains(.update) {
+                                Button("수정", action: { action(comment, .update) })
+                                    .buttonStyle(SmallBorderlessButtonStyle())
+                            }
+                            if permissions.contains(.delete) {
+                                Button("삭제", action: { action(comment, .delete) })
+                                    .buttonStyle(SmallBorderlessButtonStyle(status: .danger))
+                            }
 //                                if permissions.contains(.hide) {
 //                                    Button("숨김", action: { print("숨기기") })
 //                                }
-                            }
-                            .buttonStyle(SmallBorderlessButtonStyle())
                         }
                         .padding(.horizontal, 12)
                     }

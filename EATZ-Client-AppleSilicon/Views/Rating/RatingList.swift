@@ -63,14 +63,19 @@ struct RatingList: View {
         else {
             HStack(spacing: 8) {
                 Spacer()
-                Group {
-                    if permissions.contains(.block) { Button("작성자 차단", action: onBlock) }
-                    if permissions.contains(.report) { Button("신고", action: onReport) }
-                    if permissions.contains(.delete) { Button("삭제", action: onDelete) }
-//                    if permissions.contains(.hide) { Button("숨김", action: onHide) }
+                if permissions.contains(.block) {
+                    Button("작성자 차단", action: onBlock)
+                        .buttonStyle(SmallBorderlessButtonStyle())
                 }
-                .font(.system(size: 12, weight: .semibold))
-                .buttonStyle(SmallBorderlessButtonStyle())
+                if permissions.contains(.report) {
+                    Button("신고", action: onReport)
+                        .buttonStyle(SmallBorderlessButtonStyle())
+                }
+                if permissions.contains(.delete) {
+                    Button("삭제", action: onDelete)
+                        .buttonStyle(SmallBorderlessButtonStyle(status: .danger))
+                }
+//                    if permissions.contains(.hide) { Button("숨김", action: onHide) }
             }
             .padding(.horizontal, 12)
         }

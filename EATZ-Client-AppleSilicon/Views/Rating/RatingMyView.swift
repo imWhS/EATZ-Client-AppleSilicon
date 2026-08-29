@@ -31,7 +31,7 @@ struct RatingMyView: View {
     func authorInteractionView(rating: Rating) -> some View {
         HStack(spacing: 8) {
             Spacer()
-            Button("삭제", action: { onDeleteTapped(rating) }).buttonStyle(SmallBorderlessButtonStyle())
+            Button("삭제", action: { onDeleteTapped(rating) }).buttonStyle(SmallBorderlessButtonStyle(status: .danger))
             Button("수정", action: { onUpdateTapped(rating.id) }).buttonStyle(SmallBorderlessButtonStyle())
         }
         .padding(.horizontal, 12)

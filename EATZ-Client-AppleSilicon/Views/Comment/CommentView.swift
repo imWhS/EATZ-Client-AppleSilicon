@@ -12,29 +12,23 @@ struct CommentView: View {
     @EnvironmentObject private var authManager: AuthManager
     @StateObject var viewModel: CommentViewModel
     
+    private var commentEnabled: Bool {
+        guard let recipeEssential = viewModel.recipeEssential else { return false }
+        return recipeEssential.commentEnabled
+    }
+    
     init(recipeId: Int64) {
         self._viewModel = StateObject(wrappedValue: CommentViewModel(for: recipeId))
     }
     
     var body: some View {
-        Group {
-            if case .loaded = viewModel.viewState,
-               !viewModel.pagedCommentsWithPermissions.isEmpty
-            {
-                ScrollView {
-                    commentView
+        contentView
+            .safeAreaInset(edge: .bottom) {
+                if viewModel.presentEditor,
+                   commentEnabled {
+                    CommentEditor(authManager, viewModel)
                 }
-                .refreshable { await viewModel.refresh() }
-            } else {
-                commentView
             }
-        }
-        .safeAreaInset(edge: .bottom) {
-            if viewModel.presentEditor {
-                CommentEditor(authManager: authManager, viewModel: viewModel)
-            }
-        }
-        .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
         .toolbarBackground(.hidden, for: .tabBar)
         .navigationTitle(viewModel.navigationTitleLabel)
         .navigationBarTitleDisplayMode(.inline)
@@ -54,6 +48,22 @@ struct CommentView: View {
         .getReportContext(resource: $viewModel.reportResource)
     }
     
+    private var contentView: some View {
+        ZStack {
+            if case .loaded = viewModel.viewState,
+               !viewModel.pagedCommentsWithPermissions.isEmpty
+            {
+                ScrollView {
+                    commentView
+                }
+                .refreshable { await viewModel.refresh() }
+            } else {
+                commentView
+            }
+        }
+        .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
+    }
+    
     @ViewBuilder
     private var commentView: some View {
         VStack(spacing: 0) {
@@ -61,14 +71,21 @@ struct CommentView: View {
             
             switch viewModel.viewState {
             case .initialLoading: LoadingCurtain(title: "레시피에 달린 댓글 목록을 불러오고 있어요...")
-            case .loaded: contentView
+            case .loaded: loadedView
             case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.prepareDataIfNeeded)
             }
         }
     }
     
+    private var commentDisabledGuideView: some View {
+        VStack(spacing: 0) {
+            GuideView(guides: ["댓글 기능이 해제된 레시피예요. 레시피의 작성자가 댓글 기능을 설정했을 때 달린 댓글만 볼 수 있어요."])
+            HorizontalDivider()
+        }
+    }
+    
     @ViewBuilder
-    private var contentView: some View {
+    private var loadedView: some View {
         if viewModel.pagedCommentsWithPermissions.isEmpty {
             CommonEmptyStateView(
                 title: "보여드릴 댓글이 없어요.",
@@ -76,17 +93,20 @@ struct CommentView: View {
                 "comment-40"
             )
         } else {
-            CommentList(
-                viewModel.pagedCommentsWithPermissions,
-                viewModel.loadMoreComments,
-                viewModel.handleAction)
+            VStack(spacing: 0) {
+                if !commentEnabled { commentDisabledGuideView }
+                CommentList(
+                    viewModel.pagedCommentsWithPermissions,
+                    viewModel.loadMoreComments,
+                    viewModel.handleAction)
+            }
         }
     }
     
     @ViewBuilder
     private var recipeEssentialWrapperView: some View {
         if let recipeEssential = viewModel.recipeEssential {
-            RecipeEssentialView(recipeEssential, style: .white)
+            RecipeEssentialView(recipeEssential, .white)
         } else {
             EmptyView()
         }
@@ -140,7 +160,7 @@ enum CommentAlert {
     @ViewBuilder
     var message: some View {
         switch self {
-        case .commentDisabled: Text("댓글 기능이 해제된 레시피예요. 레시피의 작성자가 댓글 기능을 다시 사용하도록 설정해야 댓글을 달거나 수정할 수 있어요.")
+        case .commentDisabled: Text("댓글 기능이 해제된 레시피예요. 레시피의 작성자가 댓글 기능을 설정해야 댓글을 달거나 수정할 수 있어요.")
         case .confirmDelete(let type, _):
             let username = type.comment.author.username
             let authorLabel = type.isMine ? "회원" : "\(username)"

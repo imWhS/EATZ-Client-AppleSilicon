@@ -33,7 +33,7 @@ struct RatingContentView: View {
             if 0 < pagedRatings.totalElements {
                 ScrollView {
                     VStack(spacing: 0) {
-                        RecipeEssentialView(recipeEssential, style: .gray)
+                        RecipeEssentialView(recipeEssential, .gray)
                         RatingIndicatorView(state: viewModel.indicatorState)
                         userContextView
                         RatingList(

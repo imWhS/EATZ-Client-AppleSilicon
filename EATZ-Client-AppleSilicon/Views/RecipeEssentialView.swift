@@ -9,31 +9,19 @@ import SwiftUI
 import Kingfisher
 
 struct RecipeEssentialView: View {
-    enum Style {
-        case gray
-        case white
-        
-        var background: Color {
-            switch self {
-            case .gray: Color.backgroundPrimary
-            case .white: Color.white
-            }
-        }
-    }
-    
     var recipeEssential: RecipeEssentialWithAuthor?
+    var appearance: RecipeEssentialAppearance
     
-    var style: Style
-    
-    init(_ recipeEssential: RecipeEssentialWithAuthor? = nil, style: Style = .gray) {
+    init(_ recipeEssential: RecipeEssentialWithAuthor? = nil,
+         _ appearance: RecipeEssentialAppearance = .gray) {
         self.recipeEssential = recipeEssential
-        self.style = style
+        self.appearance = appearance
     }
     
     var body: some View {
         Group {
             if let recipeEssential = recipeEssential {
-                HStack(alignment: .center, spacing: 12) {
+                HStack(alignment: .center, spacing: 0) {
                     KFImage(URL(imageUrlString: recipeEssential.imageUrl))
                         .placeholder {
                             ProgressView()
@@ -51,10 +39,11 @@ struct RecipeEssentialView: View {
                             .font(.system(size: 12, weight: .medium))
                             .foregroundStyle(Color.gray35)
                     }
+                    .padding(.horizontal, 12)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(style.background)
-                .cornerRadius(8)
+                .background(appearance.background)
+                .cornerRadius(14)
                 .clipped()
                 .padding(.horizontal, 20)
             } else {
@@ -62,5 +51,17 @@ struct RecipeEssentialView: View {
             }
         }
         .padding(.vertical, 10)
+    }
+}
+
+enum RecipeEssentialAppearance {
+    case gray
+    case white
+    
+    var background: Color {
+        switch self {
+        case .gray: Color.backgroundPrimary
+        case .white: Color.white
+        }
     }
 }

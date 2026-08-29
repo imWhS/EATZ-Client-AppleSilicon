@@ -18,7 +18,8 @@ struct TagItem: View {
                     .font(.system(size: 17, weight: .medium))
                     .foregroundStyle(.black)
                 Spacer()
-                Button("추가", action: onAddTapped).buttonStyle(CapsuleButtonMediumStyle(status: .secondary))
+                Button("추가", action: onAddTapped)
+                    .buttonStyle(RoundedButtonStyle(.secondary, .medium))
             }
             .padding(.vertical, 12)
             .padding(.horizontal, 20)

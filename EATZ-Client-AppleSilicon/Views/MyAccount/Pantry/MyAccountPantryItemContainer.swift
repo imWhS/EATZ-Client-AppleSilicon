@@ -24,7 +24,7 @@ struct MyAccountPantryItemContainer<Content: View>: View {
             detailSection
         }
         .background(Color.white)
-        .cornerRadius(12)
+        .cornerRadius(14)
         .padding(.horizontal, 20)
         .padding(.vertical, 10)
     }

@@ -60,7 +60,7 @@ struct ServingsPicker: View {
                 Text("설정 안 함")
                     .frame(maxWidth: .infinity)
             }
-            .buttonStyle(CapsuleLargeButtonStyle(appearance: .secondary))
+            .buttonStyle(RoundedButtonStyle(.secondary, .large))
             .padding()
         }
         .navigationTitle("제공량")

@@ -26,7 +26,7 @@ struct RecipeCard: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: size, height: size)
                 .background(Color.white)
-                .cornerRadius(12)
+                .cornerRadius(14)
                 .contentShape(Rectangle())
                 .clipped()
         }

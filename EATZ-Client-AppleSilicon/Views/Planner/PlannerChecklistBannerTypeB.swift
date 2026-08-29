@@ -50,15 +50,13 @@ struct PlannerChecklistBannerTypeB: View {
     
     private var checklistButton: some View {
         Button(action: onPresentChecklistTapped) {
-            HStack {
+            HStack(spacing: 6) {
                 Text("체크리스트")
-                    .font(.system(size: 17, weight: .semibold))
-                    .fontWeight(.semibold)
                 Image("arrow-right-14")
             }
             .frame(maxWidth: .infinity)
         }
-        .buttonStyle(CapsuleLargeButtonStyle(appearance: .primary))
+        .buttonStyle(RoundedButtonStyle(.primary, .large))
     }
     
     private var emptyStateView: some View {

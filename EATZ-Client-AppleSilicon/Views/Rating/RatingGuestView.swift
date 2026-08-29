@@ -31,7 +31,7 @@ struct RatingGuestView: View {
     
     private var signWithEmailButton: some View {
         Button("이메일로 시작", action: onLogIn)
-            .buttonStyle(CapsuleButtonMediumStyle(status: .authPrimary))
+            .buttonStyle(RoundedButtonStyle(.authPrimary, .large))
     }
     
     var authActionView: some View {

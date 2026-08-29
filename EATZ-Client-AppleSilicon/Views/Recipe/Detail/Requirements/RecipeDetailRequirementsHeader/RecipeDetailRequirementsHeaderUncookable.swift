@@ -71,6 +71,6 @@ struct RecipeDetailRequirementsHeaderUncookable: View {
                 Image("add-circled-16").foregroundStyle(Color.white)
                 Text("모두 보관함에 추가")
             }}
-        .buttonStyle(CapsuleButtonMediumStyle(status: .primary))
+        .buttonStyle(RoundedButtonStyle(.primary, .medium))
     }
 }

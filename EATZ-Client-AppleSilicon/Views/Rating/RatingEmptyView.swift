@@ -30,7 +30,7 @@ struct RatingEmptyView: View {
         Button(action: { onRegisterTapped(isLoggedIn) }) {
             Text("새 평가").frame(maxWidth: .infinity)
         }
-        .buttonStyle(CapsuleLargeButtonStyle(appearance: .primary))
+        .buttonStyle(RoundedButtonStyle(.primary, .large))
         .padding(20)
     }
     
@@ -46,7 +46,7 @@ struct RatingEmptyView: View {
                 Button(action: { onRegisterTapped(isLoggedIn) }) {
                     Text("이메일로 시작").frame(maxWidth: .infinity)
                 }
-                .buttonStyle(CapsuleLargeButtonStyle(appearance: .authPrimary))
+                .buttonStyle(RoundedButtonStyle(.authPrimary, .large))
                 Text("로그인 또는 가입하면 평가를 등록할 수 있어요.")
                     .font(.system(size: 12, weight: .medium))
                     .multilineTextAlignment(.center)

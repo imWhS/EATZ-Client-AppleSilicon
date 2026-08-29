@@ -32,7 +32,7 @@ struct SmallBorderlessButtonStyle: ButtonStyle {
             .padding(.horizontal, 8)
             .padding(.vertical, 6)
             .background(configuration.isPressed ? Color.buttonSecondary : .clear)
-            .cornerRadius(12)
+            .cornerRadius(14)
             .scaleEffect(configuration.isPressed ? 0.965 : 1.0)
             .opacity(configuration.isPressed ? 0.5 : 1.0)
             .animation(

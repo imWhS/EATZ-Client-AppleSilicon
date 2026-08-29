@@ -44,7 +44,8 @@ struct ErrorCurtain: View {
                     }
                 }
                 if let onRetryTapped = onRetryTapped {
-                    Button("다시 시도", action: onRetryTapped).buttonStyle(CapsuleButtonMediumStyle(status: .secondary))
+                    Button("다시 시도", action: onRetryTapped)
+                        .buttonStyle(RoundedButtonStyle(.secondary, .medium))
                 }
             }
             Spacer()

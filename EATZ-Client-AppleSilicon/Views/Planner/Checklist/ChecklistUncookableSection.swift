@@ -67,13 +67,13 @@ struct ChecklistUncookableSection: View {
                         // 레시피를 요리하기 위해 필요한(사용자가 보관함에 추가하지 않은) 재료와 도구 모두 사용자 보관함에 일괄 추가합니다.
                         onAddAllRequirements()
                     }) {
-                        HStack(spacing: 10) {
+                        HStack(spacing: 6) {
                             Image("add-circled-22").foregroundStyle(Color.white)
                             Text("모두 보관함에 추가")
                         }
                         .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(CapsuleLargeButtonStyle(appearance: .primary))
+                    .buttonStyle(RoundedButtonStyle(.primary, .large))
                     .padding(.horizontal, 20)
                     .padding(.vertical, 10)
                 }

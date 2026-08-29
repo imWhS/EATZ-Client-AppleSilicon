@@ -60,7 +60,7 @@ struct RecipeEditorDefaultInfoImageView: View {
         HStack {
             if hasImage {
                 Button("대표 사진 삭제", action: onDeleteTapped)
-                    .buttonStyle(CapsuleButtonMediumStyle(status: isProcessing ? .disabled : .danger))
+                    .buttonStyle(RoundedButtonStyle(isProcessing ? .disabled : .danger, .medium))
             }
             PhotosPicker(
                 selection: $selectedPhotoItem,
@@ -68,7 +68,7 @@ struct RecipeEditorDefaultInfoImageView: View {
                 photoLibrary: .shared()) {
                     Text(hasImage ? "대표 사진 변경" : "대표 사진 선택")
                 }
-                .buttonStyle(CapsuleButtonMediumStyle(status: isProcessing ? .disabled : .primary))
+                .buttonStyle(RoundedButtonStyle(isProcessing ? .disabled : .primary, .medium))
         }
         .disabled(isProcessing)
     }

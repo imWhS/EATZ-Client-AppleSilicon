@@ -112,7 +112,7 @@ private struct CalendarHeaderView: View {
                 }
             }
         }
-        .buttonStyle(CapsuleButtonMediumStyle(status: .secondary))
+        .buttonStyle(RoundedButtonStyle(.secondary, .medium))
     }
 }
 

@@ -72,7 +72,7 @@ struct ThemePicker: View {
             }) {
                 Text("설정 안 함").frame(maxWidth: .infinity)
             }
-            .buttonStyle(CapsuleLargeButtonStyle(appearance: .secondary))
+            .buttonStyle(RoundedButtonStyle(.secondary, .large))
             .padding(.horizontal, 20)
             Text("모든 레시피를 둘러봅니다.")
                 .font(.system(size: 12, weight: .medium))

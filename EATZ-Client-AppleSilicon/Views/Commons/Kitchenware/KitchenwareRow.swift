@@ -34,7 +34,7 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
         }
         .frame(minHeight: 48)
         .background(style.background)
-        .cornerRadius(14)
+        .cornerRadius(21)
         .overlay(
             RoundedRectangle(cornerRadius: 14)
                 .stroke(style.borderColor, lineWidth: 1)

@@ -33,7 +33,7 @@ struct CookableFilterToggle: View {
                         "바로 요리 가능",
                         "로그인 또는 가입하면, 바로 요리할 수 있는 레시피만 찾을 수 있어요.")
                     Button("이메일로 시작", action: action)
-                        .buttonStyle(CapsuleButtonMediumStyle(status: .authPrimary))
+                        .buttonStyle(RoundedButtonStyle(.authPrimary, .medium))
                 }
                 .padding(20)
             }

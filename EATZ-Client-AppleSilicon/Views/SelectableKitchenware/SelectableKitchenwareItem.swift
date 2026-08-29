@@ -61,6 +61,6 @@ struct SelectableKitchenwareItem<Manager: SelectableKitchenwareManager>: View {
                 else { Text("선택") }
             }
         }
-        .buttonStyle(CapsuleButtonMediumStyle(status: isDisabled ? .disabled : (isSelected ? .secondary : .primary)))
+        .buttonStyle(RoundedButtonStyle(isDisabled ? .disabled : (isSelected ? .secondary : .primary), .medium))
     }
 }

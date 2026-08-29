@@ -433,7 +433,7 @@ private struct RecipeDetailReactionButtonStyle: ButtonStyle {
             .padding(16)
             .foregroundStyle(foregroundColor)
             .background(backgroundColor)
-            .cornerRadius(12)
+            .cornerRadius(14)
             .scaleEffect(type != .disabled && configuration.isPressed ? 0.965 : 1.0)
             .opacity(type != .disabled && configuration.isPressed ? 0.5 : 1.0)
             .animation(

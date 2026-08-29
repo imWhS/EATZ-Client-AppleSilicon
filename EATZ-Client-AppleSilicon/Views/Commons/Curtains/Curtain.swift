@@ -54,7 +54,7 @@ struct Curtain<Header: View, Footer: View>: View {
                 
                 if let action = action {
                     Button(actionTitle ?? "다시 시도", action: action)
-                        .buttonStyle(CapsuleButtonMediumStyle(status: .secondary))
+                        .buttonStyle(RoundedButtonStyle(.secondary, .large))
                 }
         
                 footer()

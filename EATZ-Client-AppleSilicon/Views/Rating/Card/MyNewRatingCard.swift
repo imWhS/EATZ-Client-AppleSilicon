@@ -26,10 +26,9 @@ struct MyNewRatingCard: View {
                     Button(action: {
                         onRegisterAction()
                     }) {
-                        Text("새 평가")
-                            .frame(maxWidth: .infinity)
+                        Text("새 평가").frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(CapsuleLargeButtonStyle(appearance: .primary))
+                    .buttonStyle(RoundedButtonStyle(.primary, .large))
                     Text("아직 이 레시피를 평가하지 않았어요.\n레시피의 요리 경험을 공유해보세요.")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(Color.gray35)
@@ -41,10 +40,3 @@ struct MyNewRatingCard: View {
         .padding(.horizontal, 20)
     }
 }
-
-//#Preview {
-//    NewRatingActionView(
-//        username: "hee.xtory",
-//        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiZAwyv3ky9HdSIH32PzkhiCAPtsBGRZ49LA&s",
-//        onRegisterTapped: { print("평가 등록") })
-//}

@@ -88,7 +88,7 @@ struct LogInView: View {
                     ProgressView()
                 } else {
                     Button("암호 다시 설정", action: viewModel.resetPassword)
-                        .buttonStyle(CapsuleButtonMediumStyle(status: .authSecondary))
+                        .buttonStyle(RoundedButtonStyle(.authSecondary, .medium))
                 }
                 
                 Group {

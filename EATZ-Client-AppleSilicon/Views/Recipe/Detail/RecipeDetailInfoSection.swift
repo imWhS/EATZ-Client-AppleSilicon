@@ -269,7 +269,7 @@ struct RecipeDetailInfoReactionView: View {
     
     private var commentGuideLabel: String {
         if isInitialCommentDisabled {
-            return "댓글이\n비활성화됐어요."
+            return "댓글 기능이\n해제됐어요."
         } else {
             return "첫 댓글을\n남겨보세요."
         }

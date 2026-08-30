@@ -139,11 +139,20 @@ private struct ChecklistContentView: View {
             VStack(spacing: 4) {
                 Text(titleLabel)
                     .font(.system(size: 30, weight: .bold))
-                if let planCountLabel = viewModel.planCountLabel {
-                    Text(planCountLabel)
-                        .font(.system(size: 17, weight: .medium))
-                        .multilineTextAlignment(.center)
-                        .foregroundStyle(Color.gray35)
+                
+                HStack {
+                    Group {
+                        if let planCountLabel = viewModel.planCountLabel {
+                            Text(planCountLabel)
+                        }
+                        DotSeparator()
+                        if 0 < viewModel.plansTotalTime {
+                            Text(EatzDurationFormatter.seconds(from: viewModel.plansTotalTime) ?? "")
+                        }
+                    }
+                    .font(.system(size: 17, weight: .medium))
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(Color.gray35)
                 }
             }
             .padding(20)

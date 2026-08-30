@@ -41,6 +41,29 @@ class ChecklistViewModel: ObservableObject {
         return "\(checklist.cookable.plans.count + checklist.uncookable.plans.count)개의 플랜"
     }
     
+    var plansTotalTime: Int {
+        var time = 0
+        if let uncookables = checklist?.uncookable.plans {
+            for uncookable in uncookables {
+                if let prepTime = uncookable.recipePrepTime,
+                   let cookingTime = uncookable.recipeCookingTime {
+                    time += prepTime + cookingTime
+                }
+            }
+        }
+        
+        if let cookables = checklist?.cookable.plans {
+            for cookable in cookables {
+                if let prepTime = cookable.recipePrepTime,
+                   let cookingTime = cookable.recipeCookingTime {
+                    time += prepTime + cookingTime
+                }
+            }
+        }
+        
+        return time
+    }
+    
     init(_ dateRange: (startDate: Date, endDate: Date)) {
         self.dateRange = dateRange
     }

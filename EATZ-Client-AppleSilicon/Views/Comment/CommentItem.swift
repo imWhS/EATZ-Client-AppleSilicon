@@ -46,7 +46,7 @@ struct CommentItem: View {
                 Spacer()
                 Text(comment.createdAt.formattedRelative)
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(.gray)
+                    .foregroundStyle(Color.gray35)
             }
             Text(comment.content)
                 .font(.system(size: 17, weight: .medium))

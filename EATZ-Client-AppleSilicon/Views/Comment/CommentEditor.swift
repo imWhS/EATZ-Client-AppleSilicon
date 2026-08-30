@@ -49,9 +49,9 @@ struct CommentEditor: View {
         }
         .padding(.vertical, 16)
         .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 32))
+        .clipShape(RoundedRectangle(cornerRadius: viewModel.isEditing ? 24 : 32))
         .shadow(
-            color: .black.opacity(0.1),
+            color: .black.opacity(0.07),
             radius: 8,
             y: 4
         )
@@ -61,12 +61,12 @@ struct CommentEditor: View {
     
     private var fieldView: some View {
         VStack(spacing: 0) {
-            if viewModel.isEditing { header }
+            if viewModel.isEditing { editingStateHeader }
             editor
         }
     }
     
-    private var header: some View {
+    private var editingStateHeader: some View {
         HStack {
             Text("댓글 수정 중")
                 .font(.system(size: 14, weight: .semibold))

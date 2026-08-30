@@ -125,10 +125,7 @@ struct RecipeDetailInfoDescriptionView: View {
     
     private var creatorSection: some View {
         HStack(spacing: 10) {
-            Image("info-200")
-                .resizable()
-                .foregroundStyle(Color.gray15)
-                .frame(width: 40, height: 40)
+            Image("info-40-gray15")
             
             VStack(alignment: .leading, spacing: 4) {
                 Text("출처")

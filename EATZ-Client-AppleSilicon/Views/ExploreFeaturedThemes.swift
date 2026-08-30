@@ -78,10 +78,7 @@ struct ThemeAllSection: View {
                         Curtain(
                             title: "보여드릴 테마가 없어요.",
                             header: {
-                                Image("info-200")
-                                    .resizable()
-                                    .foregroundStyle(Color.gray15)
-                                    .frame(width: 40, height: 40)
+                                Image("info-40-gray15")
                             }
                         )
                     }

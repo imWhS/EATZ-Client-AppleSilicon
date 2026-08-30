@@ -55,7 +55,7 @@ struct CookableRecipeList: View {
             case .initialLoading: LoadingCurtain(title: "요리할 수 있는 레시피 목록을 불러오고 있어요...").transition(.opacity)
             case .loaded: contentView.transition(.opacity)
             case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.resetAndLoadAll).transition(.opacity)
-            case .empty: emptyStateView
+            case .empty: emptyStateView.transition(.opacity)
             }
         }
         .background(Color.backgroundPrimary.ignoresSafeArea(edges: [.top, .bottom]))
@@ -136,7 +136,6 @@ struct CookableRecipeList: View {
                     isEmptyList)
                 listView
             }
-            .padding(.top, 10)
             .padding(.bottom, 20)
         }
         .coordinateSpace(name: "scroll")
@@ -173,13 +172,12 @@ struct CookableRecipeList: View {
         GeometryReader { proxy in
             let scrollYOffset = proxy.frame(in: .named("scroll")).minY
             Color.clear
-                .frame(height: 0)
                 .onChange(of: scrollYOffset) { _, offset in
                     withAnimation(.easeInOut(duration: 0.2)) {
                         viewModel.showNavigationBarTitle = offset < -100
                     }
                 }
-        }
+        }.frame(height: 0)
     }
 }
 
@@ -223,7 +221,8 @@ private struct CookableRecipeListHeader: View {
                     isDisabled: isEmptyList)
             }
             .padding(.leading, 20)
-            .padding(.vertical, 10)
+            .padding(.top, 20)
+            .padding(.bottom, 10)
         }
     }
     

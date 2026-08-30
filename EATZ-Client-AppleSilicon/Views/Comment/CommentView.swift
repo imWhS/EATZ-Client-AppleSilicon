@@ -126,8 +126,8 @@ enum CommentAlert {
         case .commentDisabled: return "댓글 기능 해제됨"
         case .confirmDelete(let type, _): return type.isMine ? "내 댓글 삭제" : "댓글 삭제"
         case .deletionSuccess(let isMine): return isMine ? "내 댓글 삭제 완료" : "댓글 삭제 완료"
-        case .confirmDiscardChanges(_): return "댓글 편집 종료"
-        case .confirmChangeUpdatingComment(_): return "편집할 댓글 변경"
+        case .confirmDiscardChanges(_): return "댓글 수정 취소"
+        case .confirmChangeUpdatingComment(_): return "다른 댓글 수정"
         case .error(let title, _): return title ?? "오류"
         }
     }
@@ -144,13 +144,13 @@ enum CommentAlert {
             Button("확인", role: .cancel) {}
         case .confirmDiscardChanges(let confirmAction):
             Group {
-                Button("취소", role: .cancel) {}
-                Button("버리기", role: .destructive, action: confirmAction)
+                Button("계속 편집", role: .cancel) {}
+                Button("수정 취소", role: .destructive, action: confirmAction)
             }
         case .confirmChangeUpdatingComment(let confirmAction):
             Group {
                 Button("취소", role: .cancel) {}
-                Button("버리기", role: .destructive, action: confirmAction)
+                Button("다른 댓글 수정", role: .destructive, action: confirmAction)
             }
         case .error(_, _):
             Button("확인", role: .cancel) {}
@@ -166,8 +166,8 @@ enum CommentAlert {
             let authorLabel = type.isMine ? "회원" : "\(username)"
             Text("\(authorLabel)님의 댓글을 삭제할까요? 삭제된 댓글은 복구할 수 없어요.")
         case .deletionSuccess(let isMine): Text("\(isMine ? "회원님의 " : "")댓글을 삭제했어요.")
-        case .confirmDiscardChanges(_): Text("작성 또는 변경하고 있던 내용을 버리시겠어요?")
-        case .confirmChangeUpdatingComment(_): Text("작성 또는 변경하고 있던 내용을 버리고 다른 댓글을 편집할까요?")
+        case .confirmDiscardChanges(_): Text("변경한 내용을 버리고 댓글 수정을 취소할까요?")
+        case .confirmChangeUpdatingComment(_): Text("작성 또는 수정하고 있던 내용을 버리고 다른 댓글을 수정할까요?")
         case .error(_, let message): Text(message);
         }
     }

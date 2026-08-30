@@ -216,7 +216,7 @@ enum RecipeEditorAlert: Identifiable {
             Button("삭제", role: .destructive, action: confirmAction)
         case .hasUnsavedChanges(let confirmAction):
             Button("취소", role: .cancel) {}
-            Button("종료", role: .destructive, action: confirmAction)
+            Button("편집 종료", role: .destructive, action: confirmAction)
         case .incompleteDraft: Button("확인", role: .cancel) {}
         case .userChanged(let dismissAction): Button("확인", action: dismissAction)
         case .sessionExpired(let dismissAction): Button("확인", action: dismissAction)
@@ -228,7 +228,7 @@ enum RecipeEditorAlert: Identifiable {
     var message: some View {
         switch self {
         case .deleteImageConfirmation: Text("레시피의 대표 사진을 삭제할까요?")
-        case .hasUnsavedChanges: Text("변경된 내용이 버려집니다. 편집을 종료할까요?")
+        case .hasUnsavedChanges: Text("작성 또는 수정하고 있던 내용을 버리고 편집을 종료할까요? 버려진 내용은 복구할 수 없어요.")
         case .incompleteDraft(let message): Text(message)
         case .userChanged: Text("기존과 다른 사용자로 로그인됐어요. 레시피 편집을 종료할게요.")
         case .sessionExpired: Text("로그아웃 상태로 전환됐어요. 레시피 편집을 종료할게요.")

@@ -15,6 +15,20 @@ struct PlannerPlanList: View {
     let onAddPlanTapped: (Date) -> Void
     let action: (PlannerPlan, PlannerPlanItemAction) -> Void
     
+    var plansTotalTime: Int {
+        var time = 0
+        if let plans = plans {
+            for plan in plans {
+                if let prepTime = plan.recipePrepTime,
+                   let cookingTime = plan.recipeCookingTime {
+                    time += prepTime + cookingTime
+                }
+            }
+        }
+        
+        return time
+    }
+    
     init(_ date: Date,
          plans: [PlannerPlan]?,
          onAddPlanTapped: @escaping (Date) -> Void,
@@ -61,7 +75,7 @@ struct PlannerPlanList: View {
     var body: some View {
         VStack(spacing: 0) {
             mainContentView
-            PlannerPlanListFooter(date: date, planCount: plans?.count, onAddPlanTapped: onAddPlanTapped)
+            PlannerPlanListFooter(date, plansTotalTime, planCount: plans?.count, onAddPlanTapped: onAddPlanTapped)
         }
     }
     
@@ -69,8 +83,7 @@ struct PlannerPlanList: View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 8) {
                 ForEach(plans) { plan in
-                    PlannerPlanItem(plan, action)
-                        .transition(.opacity)
+                    PlannerPlanItem(plan, action).transition(.scale(scale: 0.95).combined(with: .opacity))
                 }
                 PlannerPlanListGuideView(subtitle: detailLabel, height: contentViewHeight)
                     .frame(width: contentViewHeight)
@@ -111,8 +124,16 @@ private struct PlannerPlanListGuideView: View {
 
 private struct PlannerPlanListFooter: View {
     let date: Date
+    let plansTotalTime: Int
     let planCount: Int?
     let onAddPlanTapped: (Date) -> Void
+    
+    init(_ date: Date, _ plansTotalTime: Int, planCount: Int?, onAddPlanTapped: @escaping (Date) -> Void) {
+        self.date = date
+        self.plansTotalTime = plansTotalTime
+        self.planCount = planCount
+        self.onAddPlanTapped = onAddPlanTapped
+    }
     
     private var planCountLabel: String {
         if let itemCount = self.planCount {
@@ -154,9 +175,12 @@ private struct PlannerPlanListFooter: View {
         HStack(alignment: .center) {
             Group {
                 Text(EatzDateTimeFormatters.monthDayWithUnit.string(from: date))
-                    .font(.system(size: 12, weight: .medium))
+                    .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(Color.black)
+                DotSeparator()
                 Text(planCountLabel).contentTransition(.numericText())
+                DotSeparator()
+                Text(EatzDurationFormatter.seconds(from: plansTotalTime) ?? "").contentTransition(.numericText())
             }
             .font(.system(size: 12, weight: .medium))
             .foregroundStyle(Color.gray35)

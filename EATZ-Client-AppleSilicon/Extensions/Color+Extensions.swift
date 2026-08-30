@@ -12,6 +12,8 @@ extension Color {
     static let rating = Color("Colors/rating")
     static let backgroundPrimary = Color("Colors/backgroundPrimary")
     static let buttonSecondary = Color("Colors/buttonSecondary")
+    static let requirementYellow = Color("Colors/requirementYellow")
+    static let requirementGreen = Color("Colors/requirementGreen")
     static let gray60 = Color("Colors/gray60")
     static let gray50 = Color("Colors/gray50")
     static let gray35 = Color("Colors/gray35")

@@ -22,7 +22,7 @@ struct RecipeDetailRequirementsHeaderCookable: View {
     private var contentView: some View {
         VStack(spacing: 20) {
             Group {
-                Image("recipe-ingredients-cookable-available")
+                Image("requirement-unavailable-62")
                     .shadow(color: Color.init(hex: "76BD2F").opacity(0.75), radius: 8, x: 0, y: 4)
                 VStack(spacing: 4) {
                     Text("바로 요리할 수 있는 레시피")

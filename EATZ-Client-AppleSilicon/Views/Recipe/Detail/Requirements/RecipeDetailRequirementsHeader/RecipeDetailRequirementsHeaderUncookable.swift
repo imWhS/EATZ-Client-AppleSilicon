@@ -42,7 +42,7 @@ struct RecipeDetailRequirementsHeaderUncookable: View {
     private var contentView: some View {
         VStack(spacing: 20) {
             Group {
-                Image("recipe-ingredients-cookable-unavailable")
+                Image("requirement-unavailable-62")
                     .shadow(color: Color.init(hex: "F2B518").opacity(0.75), radius: 8, x: 0, y: 4)
                 VStack(spacing: 4) {
                     Text("바로 요리할 수 없는 레시피")

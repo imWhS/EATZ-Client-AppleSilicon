@@ -109,15 +109,16 @@ struct MyAccountSettingsView: View {
     }
     
     private var footer: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 12) {
             Group {
-                HStack {
-                    Text("EATZ")
-                        .font(.system(size: 14, weight: .bold))
-                }
+                Image("eatz-logo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 16)
+                    .opacity(0.5)
                 VStack(spacing: 2) {
                     Group {
-                        Text("© 2026 Wonhee Son. All rights reserved.")
+                        Text("© 2026 Wonhee Son. 모든 권리 보유.")
                         Link(EatzLinks.developerEmailString, destination: URL(string: EatzLinks.developerEmailString)!)
                         Link("github.com/imWhS", destination: URL(string: "https://github.com/imWhS")!)
                     }

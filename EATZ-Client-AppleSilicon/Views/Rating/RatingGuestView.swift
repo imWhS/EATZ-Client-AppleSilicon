@@ -31,7 +31,7 @@ struct RatingGuestView: View {
     
     private var signWithEmailButton: some View {
         Button("이메일로 시작", action: onLogIn)
-            .buttonStyle(RoundedButtonStyle(.authPrimary, .large))
+            .buttonStyle(RoundedButtonStyle(.authPrimary, .medium))
     }
     
     var authActionView: some View {
@@ -59,7 +59,7 @@ struct RatingGuestView: View {
                 Text("이메일로 로그인 또는 가입해보세요.")
                     .font(.system(size: 17, weight: .semibold))
                     .multilineTextAlignment(.center)
-                Text("로그인 또는 가입하면 이 레시피를 평가할 수 있어요.")
+                Text("로그인 또는 가입하면 이 레시피를 평가하고 사람들과 피드백을 주고 받을 수 있어요.")
                     .font(.system(size: 14))
                     .multilineTextAlignment(.center)
                     .foregroundStyle(Color.init(hex: "93A197"))

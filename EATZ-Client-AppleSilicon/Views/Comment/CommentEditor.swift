@@ -37,8 +37,8 @@ struct CommentEditor: View {
                     if authManager.currentUser != nil {
                         switch viewModel.registrationState {
                         case .idle: fieldView
-                        case .registering: ProgressView()
-                        case .error(let message): Text(message)
+                        case .registering: ProgressView().padding(.vertical, 16)
+                        case .error(let message): Text(message).padding(.vertical, 16)
                         }
                     } else {
                         commentLogInView
@@ -47,13 +47,9 @@ struct CommentEditor: View {
                 .frame(maxWidth: .infinity)
             }
         }
-        .padding(.vertical, 16)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: viewModel.isEditing ? 24 : 32))
-        .shadow(
-            color: .black.opacity(0.07),
-            radius: 8,
-            y: 4
+        .shadow(color: .black.opacity(0.07), radius: 8, y: 4
         )
         .animation(.snappy(duration: 0.25), value: viewModel.isEditing)
         .animation(.snappy(duration: 0.25), value: viewModel.registrationState)
@@ -64,6 +60,7 @@ struct CommentEditor: View {
             if viewModel.isEditing { editingStateHeader }
             editor
         }
+        .padding(.vertical, 16)
     }
     
     private var editingStateHeader: some View {
@@ -119,6 +116,7 @@ struct CommentEditor: View {
             }
         }
         .padding(.vertical, 20)
+        .background(Color(hex: "EAF1EC"))
     }
     
     private var signWithEmailButton: some View {

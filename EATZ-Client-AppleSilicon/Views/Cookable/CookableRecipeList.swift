@@ -122,7 +122,8 @@ struct CookableRecipeList: View {
                     ForEach(viewModel.pagedRecipes.items) { recipe in
                         CookableRecipeItem(
                             recipe,
-                            onTapItem: { id in router.push(.recipe(id: id)) },
+                            authManager.isLoggedIn,
+                            onTappedRecipe: { id in router.push(.recipe(id: id)) },
                             action: viewModel.handleRecipeAction)
                     }
                     ListPageTailView(hasNextPage: viewModel.pagedRecipes.hasNextPage, onAppear: viewModel.loadMoreRecipes)

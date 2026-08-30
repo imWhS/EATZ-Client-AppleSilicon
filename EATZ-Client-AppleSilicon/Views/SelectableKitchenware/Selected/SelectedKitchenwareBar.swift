@@ -43,7 +43,7 @@ struct SelectedKitchenwareBar: View {
         Text(placeholder)
             .font(.system(size: 12))
             .multilineTextAlignment(.center)
-            .foregroundStyle(.gray)
+            .foregroundStyle(Color.gray35)
             .frame(height: 48)
     }
 }

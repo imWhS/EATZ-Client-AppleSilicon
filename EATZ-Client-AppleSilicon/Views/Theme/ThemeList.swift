@@ -27,20 +27,3 @@ struct ThemeList: View {
         .padding(.horizontal, 20)
     }
 }
-
-#Preview {
-    let tags: [TagTheme] = [
-        .init(id: 1, name: "한식", keyword: "", emoji: "🇰🇷", description: "", createdAt: .now, updatedAt: .now),
-        .init(id: 2, name: "일식", keyword: "", emoji: "🇯🇵", description: "", createdAt: .now, updatedAt: .now),
-        .init(id: 3, name: "중식", keyword: "", emoji: "🇨🇳", description: "", createdAt: .now, updatedAt: .now),
-        .init(id: 4, name: "양식", keyword: "", emoji: "🍝", description: "", createdAt: .now, updatedAt: .now),
-        .init(id: 5, name: "분식", keyword: "", emoji: "", description: "", createdAt: .now, updatedAt: .now)
-    ]
-    
-    ScrollView {
-        VStack(spacing: 0) {
-            ThemeList(themes: tags, onItemTapped: { _ in }, hasNextPage: true, isLoadingNextPage: true, loadNextPageAction: { } )
-        }
-    }
-    .background(Color.gray)
-}

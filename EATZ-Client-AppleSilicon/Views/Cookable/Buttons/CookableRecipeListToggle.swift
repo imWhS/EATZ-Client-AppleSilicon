@@ -12,7 +12,7 @@ struct CookableRecipeListToggle: View {
     var isEnabled: Bool
     
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 10) {
             Toggle(isOn: $isCookableOnly) {}
                 .tint(.accent)
                 .labelsHidden()

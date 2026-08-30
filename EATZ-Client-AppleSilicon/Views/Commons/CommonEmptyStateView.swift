@@ -23,10 +23,8 @@ struct CommonEmptyStateView: View {
             title: title,
             description: description ?? "",
             header: {
-                Image(imageAssetName ?? "info-200")
-                    .resizable()
+                Image(imageAssetName ?? "info-40")
                     .foregroundStyle(Color.gray15)
-                    .frame(width: 40, height: 40)
             }
         )
     }

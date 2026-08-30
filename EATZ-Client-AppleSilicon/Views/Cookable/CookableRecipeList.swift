@@ -82,10 +82,7 @@ struct CookableRecipeList: View {
                 isEmptyList)
             VStack(spacing: 4) {
                 VStack(spacing: 12) {
-                    Image("info-200")
-                        .resizable()
-                        .foregroundStyle(Color.gray15)
-                        .frame(width: 40, height: 40)
+                    Image("info-40").foregroundStyle(Color.gray15)
                     VStack(spacing: 4) {
                         Text("설정하신 옵션과 상황에 맞는 레시피를 하나도 찾지 못했어요.")
                             .font(.system(size: 17, weight: .semibold))

@@ -57,7 +57,7 @@ struct ChecklistKitchenwareItem: View {
     private var leadingSection: some View {
         HStack {
             imageView
-            Image(kitchenware.missing ? "recipe-ingredients-cookable-needed" : "recipe-ingredients-cookable-added")
+            Image(kitchenware.missing ? "requirement-needed-18" : "requirement-added-18")
             Text(kitchenware.name)
                 .font(.system(size: 17, weight: .medium))
         }

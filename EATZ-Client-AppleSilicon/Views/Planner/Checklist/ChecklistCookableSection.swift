@@ -41,7 +41,7 @@ struct ChecklistCookableSection: View {
     
     private var header: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Image("recipe-ingredients-cookable-available")
+            Image("requirement-unavailable-62")
                 .shadow(color: Color.init(hex: "76BD2F").opacity(0.75), radius: 8, x: 0, y: 4)
             VStack(alignment: .leading, spacing: 4) {
                 Group {

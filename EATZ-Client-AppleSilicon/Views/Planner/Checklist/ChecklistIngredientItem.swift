@@ -33,7 +33,7 @@ struct ChecklistIngredientItem: View {
     
     var body: some View {
         HStack(alignment: .top) {
-            Image(ingredient.missing ? "recipe-ingredients-cookable-needed" : "recipe-ingredients-cookable-added")
+            Image(ingredient.missing ? "requirement-needed-18" : "requirement-added-18")
                 .frame(height: commonHeight)
             
             VStack(spacing: verticalSpacing) {

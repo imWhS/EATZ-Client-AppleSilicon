@@ -35,7 +35,7 @@ struct RecipeDetailRequirementsIngredientItem: View {
     @ViewBuilder
     private func icon() -> some View {
         if isLoggedIn {
-            Image(ingredient.ownedByUser ? "recipe-ingredients-cookable-added" : "recipe-ingredients-cookable-needed")
+            Image(ingredient.ownedByUser ? "requirement-added-18" : "requirement-needed-18")
         } else { EmptyView() }
     }
     

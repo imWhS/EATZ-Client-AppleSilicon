@@ -91,7 +91,7 @@ class CommentViewModel: ObservableObject {
     }
     
     /// 한 번에 불러올 댓글 수
-    private let pagingSizeForCommentList = 2
+    private let pagingSizeForCommentList = 10
     
     private var isLoadingState: Bool {
         if case .initialLoading = viewState { return true }

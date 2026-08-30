@@ -68,7 +68,7 @@ struct PlannerHeader: View {
                     .font(.system(size: 12, weight:. bold))
                 Image("arrow-down-5.6")
             }
-            .foregroundStyle(Color.accentColor)
+            .foregroundStyle(isDisabled ? Color.gray25 : Color.accentColor)
         }
     }
     

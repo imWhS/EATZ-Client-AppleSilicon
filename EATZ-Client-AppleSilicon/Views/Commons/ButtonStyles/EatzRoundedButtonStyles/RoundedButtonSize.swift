@@ -14,8 +14,8 @@ enum RoundedButtonSize {
     
     var font: Font {
         switch self {
-        case .large: return .body.weight(.semibold)
-        case .medium: return .subheadline.weight(.semibold)
+        case .large: return .system(size: 17, weight: .semibold)
+        case .medium: return .system(size: 14, weight: .semibold)
         case .mediumSquared: return .subheadline.weight(.semibold)
         }
     }

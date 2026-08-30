@@ -29,12 +29,11 @@ struct RatingCardHeaderView: View {
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 8) {
-                RatingScoreStar(score: score, starSize: 18)
-                .frame(height: 32)
+                RatingScoreStar(score: score, starSize: 18).frame(height: 32)
                 HStack {
                     Group {
                         if let createdAt = self.createdAt {
-                            Text("\(createdAt.formattedRelative)")
+                            Text(createdAt.formattedRelative)
                             DotSeparator(diameter: 2)
                         }
                         Text("\(score)점")

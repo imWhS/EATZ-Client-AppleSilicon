@@ -373,7 +373,7 @@ extension CommentViewModel {
             updatedAt: .now)
             .toCommentWithPermissions(for: currentUser, recipeAuthorId: recipeEssential?.authorId)
         
-        pagedCommentsWithPermissions.items.insert(dummyComment, at: 0)
+        pagedCommentsWithPermissions.insert(dummyComment, at: 0)
                 
         RecipeCommentService.shared.register(for: recipeId, content: content) { [weak self] result in
             DispatchQueue.main.async {

@@ -51,7 +51,7 @@ struct CommentEditor: View {
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: viewModel.isEditing ? 24 : 32))
         .shadow(
-            color: .black.opacity(0.1),
+            color: .black.opacity(0.07),
             radius: 8,
             y: 4
         )

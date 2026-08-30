@@ -22,7 +22,7 @@ enum RoundedButtonAppearance {
         case .secondary: .accentColor
         case .authSecondary: .auth
         case .danger: .red
-        case .disabled: .gray35
+        case .disabled: .gray25
         }
     }
     

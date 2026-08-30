@@ -28,10 +28,11 @@ struct CookableRecipeItem: View {
     }
     
     private var missingKitchenwareLabel: String {
+        guard let missingIngredientCount = recipe.missingIngredientCount else { return "" }
         guard let count = recipe.missingKitchenwareCount else { return "" }
         if count == 0 { return "" }
         else {
-            let suffix = count == 0 ? "" : ","
+            let suffix = missingIngredientCount == 0 ? "" : ","
             return "도구 \(count)개\(suffix)"
         }
     }
@@ -139,7 +140,7 @@ struct CookableRecipeItem: View {
                 if isCookable {
                     Text("바로 요리 가능")
                 } else {
-                    Text("\(missingIngredientLabel)\(missingKitchenwareLabel) 부족")
+                    Text("\(missingKitchenwareLabel)\(missingIngredientLabel) 부족")
                 }
             }
             .font(.system(size: 12, weight: .semibold))

@@ -50,7 +50,6 @@ struct RecipeEssentialView: View {
                 Text("레시피 정보를 불러오지 못했어요.")
             }
         }
-        .padding(.vertical, 10)
     }
 }
 

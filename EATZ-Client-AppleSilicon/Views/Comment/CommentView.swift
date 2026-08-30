@@ -80,8 +80,7 @@ struct CommentView: View {
     private var commentDisabledGuideView: some View {
         VStack(spacing: 0) {
             GuideView(guides: ["댓글 기능이 해제된 레시피예요. 레시피의 작성자가 댓글 기능을 설정했을 때 달린 댓글만 볼 수 있어요."])
-                .padding(.top, 10)
-                .padding(.bottom, 20)
+                .padding(.vertical, 20)
             HorizontalDivider()
         }
     }

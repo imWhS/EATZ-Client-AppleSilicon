@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct CookableView: View {
-    @StateObject private var viewModel = CookableViewModel()
     @EnvironmentObject private var router: Router
+    @EnvironmentObject private var authManager: AuthManager
+    
+    @StateObject private var viewModel = CookableViewModel()
     @FocusState private var isSearchFieldFocused: Bool
     
     var body: some View {
@@ -50,6 +52,11 @@ struct CookableView: View {
             .navigationDestination(for: ViewRoute.self) { route in
                 DestinationView(route)
             }
+            .onChange(of: authManager.isLoggedIn) { _, isLoggedIn in
+                if isLoggedIn == false {
+                    viewModel.searchCriteria.isCookableOnly = false
+                }
+            }
         }
     }
     
@@ -59,7 +66,6 @@ struct CookableView: View {
                 .font(.system(size: 34, weight: .bold))
                 .lineSpacing(8)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .fixedSize(horizontal: false, vertical: true)
                 .transition(.opacity.combined(with: .move(edge: .top)))
         }
         .padding(.horizontal, 40)
@@ -86,14 +92,12 @@ struct CookableView: View {
                         subtitleLabel: "1회 제공량",
                         action: { viewModel.sheet = .servingsPicker })
                 }
-                .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal, 20)
-                HorizontalDivider()
-                        .padding(.horizontal, 20)
-                    CookableFilterToggle(
-                        isCookableOnly: $viewModel.searchCriteria.isCookableOnly,
-                        isEnabled: viewModel.auth.isLoggedIn,
-                        action: viewModel.toggleCookableOnly)
+                HorizontalDivider().padding(.horizontal, 20)
+                CookableFilterToggle(
+                    isCookableOnly: $viewModel.searchCriteria.isCookableOnly,
+                    isEnabled: authManager.isLoggedIn,
+                    action: viewModel.toggleCookableOnly)
             }
         }
     }

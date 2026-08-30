@@ -25,20 +25,20 @@ class CookableViewModel: ObservableObject {
         return "\(servings)인"
     }
     
-    let auth: AuthProvider
+    private let auth: AuthProvider
     
     private var cancellables = Set<AnyCancellable>()
     private static let userDefaultsKey = "cookableSearchCriteria" // UserDefaults에 데이터를 저장하고, 불러올 때 사용할 고유 키
 
     init(auth: AuthProvider = AuthManager.shared) {
         self.auth = auth
-        searchCriteria = Self.loadSearchCriteria()
+        self.searchCriteria = Self.loadSearchCriteria()
         
         if !auth.isLoggedIn {
             self.searchCriteria.isCookableOnly = false
         }
         
-        observeSeachCriteriaChanges()
+        subscribeSeachCriteria()
     }
     
     func toggleCookableOnly() {
@@ -53,7 +53,7 @@ class CookableViewModel: ObservableObject {
         }
     }
     
-    private func observeSeachCriteriaChanges() {
+    private func subscribeSeachCriteria() {
         $searchCriteria
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
             .sink { [weak self] searchCriteria in

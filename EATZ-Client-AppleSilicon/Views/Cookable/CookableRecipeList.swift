@@ -53,7 +53,7 @@ struct CookableRecipeList: View {
         VStack(spacing: 0) {
             switch viewModel.viewState {
             case .initialLoading: LoadingCurtain(title: "요리할 수 있는 레시피 목록을 불러오고 있어요...").transition(.opacity)
-            case .loaded: listContainer.transition(.opacity)
+            case .loaded: contentView.transition(.opacity)
             case .error(let message): ErrorCurtain(message, onRetryTapped: viewModel.resetAndLoadAll).transition(.opacity)
             case .empty: emptyStateView
             }
@@ -64,13 +64,23 @@ struct CookableRecipeList: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(viewModel.navigationTitleLabel)
         .toolbar { titleToolbarItem }
+        .onChange(of: authManager.isLoggedIn) { _, isLoggedIn in
+            if isLoggedIn == false {
+                viewModel.searchCriteria.isCookableOnly = false
+            }
+        }
     }
     
     private var emptyStateView: some View {
-        VStack {
-            listHeader
+        VStack(spacing: 0) {
+            CookableRecipeListHeader(
+                listHeaderTitleLabel,
+                $viewModel.searchCriteria.isCookableOnly,
+                authManager.isLoggedIn,
+                $viewModel.sort,
+                viewModel.selectableSortOptions,
+                isEmptyList)
             VStack(spacing: 4) {
-                Spacer()
                 VStack(spacing: 12) {
                     Image("info-200")
                         .resizable()
@@ -88,7 +98,7 @@ struct CookableRecipeList: View {
                             .foregroundStyle(Color.gray35)
                     }
                 }
-                Spacer()
+                .frame(maxHeight: .infinity)
                 VStack(spacing: 8) {
                     if authManager.isLoggedIn && viewModel.searchCriteria.isCookableOnly == true {
                         Button(action: { viewModel.searchCriteria.isCookableOnly = false }) {
@@ -113,22 +123,18 @@ struct CookableRecipeList: View {
         }
     }
     
-    private var listContainer: some View {
+    private var contentView: some View {
         ScrollView {
             VStack(spacing: 0) {
                 scrollTrackingGeometryReader
-                listHeader
-                LazyVStack(spacing: 0) {
-                    ForEach(viewModel.pagedRecipes.items) { recipe in
-                        CookableRecipeItem(
-                            recipe,
-                            authManager.isLoggedIn,
-                            onTappedRecipe: { id in router.push(.recipe(id: id)) },
-                            action: viewModel.handleRecipeAction)
-                    }
-                    ListPageTailView(hasNextPage: viewModel.pagedRecipes.hasNextPage, onAppear: viewModel.loadMoreRecipes)
-                }
-                .animation(.easeInOut(duration: 0.2), value: viewModel.pagedRecipes.items)
+                CookableRecipeListHeader(
+                    listHeaderTitleLabel,
+                    $viewModel.searchCriteria.isCookableOnly,
+                    authManager.isLoggedIn,
+                    $viewModel.sort,
+                    viewModel.selectableSortOptions,
+                    isEmptyList)
+                listView
             }
             .padding(.top, 10)
             .padding(.bottom, 20)
@@ -136,33 +142,18 @@ struct CookableRecipeList: View {
         .coordinateSpace(name: "scroll")
     }
     
-    private var listHeaderTitleText: some View {
-        Text(listHeaderTitleLabel)
-            .font(.system(size: 30, weight: .bold))
-            .lineSpacing(6)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .fixedSize(horizontal: false, vertical: true)
-            .padding(.horizontal, 20)
-            .padding(.vertical, 10)
-    }
-    
-    private var listHeader: some View {
-        VStack(spacing: 0) {
-            listHeaderTitleText
-            
-            HStack(spacing: 0) {
-                CookableRecipeListToggle(
-                    isCookableOnly: $viewModel.searchCriteria.isCookableOnly,
-                    isEnabled: authManager.isLoggedIn)
-                Spacer()
-                SortPicker(
-                    sort: $viewModel.sort,
-                    selectableSorts: viewModel.selectableSortOptions,
-                    isDisabled: isEmptyList)
+    private var listView: some View {
+        LazyVStack(spacing: 0) {
+            ForEach(viewModel.pagedRecipes.items) { recipe in
+                CookableRecipeItem(
+                    recipe,
+                    authManager.isLoggedIn,
+                    onTappedRecipe: { id in router.push(.recipe(id: id)) },
+                    action: viewModel.handleRecipeAction)
             }
-            .padding(.leading, 20)
-            .padding(.vertical, 10)
+            ListPageTailView(hasNextPage: viewModel.pagedRecipes.hasNextPage, onAppear: viewModel.loadMoreRecipes)
         }
+        .animation(.easeInOut(duration: 0.2), value: viewModel.pagedRecipes.items)
     }
     
     private var titleToolbarItem: some ToolbarContent {
@@ -182,13 +173,68 @@ struct CookableRecipeList: View {
         GeometryReader { proxy in
             let scrollYOffset = proxy.frame(in: .named("scroll")).minY
             Color.clear
+                .frame(height: 0)
                 .onChange(of: scrollYOffset) { _, offset in
                     withAnimation(.easeInOut(duration: 0.2)) {
                         viewModel.showNavigationBarTitle = offset < -100
                     }
                 }
         }
-        .frame(height: 0)
+    }
+}
+
+private struct CookableRecipeListHeader: View {
+    let listHeaderTitleLabel: String
+    let isCookableOnly: Binding<Bool>
+    let isLoggedIn: Bool
+    let sort: Binding<CookableRecipesSort>
+    let selectableSortOptions: [CookableRecipesSort]
+    let isEmptyList: Bool
+    
+    init(
+        _ listHeaderTitleLabel: String,
+        _ isCookableOnly: Binding<Bool>,
+        _ isLoggedIn: Bool,
+        _ sort: Binding<CookableRecipesSort>,
+        _ selectableSortOptions: [CookableRecipesSort],
+        _ isEmptyList: Bool)
+    {
+        self.listHeaderTitleLabel = listHeaderTitleLabel
+        self.isCookableOnly = isCookableOnly
+        self.isLoggedIn = isLoggedIn
+        self.sort = sort
+        self.selectableSortOptions = selectableSortOptions
+        self.isEmptyList = isEmptyList
+    }
+    
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            listHeaderTitleText
+            
+            HStack(spacing: 0) {
+                CookableRecipeListToggle(
+                    isCookableOnly: isCookableOnly,
+                    isEnabled: isLoggedIn)
+                Spacer()
+                SortPicker(
+                    sort: sort,
+                    selectableSorts: selectableSortOptions,
+                    isDisabled: isEmptyList)
+            }
+            .padding(.leading, 20)
+            .padding(.vertical, 10)
+        }
+    }
+    
+    private var listHeaderTitleText: some View {
+        Text(listHeaderTitleLabel)
+            .font(.system(size: 30, weight: .bold))
+            .lineSpacing(6)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 10)
     }
 }
 

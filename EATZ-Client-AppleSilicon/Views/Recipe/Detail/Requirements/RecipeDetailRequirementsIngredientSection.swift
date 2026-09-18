@@ -56,5 +56,6 @@ struct RecipeDetailRequirementsIngredientSection: View {
             }
         }
         .padding(.vertical, 6)
+        .animation(.easeInOut(duration: 0.3), value: ingredients)
     }
 }

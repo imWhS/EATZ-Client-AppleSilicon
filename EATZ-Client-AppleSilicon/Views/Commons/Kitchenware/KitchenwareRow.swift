@@ -85,7 +85,7 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
             }
             .resizable()
             .aspectRatio(contentMode: .fill)
-            .frame(width: 48, height: 48)
+            .frame(width: 52, height: 52)
             .clipShape(Circle())
             .overlay(
                 Circle().stroke(Color.gray.opacity(0.2), lineWidth: 1)

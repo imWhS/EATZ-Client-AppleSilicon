@@ -30,7 +30,7 @@ struct SelectedKitchenwareItem: View {
             }
             .resizable()
             .aspectRatio(contentMode: .fill)
-            .frame(width: 48, height: 48)
+            .frame(width: 52, height: 52)
             .clipShape(Circle())
             .overlay(
                 Circle()

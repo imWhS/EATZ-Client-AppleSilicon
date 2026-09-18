@@ -14,6 +14,14 @@ struct RecipeDetailRequirementsKitchenwareItem: View {
     let width: CGFloat
     let action: (RecipeDetailRequirementsAction) -> Void
     
+    private var isPurchasable: Bool {
+        if (isLoggedIn == false) {
+            return true
+        }
+        
+        return !kitchenware.ownedByUser
+    }
+    
     init(
         _ kitchenware: RecipeKitchenware,
         _ isLoggedIn: Bool,
@@ -27,7 +35,14 @@ struct RecipeDetailRequirementsKitchenwareItem: View {
     }
     
     var body: some View {
-        KitchenwareRow(kitchenware, style: .outlined, isEnabled: isLoggedIn, icon, trailing: trailing)
+        KitchenwareRow(
+            kitchenware,
+            style: .outlined,
+            isEnabled: isLoggedIn,
+            isPurchasable: isPurchasable,
+            onPurchaseTapped: handlePurchase,
+            icon,
+            trailing: trailing)
             .padding(.horizontal, 4)
             .frame(minWidth: width, maxWidth: width)
     }
@@ -65,5 +80,9 @@ struct RecipeDetailRequirementsKitchenwareItem: View {
     
     private func handleTogglePantry() -> Void {
         action(.toggleKitchenwareAddition(id: kitchenware.id))
+    }
+    
+    private func handlePurchase() -> Void {
+        action(.purchase(id: kitchenware.id))
     }
 }

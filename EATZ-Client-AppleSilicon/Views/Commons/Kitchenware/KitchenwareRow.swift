@@ -12,25 +12,33 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
     let kitchenware: K
     let style: KitchenwareRowStyle
     let isEnabled: Bool
+    let isPurchasable: Bool
+    let onPurchaseTapped: (() -> Void)?
     @ViewBuilder let icon: Icon
     @ViewBuilder let trailing: Trailing
     
     init(_ kitchenware: K,
          style: KitchenwareRowStyle = .filled,
          isEnabled: Bool = true,
+         isPurchasable: Bool = false,
+         onPurchaseTapped: (() -> Void)? = nil,
          @ViewBuilder _ icon: @escaping () -> Icon = { EmptyView() },
          @ViewBuilder trailing: @escaping () -> Trailing) {
         self.kitchenware = kitchenware
         self.style = style
         self.isEnabled = isEnabled
+        self.isPurchasable = isPurchasable
+        self.onPurchaseTapped = onPurchaseTapped
         self.icon = icon()
         self.trailing = trailing()
     }
     
     var body: some View {
-        HStack(spacing: 0) {
-            leading
-            trailing
+        VStack(spacing: 4) {
+            HStack(spacing: 0) {
+                leading
+                trailing
+            }
         }
         .frame(minHeight: 48)
         .background(style.background)
@@ -47,7 +55,27 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
             kitchenwareImage
             kitchenwareNameText
         }
-        .padding(14)
+        .padding(.leading, 14)
+        .padding(.trailing, 8)
+        .padding(.vertical, 14)
+    }
+    
+    private var purchaseRow: some View {
+        HStack(spacing: 8) {
+            Image("shopping-16")
+                .foregroundStyle(Color.gray35)
+            Text("필요한 도구")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(Color.gray35)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Button(action: onPurchaseTapped ?? {}) {
+                HStack(spacing: 6) {
+                    Text("쇼핑하기")
+                    Image("external-link-14-light")
+                }
+            }
+            .buttonStyle(SmallBorderlessButtonStyle())
+        }
     }
     
     private var kitchenwareImage: some View {
@@ -66,15 +94,19 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
     }
     
     private var kitchenwareNameText: some View {
-        HStack {
-            icon
-            Text(kitchenware.name)
-                .font(.system(size: 17, weight: .medium))
-                .lineLimit(2)
-                .truncationMode(.tail)
-                .multilineTextAlignment(.leading)
-                .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(spacing: 0) {
+            HStack {
+                icon
+                Text(kitchenware.name)
+                    .font(.system(size: 17, weight: .medium))
+                    .lineLimit(2)
+                    .truncationMode(.tail)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            if isPurchasable { purchaseRow }
         }
+        .padding(.top, isPurchasable ? 6 : 0)
     }
 }
 

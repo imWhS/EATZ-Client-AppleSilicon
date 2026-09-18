@@ -44,9 +44,7 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
                 leading
                 trailing
             }
-            if isPurchasable {
-                purchaseRow
-            }
+            if isPurchasable { purchaseRow }
         }
         .frame(minHeight: 48)
         .background(style.background)

@@ -122,24 +122,31 @@ struct RecipeDetailRequirementsHeader: View {
     }
     
     private var purchaseButton: some View {
-        Button(action: onAddAllRequirements) {
-            VStack(spacing: 0) {
-                HorizontalDivider()
+        VStack (spacing: 0) {
+            HorizontalDivider()
+            Button(action: onAddAllRequirements) {
                 HStack(spacing: 4) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("준비물 구입")
-                            .font(.system(size: 17, weight: .semibold))
-                            .foregroundStyle(Color.accentColor)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        HStack(spacing: 8) {
+                            Image("shopping-18")
+                                .foregroundStyle(Color.accentColor)
+                            Text("준비물 구입")
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundStyle(Color.accentColor)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
                         Text("필요한 도구와 재료를 온라인에서 준비해보세요.")
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(Color.gray50)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     Image("external-link-14-light")
+                        .foregroundStyle(Color.accentColor)
                 }
-                .padding(20)
+                .padding(16)
             }
+            .buttonStyle(SquareHighlightButtonStyle(cornerRadius: 14))
+            .padding(4)
         }
     }
     

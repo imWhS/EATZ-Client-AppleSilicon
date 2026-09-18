@@ -31,15 +31,12 @@ struct RecipeDetailRequirementsIngredientSection: View {
                 VerticalLabeledValueView(
                     label: "총 재료 수",
                     value: "\(ingredients.count)개")
-                if isLoggedIn,
-                    let missingIngredientCount = missingIngredientCount,
-                    0 < missingIngredientCount {
-                    VerticalLabeledValueView(
-                        label: "필요한 재료 수",
-                        value: "\(missingIngredientCount)개",
-                        style: .secondary
-                    )
-                }
+                VerticalLabeledValueView(
+                    label: "필요한 재료 수",
+                    value: "\(missingIngredientCount ?? 1)개",
+                    style: .secondary
+                )
+                .opacity(isLoggedIn && 0 < missingIngredientCount ?? 0 ? 1 : 0)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 10)

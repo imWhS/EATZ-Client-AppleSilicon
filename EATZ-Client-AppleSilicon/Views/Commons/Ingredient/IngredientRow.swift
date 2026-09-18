@@ -12,7 +12,9 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
     let style: IngredientRowStyle
     let isEnabled: Bool
     let isLinkable: Bool
+    let isPurchasable: Bool
     let linkDestination: Destination?
+    let onPurchaseTapped: (() -> Void)?
     @ViewBuilder let icon: Icon
     @ViewBuilder let trailing: Trailing
     
@@ -20,22 +22,31 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
          style: IngredientRowStyle = .filled,
          isEnabled: Bool = true,
          isLinkable: Bool = false,
+         isPurchasable: Bool = false,
          linkDestination: Destination? = nil,
+         onPurchaseTapped: (() -> Void)? = nil,
          @ViewBuilder icon: @escaping () -> Icon = { EmptyView() },
          @ViewBuilder trailing: @escaping () -> Trailing) {
         self.ingredient = ingredient
         self.style = style
         self.isEnabled = isEnabled
         self.isLinkable = isLinkable
+        self.isPurchasable = isPurchasable
         self.linkDestination = linkDestination
+        self.onPurchaseTapped = onPurchaseTapped
         self.icon = icon()
         self.trailing = trailing()
     }
     
     var body: some View {
-        HStack(spacing: 0) {
-            leading
-            trailing
+        VStack(spacing: 0) {
+            HStack(spacing: 0) {
+                leading
+                trailing
+            }
+            if isPurchasable {
+                purchaseRow
+            }
         }
         .frame(minHeight: 48)
         .background(style.background)
@@ -45,6 +56,7 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
                 .stroke(style.borderColor, lineWidth: 1)
         )
         .padding(.vertical, 0.5)
+        .animation(.easeInOut(duration: 0.3), value: ingredient.ownedByUser)
     }
     
     @ViewBuilder
@@ -55,6 +67,31 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
             } else {
                 ingredientNameText.padding(14)
             }
+        }
+    }
+    
+    private var purchaseRow: some View {
+        VStack(spacing: 0) {
+            HorizontalDivider(padding: 14)
+            HStack(spacing: 8) {
+                Image("shopping-16")
+                    .foregroundStyle(Color.gray35)
+                Text("필요한 재료를 온라인에서 준비해보세요.")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(Color.gray35)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.vertical, 12)
+                Button(action: onPurchaseTapped ?? {}) {
+                    HStack(spacing: 6) {
+                        Text("구입")
+                        Image("external-link-14-light")
+                    }
+                }
+                .buttonStyle(SmallBorderlessButtonStyle())
+            }
+            .padding(.leading, 14)
+            .padding(.trailing, 8)
+            .transition(.move(edge: .top))
         }
     }
     
@@ -99,13 +136,17 @@ extension IngredientRow where Destination == EmptyView {
          style: IngredientRowStyle = .filled,
          isEnabled: Bool = true,
          isLinkable: Bool = false,
+         isPurchasable: Bool = true,
+         onPurchaseTapped: (() -> Void)? = nil,
          @ViewBuilder icon: @escaping () -> Icon = { EmptyView() },
          @ViewBuilder trailing: @escaping () -> Trailing) {
         self.ingredient = ingredient
         self.style = style
         self.isEnabled = isEnabled
         self.isLinkable = isLinkable
+        self.isPurchasable = isPurchasable
         self.linkDestination = nil
+        self.onPurchaseTapped = onPurchaseTapped
         self.icon = icon()
         self.trailing = trailing()
     }

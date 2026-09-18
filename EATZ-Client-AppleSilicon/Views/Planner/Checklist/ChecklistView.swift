@@ -134,7 +134,7 @@ private struct ChecklistContentView: View {
         .padding(.vertical, 20)
         .animation(
             .easeInOut(duration: 0.3),
-            value: [checklist.cookable.plans.isEmpty, checklist.uncookable.plans.isEmpty])
+            value: [checklist.cookable.plans.count, checklist.uncookable.plans.count])
     }
     
     private var header: some View {

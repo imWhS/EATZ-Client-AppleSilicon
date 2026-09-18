@@ -79,8 +79,8 @@ struct ChecklistUncookableSection: View {
         }
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 32))
-        .animation(.easeInOut(duration: 0.3), value: uncookable.plans)
         .animation(.easeInOut(duration: 0.3), value: [
+            uncookable.plans.count,
             missingKitchenwareCount,
             missingIngredientCount
         ])

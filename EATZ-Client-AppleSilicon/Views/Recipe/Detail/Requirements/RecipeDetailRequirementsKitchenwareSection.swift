@@ -39,15 +39,12 @@ struct RecipeDetailRequirementsKitchenwareSection: View {
                 VerticalLabeledValueView(
                     label: "총 도구 수",
                     value: "\(kitchenwares.count)개")
-                if isLoggedIn,
-                    let missingKitchenwareCount = missingKitchenwareCount,
-                    0 < missingKitchenwareCount {
-                    VerticalLabeledValueView(
-                        label: "필요한 도구 수",
-                        value: "\(missingKitchenwareCount)개",
-                        style: .secondary
-                    )
-                }
+                VerticalLabeledValueView(
+                    label: "필요한 도구 수",
+                    value: "\(missingKitchenwareCount ?? 1)개",
+                    style: .secondary
+                )
+                .opacity(isLoggedIn && 0 < missingKitchenwareCount ?? 0 ? 1 : 0)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 10)

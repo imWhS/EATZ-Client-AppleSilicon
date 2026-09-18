@@ -130,10 +130,15 @@ struct RecipeDetailRequirementsHeader: View {
                         HStack(spacing: 8) {
                             Image("shopping-18")
                                 .foregroundStyle(Color.accentColor)
-                            Text("준비물 구입")
-                                .font(.system(size: 17, weight: .semibold))
+                            HStack(spacing: 4) {
+                                Group {
+                                    Text("준비물 구입")
+                                    DotSeparator(color: Color.accentColor)
+                                    Text("쇼핑하기")
+                                }
                                 .foregroundStyle(Color.accentColor)
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .font(.system(size: 17, weight: .semibold))
+                            }
                         }
                         Text("필요한 도구와 재료를 온라인에서 준비해보세요.")
                             .font(.system(size: 14, weight: .medium))

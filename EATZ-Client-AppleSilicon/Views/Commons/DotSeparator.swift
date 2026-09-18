@@ -9,15 +9,17 @@ import SwiftUI
 
 struct DotSeparator: View {
     let diameter: CGFloat
+    let color: Color
     
-    init(diameter: CGFloat = 2.5) {
+    init(diameter: CGFloat = 2.5, color: Color = .gray15) {
         self.diameter = diameter
+        self.color = color
     }
     
     var body: some View {
         Circle()
             .frame(width: diameter, height: diameter)
-            .foregroundStyle(Color.gray15)
+            .foregroundStyle(color)
     }
 }
 

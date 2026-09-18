@@ -65,7 +65,9 @@ struct RecipeDetailRequirementsHeader: View {
     var body: some View {
         VStack(spacing: 0) {
             contentSection
-            purchaseButton
+            if case .uncookable = cookability {
+                purchaseButton
+            }
         }
         .frame(maxWidth: .infinity)
         .background(Color.backgroundPrimary)

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// O.C.
 class RecipeDetailRequirementsViewModel: ObservableObject {
     @Published var viewState: RecipeDetailRequirementsViewState = .idle
     @Published var pendingKitchenwareIds: Set<Int64> = []
@@ -114,6 +115,7 @@ class RecipeDetailRequirementsViewModel: ObservableObject {
         case .toggleKitchenwareAddition(let id): toggleKitchenwareAddition(of: id)
         case .toggleIngredientAddition(let id): toggleIngredientAddition(of: id)
         case .toggleLikeIngredient(let id): toggleLikeIngredient(of: id)
+        case .purchase(let id): print("DBG | purchase tapped!")
         }
     }
     
@@ -230,6 +232,7 @@ enum RecipeDetailRequirementsAction {
     case toggleKitchenwareAddition(id: Int64)
     case toggleIngredientAddition(id: Int64)
     case toggleLikeIngredient(id: Int64)
+    case purchase(id: Int64)
 }
 
 enum RecipeDetailRequirementsCookability: Equatable {

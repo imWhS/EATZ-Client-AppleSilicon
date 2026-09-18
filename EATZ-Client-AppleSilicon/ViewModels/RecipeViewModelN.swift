@@ -302,6 +302,7 @@ extension RecipeViewModelN {
         case .toggleKitchenwareAddition(let id): toggleKitchenwareAddition(of: id)
         case .toggleIngredientAddition(let id): toggleIngredientAddition(of: id)
         case .toggleLikeIngredient(let id): toggleLikeIngredient(of: id)
+        case .purchase(let id): print("DBG | purchase tapped!")
         }
     }
     

@@ -8,6 +8,7 @@
 import SwiftUI
 import Alamofire
 
+@MainActor
 class ChecklistViewModel: ObservableObject {
     /// 뷰가 보여줄 화면 상태
     /// - 뷰의 최상위 서브뷰에서 보여줄 화면을 분기하기 위해 사용합니다.
@@ -389,6 +390,8 @@ extension ChecklistViewModel {
                         self.isUpdatingPantry = false
                     }
                 case .failure(let networkError):
+                    self.pendingIngredientIds.remove(id)
+                    self.isUpdatingPantry = false
                     self.alert = .itemUpdateFailed(message: networkError.userMessage)
                     self.rollback(to: originalIngredient)
                 }

@@ -118,7 +118,7 @@ struct ChecklistCookabilityView: View {
                 .padding(.horizontal, 20)
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(alignment: .center, spacing: 0) {
-                        ForEach(Array(sortedKitchenwares.enumerated()), id: \.element) { index, kitchenware in
+                        ForEach(Array(sortedKitchenwares.enumerated()), id: \.element.id) { index, kitchenware in
                             ChecklistKitchenwareItem(
                                 kitchenware,
                                 isDisabled: isUpdatingPantry,
@@ -155,7 +155,7 @@ struct ChecklistCookabilityView: View {
                 
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(alignment: .center, spacing: 10) {
-                        ForEach(Array(sortedIngredients.enumerated()), id: \.element) { index, ingredient in
+                        ForEach(Array(sortedIngredients.enumerated()), id: \.element.id) { index, ingredient in
                             let isLast = index == (sortedIngredients.count - 1)
                             ChecklistIngredientItem(
                                 ingredient,

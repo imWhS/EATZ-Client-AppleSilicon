@@ -94,11 +94,11 @@ private struct ChecklistContentView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                scrollTracker
                 header
                 cookabilitySections
             }
         }
+        .coordinateSpace(name: "scroll")
     }
     
     private var cookabilitySections: some View {
@@ -171,8 +171,10 @@ private struct ChecklistContentView: View {
                 .onChange(of: offset) { _, offset in
                     let shouldShow = offset < -50
                     if viewModel.showNavigationBarTitle != shouldShow {
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            viewModel.showNavigationBarTitle = shouldShow
+                        DispatchQueue.main.async {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                viewModel.showNavigationBarTitle = shouldShow
+                            }
                         }
                     }
                 }

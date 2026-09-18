@@ -93,13 +93,11 @@ struct RecipeDetailRequirementsHeader: View {
                 VStack(spacing: 4) {
                     Text(title)
                         .font(.system(size: 17, weight: .semibold))
-                        .id(title)
                     Text(subtitle)
                         .font(.system(size: 17, weight: .medium))
                         .foregroundStyle(Color.gray50)
                         .multilineTextAlignment(.center)
                         .fixedSize(horizontal: false, vertical: true)
-                        .id(title)
                 }
                 
                 switch cookability {

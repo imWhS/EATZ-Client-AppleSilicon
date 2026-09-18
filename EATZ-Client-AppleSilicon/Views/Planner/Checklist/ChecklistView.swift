@@ -115,6 +115,7 @@ private struct ChecklistContentView: View {
                     onPlanItemAction: viewModel.handlePlanItemAction,
                     onKitchenwareItemAction: viewModel.handleKitchenwareItemAction,
                     onIngredientItemAction: viewModel.handleIngredientItemAction)
+                .transition(.opacity.combined(with: .scale(scale: 0.95)))
             }
             
             if !checklist.cookable.plans.isEmpty {
@@ -127,9 +128,13 @@ private struct ChecklistContentView: View {
                     onPlanItemAction: viewModel.handlePlanItemAction,
                     onKitchenwareItemAction: viewModel.handleKitchenwareItemAction,
                     onIngredientItemAction: viewModel.handleIngredientItemAction)
+                .transition(.opacity.combined(with: .scale(scale: 0.95)))
             }
         }
         .padding(.vertical, 20)
+        .animation(
+            .easeInOut(duration: 0.3),
+            value: [checklist.cookable.plans.isEmpty, checklist.uncookable.plans.isEmpty])
     }
     
     private var header: some View {

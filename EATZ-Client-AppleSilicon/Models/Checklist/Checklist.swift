@@ -14,12 +14,12 @@ struct Checklist : Decodable {
     let missingKitchenwareCount: Int
 }
 
-struct ChecklistCookability : Decodable {
+struct ChecklistCookability : Decodable, Equatable {
     var plans: [ChecklistPlan]
     var requirements: ChecklistRequirements
 }
 
-struct ChecklistRequirements : Codable {
+struct ChecklistRequirements : Codable, Equatable {
     var ingredients: [ChecklistIngredient]
     var kitchenwares: [ChecklistKitchenware]
 }

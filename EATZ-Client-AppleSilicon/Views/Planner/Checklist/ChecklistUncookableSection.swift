@@ -79,6 +79,11 @@ struct ChecklistUncookableSection: View {
         }
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 32))
+        .animation(.easeInOut(duration: 0.3), value: uncookable.plans)
+        .animation(.easeInOut(duration: 0.3), value: [
+            missingKitchenwareCount,
+            missingIngredientCount
+        ])
     }
     
     private var header: some View {
@@ -94,6 +99,7 @@ struct ChecklistUncookableSection: View {
                         .foregroundStyle(Color.gray35)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .contentTransition(.numericText())
             }
         }
         .padding(20)

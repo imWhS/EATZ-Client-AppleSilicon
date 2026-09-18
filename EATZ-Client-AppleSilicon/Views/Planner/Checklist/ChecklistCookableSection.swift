@@ -37,6 +37,7 @@ struct ChecklistCookableSection: View {
         .padding(.bottom, 8)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 32))
+        .animation(.easeInOut(duration: 0.3), value: cookable)
     }
     
     private var header: some View {
@@ -52,6 +53,7 @@ struct ChecklistCookableSection: View {
                         .foregroundStyle(Color.gray35)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .contentTransition(.numericText())
             }
         }
         .padding(20)

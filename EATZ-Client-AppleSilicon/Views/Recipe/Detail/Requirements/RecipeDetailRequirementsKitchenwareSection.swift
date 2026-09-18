@@ -35,30 +35,32 @@ struct RecipeDetailRequirementsKitchenwareSection: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .center, spacing: 20) {
-                VerticalLabeledValueView(
-                    label: "총 도구 수",
-                    value: "\(kitchenwares.count)개")
-                VerticalLabeledValueView(
-                    label: "필요한 도구 수",
-                    value: "\(missingKitchenwareCount ?? 1)개",
-                    style: .secondary
-                )
-                .opacity(isLoggedIn && 0 < missingKitchenwareCount ?? 0 ? 1 : 0)
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 10)
-            
-            recipeRequirementsKitchenwareList
+            header
+            list
         }
     }
     
-    private var recipeRequirementsKitchenwareList: some View {
+    private var header: some View {
+        HStack(alignment: .center, spacing: 20) {
+            VerticalLabeledValueView(
+                label: "총 도구 수",
+                value: "\(kitchenwares.count)개")
+            VerticalLabeledValueView(
+                label: "필요한 도구 수",
+                value: "\(missingKitchenwareCount ?? 1)개",
+                style: .secondary
+            )
+            .opacity(isLoggedIn && 0 < missingKitchenwareCount ?? 0 ? 1 : 0)
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 10)
+    }
+    
+    private var list: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 0) {
                 ForEach(kitchenwares) { kitchenware in
-                    RecipeDetailRequirementsKitchenwareItem(kitchenware, isLoggedIn, action)
-                        .frame(minWidth: itemWidth, maxWidth: itemWidth)
+                    RecipeDetailRequirementsKitchenwareItem(kitchenware, isLoggedIn, itemWidth, action)
                 }
             }
             .padding(.horizontal, 16)

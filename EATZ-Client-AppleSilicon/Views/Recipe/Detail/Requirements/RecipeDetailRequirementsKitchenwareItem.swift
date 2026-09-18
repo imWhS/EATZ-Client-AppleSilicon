@@ -11,21 +11,25 @@ import Kingfisher
 struct RecipeDetailRequirementsKitchenwareItem: View {
     let kitchenware: RecipeKitchenware
     let isLoggedIn: Bool
+    let width: CGFloat
     let action: (RecipeDetailRequirementsAction) -> Void
     
     init(
         _ kitchenware: RecipeKitchenware,
         _ isLoggedIn: Bool,
+        _ width: CGFloat,
         _ action: @escaping (RecipeDetailRequirementsAction) -> Void)
     {
         self.kitchenware = kitchenware
         self.isLoggedIn = isLoggedIn
+        self.width = width
         self.action = action
     }
     
     var body: some View {
         KitchenwareRow(kitchenware, style: .outlined, isEnabled: isLoggedIn, icon, trailing: trailing)
             .padding(.horizontal, 4)
+            .frame(minWidth: width, maxWidth: width)
     }
     
     @ViewBuilder

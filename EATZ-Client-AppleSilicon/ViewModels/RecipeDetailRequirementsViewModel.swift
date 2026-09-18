@@ -235,7 +235,7 @@ enum RecipeDetailRequirementsAction {
     case purchase(id: Int64)
 }
 
-enum RecipeDetailRequirementsCookability: Equatable {
+enum RecipeDetailRequirementsCookability: Equatable, Hashable {
     case cookable
     case uncookable(missingIngredientCount: Int, missingKitchenwareCount: Int)
 }

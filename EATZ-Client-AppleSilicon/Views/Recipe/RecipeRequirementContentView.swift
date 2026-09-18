@@ -63,6 +63,8 @@ struct RecipeRequirementContentView: View {
             }
             .padding(.vertical, 10)
         }
+        .transition(.opacity)
+        .animation(.easeInOut(duration: 0.3), value: cookability)
     }
     
     private var titleSection: some View {
@@ -72,24 +74,16 @@ struct RecipeRequirementContentView: View {
     
     private var headerSection: some View {
         Group {
-            if isMember { recipeRequirementsContentHeader }
+            if isMember {
+                RecipeDetailRequirementsHeader(
+                    cookability,
+                    onShowRecipeTapped,
+                    onAddAllRequirements)
+                .padding(.horizontal, 20)
+            }
             else { RecipeDetailRequirementsHeaderGuest(onAuth: onAuth) }
         }
         .frame(maxWidth: .infinity, alignment: .center)
         .padding(.vertical, 10)
-    }
-    
-    @ViewBuilder
-    private var recipeRequirementsContentHeader: some View {
-        switch cookability {
-        case .cookable:
-            RecipeDetailRequirementsHeaderCookable(onShowRecipeTapped)
-        case .uncookable(let missingIngredientCount, let missingKitchenwareCount):
-            RecipeDetailRequirementsHeaderUncookable(
-                missingKitchenwareCount,
-                missingIngredientCount,
-                onAddAllRequirements
-            )
-        }
     }
 }

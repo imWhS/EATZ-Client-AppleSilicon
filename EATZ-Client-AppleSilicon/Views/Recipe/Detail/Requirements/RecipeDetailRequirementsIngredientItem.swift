@@ -12,6 +12,8 @@ struct RecipeDetailRequirementsIngredientItem: View {
     let ingredient: RecipeIngredient
     let action: (RecipeDetailRequirementsAction) -> Void
     
+    @State private var isPurchaseSheetPresented: Bool = false
+    
     private var isPurchasable: Bool {
         if (isLoggedIn == false) {
             return true
@@ -40,6 +42,7 @@ struct RecipeDetailRequirementsIngredientItem: View {
                       trailing: trailing)
         .padding(.horizontal, 20)
         .padding(.vertical, 4)
+        .getPurchaseContext($isPurchaseSheetPresented, item: PurchaseItem(id: ingredient.id, name: ingredient.name))
     }
     
     @ViewBuilder
@@ -79,6 +82,6 @@ struct RecipeDetailRequirementsIngredientItem: View {
     }
     
     private func handlePurchase() -> Void {
-        action(.purchase(id: ingredient.id))
+        isPurchaseSheetPresented = true
     }
 }

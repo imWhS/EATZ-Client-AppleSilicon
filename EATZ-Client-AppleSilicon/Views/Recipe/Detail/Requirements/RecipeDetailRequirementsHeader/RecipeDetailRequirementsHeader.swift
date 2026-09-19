@@ -12,6 +12,8 @@ struct RecipeDetailRequirementsHeader: View {
     let onShowRecipeTapped: () -> Void
     let onAddAllRequirements: () -> Void
     
+    @State private var isPurchaseSheetPresented = false
+    
     init(
         _ cookability: RecipeDetailRequirementsCookability,
         _ onShowRecipeTapped: @escaping () -> Void,
@@ -120,12 +122,12 @@ struct RecipeDetailRequirementsHeader: View {
     }
     
     private var purchaseButton: some View {
-        VStack (spacing: 0) {
+        VStack(spacing: 0) {
             HorizontalDivider()
-            Button(action: onAddAllRequirements) {
+            Button(action: { isPurchaseSheetPresented = true }) {
                 HStack(spacing: 4) {
                     VStack(alignment: .leading, spacing: 4) {
-                        HStack(spacing: 8) {
+                        HStack(spacing: 6) {
                             Image("shopping-18")
                                 .foregroundStyle(Color.accentColor)
                             HStack(spacing: 4) {
@@ -151,6 +153,7 @@ struct RecipeDetailRequirementsHeader: View {
             .buttonStyle(SquareHighlightButtonStyle(cornerRadius: 14))
             .padding(4)
         }
+        .getPurchaseContext($isPurchaseSheetPresented, item: nil)
     }
     
     private var showRecipeButton: some View {

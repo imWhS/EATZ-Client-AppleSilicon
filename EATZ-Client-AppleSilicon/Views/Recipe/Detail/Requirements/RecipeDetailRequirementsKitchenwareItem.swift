@@ -14,6 +14,8 @@ struct RecipeDetailRequirementsKitchenwareItem: View {
     let width: CGFloat
     let action: (RecipeDetailRequirementsAction) -> Void
     
+    @State private var isPurchaseSheetPresented: Bool = false
+    
     private var isPurchasable: Bool {
         if (isLoggedIn == false) {
             return true
@@ -40,11 +42,12 @@ struct RecipeDetailRequirementsKitchenwareItem: View {
             style: .outlined,
             isEnabled: isLoggedIn,
             isPurchasable: isPurchasable,
-            onPurchaseTapped: handlePurchase,
+            onPurchaseTapped: handleShopping,
             icon,
             trailing: trailing)
-            .padding(.horizontal, 4)
-            .frame(minWidth: width, maxWidth: width)
+        .padding(.horizontal, 4)
+        .frame(minWidth: width, maxWidth: width)
+        .getPurchaseContext($isPurchaseSheetPresented, item: PurchaseItem(id: kitchenware.id, name: kitchenware.name))
     }
     
     @ViewBuilder
@@ -82,7 +85,7 @@ struct RecipeDetailRequirementsKitchenwareItem: View {
         action(.toggleKitchenwareAddition(id: kitchenware.id))
     }
     
-    private func handlePurchase() -> Void {
-        action(.purchase(id: kitchenware.id))
+    private func handleShopping() -> Void {
+        isPurchaseSheetPresented = true
     }
 }

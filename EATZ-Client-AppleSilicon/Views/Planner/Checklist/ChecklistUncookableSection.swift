@@ -19,6 +19,8 @@ struct ChecklistUncookableSection: View {
     let onKitchenwareItemAction: (Int64, ChecklistKitchenwareAction) -> Void
     let onIngredientItemAction: (Int64, ChecklistIngredientAction) -> Void
     
+    @State private var isPurchaseSheetPresented: Bool = false
+    
     private var missingKitchenwareLabel: String {
         if missingKitchenwareCount == 0 { return "" }
         else {
@@ -53,7 +55,38 @@ struct ChecklistUncookableSection: View {
                 onPlanItemAction,
                 onKitchenwareItemAction,
                 onIngredientItemAction)
-            VStack(spacing: 20) {
+            VStack(spacing: 0) {
+                VStack (spacing: 0) {
+                    HorizontalDivider()
+                    Button(action: { isPurchaseSheetPresented = true }) {
+                        HStack(spacing: 4) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                HStack(spacing: 6) {
+                                    Image("shopping-18")
+                                        .foregroundStyle(Color.accentColor)
+                                    HStack(spacing: 4) {
+                                        Group {
+                                            Text("준비물 구입")
+                                            DotSeparator(color: Color.accentColor)
+                                            Text("쇼핑하기")
+                                        }
+                                        .foregroundStyle(Color.accentColor)
+                                        .font(.system(size: 17, weight: .semibold))
+                                    }
+                                }
+                                Text("필요한 도구와 재료를 온라인에서 준비해보세요.")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundStyle(Color.gray50)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            Image("external-link-14-light")
+                                .foregroundStyle(Color.accentColor)
+                        }
+                        .padding(16)
+                    }
+                    .buttonStyle(SquareHighlightButtonStyle(cornerRadius: 14))
+                    .padding(4)
+                }
                 HorizontalDivider()
                 VStack(spacing: 0) {
                     Text("이미 위의 재료와 도구를 모두 가지고 있다면, 지금 바로 보관함에 재료와 도구를 추가해보세요.")
@@ -74,6 +107,7 @@ struct ChecklistUncookableSection: View {
                     .padding(.horizontal, 20)
                     .padding(.vertical, 10)
                 }
+                .padding(.top, 20)
             }
             .padding(.bottom, 10)
         }
@@ -84,6 +118,7 @@ struct ChecklistUncookableSection: View {
             missingKitchenwareCount,
             missingIngredientCount
         ])
+        .getPurchaseContext($isPurchaseSheetPresented, item: nil)
     }
     
     private var header: some View {

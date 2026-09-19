@@ -51,30 +51,24 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
     }
     
     private var leading: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 4) {
             kitchenwareImage
             kitchenwareNameText
         }
         .padding(.leading, 14)
-        .padding(.trailing, 8)
         .padding(.vertical, 14)
     }
     
     private var purchaseRow: some View {
         HStack(spacing: 8) {
-            Image("shopping-16")
-                .foregroundStyle(Color.gray35)
-            Text("필요한 도구")
-                .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(Color.gray35)
-                .frame(maxWidth: .infinity, alignment: .leading)
             Button(action: onPurchaseTapped ?? {}) {
-                HStack(spacing: 6) {
-                    Text("쇼핑하기")
-                    Image("external-link-14-light")
+                HStack(spacing: 4) {
+                    Image("shopping-14")
+                    Text("도구 구입")
                 }
             }
             .buttonStyle(SmallBorderlessButtonStyle())
+            Spacer()
         }
     }
     
@@ -94,19 +88,21 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
     }
     
     private var kitchenwareNameText: some View {
-        VStack(spacing: 0) {
-            HStack {
-                icon
+        HStack(spacing: 2) {
+            icon
+            VStack(spacing: 0) {
                 Text(kitchenware.name)
                     .font(.system(size: 17, weight: .medium))
                     .lineLimit(2)
                     .truncationMode(.tail)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 6)
+                if isPurchasable { purchaseRow }
             }
-            if isPurchasable { purchaseRow }
+            .padding(.top, isPurchasable ? 6 : 0)
         }
-        .padding(.top, isPurchasable ? 6 : 0)
+        .padding(.horizontal, 8)
     }
 }
 

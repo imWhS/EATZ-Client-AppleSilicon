@@ -125,28 +125,18 @@ struct RecipeDetailRequirementsHeader: View {
         VStack(spacing: 0) {
             HorizontalDivider()
             Button(action: { isPurchaseSheetPresented = true }) {
-                HStack(spacing: 4) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack(spacing: 6) {
-                            Image("shopping-18")
-                                .foregroundStyle(Color.accentColor)
-                            HStack(spacing: 4) {
-                                Group {
-                                    Text("준비물 구입")
-                                    DotSeparator(color: Color.accentColor)
-                                    Text("쇼핑하기")
-                                }
-                                .foregroundStyle(Color.accentColor)
-                                .font(.system(size: 17, weight: .semibold))
-                            }
-                        }
-                        Text("필요한 도구와 재료를 온라인에서 준비해보세요.")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundStyle(Color.gray50)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack(spacing: 6) {
+                        Image("shopping-18")
+                            .foregroundStyle(Color.accentColor)
+                        Text("준비물 구입")
+                            .foregroundStyle(Color.accentColor)
+                            .font(.system(size: 17, weight: .semibold))
                     }
-                    Image("external-link-14-light")
-                        .foregroundStyle(Color.accentColor)
+                    Text("필요한 도구와 재료를 온라인에서 준비해보세요.")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(Color.gray50)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding(16)
             }

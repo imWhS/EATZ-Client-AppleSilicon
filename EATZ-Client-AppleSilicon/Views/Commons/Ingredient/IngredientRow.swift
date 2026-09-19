@@ -44,7 +44,6 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
                 leading
                 trailing
             }
-            if isPurchasable { purchaseRow }
         }
         .frame(minHeight: 48)
         .background(style.background)
@@ -63,53 +62,49 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
             if isLinkable && ingredient.hasChildren {
                 ingredientNameTextLinkable.padding(.horizontal, 2)
             } else {
-                ingredientNameText.padding(14)
+                ingredientNameText
+                .padding(.horizontal, 14)
+                .padding(.top, 14)
+                .padding(.bottom, isPurchasable ? 8 : 14)
             }
         }
     }
     
     private var purchaseRow: some View {
-        VStack(spacing: 0) {
-            HorizontalDivider(padding: 14)
-            HStack(spacing: 8) {
-                Image("shopping-16")
-                    .foregroundStyle(Color.gray35)
-                Text("필요한 재료를 온라인에서 준비해보세요.")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(Color.gray35)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, 12)
-                Button(action: onPurchaseTapped ?? {}) {
-                    HStack(spacing: 6) {
-                        Text("구입")
-                        Image("external-link-14-light")
-                    }
+        HStack(spacing: 8) {
+            Button(action: onPurchaseTapped ?? {}) {
+                HStack(spacing: 4) {
+                    Image("shopping-14")
+                    Text("재료 구입")
                 }
-                .buttonStyle(SmallBorderlessButtonStyle())
             }
-            .padding(.leading, 14)
-            .padding(.trailing, 8)
-            .transition(.move(edge: .top))
+            .buttonStyle(SmallBorderlessButtonStyle())
+            Spacer()
         }
     }
     
     private var ingredientNameText: some View {
-        HStack {
+        HStack(spacing: 2) {
             icon
-            HStack(spacing: 4) {
-                Group {
-                    if ingredient.parentCoupled,
-                       let coupledParentName = ingredient.coupledParentName,
-                       coupledParentName.isEmpty == false {
-                        Text(coupledParentName)
-                            .foregroundStyle(Color.gray60)
+                .padding(.bottom, isPurchasable ? 6 : 0)
+            VStack(spacing: 0) {
+                HStack(spacing: 4) {
+                    Group {
+                        if ingredient.parentCoupled,
+                           let coupledParentName = ingredient.coupledParentName,
+                           coupledParentName.isEmpty == false {
+                            Text(coupledParentName)
+                                .foregroundStyle(Color.gray60)
+                        }
+                        Text(ingredient.name)
+                            .foregroundStyle(Color.black)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    Text(ingredient.name)
-                        .foregroundStyle(Color.black)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(.system(size: 17, weight: .medium))
+                    .multilineTextAlignment(.leading)
                 }
-                .font(.system(size: 17, weight: .medium))
-                .multilineTextAlignment(.leading)
+                .padding(.horizontal, 6)
+                if isPurchasable { purchaseRow }
             }
         }
     }

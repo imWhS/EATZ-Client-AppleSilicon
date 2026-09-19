@@ -63,7 +63,7 @@ struct ChecklistUncookableSection: View {
                             HStack(spacing: 6) {
                                 Image("shopping-18")
                                     .foregroundStyle(Color.accentColor)
-                                Text("준비물 구입")
+                                Text("준비물 둘러보기")
                                     .foregroundStyle(Color.accentColor)
                                     .font(.system(size: 17, weight: .semibold))
                             }

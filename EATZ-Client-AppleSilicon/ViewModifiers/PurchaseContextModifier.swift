@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PurchaseItem: Identifiable {
+    var type: RequirementType
     var id: Int64
     var name: String
 }

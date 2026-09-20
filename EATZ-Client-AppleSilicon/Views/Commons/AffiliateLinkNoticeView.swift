@@ -9,8 +9,10 @@ import SwiftUI
 
 struct AffiliateLinkNoticeView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
+    @State private var alert: AffiliateLinkNoticeAlert?
     
-    var item: PurchaseItem?
+    private var item: PurchaseItem?
     
     private var titleLabel: String {
         if let name = item?.name {
@@ -33,7 +35,7 @@ struct AffiliateLinkNoticeView: View {
             VStack(spacing: 0) {
                 header
                 Spacer()
-                interectionSection
+                interactionSection
             }
             .navigationTitle(titleLabel)
             .navigationBarTitleDisplayMode(.inline)
@@ -42,6 +44,15 @@ struct AffiliateLinkNoticeView: View {
                 dismissToolbarItem
             }
         }
+        .alert(
+            alert?.title ?? "",
+            isPresented:
+                Binding(
+                    get: { self.alert != nil },
+                    set: { isPresented in if (!isPresented) { self.alert = nil } }),
+            presenting: alert,
+            actions: { $0.actions },
+            message: { $0.message })
     }
     
     private var titleToolbarItem: some ToolbarContent {
@@ -87,7 +98,7 @@ struct AffiliateLinkNoticeView: View {
         }
     }
     
-    private var interectionSection: some View {
+    private var interactionSection: some View {
         VStack(spacing: 0) {
             Button(action: handleGoShoppingTapped) {
                 HStack(spacing: 4) {
@@ -98,7 +109,7 @@ struct AffiliateLinkNoticeView: View {
             }
             .buttonStyle(RoundedButtonStyle(.primary, .large))
             .padding(.bottom, 10)
-            Text("이 화면을 통해 이동할 페이지는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공 받습니다.")
+            Text("이 화면을 통해 이동할 페이지는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.")
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(Color.gray50)
                 .multilineTextAlignment(.center)
@@ -108,7 +119,44 @@ struct AffiliateLinkNoticeView: View {
     }
     
     private func handleGoShoppingTapped() {
-        
+        AffiliateService.shared.getAffiliateUrl(item) { result in
+            switch result {
+            case .success(let response):
+                guard let url = URL(string: response.url) else {
+                    self.alert = .error(message: "올바르지 않은 URL 주소예요.")
+                    return
+                }
+                self.openURL(url)
+            case .failure(let networkError):
+                self.alert = .error(message: networkError.userMessage)
+            }
+        }
+    }
+}
+
+enum AffiliateLinkNoticeAlert {
+    case error(message: String)
+    
+    var title: String {
+        switch self {
+        case .error: return "오류"
+        }
+    }
+    
+    @ViewBuilder
+    var message: some View {
+        switch self {
+        case .error(let message):
+            Text("쇼핑몰로 이동하지 못했어요. \(message) 다시 시도해보세요.")
+        }
+    }
+    
+    @ViewBuilder
+    var actions: some View {
+        switch self {
+        case .error:
+            Button("확인") {}
+        }
     }
 }
 

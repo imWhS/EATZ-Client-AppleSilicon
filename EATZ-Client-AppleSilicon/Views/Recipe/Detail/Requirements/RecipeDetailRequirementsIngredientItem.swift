@@ -42,7 +42,7 @@ struct RecipeDetailRequirementsIngredientItem: View {
                       trailing: trailing)
         .padding(.horizontal, 20)
         .padding(.vertical, 4)
-        .getPurchaseContext($isPurchaseSheetPresented, item: PurchaseItem(id: ingredient.id, name: ingredient.name))
+        .getPurchaseContext($isPurchaseSheetPresented, item: PurchaseItem(type: .ingredient, id: ingredient.id, name: ingredient.name))
     }
     
     @ViewBuilder

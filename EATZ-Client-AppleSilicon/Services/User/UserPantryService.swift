@@ -146,7 +146,6 @@ final class UserPantryService {
         completion: @escaping (Result<KitchenwareListPageResponse, NetworkError>) -> Void)
     {
         let pageableRequest = PageableRequest(page, size)
-        
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)/kitchenwares",
             method: .get,

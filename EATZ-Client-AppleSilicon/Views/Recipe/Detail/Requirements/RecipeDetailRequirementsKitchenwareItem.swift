@@ -47,7 +47,7 @@ struct RecipeDetailRequirementsKitchenwareItem: View {
             trailing: trailing)
         .padding(.horizontal, 4)
         .frame(minWidth: width, maxWidth: width)
-        .getPurchaseContext($isPurchaseSheetPresented, item: PurchaseItem(id: kitchenware.id, name: kitchenware.name))
+        .getPurchaseContext($isPurchaseSheetPresented, item: PurchaseItem(type: .kitchenware, id: kitchenware.id, name: kitchenware.name))
     }
     
     @ViewBuilder

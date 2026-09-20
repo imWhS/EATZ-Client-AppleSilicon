@@ -58,15 +58,15 @@ struct CalendarPicker: View {
     
     private var dismissToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Button("취소") { dismiss() }
+            Button("취소") { self.dismiss() }
         }
     }
     
     private var doneToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
             Button("완료") {
-                onComplete(makeSelectionResult())
-                dismiss()
+                self.onComplete(makeSelectionResult())
+                self.dismiss()
             }
             .fontWeight(.semibold)
             .tint(Color.accentColor)
@@ -150,7 +150,7 @@ struct CalendarPickerSummarySection: View {
             if mode == .multiple && !selectedDates.isEmpty {
                 Spacer()
                 Button {
-                    selectedDates.removeAll()
+                    self.selectedDates.removeAll()
                 } label: {
                     Text("초기화")
                 }

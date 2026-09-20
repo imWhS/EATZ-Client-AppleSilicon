@@ -24,11 +24,9 @@ struct PurchaseContextModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .sheet(isPresented: $isPresented, onDismiss: { }) {
-                if let item = item {
-                    Text("purchase \(item.id) | \(item.name)")
-                } else {
-                    Text("shopping")
-                }
+                AffiliateLinkNoticeView(item)
+                    .presentationDetents([.height(450)])
+                    .presentationDragIndicator(.visible)
             }
     }
 }

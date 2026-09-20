@@ -61,6 +61,12 @@ struct RecipeTagCloudView: View {
 
     var body: some View {
         TagCloudLayout(spacing: 6) {
+            HStack(spacing: 6) {
+                Text("태그")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color.gray35)
+                DotSeparator(diameter: 1.5)
+            }
             ForEach(Array(tags.enumerated()), id: \.1.id) { (index, tag) in
                 HStack(spacing: 6) {
                     Text(tag.name)

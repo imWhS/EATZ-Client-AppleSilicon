@@ -35,7 +35,7 @@ struct UserBlockShowLearnMoreView: View {
     
     private var titleToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            VStack(spacing: 8) {
+            VStack {
                 Text(titleLabel)
                     .font(.system(size: 17, weight: .semibold))
                 Text(subtitleLabel)

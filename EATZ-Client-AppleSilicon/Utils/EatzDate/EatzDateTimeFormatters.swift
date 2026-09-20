@@ -112,11 +112,19 @@ extension Date {
         return EatzDateTimeFormatters.yearWithUnit.string(from: self)
     }
     
-    /// 8일 이내면 "방금 전", "3일 전" 등 현재 시점 기준 상대적인 표현을,
+    /// 현재 시점으로부터 8일 미만이면 "방금 전", "3일 전" 등과 같이 현재 시점 기준의 상대적인 표현을,
     /// 그 이상이면 "yyyy년 M월 d일"인 형태로 포맷팅된 문자열로 만듭니다.
     var formattedRelative: String {
         let now = Date()
         let calendar = EatzDateTimeFormatters.calendar
+        
+        let timeInterval = now.timeIntervalSince(self)
+        
+        // 현재 시점과 상대적으로 60초 미만으로 차이나면 현재 시점과 동일한 것으로 취급합니다.
+        if timeInterval < 60 {
+            return "지금"
+        }
+        
         let components = calendar.dateComponents([.day], from: self, to: now)
         
         if let day = components.day, day < 8 {

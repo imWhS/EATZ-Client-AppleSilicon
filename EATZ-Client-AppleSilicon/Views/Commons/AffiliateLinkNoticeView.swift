@@ -11,6 +11,7 @@ struct AffiliateLinkNoticeView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
     @State private var alert: AffiliateLinkNoticeAlert?
+    @State private var isLoading: Bool = false
     
     private var item: PurchaseItem?
     
@@ -119,16 +120,20 @@ struct AffiliateLinkNoticeView: View {
     }
     
     private func handleGoShoppingTapped() {
+        isLoading = true
         AffiliateService.shared.getAffiliateUrl(item) { result in
-            switch result {
-            case .success(let response):
-                guard let url = URL(string: response.url) else {
-                    self.alert = .error(message: "올바르지 않은 URL 주소예요.")
-                    return
+            DispatchQueue.main.async {
+                self.isLoading = false
+                switch result {
+                case .success(let response):
+                    guard let url = URL(string: response.url) else {
+                        self.alert = .error(message: "올바르지 않은 URL 주소예요.")
+                        return
+                    }
+                    self.openURL(url)
+                case .failure(let networkError):
+                    self.alert = .error(message: networkError.userMessage)
                 }
-                self.openURL(url)
-            case .failure(let networkError):
-                self.alert = .error(message: networkError.userMessage)
             }
         }
     }

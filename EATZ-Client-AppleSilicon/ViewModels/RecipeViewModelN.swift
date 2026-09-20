@@ -104,7 +104,7 @@ class RecipeViewModelN: ObservableObject {
         
         // 이미 요구 사항 섹션 관련 뷰 데이터를 불러온 적 있는 경우에만 해당 뷰 데이터를 업데이트합니다.
         switch requirementsState {
-        case .content, .error: loadRequirementsIfNeeded(for: recipeId)
+        case .content, .error: loadRequirements(for: recipeId)
         case .idle, .loading: break
         }
     }
@@ -302,6 +302,7 @@ extension RecipeViewModelN {
         case .toggleKitchenwareAddition(let id): toggleKitchenwareAddition(of: id)
         case .toggleIngredientAddition(let id): toggleIngredientAddition(of: id)
         case .toggleLikeIngredient(let id): toggleLikeIngredient(of: id)
+        case .purchase(let id): print("DBG | purchase tapped!")
         }
     }
     

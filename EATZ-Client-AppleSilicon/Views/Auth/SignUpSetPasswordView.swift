@@ -23,7 +23,7 @@ struct SignUpSetPasswordView: View {
                         password: $viewModel.password,
                         isFocused: $isPasswordFocused,
                         isPasswordVisible: $isPasswordVisible,
-                        onSubmit: viewModel.validatePassword)
+                        onSubmit: viewModel.validatePasswordForSignUp)
                     showPasswordToggleView
                 }
                 GuideView(guides: [
@@ -116,7 +116,7 @@ struct SignUpSetPasswordView: View {
     
     private var doneToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            Button(action: viewModel.validatePassword) {
+            Button(action: viewModel.validatePasswordForSignUp) {
                 Text("완료")
             }
             .fontWeight(.semibold)

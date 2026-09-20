@@ -37,7 +37,7 @@ struct ChecklistIngredientItem: View {
                 .frame(height: commonHeight)
             
             VStack(spacing: verticalSpacing) {
-                HStack {
+                HStack(spacing: 4) {
                     leadingSection
                     trailingSection
                 }
@@ -58,13 +58,12 @@ struct ChecklistIngredientItem: View {
                    let coupledParentName = ingredient.coupledParentName,
                    coupledParentName.isEmpty == false {
                     Text(coupledParentName)
-                        .font(.system(size: 17, weight: .medium))
                         .foregroundStyle(Color.gray60)
                 }
                 Text(ingredient.name)
-                    .font(.system(size: 17, weight: .medium))
-                Spacer()
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .font(.system(size: 17, weight: .medium))
             .frame(minHeight: commonHeight, maxHeight: commonHeight)
         }
     }

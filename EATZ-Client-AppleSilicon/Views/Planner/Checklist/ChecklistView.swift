@@ -94,11 +94,11 @@ private struct ChecklistContentView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                scrollTracker
                 header
                 cookabilitySections
             }
         }
+        .coordinateSpace(name: "scroll")
     }
     
     private var cookabilitySections: some View {
@@ -115,6 +115,7 @@ private struct ChecklistContentView: View {
                     onPlanItemAction: viewModel.handlePlanItemAction,
                     onKitchenwareItemAction: viewModel.handleKitchenwareItemAction,
                     onIngredientItemAction: viewModel.handleIngredientItemAction)
+                .transition(.opacity.combined(with: .scale(scale: 0.95)))
             }
             
             if !checklist.cookable.plans.isEmpty {
@@ -127,9 +128,13 @@ private struct ChecklistContentView: View {
                     onPlanItemAction: viewModel.handlePlanItemAction,
                     onKitchenwareItemAction: viewModel.handleKitchenwareItemAction,
                     onIngredientItemAction: viewModel.handleIngredientItemAction)
+                .transition(.opacity.combined(with: .scale(scale: 0.95)))
             }
         }
         .padding(.vertical, 20)
+        .animation(
+            .easeInOut(duration: 0.3),
+            value: [checklist.cookable.plans.count, checklist.uncookable.plans.count])
     }
     
     private var header: some View {
@@ -166,8 +171,10 @@ private struct ChecklistContentView: View {
                 .onChange(of: offset) { _, offset in
                     let shouldShow = offset < -50
                     if viewModel.showNavigationBarTitle != shouldShow {
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            viewModel.showNavigationBarTitle = shouldShow
+                        DispatchQueue.main.async {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                viewModel.showNavigationBarTitle = shouldShow
+                            }
                         }
                     }
                 }

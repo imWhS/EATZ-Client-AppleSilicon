@@ -37,11 +37,12 @@ struct ChecklistCookableSection: View {
         .padding(.bottom, 8)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 32))
+        .animation(.easeInOut(duration: 0.3), value: cookable.plans.count)
     }
     
     private var header: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Image("requirement-unavailable-62")
+            Image("requirement-available-62")
                 .shadow(color: Color.init(hex: "76BD2F").opacity(0.75), radius: 8, x: 0, y: 4)
             VStack(alignment: .leading, spacing: 4) {
                 Group {
@@ -52,6 +53,7 @@ struct ChecklistCookableSection: View {
                         .foregroundStyle(Color.gray35)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .contentTransition(.numericText())
             }
         }
         .padding(20)

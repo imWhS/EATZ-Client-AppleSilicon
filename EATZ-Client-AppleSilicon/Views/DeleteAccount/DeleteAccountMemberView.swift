@@ -9,12 +9,7 @@ import SwiftUI
 
 struct DeleteAccountMemberView: View {
     @EnvironmentObject private var router: Router
-    @EnvironmentObject var authManager: AuthManager 
-//    
-//    private let userItemHorizontalPadding: CGFloat = 20
-//    private let profileImageSize: CGFloat = 40
-//    private let userItemProfileImageLabelSpacing: CGFloat = 12
-//    private let userItemVerticalPadding: CGFloat = 16
+    @EnvironmentObject var authManager: AuthManager
     
     var body: some View {
         Group {

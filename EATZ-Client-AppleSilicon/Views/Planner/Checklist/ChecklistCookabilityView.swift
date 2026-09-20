@@ -73,15 +73,13 @@ struct ChecklistCookabilityView: View {
     var body: some View {
         VStack(spacing: 0) {
             planList
-            if !sortedKitchenwares.isEmpty && !sortedIngredients.isEmpty {
-                VStack(spacing: 10) {
-                    if !sortedKitchenwares.isEmpty {
-                        kitchenwareList
-                    }
-                    
-                    if !sortedIngredients.isEmpty {
-                        ingredientList
-                    }
+            VStack(spacing: 10) {
+                if !sortedKitchenwares.isEmpty {
+                    kitchenwareList
+                }
+                
+                if !sortedIngredients.isEmpty {
+                    ingredientList
                 }
             }
         }
@@ -109,18 +107,18 @@ struct ChecklistCookabilityView: View {
                     VerticalLabeledValueView(
                         label: "총 도구 수",
                         value: "\(sortedKitchenwares.count)개")
-                    if 0 < missingKitchenwareCount {
-                        VerticalLabeledValueView(
-                            label: "필요한 도구 수",
-                            value: "\(missingKitchenwareCount)개",
-                            style: .secondary)
-                    }
+                    VerticalLabeledValueView(
+                        label: "필요한 도구 수",
+                        value: "\(missingKitchenwareCount)개",
+                        style: .secondary)
+                    .opacity(missingKitchenwareCount == 0 ? 0 : 1)
+                    .animation(.easeInOut(duration: 0.3), value: missingKitchenwareCount)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 20)
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(alignment: .center, spacing: 0) {
-                        ForEach(Array(sortedKitchenwares.enumerated()), id: \.element) { index, kitchenware in
+                        ForEach(Array(sortedKitchenwares.enumerated()), id: \.element.id) { index, kitchenware in
                             ChecklistKitchenwareItem(
                                 kitchenware,
                                 isDisabled: isUpdatingPantry,
@@ -145,23 +143,19 @@ struct ChecklistCookabilityView: View {
                     VerticalLabeledValueView(
                         label: "총 재료 수",
                         value: "\(sortedIngredients.count)개")
-                    
-                    if 0 < missingIngredientCount {
-                        VerticalLabeledValueView(
-                            label: "필요한 재료 수",
-                            value: "\(missingIngredientCount)개",
-                            style: .secondary)
-                        .transition(.opacity.combined(with: .scale(scale: 0.95)))
-                    }
+                    VerticalLabeledValueView(
+                        label: "필요한 재료 수",
+                        value: "\(missingIngredientCount)개",
+                        style: .secondary)
+                    .opacity(missingIngredientCount == 0 ? 0 : 1)
+                    .animation(.easeInOut(duration: 0.3), value: missingIngredientCount)
                 }
-                .transition(.opacity.combined(with: .scale(scale: 0.95)))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 20)
-                .animation(.snappy, value: missingIngredientCount > 0)
                 
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(alignment: .center, spacing: 10) {
-                        ForEach(Array(sortedIngredients.enumerated()), id: \.element) { index, ingredient in
+                        ForEach(Array(sortedIngredients.enumerated()), id: \.element.id) { index, ingredient in
                             let isLast = index == (sortedIngredients.count - 1)
                             ChecklistIngredientItem(
                                 ingredient,

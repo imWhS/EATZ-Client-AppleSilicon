@@ -11,7 +11,7 @@ import MarkdownView
 struct LaunchNoticeView: View {
     @Environment(\.dismiss) private var dismiss
     
-    @State var showNavigationBarTitle = false
+    @State private var showNavigationBarTitle = false
     
     let id: Int64
     let title: String

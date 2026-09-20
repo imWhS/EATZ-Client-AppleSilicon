@@ -11,21 +11,43 @@ import Kingfisher
 struct RecipeDetailRequirementsKitchenwareItem: View {
     let kitchenware: RecipeKitchenware
     let isLoggedIn: Bool
+    let width: CGFloat
     let action: (RecipeDetailRequirementsAction) -> Void
+    
+    @State private var isPurchaseSheetPresented: Bool = false
+    
+    private var isPurchasable: Bool {
+        if (isLoggedIn == false) {
+            return true
+        }
+        
+        return !kitchenware.ownedByUser
+    }
     
     init(
         _ kitchenware: RecipeKitchenware,
         _ isLoggedIn: Bool,
+        _ width: CGFloat,
         _ action: @escaping (RecipeDetailRequirementsAction) -> Void)
     {
         self.kitchenware = kitchenware
         self.isLoggedIn = isLoggedIn
+        self.width = width
         self.action = action
     }
     
     var body: some View {
-        KitchenwareRow(kitchenware, style: .outlined, isEnabled: isLoggedIn, icon, trailing: trailing)
-            .padding(.horizontal, 4)
+        KitchenwareRow(
+            kitchenware,
+            style: .outlined,
+            isEnabled: isLoggedIn,
+            isPurchasable: isPurchasable,
+            onPurchaseTapped: handleShopping,
+            icon,
+            trailing: trailing)
+        .padding(.horizontal, 4)
+        .frame(minWidth: width, maxWidth: width)
+        .getPurchaseContext($isPurchaseSheetPresented, item: PurchaseItem(type: .kitchenware, id: kitchenware.id, name: kitchenware.name))
     }
     
     @ViewBuilder
@@ -61,5 +83,9 @@ struct RecipeDetailRequirementsKitchenwareItem: View {
     
     private func handleTogglePantry() -> Void {
         action(.toggleKitchenwareAddition(id: kitchenware.id))
+    }
+    
+    private func handleShopping() -> Void {
+        isPurchaseSheetPresented = true
     }
 }

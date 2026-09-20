@@ -81,7 +81,7 @@ struct PlannerRecipePicker: View {
         case .loading: LoadingCurtain(title: "저장한 레시피 목록을 불러오고 있어요...")
         case .loaded:
             PlannerRecipePickerRecipeList(
-                headerTitle: "최근에 저장한 레시피",
+                headerTitle: "최근에 저장한 레시피 중에서 추가",
                 pagedRecipes: viewModel.pagedSavedRecipes,
                 onRecipeTapped: viewModel.addToPlanner,
                 loadMore: viewModel.loadMoreSavedRecipes)
@@ -114,7 +114,7 @@ struct PlannerRecipePicker: View {
             switch viewModel.searchState {
             case .searching: LoadingCurtain(title: "레시피를 찾고 있어요...")
             case .searched: PlannerRecipePickerRecipeList(
-                headerTitle: "'\(viewModel.keyword)' 관련 레시피",
+                headerTitle: "'\(viewModel.keyword)' 관련 레시피 중에서 추가",
                 pagedRecipes: viewModel.pagedSearchedRecipes,
                 onRecipeTapped: viewModel.addToPlanner,
                 loadMore: viewModel.loadMoreSearchedRecipes)

@@ -154,7 +154,7 @@ struct AuthView: View {
     private func authActionButton(title: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack(spacing: 4) {
-                Text(title).fontWeight(.semibold)
+                Text(title)
                 Image("arrow-right-14")
             }
             .frame(maxWidth: .infinity)

@@ -12,6 +12,16 @@ struct RecipeDetailRequirementsIngredientItem: View {
     let ingredient: RecipeIngredient
     let action: (RecipeDetailRequirementsAction) -> Void
     
+    @State private var isPurchaseSheetPresented: Bool = false
+    
+    private var isPurchasable: Bool {
+        if (isLoggedIn == false) {
+            return true
+        }
+        
+        return !ingredient.ownedByUser
+    }
+    
     init(
         _ isLoggedIn: Bool,
         _ ingredient: RecipeIngredient,
@@ -26,17 +36,19 @@ struct RecipeDetailRequirementsIngredientItem: View {
         IngredientRow(ingredient,
                       style: .outlined,
                       isEnabled: isLoggedIn,
+                      isPurchasable: isPurchasable,
+                      onPurchaseTapped: handlePurchase,
                       icon: icon,
                       trailing: trailing)
         .padding(.horizontal, 20)
         .padding(.vertical, 4)
+        .getPurchaseContext($isPurchaseSheetPresented, item: PurchaseItem(type: .ingredient, id: ingredient.id, name: ingredient.name))
     }
     
     @ViewBuilder
     private func icon() -> some View {
-        if isLoggedIn {
-            Image(ingredient.ownedByUser ? "requirement-added-18" : "requirement-needed-18")
-        } else { EmptyView() }
+        if isLoggedIn { Image(ingredient.ownedByUser ? "requirement-added-18" : "requirement-needed-18") }
+        else { EmptyView() }
     }
     
     @ViewBuilder
@@ -51,17 +63,14 @@ struct RecipeDetailRequirementsIngredientItem: View {
     
     private var actionButtonContainer: some View {
         HStack(spacing: 0) {
-            Group {
-                actionButton(image: ingredient.likedByUser ? "like-filled-18" : "like-stroked-18", action: handleToggleLike)
-                actionButton(image: ingredient.ownedByUser ? "remove-from-pantry-18" : "add-circled-18", action: handleTogglePantry)
-            }
-            .buttonStyle(SmallBorderlessButtonStyle())
+            actionButton(ingredient.likedByUser ? "like-filled-18" : "like-stroked-18", handleToggleLike)
+            actionButton(ingredient.ownedByUser ? "remove-from-pantry-18" : "add-circled-18", handleTogglePantry)
         }
         .padding(4)
     }
     
-    private func actionButton(image: String, label: String = "", action: @escaping () -> Void) -> some View {
-        Button(action: action) { Image(image).padding(4) }
+    private func actionButton(_ image: String, _ action: @escaping () -> Void) -> some View {
+        Button(action: action) { Image(image).padding(4) }.buttonStyle(SmallBorderlessButtonStyle())
     }
     
     private func handleToggleLike() -> Void {
@@ -70,5 +79,9 @@ struct RecipeDetailRequirementsIngredientItem: View {
     
     private func handleTogglePantry() -> Void {
         action(.toggleIngredientAddition(id: ingredient.id))
+    }
+    
+    private func handlePurchase() -> Void {
+        isPurchaseSheetPresented = true
     }
 }

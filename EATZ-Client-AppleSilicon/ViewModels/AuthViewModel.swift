@@ -57,7 +57,7 @@ class AuthViewModel: ObservableObject {
     private let authService = AuthService.shared
     
     var isPasswordValid: Bool {
-        return password.count >= 8 && password.count <= 64
+        return 8 <= password.count && password.count <= 64
     }
 
     var isUsernameValid: Bool {
@@ -179,6 +179,8 @@ class AuthViewModel: ObservableObject {
     }
     
     func logIn() {
+        guard validatePassword() else { return }
+        
         isLoading = true
         authService.logIn(email: email, password: password) { [weak self] result in
             guard let self = self else { return }
@@ -321,11 +323,17 @@ class AuthViewModel: ObservableObject {
         }
     }
 
-    func validatePassword() {
+    func validatePasswordForSignUp() {
+        guard validatePassword() else { return }
+        self.proceedToUsername()
+    }
+    
+    func validatePassword() -> Bool {
         if !isPasswordValid {
             alert = .invalidPasswordInput
+            return false
         } else {
-            proceedToUsername()
+            return true
         }
     }
     
@@ -417,7 +425,7 @@ enum AuthAlert: Identifiable {
         case .invalidPasswordInput:
             return Alert(
                 title: Text("올바르지 않은 암호"),
-                message: Text("암호는 최소 8자부터 최대 64자까지의 길이로 설정해주세요."),
+                message: Text("암호는 최소 8자부터 최대 64자까지의 길이로 입력해주세요."),
                 dismissButton: .default(Text("확인"))
             )
         case .invalidUsernameInput:

@@ -135,11 +135,11 @@ private struct PlannerPlanListFooter: View {
         self.onAddPlanTapped = onAddPlanTapped
     }
     
-    private var planCountLabel: String {
-        if let itemCount = self.planCount {
-            return "\(itemCount)개의 플랜"
+    private var planCountLabel: String? {
+        if let count = self.planCount, 0 < count {
+            return "\(count)개의 플랜"
         } else {
-            return ""
+            return nil
         }
     }
     
@@ -177,10 +177,14 @@ private struct PlannerPlanListFooter: View {
                 Text(EatzDateTimeFormatters.monthDayWithUnit.string(from: date))
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(Color.black)
-                DotSeparator()
-                Text(planCountLabel).contentTransition(.numericText())
-                DotSeparator()
-                Text(EatzDurationFormatter.seconds(from: plansTotalTime) ?? "").contentTransition(.numericText())
+                if let countLabel = planCountLabel {
+                    DotSeparator()
+                    Text(countLabel).contentTransition(.numericText())
+                }
+                if let totalTime = EatzDurationFormatter.seconds(from: plansTotalTime) {
+                    DotSeparator()
+                    Text(totalTime).contentTransition(.numericText())
+                }
             }
             .font(.system(size: 12, weight: .medium))
             .foregroundStyle(Color.gray35)

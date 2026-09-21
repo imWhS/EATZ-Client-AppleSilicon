@@ -28,7 +28,7 @@ struct RecipeEssentialView: View {
                         }
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: 60, height: 60)
+                        .frame(width: 68, height: 68)
                         .clipped()
                     VStack(alignment: .leading, spacing: 4) {
                         Text(recipeEssential.title)
@@ -39,13 +39,14 @@ struct RecipeEssentialView: View {
                             .font(.system(size: 12, weight: .medium))
                             .foregroundStyle(Color.gray35)
                     }
-                    .padding(.horizontal, 12)
+                    .padding(.horizontal, 16)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(appearance.background)
                 .cornerRadius(14)
                 .clipped()
                 .padding(.horizontal, 20)
+                .padding(.vertical, 8)
             } else {
                 Text("레시피 정보를 불러오지 못했어요.")
             }

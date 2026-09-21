@@ -22,6 +22,14 @@ struct RecipeDetailRequirementsIngredientItem: View {
         return !ingredient.ownedByUser
     }
     
+    private var ingredientFullName: String {
+        var prefix = ""
+        if let coupledParentName = ingredient.coupledParentName, ingredient.parentCoupled {
+            prefix = coupledParentName + " "
+        }
+        return prefix + ingredient.name
+    }
+    
     init(
         _ isLoggedIn: Bool,
         _ ingredient: RecipeIngredient,
@@ -42,7 +50,12 @@ struct RecipeDetailRequirementsIngredientItem: View {
                       trailing: trailing)
         .padding(.horizontal, 20)
         .padding(.vertical, 4)
-        .getPurchaseContext($isPurchaseSheetPresented, item: PurchaseItem(type: .ingredient, id: ingredient.id, name: ingredient.name))
+        .getPurchaseContext(
+            $isPurchaseSheetPresented,
+            item: PurchaseItem(
+                type: .ingredient,
+                id: ingredient.id,
+                name: ingredientFullName))
     }
     
     @ViewBuilder

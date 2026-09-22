@@ -46,9 +46,14 @@ struct MyAccountSettingsView: View {
                                 openURL(url)
                             }
                         }
-                        BasicMenuRow("개발자에게 편지 쓰기", false, .externalLink, EatzLinks.developerEmailString) {
-                            if let url = SupportEmailUtli.createEmailURL() {
+                        BasicMenuRow("개발자에게 편지 쓰기", authManager.currentUser != nil, .externalLink, EatzLinks.developerEmailString) {
+                            if let url = SupportEmailUtli.createEmailURL(currentUser: authManager.currentUser) {
                                 openURL(url)
+                            }
+                        }
+                        if let currentUser = authManager.currentUser {
+                            BasicMenuRow("Public ID", false, .id(trailing: currentUser.publicId)) {
+                                print("버전 확인")
                             }
                         }
                     }

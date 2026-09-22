@@ -13,8 +13,9 @@ struct CurrentUser: Identifiable, Codable, Hashable, Equatable {
     let email: String
     let imageUrl: String?
     let role: UserRole
+    let publicId: String
     
     static func makeFake() -> CurrentUser {
-        return CurrentUser(id: 1, username: "testAccount", email: "testAccount@eatz.io", imageUrl: "", role: .member)
+        return CurrentUser(id: 1, username: "testAccount", email: "testAccount@eatz.io", imageUrl: "", role: .member, publicId: "44fdd3477dfdddsa")
     }
 }

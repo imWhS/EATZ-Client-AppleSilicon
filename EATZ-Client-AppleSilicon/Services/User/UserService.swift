@@ -48,7 +48,7 @@ final class UserService {
     
     func fetchSavedRecipes(
         page: Int = 0,
-        size: Int = 2,
+        size: Int = 10,
         completion: @escaping (Result<RecipeBasicsPaged, NetworkError>) -> Void)
     {
         let pageableRequest = PageableRequest(page, size)
@@ -74,7 +74,7 @@ final class UserService {
     
     func fetchLikedRecipes(
         page: Int = 0,
-        size: Int = 2,
+        size: Int = 10,
         completion: @escaping (Result<RecipeBasicsPaged, NetworkError>) -> Void)
     {
         let pageableRequest = PageableRequest(page, size)

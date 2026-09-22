@@ -20,11 +20,18 @@ final class AffiliateService {
         _ item: PurchaseItem? = nil,
         completion: @escaping (Result<AffiliateResponse, NetworkError>) -> Void)
     {
-        let request = AffiliateRequest(type: item?.type, id: item?.id)
-        networkClient.request(
-            endpointUrl: "\(commonEndpointUrl)",
-            method: .get,
-            parameters: request,
-            completion: completion)
+        if let item = item {
+            let request = AffiliateRequest(requirementType: item.type, requirementId: item.id)
+            networkClient.request(
+                endpointUrl: "\(commonEndpointUrl)",
+                method: .get,
+                parameters: request,
+                completion: completion)
+        } else {
+            networkClient.request(
+                endpointUrl: "\(commonEndpointUrl)",
+                method: .get,
+                completion: completion)
+        }
     }
 }

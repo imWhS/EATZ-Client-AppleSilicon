@@ -8,6 +8,6 @@
 import Foundation
 
 struct AffiliateRequest: Encodable {
-    let type: RequirementType?
-    let id: Int64?
+    let requirementType: RequirementType?
+    let requirementId: Int64?
 }

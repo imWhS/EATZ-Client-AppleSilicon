@@ -16,11 +16,11 @@ final class AffiliateService {
     
     private init() {}
     
-    func getAffiliateUrl(
+    func getAffiliate(
         _ item: PurchaseItem? = nil,
-        completion: @escaping (Result<AffiliateUrlResponse, NetworkError>) -> Void)
+        completion: @escaping (Result<AffiliateResponse, NetworkError>) -> Void)
     {
-        let request = AffiliateUrlRequest(type: item?.type, id: item?.id)
+        let request = AffiliateRequest(type: item?.type, id: item?.id)
         networkClient.request(
             endpointUrl: "\(commonEndpointUrl)",
             method: .get,

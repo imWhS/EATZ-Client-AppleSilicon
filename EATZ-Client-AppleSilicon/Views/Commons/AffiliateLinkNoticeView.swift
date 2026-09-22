@@ -121,7 +121,7 @@ struct AffiliateLinkNoticeView: View {
     
     private func handleGoShoppingTapped() {
         isLoading = true
-        AffiliateService.shared.getAffiliateUrl(item) { result in
+        AffiliateService.shared.getAffiliate(item) { result in
             DispatchQueue.main.async {
                 self.isLoading = false
                 switch result {

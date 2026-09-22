@@ -239,7 +239,7 @@ extension RatingViewModelN {
     private func loadPagedRatings(
         recipeId: Int64,
         page: Int,
-        size: Int = 2,
+        size: Int = 10,
         completion: @escaping (Result<RatingsPaged, NetworkError>) -> Void)
     {
         RecipeRatingService.shared.fetchAll(for: recipeId, page: page, size: size, completion: completion)

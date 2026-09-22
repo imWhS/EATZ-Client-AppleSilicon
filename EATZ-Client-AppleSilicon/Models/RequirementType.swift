@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum RequirementType: String, Encodable {
+enum RequirementType: String, Codable {
     case ingredient
     case kitchenware
 }

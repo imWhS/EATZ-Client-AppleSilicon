@@ -8,6 +8,8 @@
 import Foundation
 
 struct AffiliateResponse: Decodable {
+    let requirementType: RequirementType?
+    let requirementId: Int64?
     let url: String
     let provider: String
 }

@@ -51,13 +51,13 @@ class CookableRecipeListViewModel: ObservableObject {
     
     var selectableSortOptions: [CookableRecipesSort] {
         let sorts = CookableRecipesSort.allCases
-        return auth.isLoggedIn ? sorts : sorts.filter( { $0 != .FEWEST_MISSING_REQUIREMENTS } )
+        return auth.isLoggedIn ? sorts : sorts.filter( { $0 != .fewestMissingRequirements } )
     }
     
     init(searchCriteria: CookableSearchCriteria, auth: AuthProvider = AuthManager.shared) {
         self.searchCriteria = searchCriteria
         self.auth = auth
-        self.sort = auth.isLoggedIn ? .FEWEST_MISSING_REQUIREMENTS : .TRENDING
+        self.sort = auth.isLoggedIn ? .fewestMissingRequirements : .trending
         
         subscribeToSelectedSort()
         subscribeToSearchCriteria()
@@ -157,7 +157,7 @@ extension CookableRecipeListViewModel {
                 id: recipe.id,
                 authorId: recipe.authorId,
                 authorUsername: recipe.authorUsername,
-                type: .RECIPE,
+                type: .recipe,
                 content: recipe.title)
         }
     }

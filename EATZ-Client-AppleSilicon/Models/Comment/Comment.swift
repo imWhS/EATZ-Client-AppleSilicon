@@ -23,7 +23,7 @@ struct Comment: Identifiable, Codable, Equatable, Hashable {
         
         guard let currentUser else { return result }
         
-        if author.id == currentUser.id || recipeAuthorId == currentUser.id || currentUser.role == .ROLE_ADMIN {
+        if author.id == currentUser.id || recipeAuthorId == currentUser.id || currentUser.role == .admin {
             result.insert(.delete)
         }
         
@@ -56,7 +56,7 @@ struct Comment: Identifiable, Codable, Equatable, Hashable {
         
         let isMyComment = author.id == currentUser.id
         let isRecipeAuthor = recipeAuthorId == currentUser.id
-        let isAdmin = currentUser.role == .ROLE_ADMIN
+        let isAdmin = currentUser.role == .admin
         
         if !isMyComment {
             result.insert(.block)

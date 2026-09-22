@@ -96,7 +96,7 @@ extension RatingViewModelN {
             id: rating.id,
             authorId: rating.author.id,
             authorUsername: rating.author.username,
-            type: .RATING,
+            type: .rating,
             content: rating.content)
     }
     

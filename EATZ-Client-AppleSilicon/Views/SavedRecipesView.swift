@@ -116,7 +116,7 @@ struct SavedRecipesView: View {
             id: recipe.id,
             authorId: recipe.authorId,
             authorUsername: recipe.authorUsername,
-            type: .RECIPE,
+            type: .recipe,
             content: recipe.title)
     }
 }

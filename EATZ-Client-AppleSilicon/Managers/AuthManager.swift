@@ -235,7 +235,7 @@ final class AuthManager: ObservableObject, AuthProvider {
 extension AuthManager {
     /// 인증(로그인) 상태의 프리뷰용 인스턴스입니다.
     static var previewAuthenticated: AuthManager {
-        let user = CurrentUser(id: 1, username: "dev_preview", email: "devpreview@eatz.io", imageUrl: nil, role: .ROLE_MEMBER)
+        let user = CurrentUser(id: 1, username: "dev_preview", email: "devpreview@eatz.io", imageUrl: nil, role: .member)
         return AuthManager(initialState: .authenticated(user: user))
     }
     

@@ -41,7 +41,7 @@ struct Rating: Identifiable, Codable, Hashable {
         
         let isMyRating = author.id == currentUser.id
         let isRecipeAuthor = recipeAuthorId == currentUser.id
-        let isAdmin = currentUser.role == .ROLE_ADMIN
+        let isAdmin = currentUser.role == .admin
         
         if isMyRating || isRecipeAuthor || isAdmin { result.insert(.delete) }
         if !isMyRating {

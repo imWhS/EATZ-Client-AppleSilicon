@@ -15,6 +15,6 @@ struct ExploreSearchCriteria: Equatable, Codable, Hashable {
     var sort: ExploreRecipesSort
     
     var isDefault: Bool {
-        keyword.isEmpty && maxTotalTime == nil && servings == nil && tagId == nil && sort == .TRENDING
+        keyword.isEmpty && maxTotalTime == nil && servings == nil && tagId == nil && sort == .trending
     }
 }

@@ -8,6 +8,6 @@
 import Foundation
 
 enum UserRole: String, Codable {
-    case ROLE_MEMBER
-    case ROLE_ADMIN
+    case member
+    case admin
 }

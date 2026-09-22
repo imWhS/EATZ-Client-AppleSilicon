@@ -8,7 +8,7 @@
 import Foundation
 
 enum ResourceType: String, Codable {
-    case RECIPE
-    case COMMENT
-    case RATING
+    case recipe
+    case comment
+    case rating
 }

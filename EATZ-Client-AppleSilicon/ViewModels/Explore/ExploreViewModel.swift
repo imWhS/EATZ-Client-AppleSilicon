@@ -49,7 +49,7 @@ class ExploreViewModel: ObservableObject {
     ///
     /// - 값 변경이 감지되면, `searchCriteriaPublisher`를 구독하는 모든 뷰 모델로 이벤트를 발행함으로써, 관련 API 호출을 트리거합니다.
     /// - API 요청 시 레시피 조회/검색 조건으로 사용하는 데이터 소스입니다.
-    @Published var commonSort: ExploreRecipesSort = .TRENDING
+    @Published var commonSort: ExploreRecipesSort = .trending
     
     /// 선택된 카테고리입니다.
     ///

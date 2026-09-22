@@ -16,6 +16,7 @@ enum CookableRecipesSort: String, Codable, CaseIterable, Equatable, Sortable {
     
     var id: Self { self }
     
+    /// 뷰에서 사용하는 한글 이름입니다.
     var displayName: String {
         switch self {
         case .fewestMissingRequirements: return "적은 준비물"

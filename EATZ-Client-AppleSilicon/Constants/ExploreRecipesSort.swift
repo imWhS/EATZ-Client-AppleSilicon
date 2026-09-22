@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ExploreRecipesSort: Identifiable, Codable, CaseIterable, Equatable, Sortable {
+enum ExploreRecipesSort: String, Identifiable, Codable, CaseIterable, Equatable, Sortable {
     case trending
     case latest
     case highestRated

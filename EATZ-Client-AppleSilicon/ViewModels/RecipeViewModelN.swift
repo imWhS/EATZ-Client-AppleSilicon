@@ -167,7 +167,7 @@ extension RecipeViewModelN {
     
     func handleReport() {
         guard case .content(let recipe) = state else { return }
-        reportResource = ReportResource(id: recipe.id, authorId: recipe.author.id, authorUsername: recipe.author.username, type: .RECIPE, content: recipe.title)
+        reportResource = ReportResource(id: recipe.id, authorId: recipe.author.id, authorUsername: recipe.author.username, type: .recipe, content: recipe.title)
     }
     
     func toggleLike(for recipeId: Int64) {

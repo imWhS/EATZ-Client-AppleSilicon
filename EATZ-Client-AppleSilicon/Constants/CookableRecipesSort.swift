@@ -8,21 +8,21 @@
 import Foundation
 
 enum CookableRecipesSort: String, Codable, CaseIterable, Equatable, Sortable {
-    case FEWEST_MISSING_REQUIREMENTS
-    case TRENDING
-    case LATEST
-    case HIGHEST_RATED
-    case MOST_LIKED
+    case fewestMissingRequirements
+    case trending
+    case latest
+    case highestRated
+    case mostLiked
     
     var id: Self { self }
     
     var displayName: String {
         switch self {
-        case .FEWEST_MISSING_REQUIREMENTS: return "적은 준비물"
-        case .TRENDING: return "추천"
-        case .LATEST: return "최근 등록됨"
-        case .HIGHEST_RATED: return "높은 평가 평균 점수"
-        case .MOST_LIKED: return "높은 좋아요 수"
+        case .fewestMissingRequirements: return "적은 준비물"
+        case .trending: return "추천"
+        case .latest: return "최근 등록됨"
+        case .highestRated: return "높은 평가 평균 점수"
+        case .mostLiked: return "높은 좋아요 수"
         }
     }
 }

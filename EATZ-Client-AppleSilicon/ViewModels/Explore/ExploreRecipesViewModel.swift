@@ -32,7 +32,7 @@ class ExploreRecipesViewModel: ObservableObject {
     @Published var pendingSaveRecipeIds: Set<Int64> = []
     
     private var filters = ExploreFilters()
-    private var sort: ExploreRecipesSort = .TRENDING
+    private var sort: ExploreRecipesSort = .trending
     
     private let auth: AuthProvider
     private let userService = UserService.shared
@@ -148,7 +148,7 @@ class ExploreRecipesViewModel: ObservableObject {
                 id: recipe.id,
                 authorId: recipe.authorId,
                 authorUsername: recipe.authorUsername,
-                type: .RECIPE,
+                type: .recipe,
                 content: recipe.title)
         }
     }
@@ -207,7 +207,7 @@ class ExploreRecipesViewModel: ObservableObject {
             id: recipe.id,
             authorId: recipe.authorId,
             authorUsername: recipe.authorUsername,
-            type: .RECIPE,
+            type: .recipe,
             content: recipe.title)
     }
     

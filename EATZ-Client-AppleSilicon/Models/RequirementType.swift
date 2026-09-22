@@ -8,6 +8,6 @@
 import Foundation
 
 enum RequirementType: String, Encodable {
-    case ingredient = "INGREDIENT"
-    case kitchenware = "KITCHENWARE"
+    case ingredient
+    case kitchenware
 }

@@ -197,7 +197,7 @@ extension ChecklistViewModel {
     }
     
     private func reportRecipe(_ recipeId: Int64, _ recipeTitle: String, _ recipeAuthorId: Int64, _ recipeAuthorUsername: String) {
-        let resource = ReportResource(id: recipeId, authorId: recipeAuthorId, authorUsername: recipeAuthorUsername, type: .RECIPE, content: recipeTitle)
+        let resource = ReportResource(id: recipeId, authorId: recipeAuthorId, authorUsername: recipeAuthorUsername, type: .recipe, content: recipeTitle)
         reportResource = resource
     }
     

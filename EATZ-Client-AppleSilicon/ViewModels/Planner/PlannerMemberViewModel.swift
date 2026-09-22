@@ -194,7 +194,7 @@ extension PlannerMemberViewModel {
     }
     
     private func handleReportRecipe(recipeId: Int64, recipeTitle: String, authorId: Int64, authorUsername: String) {
-        reportResource = ReportResource(id: recipeId, authorId: authorId, authorUsername: authorUsername, type: .RECIPE, content: recipeTitle)
+        reportResource = ReportResource(id: recipeId, authorId: authorId, authorUsername: authorUsername, type: .recipe, content: recipeTitle)
     }
     
     /// 특정 플랜에 추가된 레시피의 좋아요 상태를 토글합니다.

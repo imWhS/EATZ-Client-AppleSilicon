@@ -245,7 +245,7 @@ extension CommentViewModel {
             id: comment.id,
             authorId: comment.author.id,
             authorUsername: comment.author.username,
-            type: .COMMENT,
+            type: .comment,
             content: comment.content)
     }
     

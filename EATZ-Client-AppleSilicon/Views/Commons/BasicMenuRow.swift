@@ -13,6 +13,7 @@ enum BasicMenuRowType {
     case action
     case destructiveAction
     case info(trailing: String)
+    case id(trailing: String)
     
     var labelForegroundColor: Color {
         switch self {
@@ -21,6 +22,7 @@ enum BasicMenuRowType {
         case .action: return .accentColor
         case .destructiveAction: return .red
         case .info: return .black
+        case .id: return .black
         }
     }
     
@@ -32,6 +34,10 @@ enum BasicMenuRowType {
         case .info(let trailing):
             Text(trailing)
                 .font(.system(size: 17, weight: .medium))
+                .foregroundStyle(Color.gray35)
+        case .id(let trailing):
+            Text(trailing)
+                .font(.system(size: 17, weight: .medium, design: .monospaced))
                 .foregroundStyle(Color.gray35)
         default: EmptyView()
         }

@@ -249,10 +249,9 @@ extension ChecklistViewModel {
         // 상태 변경 전의 도구를 별도로 보관합니다. 도구 상태 변경 실패 시, 낙관적 업데이트된 UI를 원상 복구할 때 사용합니다.
         guard let firstLocation = locations.first else { return }
         
+        if isUpdatingPantry { return }
         if pendingKitchenwareIds.contains(id) { return }
         pendingKitchenwareIds.insert(id)
-        
-        if isUpdatingPantry { return }
         isUpdatingPantry = true
         
         let originalKitchenware = getKitchenware(from: currentChecklist, at: firstLocation)
@@ -286,10 +285,9 @@ extension ChecklistViewModel {
         // 상태 변경 전의 재료를 별도로 보관합니다. 재료 상태 변경 실패 시, 낙관적 업데이트된 UI를 원상 복구할 때 사용합니다.
         guard let firstLocation = locations.first else { return }
         
+        guard !isUpdatingPantry else { return }
         guard !pendingIngredientIds.contains(id) else { return }
         pendingIngredientIds.insert(id)
-        
-        guard !isUpdatingPantry else { return }
         isUpdatingPantry = true
         
         let originalIngredient = getIngredient(from: currentChecklist, at: firstLocation)

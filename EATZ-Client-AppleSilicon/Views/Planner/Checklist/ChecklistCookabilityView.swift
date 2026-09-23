@@ -117,7 +117,7 @@ struct ChecklistCookabilityView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 20)
                 ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack(alignment: .center, spacing: 0) {
+                    HStack(alignment: .center, spacing: 0) {
                         ForEach(Array(sortedKitchenwares.enumerated()), id: \.element.id) { index, kitchenware in
                             ChecklistKitchenwareItem(
                                 kitchenware,
@@ -154,7 +154,7 @@ struct ChecklistCookabilityView: View {
                 .padding(.horizontal, 20)
                 
                 ScrollView(.vertical, showsIndicators: false) {
-                    LazyVStack(alignment: .center, spacing: 10) {
+                    VStack(alignment: .center, spacing: 10) {
                         ForEach(Array(sortedIngredients.enumerated()), id: \.element.id) { index, ingredient in
                             let isLast = index == (sortedIngredients.count - 1)
                             ChecklistIngredientItem(

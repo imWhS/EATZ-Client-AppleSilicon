@@ -140,11 +140,21 @@ private struct ChecklistContentView: View {
     private var header: some View {
         VStack(spacing: 0) {
             PlannerPeriodIndicator(style: .plain, startDate: dateRange.startDate, endDate: dateRange.endDate)
-                .background(Capsule().fill(Color.white))
             VStack(spacing: 4) {
-                Text(titleLabel)
-                    .font(.system(size: 30, weight: .bold))
-                
+                Text(titleLabel).font(.system(size: 30, weight: .bold))
+                .background(
+                    GeometryReader { proxy in
+                        Color.clear
+                            .onChange(of: proxy.frame(in: .named("scroll")).maxY) { _, maxY in
+                                let shouldShow = maxY < 0
+                                if viewModel.showNavigationBarTitle != shouldShow {
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        viewModel.showNavigationBarTitle = shouldShow
+                                    }
+                                }
+                            }
+                    }.frame(height: 0)
+                )
                 HStack {
                     Group {
                         if let planCountLabel = viewModel.planCountLabel {
@@ -162,24 +172,6 @@ private struct ChecklistContentView: View {
             }
             .padding(20)
         }
-    }
-    
-    private var scrollTracker: some View {
-        GeometryReader { proxy in
-            let offset = proxy.frame(in: .named("scroll")).minY
-            Color.clear
-                .onChange(of: offset) { _, offset in
-                    let shouldShow = offset < -50
-                    if viewModel.showNavigationBarTitle != shouldShow {
-                        DispatchQueue.main.async {
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                viewModel.showNavigationBarTitle = shouldShow
-                            }
-                        }
-                    }
-                }
-        }
-        .frame(height: 0)
     }
 }
 

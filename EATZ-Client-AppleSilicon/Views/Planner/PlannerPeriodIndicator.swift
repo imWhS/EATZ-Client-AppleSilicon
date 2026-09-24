@@ -21,6 +21,7 @@ struct PlannerPeriodIndicator: View {
             getDateView(date: endDate)
         }
         .padding(6)
+        .background(Capsule().fill(Color.white))
     }
     
     private func getDateView(date: Date) -> some View {
@@ -39,10 +40,10 @@ struct PlannerPeriodIndicator: View {
                     .frame(height: capHeight)
                     .foregroundStyle(Color.black)
             }
-                .frame(width: 70, height: 70)
-                .background(style.dateViewBackground)
-                .cornerRadius(35)
-                .border(color: style.dateViewBorderColor, width: 1, radius: 35)
+            .frame(width: 70, height: 70)
+            .background(style.dateViewBackground)
+            .cornerRadius(35)
+            .border(color: style.dateViewBorderColor, width: 1, radius: 35)
         )
     }
 }

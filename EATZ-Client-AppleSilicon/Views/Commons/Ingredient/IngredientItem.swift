@@ -33,6 +33,7 @@ struct IngredientItem<Destination: View>: View {
     var body: some View {
         IngredientRow(ingredient,
                       isLinkable: isLinkable,
+                      showIcon: false,
                       linkDestination: ExploreIngredientsChildList(parentId: ingredient.id, parentName: ingredient.name),
                       trailing: trailing)
         .padding(.horizontal, 20)

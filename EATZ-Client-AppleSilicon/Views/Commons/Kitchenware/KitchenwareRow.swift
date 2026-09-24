@@ -13,6 +13,7 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
     let style: KitchenwareRowStyle
     let isEnabled: Bool
     let isPurchasable: Bool
+    let showIcon: Bool
     let onPurchaseTapped: (() -> Void)?
     @ViewBuilder let icon: Icon
     @ViewBuilder let trailing: Trailing
@@ -21,6 +22,7 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
          style: KitchenwareRowStyle = .filled,
          isEnabled: Bool = true,
          isPurchasable: Bool = false,
+         showIcon: Bool = true,
          onPurchaseTapped: (() -> Void)? = nil,
          @ViewBuilder _ icon: @escaping () -> Icon = { EmptyView() },
          @ViewBuilder trailing: @escaping () -> Trailing) {
@@ -28,6 +30,7 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
         self.style = style
         self.isEnabled = isEnabled
         self.isPurchasable = isPurchasable
+        self.showIcon = showIcon
         self.onPurchaseTapped = onPurchaseTapped
         self.icon = icon()
         self.trailing = trailing()
@@ -89,7 +92,9 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
     
     private var kitchenwareNameText: some View {
         HStack(spacing: 2) {
-            icon
+            if showIcon {
+                icon
+            }
             VStack(spacing: 0) {
                 Text(kitchenware.name)
                     .font(.system(size: 17, weight: .medium))
@@ -97,7 +102,7 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
                     .truncationMode(.tail)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 6)
+                    .padding(.horizontal, showIcon ? 6 : 0)
                 if isPurchasable { purchaseRow }
             }
             .padding(.top, isPurchasable ? 6 : 0)

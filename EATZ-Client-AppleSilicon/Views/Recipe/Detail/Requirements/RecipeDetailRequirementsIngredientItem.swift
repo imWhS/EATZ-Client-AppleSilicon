@@ -45,6 +45,7 @@ struct RecipeDetailRequirementsIngredientItem: View {
                       style: .outlined,
                       isEnabled: isLoggedIn,
                       isPurchasable: isPurchasable,
+                      showIcon: true,
                       onPurchaseTapped: handlePurchase,
                       icon: icon,
                       trailing: trailing)
@@ -60,8 +61,7 @@ struct RecipeDetailRequirementsIngredientItem: View {
     
     @ViewBuilder
     private func icon() -> some View {
-        if isLoggedIn { Image(ingredient.ownedByUser ? "requirement-added-18" : "requirement-needed-18") }
-        else { EmptyView() }
+        Image(ingredient.ownedByUser ? "requirement-added-18" : "requirement-needed-18")
     }
     
     @ViewBuilder

@@ -13,6 +13,7 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
     let isEnabled: Bool
     let isLinkable: Bool
     let isPurchasable: Bool
+    let showIcon: Bool
     let linkDestination: Destination?
     let onPurchaseTapped: (() -> Void)?
     @ViewBuilder let icon: Icon
@@ -23,6 +24,7 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
          isEnabled: Bool = true,
          isLinkable: Bool = false,
          isPurchasable: Bool = false,
+         showIcon: Bool = true,
          linkDestination: Destination? = nil,
          onPurchaseTapped: (() -> Void)? = nil,
          @ViewBuilder icon: @escaping () -> Icon = { EmptyView() },
@@ -32,6 +34,7 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
         self.isEnabled = isEnabled
         self.isLinkable = isLinkable
         self.isPurchasable = isPurchasable
+        self.showIcon = showIcon
         self.linkDestination = linkDestination
         self.onPurchaseTapped = onPurchaseTapped
         self.icon = icon()
@@ -63,7 +66,7 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
                 ingredientNameTextLinkable.padding(.horizontal, 2)
             } else {
                 ingredientNameText
-                    .padding(.horizontal, isPurchasable ? 8 : 14)
+                    .padding(.horizontal, 14)
                     .padding(.top, 14)
                     .padding(.bottom, isPurchasable ? 8 : 14)
             }
@@ -85,7 +88,9 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
     
     private var ingredientNameText: some View {
         HStack(spacing: 2) {
-            icon.padding(.bottom, isPurchasable ? 6 : 0)
+            if showIcon {
+                icon.padding(.bottom, isPurchasable ? 6 : 0)
+            }
             VStack(spacing: 0) {
                 HStack(spacing: 4) {
                     Group {
@@ -102,7 +107,7 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
                     .font(.system(size: 17, weight: .medium))
                     .multilineTextAlignment(.leading)
                 }
-                .padding(.horizontal, 6)
+                .padding(.horizontal, showIcon ? 6 : 0)
                 if isPurchasable { purchaseRow }
             }
         }
@@ -129,6 +134,7 @@ extension IngredientRow where Destination == EmptyView {
          isEnabled: Bool = true,
          isLinkable: Bool = false,
          isPurchasable: Bool = true,
+         showIcon: Bool = false,
          onPurchaseTapped: (() -> Void)? = nil,
          @ViewBuilder icon: @escaping () -> Icon = { EmptyView() },
          @ViewBuilder trailing: @escaping () -> Trailing) {
@@ -137,6 +143,7 @@ extension IngredientRow where Destination == EmptyView {
         self.isEnabled = isEnabled
         self.isLinkable = isLinkable
         self.isPurchasable = isPurchasable
+        self.showIcon = showIcon
         self.linkDestination = nil
         self.onPurchaseTapped = onPurchaseTapped
         self.icon = icon()

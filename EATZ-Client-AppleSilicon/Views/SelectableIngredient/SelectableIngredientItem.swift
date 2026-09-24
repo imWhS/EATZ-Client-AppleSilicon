@@ -28,6 +28,7 @@ struct SelectableIngredientItem<Manager: SelectableIngredientManager>: View {
     var body: some View {
         IngredientRow(ingredient,
                       isLinkable: true,
+                      showIcon: false,
                       linkDestination: SelectableIngredientChildList<Manager>(
                         parentId: ingredient.id, parentName: ingredient.name).environmentObject(manager),
                       trailing: trailing)

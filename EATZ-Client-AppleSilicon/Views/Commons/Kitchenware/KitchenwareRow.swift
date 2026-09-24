@@ -102,7 +102,7 @@ struct KitchenwareRow<K: KitchenwareDisplayable, Icon: View, Trailing: View>: Vi
             }
             .padding(.top, isPurchasable ? 6 : 0)
         }
-        .padding(.horizontal, 8)
+        .padding(.horizontal, isPurchasable ? 0 : 8)
     }
 }
 

@@ -1,7 +1,27 @@
-# EATZ - iOS
+# EATZ iOS 클라이언트
+
+![EATZ](./images/eatz-main.png)
 
 사용자가 현재 보유한 재료와 도구를 기반으로 지금 만들 수 있는 레시피를 둘러보고, 자신만의 레시피를 공유할 수 있는 소셜 레시피 플랫폼 EATZ의 iOS 애플리케이션입니다. 
 EATZ 웹 API 서버 eatz-server와 통신하는 클라이언트이기도 합니다.
+
+<p align="center">
+  <img src="./images/eatz-feature1.png" width="240">
+  <img src="./images/eatz-feature2.png" width="240">
+  <img src="./images/eatz-feature3.png" width="240">
+  <img src="./images/eatz-feature4.png" width="240">
+  <img src="./images/eatz-feature5.png" width="240">
+  <img src="./images/eatz-feature6.png" width="240">
+  <img src="./images/eatz-feature7.png" width="240">
+  <img src="./images/eatz-feature8.png" width="240">
+</p>
+
+| 카테고리 | 스택 및 기술 |
+| --- | --- |
+| 언어 | Swift |
+| UI 프레임워크 | SwiftUI |
+| 주 아키텍처 | MVVM |
+| 인증 | JWT |
 
 ## 주요 특징
 

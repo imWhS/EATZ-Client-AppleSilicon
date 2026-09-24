@@ -5,6 +5,14 @@
 사용자가 현재 보유한 재료와 도구를 기반으로 지금 요리할 수 있는 레시피를 둘러보거나 플래너로 요리 일정을 관리하고, 자신만의 레시피를 공유할 수 있는 소셜 레시피 플랫폼 EATZ의 iOS 애플리케이션입니다. 
 EATZ API 웹 서버 [eatz-server](https://github.com/imWhS/eatz-server)와 통신하는 클라이언트이기도 합니다.
 
+<br>
+<p align="center">
+  <a href="https://apps.apple.com/kr/app/eatz-바로-요리할-수-있는-모든-레시피/id6796143243">
+    <img src="./images/app-store-link.png" width="180" alt="Download on the App Store">
+  </a>
+</p>
+<br>
+
 <p align="center">
   <img src="./images/eatz-feature1.png" width="240">
   <img src="./images/eatz-feature2.png" width="240">

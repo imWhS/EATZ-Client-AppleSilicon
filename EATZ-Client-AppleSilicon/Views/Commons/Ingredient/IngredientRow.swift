@@ -63,9 +63,9 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
                 ingredientNameTextLinkable.padding(.horizontal, 2)
             } else {
                 ingredientNameText
-                .padding(.horizontal, 14)
-                .padding(.top, 14)
-                .padding(.bottom, isPurchasable ? 8 : 14)
+                    .padding(.horizontal, isPurchasable ? 8 : 14)
+                    .padding(.top, 14)
+                    .padding(.bottom, isPurchasable ? 8 : 14)
             }
         }
     }
@@ -85,8 +85,7 @@ struct IngredientRow<I: IngredientDisplayable, Icon: View, Trailing: View, Desti
     
     private var ingredientNameText: some View {
         HStack(spacing: 2) {
-            icon
-                .padding(.bottom, isPurchasable ? 6 : 0)
+            icon.padding(.bottom, isPurchasable ? 6 : 0)
             VStack(spacing: 0) {
                 HStack(spacing: 4) {
                     Group {

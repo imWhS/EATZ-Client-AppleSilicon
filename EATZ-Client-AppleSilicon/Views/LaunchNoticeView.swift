@@ -27,25 +27,7 @@ struct LaunchNoticeView: View {
                     contentView
                 }
                 .coordinateSpace(name: "scroll")
-                VStack(spacing: 20) {
-                    HStack {
-                        if !isForce {
-                            Button(action: {
-                                SystemManager.shared.markNoticeAsViewed(id: id, doNotShowAgain: true)
-                            }) {
-                             Text("다시 보지 않기").frame(maxWidth: .infinity)
-                            }.buttonStyle(RoundedButtonStyle(.secondary, .large))
-                        }
-                        Button(action: {
-                            SystemManager.shared.markNoticeAsViewed(id: id, doNotShowAgain: false)
-                        }) {
-                         Text("확인").frame(maxWidth: .infinity)
-                        }.buttonStyle(RoundedButtonStyle(.secondary, .large))
-                    }
-                    .padding(.horizontal, 20)
-                }
-                .padding(.vertical, 20)
-                .background(Color.backgroundPrimary)
+                bottomInteractionView
             }
             .navigationTitle(navigationTitleLabel)
             .navigationBarTitleDisplayMode(.inline)
@@ -87,10 +69,10 @@ struct LaunchNoticeView: View {
                         GeometryReader { proxy in
                             Color.clear
                                 .onChange(of: proxy.frame(in: .named("scroll")).maxY) { _, maxY in
-                                    let isShowing = maxY < 0
-                                    if showNavigationBarTitle != isShowing {
+                                    let shouldShow = maxY < 0
+                                    if showNavigationBarTitle != shouldShow {
                                         withAnimation(.easeInOut(duration: 0.2)) {
-                                            showNavigationBarTitle = isShowing
+                                            showNavigationBarTitle = shouldShow
                                         }
                                     }
                                 }
@@ -101,5 +83,27 @@ struct LaunchNoticeView: View {
             }
             .padding(.horizontal, 20)
         }
+    }
+    
+    private var bottomInteractionView: some View {
+        VStack(spacing: 20) {
+            HStack {
+                if !isForce {
+                    Button(action: {
+                        SystemManager.shared.markNoticeAsViewed(id: id, doNotShowAgain: true)
+                    }) {
+                     Text("다시 보지 않기").frame(maxWidth: .infinity)
+                    }.buttonStyle(RoundedButtonStyle(.secondary, .large))
+                }
+                Button(action: {
+                    SystemManager.shared.markNoticeAsViewed(id: id, doNotShowAgain: false)
+                }) {
+                 Text("확인").frame(maxWidth: .infinity)
+                }.buttonStyle(RoundedButtonStyle(.secondary, .large))
+            }
+            .padding(.horizontal, 20)
+        }
+        .padding(.vertical, 20)
+        .background(Color.backgroundPrimary)
     }
 }

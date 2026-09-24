@@ -27,7 +27,7 @@ struct SelectableKitchenwareItem<Manager: SelectableKitchenwareManager>: View {
     }
 
     var body: some View {
-        KitchenwareRow(kitchenware, trailing: trailing)
+        KitchenwareRow(kitchenware, showIcon: false, trailing: trailing)
             .padding(.horizontal, 20)
             .padding(.vertical, 4)
     }
